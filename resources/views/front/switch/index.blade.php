@@ -17,7 +17,7 @@
                 <thead class="bg-gray-100">
                     <tr>
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">MAC</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">NVR </th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Serial </th>
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Marca</th>
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Modelo</th>
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Nombre</th>
