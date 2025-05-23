@@ -24,7 +24,7 @@ class Nvr extends Model
 
     public function nvrHdd()
     {
-        return $this->hasMany(NvrHdd::class);
+        return $this->hasMany(Hddnvr::class);
     }
 
     public function camera()
