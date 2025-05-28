@@ -1,6 +1,6 @@
 @extends('layouts.app-home')
 @section('content')
-    <!-- resources/views/link/create.blade.php -->
+    <!-- resources/views/front/link/create.blade.php -->
 
     <div class="container mx-auto px-4 py-6">
         <div class="flex justify-between items-center mb-6">

@@ -1,6 +1,6 @@
 @extends('layouts.app-home')
 @section('content')
-    <!-- resources/views/nvr/index.blade.php -->
+    <!-- resources/views/front/nvr/index.blade.php -->
 
     <div class="container mx-auto px-4 py-6">
 
