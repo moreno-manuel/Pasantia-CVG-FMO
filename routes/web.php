@@ -20,7 +20,10 @@ Route::get('/home', function () {
 })->middleware('auth')->name('home');
 
 
+Route::resource('switch', SwitchController::class);
+Route::resource('enlace', LinkController::class);
+
+
+
 Route::resource('camara', CameraController::class)->except(['show', 'destroy', 'edit', 'update']);
 Route::resource('nvr', NvrController::class)->except(['show', 'destroy', 'edit', 'update']);
-Route::resource('switch', SwitchController::class)->except(['show', 'destroy', 'edit', 'update']);
-Route::resource('link', LinkController::class)->except(['show', 'destroy', 'edit', 'update']);

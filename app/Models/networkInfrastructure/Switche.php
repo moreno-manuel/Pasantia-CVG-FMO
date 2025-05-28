@@ -2,6 +2,8 @@
 
 namespace App\Models\networkInfrastructure;
 
+
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 
 class Switche extends Model
@@ -20,4 +22,18 @@ class Switche extends Model
         'description'
 
     ];
+
+    protected function serial(): Attribute
+    {
+        return Attribute::make(
+            set: fn($serial) => strtoupper($serial),
+        );
+    }
+
+    protected function model(): Attribute
+    {
+        return Attribute::make(
+            set: fn($model) => strtoupper($model),
+        );
+    }
 }

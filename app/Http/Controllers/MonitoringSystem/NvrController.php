@@ -9,7 +9,13 @@ class NvrController extends Controller
 {
     //
 
-    public function index(){
+    public function index()
+    {
         return view('front.nvr.index');
+    }
+
+    public function create()
+    {
+        return view('front.nvr.create');
     }
 }

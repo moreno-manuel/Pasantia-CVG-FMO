@@ -28,6 +28,7 @@ return new class extends Migration
             $table->bigInteger('capacity_hdd')->nullable();
             $table->bigInteger('capacity_max');
             $table->string('status');
+            $table->timestamps();
         });
 
         Schema::create('cameras', function (Blueprint $table) {
@@ -52,6 +53,7 @@ return new class extends Migration
             $table->date('date_ini');
             $table->date('date_end')->nullable();
             $table->string('description')->nullable();
+            $table->timestamps();
         });
     }
 

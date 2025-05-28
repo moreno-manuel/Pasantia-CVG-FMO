@@ -1,42 +1,43 @@
 @extends('layouts.app-home')
 @section('content')
-    <!-- resources/views/camaras/create.blade.php -->
+    <!-- resources/views/link/create.blade.php -->
+
     <div class="container mx-auto px-4 py-6">
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold">Crear Nueva Cámara</h1>
+            <h1 class="text-2xl font-bold">Crear Nuevo Enlace</h1>
 
             <!-- Botón Volver -->
-            <a href="{{ route('camara.index') }}"
+            <a href="{{ route('enlace.index') }}"
                 class="inline-flex items-center px-4 py-2 bg-gray-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition ease-in-out duration-150">
                 Volver
             </a>
         </div>
 
+        {{-- Formnulario Enlace --}}
         <div class="bg-white shadow overflow-hidden sm:rounded-lg p-6">
-            <form action="#" method="POST">
+            <form action="{{ route('enlace.store') }}" method="POST">
                 @csrf
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Campo Nombre -->
-                    <div>
-                        <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
-                        <input type="text" name="nombre" id="nombre"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            required>
-                    </div>
 
                     <!-- Campo Dirección MAC -->
                     <div>
                         <label for="mac" class="block text-sm font-medium text-gray-700">Dirección MAC</label>
-                        <input type="text" name="mac" id="mac"
+                        <input type="text" name="mac" value="{{ old('mac') }}"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             placeholder="Ejemplo: 00:1A:2B:3C:4D:5E" required>
                     </div>
+                    @error('mac')
+                        <br>
+                        <span class="bg-red-600 text-white py-2 px-4 rounded font-bold"
+                            style="font-size: 12px">{{ $message }}</span>
+                        </br>
+                    @enderror
 
-                    <!-- Campo NVR ID -->
+                    <!-- Campo Nombre -->
                     <div>
-                        <label for="nvr_id" class="block text-sm font-medium text-gray-700">NVR ID</label>
-                        <input type="text" name="nvr_id" id="nvr_id"
+                        <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
+                        <input type="text" name="name" value = '{{ old('name') }}'
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
                     </div>
@@ -44,13 +45,14 @@
                     <!-- Campo Marca -->
                     <div>
                         <label for="marca" class="block text-sm font-medium text-gray-700">Marca</label>
-                        <select name="marca" id="marca"
+                        <select name="mark" value='{{ old('mark') }}'
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
                             <option value="">Selecciona una marca</option>
                             <option value="Hikvision">Hikvision</option>
                             <option value="Dahua">Dahua</option>
                             <option value="Axis">Axis</option>
+                            <option value="Ubiquiti">Ubiquiti</option>
                             <option value="Other">Otra</option>
                         </select>
                     </div>
@@ -58,53 +60,56 @@
                     <!-- Campo Modelo -->
                     <div>
                         <label for="modelo" class="block text-sm font-medium text-gray-700">Modelo</label>
-                        <input type="text" name="modelo" id="modelo"
+                        <input type="text" name="model" value="{{ old('model') }}"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
+                    </div>
+
+                    <!-- Campo SSID -->
+                    <div>
+                        <label for="ssid" class="block text-sm font-medium text-gray-700">SSID</label>
+                        <input type="text" name="ssid" value="{{ old('ssid') }}"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            placeholder="Nombre de red Wi-Fi" required>
                     </div>
 
                     <!-- Campo IP -->
                     <div>
                         <label for="ip" class="block text-sm font-medium text-gray-700">Dirección IP</label>
-                        <input type="text" name="ip" id="ip"
+                        <input type="text" name="ip" value="{{ old('ip') }}"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            placeholder="Ejemplo: 192.168.1.10" required>
+                            placeholder="Ejemplo: 192.168.1.20" required>
                     </div>
+                    @error('ip')
+                        <br>
+                        <span class="bg-red-600 text-white py-2 px-4 rounded font-bold"
+                            style="font-size: 12px">{{ $message }}</span>
+                        </br>
+                    @enderror
 
-                    <!-- Campo Ubicación -->
+                    <!-- Campo Localidad -->
                     <div>
-                        <label for="ubicacion" class="block text-sm font-medium text-gray-700">Ubicación</label>
-                        <input type="text" name="ubicacion" id="ubicacion"
+                        <label for="localidad" class="block text-sm font-medium text-gray-700">Localidad</label>
+                        <input type="text" name="location" value="{{ old('location') }}"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
-                    </div>
-
-                    <!-- Campo Estado -->
-                    <div>
-                        <label for="status" class="block text-sm font-medium text-gray-700">Estado</label>
-                        <select name="status" id="status"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            required>
-                            <option value="">Selecciona el estado</option>
-                            <option value="Activo">Activo</option>
-                            <option value="Inactivo">Inactivo</option>
-                        </select>
                     </div>
 
                     <!-- Campo Descripción -->
                     <div class="md:col-span-2">
                         <label for="descripcion" class="block text-sm font-medium text-gray-700">Descripción</label>
-                        <textarea name="descripcion" id="descripcion" rows="3"
+                        <textarea name="description" value="{{ old('description') }}" rows="3"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            placeholder="Describe brevemente la ubicación o uso de esta cámara..."></textarea>
+                            placeholder="Describe brevemente este enlace..."></textarea>
                     </div>
                 </div>
 
                 <!-- Botón Guardar -->
                 <div class="mt-6 flex justify-end">
                     <button type="submit"
-                        class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:outline-none focus:ring ring-green-300 disabled:opacity-25 transition ease-in-out duration-150">
-                        Guardar Cámara
+                        class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:outline-none focus:ring ring-green-300 disabled:opacity-25 transition ease-in-out duration-150"
+                        onclick="return confirm('¿Estás seguro de guardar este Enlace?')">
+                        Guardar Enlace
                     </button>
                 </div>
             </form>

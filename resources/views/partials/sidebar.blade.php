@@ -22,7 +22,7 @@
                     <li><a href="{{route ('nvr.index')}}" class="block px-4 py-2 text-gray-600 hover:bg-blue-100 rounded">NVR</a></li>
                     <li><a href="{{route('switch.index')}}" class="block px-4 py-2 text-gray-600 hover:bg-blue-100 rounded">Switch</a>
                     </li>
-                    <li><a href="{{route('link.index')}}" class="block px-4 py-2 text-gray-600 hover:bg-blue-100 rounded">Enlace</a>
+                    <li><a href="{{route('enlace.index')}}" class="block px-4 py-2 text-gray-600 hover:bg-blue-100 rounded">Enlace</a>
                     </li>
 
                 </ul>

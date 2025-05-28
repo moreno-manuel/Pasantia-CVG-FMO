@@ -28,8 +28,9 @@ return new class extends Migration
             $table->string('name');
             $table->string('ssid');
             $table->string('location');
-            $table->unsignedBigInteger('ip');
+            $table->unsignedBigInteger('ip')->unique()->require();
             $table->string('description')->nullable();
+            $table->timestamps();
         });
     }
 
