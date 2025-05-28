@@ -1,6 +1,12 @@
 @extends('layouts.app-home')
 @section('content')
+<<<<<<< HEAD
     <!-- resources/views/switch/index.blade.php -->
+=======
+    <div class="container mx-auto px-4 py-6">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold">Switch</h1>
+>>>>>>> def195e204544cf70835e80cb5b845ad104f78ee
 
     <div class="container mx-auto px-4 py-6">
 
@@ -55,18 +61,45 @@
             <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-sm">
                 <thead class="bg-gray-100">
                     <tr>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-36">Serial</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-32">Modelo</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-28">Puertos</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-40">Persona Usuario</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-32">Status</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-32">Acciones</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Serial</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Model</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Número de Puertos</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Persona Usuario Asignado</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Descripción</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Acciones</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
+                    <!-- Ejemplo de datos estáticos (reemplaza con datos reales desde el controlador) -->
+                    @php
+                        $dispositivos = [
+                            [
+                                'serial' => '00:1A:2B:3C:4D:5E',
+                                'model' => 'NVR001',
+                                'number_ports' => '16',
+                                'user_person' => 'planta',
+                                'description' => 'Entrada Principal',
+                            ],
+                            [
+                                'serial' => '00:1A:2B:3C:4D:5E',
+                                'model' => 'NVR001',
+                                'number_ports' => '16',
+                                'user_person' => 'planta',
+                                'description' => 'Entrada Principal',
+                            ],
+                            [
+                                'serial' => '00:1A:2B:3C:4D:5E',
+                                'model' => 'NVR001',
+                                'number_ports' => '16',
+                                'user_person' => 'planta',
+                                'description' => 'Entrada Principal',
+                            ],
+                        ];
+                    @endphp
 
                     @foreach ($switches as $switch)
                         <tr class="hover:bg-gray-50">
+<<<<<<< HEAD
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $switch['serial'] }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $switch['model'] }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $switch['number_ports'] }}</td>
@@ -80,6 +113,14 @@
                             </td>
 
                             {{-- Acciones --}}
+=======
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $dispositivo['serial'] }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $dispositivo['model'] }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $dispositivo['number_ports'] }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $dispositivo['user_person'] }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $dispositivo['description'] }}</t>
+
+>>>>>>> def195e204544cf70835e80cb5b845ad104f78ee
                             <td class="px-6 py-4 text-sm space-x-2">
                                 <div class="flex space-x-2">
                                     <a href="{{ route('switch.show', $switch) }}"

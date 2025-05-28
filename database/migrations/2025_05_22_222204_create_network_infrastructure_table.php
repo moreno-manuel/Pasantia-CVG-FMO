@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('model');
             $table->string('number_ports');
             $table->string('user_person'); // espacio fisico donde esta instalado
-            $table->string('status');
             $table->string('description')->nullable();
             $table->timestamps();
         });

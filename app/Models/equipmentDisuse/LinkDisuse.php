@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Models\equipmentDisuse;
+namespace App\Models\EquipmentDisuse;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Linkdisuse extends Model
+class LinkDisuse extends Model
 {
     protected $table = 'link_disuses';
     protected $primaryKey = 'id';
     public $incrementing = false;
     protected $keyType = 'string';
 
-    protected $fillable = [
+    protected $fillable =[
         'id',
         'name',
         'ssid',
@@ -19,8 +19,7 @@ class Linkdisuse extends Model
         'ip'
     ];
 
-    public function equipmentDisuse()
-    {
-        return $this->belongsTo(EquipmentDisuse::class);
+    public function equipmentDisuse(){
+        return $this->belongsTo(equipmentDisuse::class);
     }
 }

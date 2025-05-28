@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\equipmentDisuse;
+namespace App\Models\EquipmentDisuse;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,7 +16,7 @@ class NvrDisuse extends Model
         'name',
         'ip',
         'number_port',
-        'number_hdd',
+        'number_hdd'
     ];
 
     public function equipmentDisuse()
@@ -24,8 +24,7 @@ class NvrDisuse extends Model
         return $this->belongsTo(EquipmentDisuse::class);
     }
 
-    public function nvrHddDisuse()
-    {
-        return $this->hasMany(NvrHddDisuse::class);
+    public function hddNvr(){
+        return $this->hasMany(HddNvrDisuse::class);
     }
 }

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('nvr_hdds', function (Blueprint $table) {
+        Schema::create('hdd_nvrs', function (Blueprint $table) {
             $table->id();
             $table->string('nvr_id');
             $table->foreign('nvr_id')->references('mac')->on('nvrs')->onDelete('cascade');
@@ -63,7 +63,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('nvrs');
-        Schema::dropIfExists('nvr_hdds');
+        Schema::dropIfExists('hdd_nvrs');
         Schema::dropIfExists('cameras');
         Schema::dropIfExists('condition_attentions');
     }

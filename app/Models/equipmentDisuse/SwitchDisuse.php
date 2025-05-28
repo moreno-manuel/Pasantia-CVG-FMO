@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\equipmentDisuse;
+namespace App\Models\EquipmentDisuse;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,14 +11,13 @@ class SwitchDisuse extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
-    protected $fillable = [
+    protected $fillable=[
         'id',
-        'number_port',
+        'number_ports',
         'person_user'
     ];
 
-    public function equipmentDisuse()
-    {
+    public function equipmentDisuses(){
         return $this->belongsTo(EquipmentDisuse::class);
     }
 }

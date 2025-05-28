@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\equipmentDisuse;
+namespace App\Models\EquipmentDisuse;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,6 +15,7 @@ class CameraDisuse extends Model
         'id',
         'name',
         'location',
+        'nvr_name',
         'ip'
     ];
 

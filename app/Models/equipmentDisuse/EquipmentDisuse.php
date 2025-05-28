@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\equipmentDisuse;
+namespace App\Models\EquipmentDisuse;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,13 +15,13 @@ class EquipmentDisuse extends Model
         'id',
         'mark',
         'model',
-        'date',
-        'description'
+        'date_delete',
+        'descripion'
     ];
 
-    public function cameraDisuse()
+    public function switchDisuse()
     {
-        return $this->hasOne(CameraDisuse::class);
+        return $this->hasOne(SwitchDisuse::class);
     }
 
     public function linkDisuse()
@@ -29,13 +29,13 @@ class EquipmentDisuse extends Model
         return $this->hasOne(LinkDisuse::class);
     }
 
+    public function cameraDisuse()
+    {
+        return $this->hasOne(CameraDisuse::class);
+    }
+
     public function nvrDisuse()
     {
         return $this->hasOne(NvrDisuse::class);
-    }
-
-    public function switchDisuse()
-    {
-        return $this->hasOne(SwitchDisuse::class);
     }
 }

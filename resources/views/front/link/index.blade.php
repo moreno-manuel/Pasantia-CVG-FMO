@@ -1,6 +1,12 @@
 @extends('layouts.app-home')
 @section('content')
+<<<<<<< HEAD
     <!-- resources/views/link/index.blade.php -->
+=======
+    <div class="container mx-auto px-4 py-6">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold">Enlace</h1>
+>>>>>>> def195e204544cf70835e80cb5b845ad104f78ee
 
     <div class="container mx-auto px-4 py-6">
 
@@ -56,25 +62,73 @@
             <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-sm">
                 <thead class="bg-gray-100">
                     <tr>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-32">MAC</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-28">Marca</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-28">Modelo</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-32">Nombre</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-32">IP</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-32">Localidad</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-32">Acciones</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">MAC</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Marca</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Modelo</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Nombre</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">SSID</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">IP</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Ubicación</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Descripción</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Acciones</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
+                    <!-- Ejemplo de datos estáticos (reemplaza con datos reales desde el controlador) -->
+                    @php
+                        $dispositivos = [
+                            [
+                                'mac' => '00:1A:2B:3C:4D:5E',
+                                'mark' => 'NVR001',
+                                'model' => 'Hikvision',
+                                'name' => 'DS-2CD2042WD-I',
+                                'ssid' => 'Cámara 1',
+                                'location' => 'Entrada Principal',
+                                'ip' => '192.168.1.10',
+                                'description' => 'Activo',
+                            ],
+                            [
+                                'mac' => '00:1A:2B:3C:4D:5E',
+                                'mark' => 'NVR001',
+                                'model' => 'Hikvision',
+                                'name' => 'DS-2CD2042WD-I',
+                                'ssid' => 'Cámara 1',
+                                'location' => 'Entrada Principal',
+                                'ip' => '192.168.1.10',
+                                'description' => 'Activo',
+                            ],
+                            [
+                                'mac' => '00:1A:2B:3C:4D:5E',
+                                'mark' => 'NVR001',
+                                'model' => 'Hikvision',
+                                'name' => 'DS-2CD2042WD-I',
+                                'ssid' => 'Cámara 1',
+                                'location' => 'Entrada Principal',
+                                'ip' => '192.168.1.10',
+                                'description' => 'Activo',
+                            ],
+                        ];
+                    @endphp
 
                     @foreach ($links as $link)
                         <tr class="hover:bg-gray-50">
+<<<<<<< HEAD
                             <td class="px-6 py-4 text-sm text-gray-900 truncate">{{ $link['mac'] }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $link['mark'] }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $link['model'] }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $link['name'] }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $link['ip'] }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $link['location'] }}</td>
+=======
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $dispositivo['mac'] }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $dispositivo['mark'] }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $dispositivo['model'] }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $dispositivo['name'] }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $dispositivo['ssid'] }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $dispositivo['ip'] }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $dispositivo['location'] }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $dispositivo['description'] }}</td>
+>>>>>>> def195e204544cf70835e80cb5b845ad104f78ee
                             <td class="px-6 py-4 text-sm space-x-2">
                                 <div class="flex space-x-2">
                                     <a href="{{ route('enlace.show', $link['mac']) }}"
