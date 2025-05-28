@@ -1,4 +1,4 @@
-@extends('layouts.app-home') <!-- Asegúrate de tener layouts/app.blade.php -->
+@extends('layouts.app-home')
 
 @section('content')
     <div class="container mx-auto px-4 py-6">
@@ -58,7 +58,7 @@
             <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-sm">
                 <thead class="bg-gray-100">
                     <tr>
-<<<<<<< HEAD
+
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-32">MAC</th>
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-24">NVR</th>
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-24">Marca</th>
@@ -68,17 +68,7 @@
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-24">IP</th>
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-24">Status</th>
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-32">Acciones</th>
-=======
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">MAC</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Marca</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Modelo</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Nombre</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">IP</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Ubicación</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">NVR Conexión</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Status</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Acciones</th>
->>>>>>> def195e204544cf70835e80cb5b845ad104f78ee
+
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
@@ -122,18 +112,14 @@
 
                     @foreach ($dispositivos as $dispositivo)
                         <tr class="hover:bg-gray-50">
-<<<<<<< HEAD
                             <td class="px-6 py-4 text-sm text-gray-900 truncate">{{ $dispositivo['mac'] }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $dispositivo['nvr_id'] }}</td>
-=======
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $dispositivo['mac'] }}</td>
->>>>>>> def195e204544cf70835e80cb5b845ad104f78ee
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $dispositivo['marca'] }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $dispositivo['modelo'] }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $dispositivo['nombre'] }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $dispositivo['ip'] }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $dispositivo['ubicacion'] }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $dispositivo['nvr_id'] }}</td>
+
                             <td class="px-6 py-4 text-sm">
                                 <span
                                     class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 

@@ -59,27 +59,15 @@
             <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-sm">
                 <thead class="bg-gray-100">
                     <tr>
-<<<<<<< HEAD
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-32">MAC</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-28">Marca</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-28">Modelo</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-32">IP</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-32">Nombre</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-24">Puertos</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-24">Status</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-32">Acciones</th>
-=======
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">MAC</th>
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Marca</th>
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Modelo</th>
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Nombre</th>
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">IP</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Capacidad Puertos</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Puertos Usados</th>
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Puertos Disponibles</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Descripción</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Status</th>
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Acciones</th>
->>>>>>> def195e204544cf70835e80cb5b845ad104f78ee
+
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
@@ -87,7 +75,6 @@
                         $nvrs = [
                             [
                                 'mac' => '00:1A:2B:3C:4D:5E',
-<<<<<<< HEAD
                                 'marca' => 'Hikvision',
                                 'modelo' => 'DS-7608NI-I2/8P',
                                 'ip' => '192.168.1.20',
@@ -112,58 +99,19 @@
                                 'nombre' => 'NVR Exterior',
                                 'puertos_disponibles' => 16,
                                 'status' => 'Activo',
-=======
-                                'mark' => 'Hikvision',
-                                'model' => 'DS-2CD2042WD-I',
-                                'name' => 'Cámara 1',
-                                'ip' => '192.168.1.10',
-                                'volumen_1' => '5',
-                                'volumen_2' => '5',
-                                'number_ports' => '10',
-                                'use_ports' => '5',
-                                'dis_ports' => '5',
-                                'description' => 'Activo',
-                            ],
-                            [
-                                'mac' => '00:1A:2B:3C:4D:5E',
-                                'mark' => 'Hikvision',
-                                'model' => 'DS-2CD2042WD-I',
-                                'name' => 'Cámara 1',
-                                'ip' => '192.168.1.10',
-                                'volumen_1' => '5',
-                                'volumen_2' => '5',
-                                'number_ports' => '10',
-                                'use_ports' => '5',
-                                'dis_ports' => '5',
-                                'description' => 'inactio',
-                            ],
-                            [
-                                'mac' => '00:1A:2B:3C:4D:5E',
-                                'mark' => 'Hikvision',
-                                'model' => 'DS-2CD2042WD-I',
-                                'name' => 'Cámara 1',
-                                'ip' => '192.168.1.10',
-                                'volumen_1' => '5',
-                                'volumen_2' => '5',
-                                'number_ports' => '10',
-                                'use_ports' => '5',
-                                'dis_ports' => '5',
-                                'description' => 'inactivo',
->>>>>>> def195e204544cf70835e80cb5b845ad104f78ee
                             ],
                         ];
                     @endphp
 
                     @foreach ($nvrs as $nvr)
                         <tr class="hover:bg-gray-50">
-<<<<<<< HEAD
+
                             <td class="px-6 py-4 text-sm text-gray-900 truncate">{{ $nvr['mac'] }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $nvr['marca'] }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $nvr['modelo'] }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $nvr['ip'] }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $nvr['nombre'] }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900 text-center">{{ $nvr['puertos_disponibles'] }}
-                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-900 text-center">{{ $nvr['puertos_disponibles'] }} </td>
                             <td class="px-6 py-4 text-sm">
                                 <span
                                     class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
@@ -193,33 +141,6 @@
                                         </button>
                                     </form>
                                 </div>
-=======
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $dispositivo['mac'] }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $dispositivo['mark'] }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $dispositivo['model'] }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $dispositivo['name'] }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $dispositivo['ip'] }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $dispositivo['number_ports'] }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $dispositivo['use_ports'] }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $dispositivo['dis_ports'] }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $dispositivo['description'] }}</td>
-
-                            <td class="px-6 py-4 text-sm space-x-2">
-                                <!-- Botón Ver -->
-                                <a href="#"
-                                    class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                    Ver
-                                </a>
-                                <!-- Botón Eliminar -->
-                                <form action="#" method="POST" class="inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit"
-                                        class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                        Eliminar
-                                    </button>
-                                </form>
->>>>>>> def195e204544cf70835e80cb5b845ad104f78ee
                             </td>
                         </tr>
                     @endforeach
