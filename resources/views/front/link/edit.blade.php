@@ -35,6 +35,12 @@
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             value="{{ old('name', $link->name) }}" required>
                     </div>
+                    @error('name')
+                        <br>
+                        <span class="bg-red-600 text-white py-2 px-4 rounded font-bold"
+                            style="font-size: 12px">{{ $message }}</span>
+                        </br>
+                    @enderror
 
                     <!-- Campo Marca -->
                     <div>

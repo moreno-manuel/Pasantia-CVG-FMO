@@ -17,8 +17,9 @@ class Switche extends Model
         'serial',
         'model',
         'number_ports',
-        'user_person',
-        'description'
+        'location',
+        'description',
+        'status'
 
     ];
 
@@ -33,6 +34,12 @@ class Switche extends Model
     {
         return Attribute::make(
             set: fn($model) => strtoupper($model),
+        );
+    }
+    protected function location(): Attribute
+    {
+        return Attribute::make(
+            set: fn($location) => strtoupper($location),
         );
     }
 }

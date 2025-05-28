@@ -16,14 +16,14 @@ return new class extends Migration
             $table->string('mark');
             $table->string('model');
             $table->date('date');
-            $table->date('description');
+            $table->string('description');
             $table->timestamps();
         });
 
         Schema::create('switch_disuses', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->string('number_ports');
-            $table->string('person_user');
+            $table->string('location');
             $table->timestamps();
         });
 

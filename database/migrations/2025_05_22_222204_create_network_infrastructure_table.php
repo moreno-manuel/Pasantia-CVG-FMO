@@ -15,8 +15,9 @@ return new class extends Migration
             $table->string('serial')->primary();
             $table->string('model');
             $table->string('number_ports');
-            $table->string('user_person'); // espacio fisico donde esta instalado
+            $table->string('location');
             $table->string('description')->nullable();
+            $table->string('status');
             $table->timestamps();
         });
 
@@ -27,6 +28,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('ssid');
             $table->string('location');
+            $table->string('status');
             $table->unsignedBigInteger('ip')->unique()->require();
             $table->string('description')->nullable();
             $table->timestamps();

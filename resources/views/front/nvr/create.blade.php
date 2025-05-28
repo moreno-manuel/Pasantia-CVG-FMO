@@ -13,18 +13,13 @@
             </a>
         </div>
 
+
+        {{-- Formulario NVR --}}
         <div class="bg-white shadow overflow-hidden sm:rounded-lg p-6">
             <form action="{{ route('nvr.store') }}" method="POST">
                 @csrf
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Campo Nombre -->
-                    <div>
-                        <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
-                        <input type="text" name="nombre" id="nombre"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            required>
-                    </div>
 
                     <!-- Campo Dirección MAC -->
                     <div>
@@ -33,11 +28,31 @@
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             placeholder="Ejemplo: 00:1A:2B:3C:4D:5E" required>
                     </div>
+                    @error('mac')
+                        <br>
+                        <span class="bg-red-600 text-white py-2 px-4 rounded font-bold"
+                            style="font-size: 12px">{{ $message }}</span>
+                        </br>
+                    @enderror
+
+                    <!-- Campo Nombre -->
+                    <div>
+                        <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
+                        <input type="text" name="name" id="name"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            required>
+                    </div>
+                    @error('name')
+                        <br>
+                        <span class="bg-red-600 text-white py-2 px-4 rounded font-bold"
+                            style="font-size: 12px">{{ $message }}</span>
+                        </br>
+                    @enderror
 
                     <!-- Campo Marca -->
                     <div>
                         <label for="marca" class="block text-sm font-medium text-gray-700">Marca</label>
-                        <select name="marca" id="marca"
+                        <select name="mark" id="mark"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
                             <option value="">Selecciona una marca</option>
@@ -51,7 +66,7 @@
                     <!-- Campo Modelo -->
                     <div>
                         <label for="modelo" class="block text-sm font-medium text-gray-700">Modelo</label>
-                        <input type="text" name="modelo" id="modelo"
+                        <input type="text" name="model" id="model"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
                     </div>
@@ -68,7 +83,7 @@
                     <div>
                         <label for="puertos_disponibles" class="block text-sm font-medium text-gray-700">Puertos
                             Disponibles</label>
-                        <input type="number" name="puertos_disponibles" id="puertos_disponibles"
+                        <input type="number" name="number_ports" id="number_ports"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             min="1" required>
                     </div>
@@ -77,9 +92,9 @@
                     <div>
                         <label for="num_discos_duros" class="block text-sm font-medium text-gray-700">Número de Discos
                             Duros</label>
-                        <input type="number" name="num_discos_duros" id="num_discos_duros"
+                        <input type="number" name="number_hdd" id="number_hdd"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            min="0" oninput="generateHDDForm(this.value)">
+                            min="1" max="4" oninput="generateHDDForm(this.value)">
                     </div>
 
                     <!-- Campo Estado -->
@@ -97,10 +112,11 @@
                     <!-- Campo Descripción -->
                     <div class="md:col-span-2">
                         <label for="descripcion" class="block text-sm font-medium text-gray-700">Descripción</label>
-                        <textarea name="descripcion" id="descripcion" rows="3"
+                        <textarea name="description" id="description" rows="3"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             placeholder="Describe brevemente este NVR..."></textarea>
                     </div>
+
                 </div>
 
                 <!-- Campos dinámicos de HDDs -->
@@ -151,14 +167,14 @@
                     <!-- Serial -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Serial</label>
-                        <input type="text" name="discos[${i}][serial]"
+                        <input type="text" name="hdd[${i}][serial_hdd]"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
                     </div>
 
                     <!-- Capacidad actual -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Capacidad (GB)</label>
-                        <input type="number" name="discos[${i}][capacidad]"
+                        <input type="number" name="hdd[${i}][capacity_hdd]"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             min="1">
                     </div>
@@ -166,7 +182,7 @@
                     <!-- Capacidad máxima del puerto -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Capacidad Máxima (GB)</label>
-                        <input type="number" name="discos[${i}][capacidad_max]"
+                        <input type="number" name="hdd[${i}][capacity_max]"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             min="1">
                     </div>
@@ -174,12 +190,12 @@
                     <!-- Estado del disco -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Estado</label>
-                        <select name="discos[${i}][status]"
+                        <select name="hdd[${i}][status]"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
                             <option value="">Selecciona...</option>
-                            <option value="Activo">Activo</option>
-                            <option value="Inactivo">Inactivo</option>
-                            <option value="Fuera de servicio">Fuera de servicio</option>
+                            <option value="Ocupado">Activo</option>
+                            <option value="Disponible">Inactivo</option>
+
                         </select>
                     </div>
                 </div>

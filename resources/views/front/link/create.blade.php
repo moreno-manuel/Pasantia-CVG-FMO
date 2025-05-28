@@ -13,7 +13,7 @@
             </a>
         </div>
 
-        {{-- Formnulario Enlace --}}
+        {{-- Formnulario Enlace (link) --}}
         <div class="bg-white shadow overflow-hidden sm:rounded-lg p-6">
             <form action="{{ route('enlace.store') }}" method="POST">
                 @csrf
@@ -41,6 +41,12 @@
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
                     </div>
+                    @error('name')
+                        <br>
+                        <span class="bg-red-600 text-white py-2 px-4 rounded font-bold"
+                            style="font-size: 12px">{{ $message }}</span>
+                        </br>
+                    @enderror
 
                     <!-- Campo Marca -->
                     <div>
@@ -61,6 +67,14 @@
                     <div>
                         <label for="modelo" class="block text-sm font-medium text-gray-700">Modelo</label>
                         <input type="text" name="model" value="{{ old('model') }}"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            required>
+                    </div>
+
+                    <!-- Campo ubicacion -->
+                    <div>
+                        <label for="modelo" class="block text-sm font-medium text-gray-700">Modelo</label>
+                        <input type="text" name="location" value="{{ old('location') }}"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
                     </div>
@@ -93,6 +107,18 @@
                         <input type="text" name="location" value="{{ old('location') }}"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
+                    </div>
+
+                    <!-- Campo Estado -->
+                    <div>
+                        <label for="status" class="block text-sm font-medium text-gray-700">Estado</label>
+                        <select name="status" value = '{{ old('status') }}'
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            required>
+                            <option value="">Selecciona el estado</option>
+                            <option value="Activo">Activo</option>
+                            <option value="Inactivo">Inactivo</option>
+                        </select>
                     </div>
 
                     <!-- Campo Descripción -->

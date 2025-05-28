@@ -15,41 +15,47 @@
 
         <!-- Filtros para búsqueda -->
         <form method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4" onsubmit="return validateFilters()">
+
             <!-- Serial -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Serial</label>
                 <input type="text" name="serial" value="{{ $filters['serial'] ?? '' }}"
-                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                    class="w-full rounded-md border-black shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
             </div>
 
-            <!-- Modelo -->
+            <!-- ubicacion -->
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Modelo</label>
-                <input type="text" name="model" value="{{ $filters['model'] ?? '' }}"
-                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Ubicación</label>
+                <input type="text" name="location" value="{{ $filters['location'] ?? '' }}"
+                    class="w-full rounded-md border-black shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
             </div>
 
-            <!-- Número de Puertos -->
+            {{-- Status --}}
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Número de Puertos</label>
-                <input type="number" name="number_ports" value="{{ $filters['number_ports'] ?? '' }}" min="1"
-                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Estado</label>
+                <select name="status"
+                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" >
+                    <option value="">Todos</option>
+                    <option value="Activo">Activo</option>
+                    <option value="Inactivo">Inactivo</option>
+                </select>
             </div>
 
             <!-- Botones: Filtrar + Limpiar -->
             <div class="flex items-end space-x-2">
-                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm">
+                <button type="submit" class="px-1 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-xs">
                     Filtrar
                 </button>
 
                 <!-- Botón Limpiar Filtros -->
                 <a href="{{ route('switch.index') }}"
-                    class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 text-sm">
+                    class="px-1 py-1 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 text-xs">
                     Limpiar
                 </a>
             </div>
         </form>
 
+        <br>
         <!-- Tabla -->
         <div class="overflow-x-auto">
             <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-sm">
@@ -58,7 +64,7 @@
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Serial</th>
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Model</th>
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Número de Puertos</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Persona Usuario Asignado</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Ubicación</th>
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Status</th>
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Acciones</th>
                     </tr>
@@ -70,7 +76,7 @@
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $switch['serial'] }} </td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $switch['model'] }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $switch['number_ports'] }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $switch['user_person'] }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $switch['location'] }}</td>
                             <td class="px-6 py-4 text-sm">
                                 <span
                                     class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
@@ -109,9 +115,10 @@
         {{-- paginacion --}}
         {{ $switches->appends([
                 'serial' => $filters['serial'] ?? '',
-                'model' => $filters['model'] ?? '',
-                'number_ports' => $filters['number_ports'] ?? '',
+                'location' => $filters['location'] ?? '',
+                'status' => $filters['status'] ?? '',
             ])->links() }}
+
 
         {{-- funcion para los filtros --}}
         @push('scripts')
@@ -119,17 +126,17 @@
                 function validateFilters() {
                     // Obtén los valores de los campos de filtro
                     const serial = document.querySelector("input[name='serial']")?.value.trim();
-                    const model = document.querySelector("input[name='model']")?.value.trim();
-                    const numberPorts = document.querySelector("input[name='number_ports']")?.value.trim();
+                    const location = document.querySelector("input[name='location']")?.value.trim();
+                    const status = document.querySelector("select[name='status']")?.value.trim();
 
-                    // Verifica si todos están vacíos
-                    if (!serial && !model && (!numberPorts || parseInt(numberPorts) <= 0)) {
+                    // Verifica si está vacio
+                    if (!serial && !location && !status) {
                         // Cancelar envío del formulario
                         alert('Por favor, ingresa al menos un valor para filtrar.');
                         return false;
                     }
 
-                    // Si al menos uno tiene valor, permite el envío
+                    // Si tiene un valor
                     return true;
                 }
             </script>

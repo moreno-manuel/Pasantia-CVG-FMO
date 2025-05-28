@@ -13,47 +13,29 @@
             </a>
         </div>
 
-        <!-- Filtros -->
-        <div class="bg-white p-4 rounded-lg shadow-md mb-6">
-            <form method="GET" class="grid grid-cols-1 md:grid-cols-5 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
-                    <input type="text" name="nombre"
-                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Marca</label>
-                    <select name="marca"
-                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
-                        <option value="">Todas</option>
-                        <option value="Hikvision">Hikvision</option>
-                        <option value="Dahua">Dahua</option>
-                        <option value="Axis">Axis</option>
-                        <option value="Other">Otra</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Modelo</label>
-                    <input type="text" name="modelo"
-                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Estado</label>
-                    <select name="status"
-                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
-                        <option value="">Todos</option>
-                        <option value="Activo">Activo</option>
-                        <option value="Inactivo">Inactivo</option>
-                    </select>
-                </div>
-                <div class="flex items-end">
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm">
-                        Filtrar
-                    </button>
-                </div>
-            </form>
-        </div>
+        <!-- Filtros para búsqueda -->
+        <form method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Serial -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+                <input type="text" name="name"
+                    class="w-full rounded-md border-black shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+            </div>
 
+            <!-- Botones: Filtrar + Limpiar -->
+            <div class="flex items-end space-x-2">
+                <button type="submit" class="px-1 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-xs">
+                    Filtrar
+                </button>
+
+                <!-- Botón Limpiar Filtros -->
+                <a href="#" class="px-1 py-1 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 text-xs">
+                    Limpiar
+                </a>
+            </div>
+        </form>
+        <br>
+        
         <!-- Tabla -->
         <div class="overflow-x-auto">
             <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-sm">
@@ -71,47 +53,16 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
-                    @php
-                        $nvrs = [
-                            [
-                                'mac' => '00:1A:2B:3C:4D:5E',
-                                'marca' => 'Hikvision',
-                                'modelo' => 'DS-7608NI-I2/8P',
-                                'ip' => '192.168.1.20',
-                                'nombre' => 'NVR Principal',
-                                'puertos_disponibles' => 8,
-                                'status' => 'Activo',
-                            ],
-                            [
-                                'mac' => '00:1B:44:11:3A:B7',
-                                'marca' => 'Dahua',
-                                'modelo' => 'NVR4108HS-W',
-                                'ip' => '192.168.1.21',
-                                'nombre' => 'NVR Estacionamiento',
-                                'puertos_disponibles' => 4,
-                                'status' => 'Inactivo',
-                            ],
-                            [
-                                'mac' => '00:1C:B3:01:02:03',
-                                'marca' => 'Axis',
-                                'modelo' => 'AXIS Q6055-E',
-                                'ip' => '192.168.1.22',
-                                'nombre' => 'NVR Exterior',
-                                'puertos_disponibles' => 16,
-                                'status' => 'Activo',
-                            ],
-                        ];
-                    @endphp
-
+                   
                     @foreach ($nvrs as $nvr)
                         <tr class="hover:bg-gray-50">
 
                             <td class="px-6 py-4 text-sm text-gray-900 truncate">{{ $nvr['mac'] }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $nvr['marca'] }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $nvr['modelo'] }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $nvr['mark'] }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $nvr['model'] }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $nvr['ip'] }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $nvr['nombre'] }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900 text-center">{{ $nvr['puertos_disponibles'] }} </td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $nvr['name'] }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900 text-center">{{ $nvr['number_ports'] }} </td>
                             <td class="px-6 py-4 text-sm">
                                 <span
                                     class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 

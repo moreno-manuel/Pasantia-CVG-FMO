@@ -57,13 +57,12 @@
                             min="1" required>
                     </div>
 
-                    <!-- Campo Persona Usuario -->
+                    <!-- Campo ubicacion -->
                     <div>
-                        <label for="persona_usuario" class="block text-sm font-medium text-gray-700">Persona
-                            Usuario</label>
-                        <input type="text" name="user_person" value = '{{ old('user_person') }}'
+                        <label for="location" class="block text-sm font-medium text-gray-700">Ubicación</label>
+                        <input type="text" name="location" value = '{{ old('location') }}'
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            placeholder="Nombre del responsable" required>
+                            placeholder="Ubicación de Instalación" required>
                     </div>
 
                     <!-- Campo Estado -->
@@ -75,7 +74,6 @@
                             <option value="">Selecciona el estado</option>
                             <option value="Activo">Activo</option>
                             <option value="Inactivo">Inactivo</option>
-                            <option value="Mantenimiento">En Mantenimiento</option>
                         </select>
                     </div>
 

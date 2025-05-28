@@ -17,15 +17,15 @@ class SwitchController extends Controller
     {
         // Valida si hay algún filtro activo
         $hasFilters = $request->filled('serial') ||
-            $request->filled('model') ||
-            $request->filled('number_ports');
+            $request->filled('location') ||
+            $request->filled('status');
 
         if (!$hasFilters) { //si no se aplica un filtro
-            $switches = Switche::paginate(5);
+            $switches = Switche::paginate(10);
             return view('front.switch.index', compact('switches'));
         }
 
-        return filter($request,'switches'); //helper
+        return filter($request, 'switches'); //helper
     }
 
     public function create() //muestra la vista para crear un nuevo switch
@@ -39,8 +39,8 @@ class SwitchController extends Controller
         $validator = Validator::make($request->all(), [ //para capturar si hay dato incorrecto
             'serial' => 'required|unique:switches',
             'model' => 'required',
+            'location' => 'required',
             'number_ports' => 'required',
-            'user_person' => 'required',
             'status' => 'required',
             'description' => 'nullable'
         ]);
@@ -78,7 +78,7 @@ class SwitchController extends Controller
 
         $validator = Validator::make($request->all(), [ //para capturar si hay dato incorrecto
             'number_ports' => 'required',
-            'user_person' => 'required',
+            'location' => 'required',
             'status' => 'required',
             'description' => 'nullable'
         ]);

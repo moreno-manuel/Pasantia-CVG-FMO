@@ -18,12 +18,11 @@ class LinkController extends Controller
     public function index(Request $request) //muestra los registros en la tabla principal link
     {
         // Valida si hay algún filtro activo
-        $hasFilters = $request->filled('name') ||
-            $request->filled('model') ||
-            $request->filled('mark');
+        $hasFilters = $request->filled('status') ||
+            $request->filled('location');
 
         if (!$hasFilters) { //si no se aplica un filtro
-            $links = Link::paginate(5);
+            $links = Link::paginate(10);
             return view('front.link.index', compact('links'));
         }
 
@@ -42,9 +41,10 @@ class LinkController extends Controller
                 'mac' => 'required|unique:links',
                 'mark' => 'required',
                 'model' => 'required',
-                'name' => 'required',
+                'name' => 'required|unique:links',
                 'ssid' => 'required',
                 'location' => 'required',
+                'status' => 'required',
                 'ip' => 'required|ip|unique:links',
                 'description' => 'nullable'
             ]);
@@ -96,6 +96,7 @@ class LinkController extends Controller
                 'name' => 'required',
                 'ssid' => 'required',
                 'location' => 'required',
+                'status' => 'required',
                 'ip' => 'required|ip|unique:links',
                 'description' => 'nullable'
             ]);

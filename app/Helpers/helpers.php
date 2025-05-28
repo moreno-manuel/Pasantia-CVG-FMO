@@ -14,32 +14,32 @@ para la busqueda*/
 
 function filter(Request $request, string $table)
 {
-    
+
     switch ($table) {
         case 'switches': {
-                // Obtén los valores de los filtros
-                $name = strtoupper($request->input('serial'));
-                $model = strtoupper($request->input('model'));
-                $mark = $request->input('number_ports');
+                // Obtén el valor del filtro
+                $serial = strtoupper($request->input('serial'));
+                $location = strtoupper($request->input('location'));
+                $status = $request->input('status');
 
                 // Construye la consulta base
                 $query = Switche::query();
 
                 // Aplica filtros condicionalmente
-                if ($name) {
-                    $query->where('serial', 'like',  $name . '%');
+                if ($serial) {
+                    $query->where('serial', 'like',  $serial . '%');
                 }
 
-                if ($model) {
-                    $query->where('model', 'like',  $model . '%');
+                if ($location) {
+                    $query->where('location', 'like',  $location . '%');
                 }
 
-                if ($mark) {
-                    $query->where('number_ports', $mark);
+                if ($status) {
+                    $query->where('status', 'like',  $status . '%');
                 }
 
                 // Ejecuta la consulta y aplica paginación
-                $switches = $query->paginate(5);
+                $switches = $query->paginate(10);
 
                 // Mantiene los valores de los filtros en la vista
                 return view('front.switch.index', compact('switches'))
@@ -50,25 +50,23 @@ function filter(Request $request, string $table)
 
         case 'links': {
                 // Obtén los valores de los filtros
-                $name = strtoupper($request->input('name'));
-                $model = strtoupper($request->input('model'));
-                $mark = strtoupper($request->input('mark'));
+                $location = strtoupper($request->input('location'));
+                $status = $request->input('status');
+
 
                 // Construye la consulta base
                 $query = Link::query();
 
                 // Aplica filtros condicionalmente
-                if ($name) {
-                    $query->where('name', 'like',  $name . '%');
+                if ($location) {
+                    $query->where('location', 'like',  $location . '%');
                 }
 
-                if ($model) {
-                    $query->where('model', 'like',  $model . '%');
+                // Aplica filtros condicionalmente
+                if ($status) {
+                    $query->where('status', 'like',  $status . '%');
                 }
 
-                if ($mark) {
-                    $query->where('mark', 'like',  $mark . '%');
-                }
 
                 // Ejecuta la consulta y aplica paginación
                 $links = $query->paginate(5);
@@ -82,7 +80,7 @@ function filter(Request $request, string $table)
                 break;
             }
         default:
-            # code...
+            return 'Error s';
             break;
     }
 }

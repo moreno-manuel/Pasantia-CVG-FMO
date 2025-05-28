@@ -13,6 +13,7 @@ class ConditionAttention extends Model
         'name',
         'date_ini',
         'date_end',
+        'satus',
         'description'
     ];
 

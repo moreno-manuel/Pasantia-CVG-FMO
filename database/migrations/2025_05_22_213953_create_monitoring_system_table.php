@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('ip')->unique()->required();
             $table->integer('number_ports');
             $table->integer('number_hdd');
+            $table->string('status');
             $table->string('description')->nullable();
             $table->timestamps();
         });
@@ -52,6 +53,7 @@ return new class extends Migration
             $table->string('name');
             $table->date('date_ini');
             $table->date('date_end')->nullable();
+            $table->string('status');
             $table->string('description')->nullable();
             $table->timestamps();
         });

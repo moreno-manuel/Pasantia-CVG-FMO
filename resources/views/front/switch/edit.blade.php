@@ -36,10 +36,10 @@
 
                     <!-- Campo Persona Usuario -->
                     <div>
-                        <label for="user_person" class="block text-sm font-medium text-gray-700">Persona Usuario</label>
+                        <label for="user_person" class="block text-sm font-medium text-gray-700">Ubicación</label>
                         <input type="text" name="user_person" id="user_person"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            value="{{ old('user_person', $switch->user_person) }}" required>
+                            value="{{ old('user_person', $switch->location) }}" required>
                     </div>
 
                     <!-- Campo Estado -->
@@ -52,8 +52,6 @@
                             <option value="Activo" {{ $switch->status === 'Activo' ? 'selected' : '' }}>Activo</option>
                             <option value="Inactivo" {{ $switch->status === 'Inactivo' ? 'selected' : '' }}>Inactivo
                             </option>
-                            <option value="Mantenimiento" {{ $switch->status === 'Mantenimiento' ? 'selected' : '' }}>En
-                                Mantenimiento</option>
                         </select>
                     </div>
 
