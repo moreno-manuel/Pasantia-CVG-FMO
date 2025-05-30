@@ -66,4 +66,11 @@ class Link extends Model
             set: fn($name) => strtoupper($name),
         );
     }
+
+    protected function location(): Attribute //name
+    {
+        return Attribute::make(
+            set: fn($location) => strtoupper($location),
+        );
+    }
 }

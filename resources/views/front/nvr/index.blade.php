@@ -14,11 +14,12 @@
         </div>
 
         <!-- Filtros para búsqueda -->
-        <form method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <form method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4" onsubmit="return validateFilters()">
+
             <!-- Localidad -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Localidad</label>
-                <input type="text" name="Localidad"
+                <input type="text" name="location" value="{{ $filters['location'] ?? '' }}"
                     class="w-full rounded-md border-black shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
             </div>
 
@@ -40,81 +41,113 @@
                 </button>
 
                 <!-- Botón Limpiar Filtros -->
-                <a href="#" class="px-1 py-1 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 text-xs">
+                <a href="{{ route('nvr.index') }}"
+                    class="px-1 py-1 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 text-xs">
                     Limpiar
                 </a>
             </div>
         </form>
+
         <br>
 
-        <!-- Tabla -->
-        <div class="overflow-x-auto">
-            <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-sm">
-                <thead class="bg-gray-100">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">MAC</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Marca</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Modelo</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Nombre</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">N°/Puertos</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Localidad</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">IP</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Status</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Acciones</th>
+        {{-- valida para mostrar tabla o mensaje --}}
+        @if ($nvrs->isNotEmpty())
+            <!-- Tabla -->
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-sm">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">MAC</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Marca</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Modelo</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Nombre</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">N°/Puertos</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Localidad</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">IP</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Status</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Acciones</th>
 
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-200">
-
-                    @foreach ($nvrs as $nvr)
-                        <tr class="hover:bg-gray-50">
-
-                            <td class="px-6 py-4 text-sm text-gray-900 truncate">{{ $nvr['mac'] }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $nvr['mark'] }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $nvr['model'] }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $nvr['name'] }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $nvr['ports_number'] }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $nvr['location'] }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $nvr['ip'] }}</td>
-                            <td class="px-6 py-4 text-sm">
-                                <span
-                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                    {{ $nvr['status'] === 'Activo' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                    {{ $nvr['status'] }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 text-sm">
-                                <div class="flex space-x-2">
-                                    <!-- Botón Ver -->
-                                    <a href="{{route('nvr.show',$nvr)}}"
-                                        class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                        Ver
-                                    </a>
-                                    <!-- Botón Editar -->
-                                    <a href="{{route('nvr.edit',$nvr)}}"
-                                        class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
-                                        Editar
-                                    </a>
-                                    <!-- Botón Eliminar -->
-                                    <form action="{{ route('nvr.destroy', $nvr) }}" method="POST" class="inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                            class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                            Eliminar
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
 
-        {{--  <!-- Paginación -->
-        <div class="mt-6">
-            {{ $nvrs->links() }} 
-        </div> --}}
+                        @foreach ($nvrs as $nvr)
+                            <tr class="hover:bg-gray-50">
+
+                                <td class="px-6 py-4 text-sm text-gray-900 truncate">{{ $nvr['mac'] }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-900">{{ $nvr['mark'] }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-900">{{ $nvr['model'] }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-900">{{ $nvr['name'] }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-900">{{ $nvr['ports_number'] }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-900">{{ $nvr['location'] }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-900">{{ $nvr['ip'] }}</td>
+                                <td class="px-6 py-4 text-sm">
+                                    <span
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+                                    {{ $nvr['status'] === 'Activo' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                        {{ $nvr['status'] }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-sm">
+                                    <div class="flex space-x-2">
+                                        <!-- Botón Ver -->
+                                        <a href="{{ route('nvr.show', $nvr) }}"
+                                            class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                            Ver
+                                        </a>
+                                        <!-- Botón Editar -->
+                                        <a href="{{ route('nvr.edit', $nvr) }}"
+                                            class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                                            Editar
+                                        </a>
+                                        <!-- Botón Eliminar -->
+                                        <form action="{{ route('nvr.destroy', $nvr) }}" method="POST" class="inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                                Eliminar
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+            {{-- paginacion --}}
+            {{ $nvrs->appends([
+                    'location' => $filters['location'] ?? '',
+                    'status' => $filters['status'] ?? '',
+                ])->links() }}
+        @else
+            <div class="text-center mt-6 bg-gray-100 border border-gray-300 rounded-md p-4 text-gray-700">
+                <p>No hay registros existentes</p>
+            </div>
+        @endif
+        
     </div>
+
+    {{-- funcion para los filtros --}}
+    @push('scripts')
+        <script>
+            function validateFilters() {
+                // Obtén los valores de los campos de filtro
+                const location = document.querySelector("input[name='location']")?.value.trim();
+                const status = document.querySelector("select[name='status']")?.value.trim();
+
+                // Verifica si estávacíos
+                if (!location && !status) {
+                    // Cancelar envío del formulario
+                    alert('Por favor, ingresa al menos un valor para filtrar.');
+                    return false;
+                }
+                // Si hay un valor
+                return true;
+            }
+        </script>
+    @endpush
+
 @endsection

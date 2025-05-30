@@ -2,6 +2,7 @@
 
 namespace App\Models\monitoringSystem;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 
 class SlotNvr extends Model
@@ -16,8 +17,17 @@ class SlotNvr extends Model
         'status'
     ];
 
+    //Relaciones
     public function nvr()
     {
         return $this->belongsTo(Nvr::class, 'nvr_id', 'mac');
+    }
+
+    //casteos
+    protected function nvrId(): Attribute //mac
+    {
+        return Attribute::make(
+            set: fn($nvr_id) => strtoupper($nvr_id),
+        );
     }
 }

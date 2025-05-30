@@ -12,7 +12,8 @@ use function app\Helpers\filter;
 //controlador para el crud del switch
 class SwitchController extends Controller
 {
-    public function index(Request $request) //muestra los registros en la tabla principal
+
+    public function index(Request $request) //muestra los registros en la tabla principal switch
     {
         // Valida si hay algún filtro activo
         $hasFilters = $request->filled('serial') ||

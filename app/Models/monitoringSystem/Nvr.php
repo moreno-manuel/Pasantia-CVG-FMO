@@ -28,13 +28,13 @@ class Nvr extends Model
     //relaciones
     public function slotNvr()
     {
-        return $this->hasMany(SlotNvr::class,'nvr_id','mac');
+        return $this->hasMany(SlotNvr::class, 'nvr_id', 'mac');
     }
 
     public function camera()
     {
 
-        return $this->hasMany(Camera::class);
+        return $this->hasMany(Camera::class, 'nvr_id', 'mac');
     }
 
 
@@ -65,6 +65,13 @@ class Nvr extends Model
     {
         return Attribute::make(
             set: fn($name) => strtoupper($name),
+        );
+    }
+
+    protected function location(): Attribute //name
+    {
+        return Attribute::make(
+            set: fn($location) => strtoupper($location),
         );
     }
 

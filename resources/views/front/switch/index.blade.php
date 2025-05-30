@@ -56,90 +56,100 @@
         </form>
 
         <br>
-        <!-- Tabla -->
-        <div class="overflow-x-auto">
-            <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-sm">
-                <thead class="bg-gray-100">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Serial</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Model</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">N°/Puertos</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Localidad</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Status</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-200">
 
-                    @foreach ($switches as $switch)
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $switch['serial'] }} </td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $switch['model'] }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $switch['number_ports'] }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $switch['location'] }}</td>
-                            <td class="px-6 py-4 text-sm">
-                                <span
-                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                    {{ $switch['status'] === 'Activo' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                    {{ $switch['status'] }}
-                                </span>
-                            </td>
-
-                            {{-- Acciones --}}
-                            <td class="px-6 py-4 text-sm space-x-2">
-                                <div class="flex space-x-2">
-                                    <a href="{{ route('switch.show', $switch) }}"
-                                        class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                        Ver
-                                    </a>
-                                    <a href="{{ route('switch.edit', $switch) }}"
-                                        class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
-                                        Editar
-                                    </a>
-                                    <form action="{{ route('switch.destroy', $switch) }}" method="POST" class="inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                            class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                            Eliminar
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
+        {{-- valida para mostrar tabla o mensaje --}}
+        @if ($switches->isNotEmpty())
+            <!-- Tabla -->
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-sm">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Serial</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Model</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">N°/Puertos</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Localidad</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Status</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Acciones</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
 
-        {{-- paginacion --}}
-        {{ $switches->appends([
-                'serial' => $filters['serial'] ?? '',
-                'location' => $filters['location'] ?? '',
-                'status' => $filters['status'] ?? '',
-            ])->links() }}
+                        @foreach ($switches as $switch)
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 text-sm text-gray-900">{{ $switch['serial'] }} </td>
+                                <td class="px-6 py-4 text-sm text-gray-900">{{ $switch['model'] }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-900">{{ $switch['number_ports'] }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-900">{{ $switch['location'] }}</td>
+                                <td class="px-6 py-4 text-sm">
+                                    <span
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+                                    {{ $switch['status'] === 'Activo' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                        {{ $switch['status'] }}
+                                    </span>
+                                </td>
 
+                                {{-- Acciones --}}
+                                <td class="px-6 py-4 text-sm space-x-2">
+                                    <div class="flex space-x-2">
+                                        <a href="{{ route('switch.show', $switch) }}"
+                                            class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                            Ver
+                                        </a>
+                                        <a href="{{ route('switch.edit', $switch) }}"
+                                            class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                                            Editar
+                                        </a>
+                                        <form action="{{ route('switch.destroy', $switch) }}" method="POST"
+                                            class="inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                                Eliminar
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
 
-        {{-- funcion para los filtros --}}
-        @push('scripts')
-            <script>
-                function validateFilters() {
-                    // Obtén los valores de los campos de filtro
-                    const serial = document.querySelector("input[name='serial']")?.value.trim();
-                    const location = document.querySelector("input[name='location']")?.value.trim();
-                    const status = document.querySelector("select[name='status']")?.value.trim();
+            {{-- paginacion --}}
+            {{ $switches->appends([
+                    'serial' => $filters['serial'] ?? '',
+                    'location' => $filters['location'] ?? '',
+                    'status' => $filters['status'] ?? '',
+                ])->links() }}
+        @else
+            <div class="text-center mt-6 bg-gray-100 border border-gray-300 rounded-md p-4 text-gray-700">
+                <p>No hay registros existentes</p>
+            </div>
+        @endif
 
-                    // Verifica si está vacio
-                    if (!serial && !location && !status) {
-                        // Cancelar envío del formulario
-                        alert('Por favor, ingresa al menos un valor para filtrar.');
-                        return false;
-                    }
-
-                    // Si tiene un valor
-                    return true;
-                }
-            </script>
-        @endpush
     </div>
+    
+    {{-- funcion para los filtros --}}
+    @push('scripts')
+        <script>
+            function validateFilters() {
+                // Obtén los valores de los campos de filtro
+                const serial = document.querySelector("input[name='serial']")?.value.trim();
+                const location = document.querySelector("input[name='location']")?.value.trim();
+                const status = document.querySelector("select[name='status']")?.value.trim();
+
+                // Verifica si está vacio
+                if (!serial && !location && !status) {
+                    // Cancelar envío del formulario
+                    alert('Por favor, ingresa al menos un valor para filtrar.');
+                    return false;
+                }
+
+                // Si tiene un valor
+                return true;
+            }
+        </script>
+    @endpush
+
 @endsection

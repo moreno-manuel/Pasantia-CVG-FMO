@@ -2,7 +2,7 @@
     <ul class="space-y-2">
         <!-- Inicio -->
         <li>
-            <a href="{{route('home')}}" class="block px-6 py-3 text-gray-700 hover:bg-blue-50 rounded">Inicio</a>
+            <a href="{{ route('home') }}" class="block px-6 py-3 text-gray-700 hover:bg-blue-50 rounded">Inicio</a>
         </li>
 
         <!-- Menú desplegable con <Equipos> -->
@@ -17,22 +17,30 @@
                     </svg>
                 </summary>
                 <ul class="mt-1 ml-4 space-y-1">
-                    <li><a href="{{route('camara.index')}}" class="block px-4 py-2 text-gray-600 hover:bg-blue-100 rounded">Camara</a>
+                    <li><a href="{{ route('camara.index') }}"
+                            class="block px-4 py-2 text-gray-600 hover:bg-blue-100 rounded">Camara</a>
                     </li>
-                    <li><a href="{{route ('nvr.index')}}" class="block px-4 py-2 text-gray-600 hover:bg-blue-100 rounded">NVR</a></li>
-                    <li><a href="{{route('switch.index')}}" class="block px-4 py-2 text-gray-600 hover:bg-blue-100 rounded">Switch</a>
+                    <li><a href="{{ route('nvr.index') }}"
+                            class="block px-4 py-2 text-gray-600 hover:bg-blue-100 rounded">NVR</a></li>
+                    <li><a href="{{ route('switch.index') }}"
+                            class="block px-4 py-2 text-gray-600 hover:bg-blue-100 rounded">Switch</a>
                     </li>
-                    <li><a href="{{route('enlace.index')}}" class="block px-4 py-2 text-gray-600 hover:bg-blue-100 rounded">Enlace</a>
+                    <li><a href="{{ route('enlace.index') }}"
+                            class="block px-4 py-2 text-gray-600 hover:bg-blue-100 rounded">Enlace</a>
                     </li>
 
                 </ul>
             </details>
         </li>
 
+        <!-- Condicion de Atencion -->
+        <li>
+            <a href="#" class="block px-6 py-3 text-gray-700 hover:bg-blue-50 rounded"> Condición de Atención</a>
+        </li>
+
         <!-- historial equipos eliminados -->
         <li>
-            <a href="#" class="block px-6 py-3 text-gray-700 hover:bg-blue-50 rounded">Equipos Eliminados</a>
-
+            <a href="#" class="block px-6 py-3 text-gray-700 hover:bg-blue-50 rounded">Historial Eliminados</a>
         </li>
 
         <!-- Configuraciones-->

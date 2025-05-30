@@ -36,7 +36,7 @@ return new class extends Migration
         Schema::create('cameras', function (Blueprint $table) {
             $table->string('mac')->primary();
             $table->string('nvr_id');
-            $table->foreign('nvr_id')->references('mac')->on('nvrs')->onDelete('restrict');
+            $table->foreign('nvr_id')->references('mac')->on('nvrs');
             $table->string('mark');
             $table->string('model');
             $table->string('name')->unique()->required();

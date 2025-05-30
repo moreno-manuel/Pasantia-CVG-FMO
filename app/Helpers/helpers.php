@@ -2,6 +2,8 @@
 
 namespace app\Helpers;
 
+use App\Models\monitoringSystem\Camera;
+use App\Models\monitoringSystem\Nvr;
 use App\Models\networkInfrastructure\Link;
 use App\Models\networkInfrastructure\Switche;
 use Illuminate\Http\Request;
@@ -18,8 +20,8 @@ function filter(Request $request, string $table)
     switch ($table) {
         case 'switches': {
                 // Obtén el valor del filtro
-                $serial = strtoupper($request->input('serial'));
-                $location = strtoupper($request->input('location'));
+                $serial = $request->input('serial');
+                $location = $request->input('location');
                 $status = $request->input('status');
 
                 // Construye la consulta base
@@ -50,7 +52,7 @@ function filter(Request $request, string $table)
 
         case 'links': {
                 // Obtén los valores de los filtros
-                $location = strtoupper($request->input('location'));
+                $location = $request->input('location');
                 $status = $request->input('status');
 
 
@@ -75,8 +77,62 @@ function filter(Request $request, string $table)
                 return view('front.link.index', compact('links'))
                     ->with('filters', $request->all());
                 break;
+            }
+
+        case 'nvrs': {
+                // Obtén los valores de los filtros
+                $location = $request->input('location');
+                $status = $request->input('status');
 
 
+                // Construye la consulta base
+                $query = Nvr::query();
+
+                // Aplica filtros condicionalmente
+                if ($location) {
+                    $query->where('location', 'like',  $location . '%');
+                }
+
+                // Aplica filtros condicionalmente
+                if ($status) {
+                    $query->where('status', 'like',  $status . '%');
+                }
+
+
+                // Ejecuta la consulta y aplica paginación
+                $nvrs = $query->paginate(10);
+
+                // Mantiene los valores de los filtros en la vista
+                return view('front.nvr.index', compact('nvrs'))
+                    ->with('filters', $request->all());
+                break;
+            }
+        case 'cameras': {
+                // Obtén los valores de los filtros
+                $location = $request->input('location');
+                $status = $request->input('status');
+
+
+                // Construye la consulta base
+                $query = Camera::query();
+
+                // Aplica filtros condicionalmente
+                if ($location) {
+                    $query->where('location', 'like',  $location . '%');
+                }
+
+                // Aplica filtros condicionalmente
+                if ($status) {
+                    $query->where('status', 'like',  $status . '%');
+                }
+
+
+                // Ejecuta la consulta y aplica paginación
+                $cameras = $query->paginate(10);
+
+                // Mantiene los valores de los filtros en la vista
+                return view('front.camera.index', compact('cameras'))
+                    ->with('filters', $request->all());
                 break;
             }
         default:

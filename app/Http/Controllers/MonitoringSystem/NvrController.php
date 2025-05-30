@@ -10,17 +10,27 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
+use function app\Helpers\filter;
+
 /* controlador para el crud de nvr
-tambien se crean las  */
+y sus volumenes */
 
 class NvrController extends Controller
 {
     //
 
-    public function index()
+    public function index(Request $request)
     {
-        $nvrs = Nvr::paginate(10);
-        return view('front.nvr.index', compact('nvrs'));
+        // Valida si hay algún filtro activo
+        $hasFilters = $request->filled('location') ||
+            $request->filled('status');
+
+        if (!$hasFilters) { //si no se aplica un filtro
+            $nvrs = Nvr::paginate(10);
+            return view('front.nvr.index', compact('nvrs'));
+        }
+
+        return filter($request, 'nvrs'); //helper
     }
 
     public function create()
@@ -46,36 +56,35 @@ class NvrController extends Controller
                 'description' => 'nullable'
             ]);
 
-            // Validación de Ranuras 
+            // Validación de volumenes(slots)
             $slots = [];
-            $slotCount = $request->input('slot_number'); //extrae el numero de Ranuras 
+            $slotCount = $request->input('slot_number'); //extrae el numero de volumens 
             $slotRules = []; //reglas de validacion
             for ($i = 1; $i <= $slotCount; $i++) { //recorrido para cada slot
-                $slotRules["ranura.{$i}.serial_disco"] = 'nullable';
-                $slotRules["ranura.{$i}.capacidad_disco"] = 'nullable';
-                $slotRules["ranura.{$i}.capacidad_max_puerto"] = 'required';
-                $slotRules["ranura.{$i}.status"] = 'required|in:Ocupado,Disponible';
+                $slotRules["volumen.{$i}.serial_disco"] = 'nullable';
+                $slotRules["volumen.{$i}.capacidad_disco"] = 'nullable|lt:capacidad_max_volumen';
+                $slotRules["volumen.{$i}.capacidad_max_volumen"] = 'required';
+                $slotRules["volumen.{$i}.status"] = 'required';
             }
             $slotValidator = Validator::make($request->all(), $slotRules); //validacion
-
             if ($slotValidator->fails()) { //si captura un error
                 return back()->withErrors($slotValidator)->withInput();
             }
 
-            //extrae todas las ranura y luego la elimina del request
-            $slots = $request->input('ranura', []);
-            $request->offsetUnset('ranura');
+            //extrae todos los volumen(slots) y luego la elimina del request
+            $slots = $request->input('volumen', []);
+            $request->offsetUnset('volumen');
 
             // Guarda el NVR
             Nvr::create($request->all());
 
-            // Guarda los datos para cada slot
+            // Guarda los datos para cada volumen (slot)
             foreach ($slots as $index => $slot) {
                 SlotNvr::create([
                     'nvr_id' => $validated['mac'],
                     'hdd_serial' => $slot['serial_disco'] ?? null,
                     'hdd_capacity' => $slot['capacidad_disco'] ?? null,
-                    'capacity_max' => $slot['capacidad_max_puerto'],
+                    'capacity_max' => $slot['capacidad_max_volumen'],
                     'status' => $slot['status'],
                 ]);
             }
@@ -117,22 +126,22 @@ class NvrController extends Controller
                 'description' => 'nullable'
             ]);
 
-            // Validación de discos duros
+            //validación volumen(slots)
             $slotCount = $request->input('slot_number');
             $slotRules = []; //reglas de validacion
             for ($i = 1; $i <= $slotCount; $i++) {
-                $slotRules["ranura.{$i}.serial_disco"] = 'nullable';
-                $slotRules["ranura.{$i}.capacidad_disco"] = 'nullable';
-                $slotRules["ranura.{$i}.status"] = 'required|in:Ocupado,Disponible';
+                $slotRules["volumen.{$i}.serial_disco"] = 'nullable';
+                $slotRules["volumen.{$i}.capacidad_disco"] = 'nullable';
+                $slotRules["volumen.{$i}.status"] = 'required';
             }
             $slotValidator = Validator::make($request->all(), $slotRules); //validacion
             if ($slotValidator->fails()) { //si captura un error
                 return back()->withErrors($slotValidator)->withInput();
             }
 
-            //extrae todas las ranura y luego la elimina del request
-            $slotsRequest = $request->input('ranura', []);
-            $request->offsetUnset('ranura');
+            //extrae todos las volumen(slots) y luego la elimina del request
+            $slotsRequest = $request->input('volumen', []);
+            $request->offsetUnset('volumen');
 
             // actualiza nvr
             $nvr->update($request->all());
@@ -140,7 +149,7 @@ class NvrController extends Controller
             //slots que seran actualizados 
             $slots = $nvr->slotNvr;
             $i = 0;
-            // actualiza slots
+            // actualiza volumen (sltos)
             foreach ($slotsRequest as $slotData) {
                 $slot = $slots[$i];
                 if ($slot) {

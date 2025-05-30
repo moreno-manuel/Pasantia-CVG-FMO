@@ -95,10 +95,9 @@
                             min="1" required>
                     </div>
 
-                    <!-- Campo Número de Ranuras (No editable) -->
+                    <!-- Campo Número de volumens (No editable) -->
                     <div>
-                        <label for="slot_number" class="block text-sm font-medium text-gray-700">Ranuras de Disco
-                            Duro</label>
+                        <label for="slot_number" class="block text-sm font-medium text-gray-700">Volumen</label>
                         <input type="number" name="slot_number" id="slot_number"
                             value="{{ old('slot_number', $nvr->slot_number) }}"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-gray-100 text-gray-500 sm:text-sm"
@@ -135,10 +134,9 @@
                     </div>
                 </div>
 
-                <!-- Campos dinámicos de Ranuras de Discos -->
+                <!-- Campos dinámicos de volumens de Discos -->
                 <div id="hdd-form-container" class="mt-6">
-                    <h3 class="text-lg font-medium text-gray-700 mb-3">Discos Duros</h3>
-                    <p class="text-sm text-gray-500 mb-4">Ingresa la información de los discos duros.</p>
+                    <h3 class="text-lg font-medium text-gray-700 mb-3">Volumen</h3>
                     <div class="space-y-4" id="hdd-fields">
                         <!-- Generar HDDs estáticos desde PHP -->
                         @php
@@ -148,41 +146,42 @@
 
                         @foreach ($slots as $index => $slot)
                             <div class="bg-gray-50 p-4 rounded-md border border-gray-200 mb-4">
-                                <h4 class="text-sm font-medium text-gray-700 mb-2">Disco Duro #{{ $index + 1 }}</h4>
+                                <h4 class="text-sm font-medium text-gray-700 mb-2">Volumen #{{ $index + 1 }}</h4>
                                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                                     <!-- Serial -->
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700">Serial</label>
-                                        <input type="text" name="ranura[{{ $index + 1 }}][serial_disco]"
-                                            value="{{ old('ranura.' . $loop->iteration . '.serial_disco', $slot['hdd_serial']) }}"
+                                        <input type="text" name="volumen[{{ $index + 1 }}][serial_disco]"
+                                            value="{{ old('volumen.' . $loop->iteration . '.serial_disco', $slot['hdd_serial']) }}"
                                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
                                     </div>
 
                                     <!-- Capacidad actual -->
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700">Capacidad (GB)</label>
-                                        <input type="number" name="ranura[{{ $index + 1 }}][capacidad_disco]"
-                                            value="{{ old('ranura.' . $loop->iteration . '.capacidad_disco', $slot['hdd_capacity']) }}"
+                                        <label class="block text-sm font-medium text-gray-700">Capacidad/Disco (GB)</label>
+                                        <input type="number" name="volumen[{{ $index + 1 }}][capacidad_disco]"
+                                            value="{{ old('volumen.' . $loop->iteration . '.capacidad_disco', $slot['hdd_capacity']) }}"
                                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                                             min="1">
                                     </div>
 
                                     <!-- Capacidad máxima del puerto (No editable) -->
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700">Capacidad Máxima
+                                        <label class="block text-sm font-medium text-gray-700">Capacidad Máxima/volumen
                                             (GB)
                                         </label>
-                                        <input type="number" name="ranura[{{ $index + 1 }}][capaciad_max_puerto]"
-                                            value="{{ old('ranura.' . $loop->iteration . '.capaciad_max_puerto', $slot['capacity_max']) }}"
+                                        <input type="number" name="volumen[{{ $index + 1 }}][capacidad_max_volumen]"
+                                            value="{{ old('volumen.' . $loop->iteration . '.capacidad_max_volumen', $slot['capacity_max']) }}"
                                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-gray-100 text-gray-500 sm:text-sm"
                                             min="1" readonly disabled>
                                     </div>
 
                                     <!-- Estado del disco -->
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700">Estado</label>
-                                        <select name="ranura[{{ $index + 1 }}][status]"
-                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                                        <label class="block text-sm font-medium text-gray-700">Status</label>
+                                        <select name="volumen[{{ $index + 1 }}][status]"
+                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                                            required>
                                             <option value="">Selecciona...</option>
                                             <option value="Ocupado" {{ $slot['status'] == 'Ocupado' ? 'selected' : '' }}>
                                                 Ocupado</option>

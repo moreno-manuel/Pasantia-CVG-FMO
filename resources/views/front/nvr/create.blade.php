@@ -95,12 +95,12 @@
                             min="1" required>
                     </div>
 
-                    <!-- Campo Número de Ranuras -->
+                    <!-- Campo Número de volumens -->
                     <div>
-                        <label for="num_discos_duros" class="block text-sm font-medium text-gray-700">Ranuras De Discos</label>
-                        <input type="number" name="slot_number" id="slot_number" value="{{ old('slot_number') }}"
+                        <label for="num_discos_duros" class="block text-sm font-medium text-gray-700">N° Volumen</label>
+                        <input type="number" name="slot_number" id="slot_number"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            min="1" max="4" oninput="generateHDDForm(this.value)">
+                            min="1" max="4" oninput="generateHDDForm(this.value)" required>
                     </div>
 
                     <!-- Campo Localidad -->
@@ -135,9 +135,8 @@
 
                 <!-- Campos dinámicos de HDDs -->
                 <div id="hdd-form-container" class="mt-6">
-                    <h3 class="text-lg font-medium text-gray-700 mb-3">Ranuras de Discos Duros</h3>
-                    <p class="text-sm text-gray-500 mb-4">Ingresa la información de las Ranuras</p>
-                    <p class="text-sm text-gray-500 mb-4">Ingresa la información de los Discos Duros</p>
+                    <h3 class="text-lg font-medium text-gray-700 mb-3">Volumen</h3>
+                    <p class="text-sm text-gray-500 mb-4">Ingresa la información del Volumen y/o Disco Duro</p>
                     <div class="space-y-4" id="hdd-fields">
                         <!-- Aquí se insertan los campos dinámicos -->
 
@@ -157,7 +156,7 @@
 
     </div>
 
-    {{-- para campos dinamicos asignacion de discos duros --}}
+    {{-- para campos dinamicos asignacion de volumen --}}
     @push('scripts')
         <script>
             console.log("Valor recibido:", count);
@@ -180,38 +179,38 @@
                 for (let i = 1; i <= count; i++) {
                     const html = `
             <div class="bg-gray-50 p-4 rounded-md border border-gray-200 mb-4">
-                <h4 class="text-sm font-medium text-gray-700 mb-2">Disco Duro #${i}</h4>
+                <h4 class="text-sm font-medium text-gray-700 mb-2">Volumen #${i}</h4>
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
 
                     
                     <!-- Serial del disco "disco ..." en español para mesajes de error-->
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Serial</label>
-                        <input type="text" name="ranura[${i}][serial_disco] 
+                        <input type="text" name="volumen[${i}][serial_disco]"" 
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
                     </div>
 
                     <!-- Capacidad del disco -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Capacidad/Disco(GB)</label>
-                        <input type="number" name="ranura[${i}][capacidad_disco] 
+                        <input type="number" name="volumen[${i}][capacidad_disco]" 
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             min="1">
                     </div>
 
                     <!-- Capacidad máxima del puerto -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Capacidad Máxima/Ranura (GB)</label>
-                        <input type="number" name="ranura[${i}][capacidad_max_puerto]" 
+                        <label class="block text-sm font-medium text-gray-700">Capacidad Máxima/volumen (GB)</label>
+                        <input type="number" name="volumen[${i}][capacidad_max_volumen]" 
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            min="1" >
+                            min="1" required>
                     </div>
 
                     <!-- Estado del disco -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Status</label>
-                        <select name="ranura[${i}][status]"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                        <select name="volumen[${i}][status]"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" required>
                             <option value="">Selecciona...</option>
                             <option value="Ocupado">Ocupado</option>
                             <option value="Disponible">Disponible</option>

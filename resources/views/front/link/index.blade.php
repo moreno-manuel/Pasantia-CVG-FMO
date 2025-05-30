@@ -26,7 +26,7 @@
 
             {{-- Status --}}
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Estado</label>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
                 <select name="status"
                     class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                     <option value="">Todos</option>
@@ -51,94 +51,99 @@
 
         <br>
 
-        <!-- Tabla -->
-        <div class="overflow-x-auto">
-            <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-sm">
-                <thead class="bg-gray-100">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">MAC</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Marca</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Modelo</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Nombre</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Localidad</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">IP</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Status</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-200">
-
-                    @foreach ($links as $link)
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 text-sm text-gray-900 truncate">{{ $link['mac'] }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $link['mark'] }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $link['model'] }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $link['name'] }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $link['location'] }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $link['ip'] }}</td>
-                            <td class="px-6 py-4 text-sm">
-                                <span
-                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                    {{ $link['status'] === 'Activo' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                    {{ $link['status'] }}
-                                </span>
-                            </td>
-
-                            <td class="px-6 py-4 text-sm space-x-2">
-                                <div class="flex space-x-2">
-                                    <a href="{{ route('enlace.show', $link['mac']) }}"
-                                        class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                        Ver
-                                    </a>
-                                    <a href="{{ route('enlace.edit', $link['mac']) }}"
-                                        class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
-                                        Editar
-                                    </a>
-                                    <form action="{{ route('enlace.destroy', $link['mac']) }}" method="POST"
-                                        class="inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                            class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                            Eliminar
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
+        {{-- valida para mostrar tabla o mensaje --}}
+        @if ($links->isNotEmpty())
+            <!-- Tabla -->
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-sm">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">MAC</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Marca</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Modelo</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Nombre</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Localidad</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">IP</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Status</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Acciones</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
 
-        {{-- paginacion --}}
-        {{ $links->appends([
-                'location' => $filters['location'] ?? '',
-                'status' => $filters['status'] ?? '',
-            ])->links() }}
+                        @foreach ($links as $link)
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 text-sm text-gray-900 truncate">{{ $link['mac'] }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-900">{{ $link['mark'] }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-900">{{ $link['model'] }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-900">{{ $link['name'] }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-900">{{ $link['location'] }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-900">{{ $link['ip'] }}</td>
+                                <td class="px-6 py-4 text-sm">
+                                    <span
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+                                    {{ $link['status'] === 'Activo' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                        {{ $link['status'] }}
+                                    </span>
+                                </td>
 
+                                <td class="px-6 py-4 text-sm space-x-2">
+                                    <div class="flex space-x-2">
+                                        <a href="{{ route('enlace.show', $link['mac']) }}"
+                                            class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                            Ver
+                                        </a>
+                                        <a href="{{ route('enlace.edit', $link['mac']) }}"
+                                            class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                                            Editar
+                                        </a>
+                                        <form action="{{ route('enlace.destroy', $link['mac']) }}" method="POST"
+                                            class="inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                                Eliminar
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
 
-
-
-        {{-- funcion para los filtros --}}
-        @push('scripts')
-            <script>
-                function validateFilters() {
-                    // Obtén los valores de los campos de filtro
-                    const location = document.querySelector("input[name='location']")?.value.trim();
-                    const status = document.querySelector("select[name='status']")?.value.trim();
-
-                    // Verifica si estávacíos
-                    if (!location && !status) {
-                        // Cancelar envío del formulario
-                        alert('Por favor, ingresa al menos un valor para filtrar.');
-                        return false;
-                    }
-                    // Si hay un valor
-                    return true;
-                }
-            </script>
-        @endpush
+            {{-- paginacion --}}
+            {{ $links->appends([
+                    'location' => $filters['location'] ?? '',
+                    'status' => $filters['status'] ?? '',
+                ])->links() }}
+        @else
+            <div class="text-center mt-6 bg-gray-100 border border-gray-300 rounded-md p-4 text-gray-700">
+                <p>No hay registros existentes</p>
+            </div>
+        @endif
 
     </div>
+
+    {{-- funcion para los filtros --}}
+    @push('scripts')
+        <script>
+            function validateFilters() {
+                // Obtén los valores de los campos de filtro
+                const location = document.querySelector("input[name='location']")?.value.trim();
+                const status = document.querySelector("select[name='status']")?.value.trim();
+
+                // Verifica si estávacíos
+                if (!location && !status) {
+                    // Cancelar envío del formulario
+                    alert('Por favor, ingresa al menos un valor para filtrar.');
+                    return false;
+                }
+                // Si hay un valor
+                return true;
+            }
+        </script>
+    @endpush
+
 @endsection

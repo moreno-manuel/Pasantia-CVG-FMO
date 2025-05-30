@@ -1,7 +1,7 @@
 @extends('layouts.app-home')
 @section('content')
     <!-- resources/views/front/nvr/show.blade.php -->
-    
+
     <div class="container mx-auto px-4 py-6">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold">Detalles del NVR</h1>
@@ -59,13 +59,30 @@
 
                     <!-- Campo Puertos Disponibles -->
                     <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-700">Puertos Disponibles</dt>
+                        <dt class="text-sm font-medium text-gray-700">N° Puertos</dt>
                         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $nvr->ports_number }}</dd>
+                    </div>
+
+                    {{-- Para calcular el N° de puertos usados/disponibles --}}
+                    @php
+                        $ports_use = $nvr->camera;
+                    @endphp
+                    <!-- Campo Puertos Usados -->
+                    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-700">N° Puertos/Usados</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $ports_use->count() }}</dd>
+                    </div>
+
+                    <!-- Campo Puertos Disponibles -->
+                    <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-700">N° Puertos/Disponibles</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                            {{ $nvr->ports_number - $ports_use->count() }}</dd>
                     </div>
 
                     <!-- Campo Ranuras de Disco -->
                     <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-700">Ranuras de Disco</dt>
+                        <dt class="text-sm font-medium text-gray-700">N° Volumen</dt>
                         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $nvr->slot_number }}</dd>
                     </div>
 
@@ -77,7 +94,7 @@
 
                     <!-- Campo Estado -->
                     <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-700">Estado</dt>
+                        <dt class="text-sm font-medium text-gray-700">Status</dt>
                         <dd class="mt-1 text-sm sm:mt-0 sm:col-span-2">
                             <span
                                 class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
@@ -98,19 +115,20 @@
             </div>
         </div>
 
-        <!-- Tabla de Discos Duros -->
+        <!-- Tabla de Volumenes-->
 
         <div class="mt-8">
-            <h3 class="text-lg font-medium text-gray-700 mb-3">Discos Duros Asociados</h3>
+            <h3 class="text-lg font-medium text-gray-700 mb-3">Detalles Volumen</h3>
             <div class="overflow-x-auto">
                 <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-sm">
                     <thead class="bg-gray-100">
                         <tr>
                             <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Volumen</th>
                             <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Serial</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Capacidad (GB)</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Capacidad Máxima (GB)</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Estado</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Capacidad/Disco (GB)</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Capacidad Máxima/volumen (GB)
+                            </th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Status</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
@@ -127,7 +145,7 @@
                                     <span
                                         class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
                                             {{ $slot->status === 'Ocupado' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                        {{ $slot->status === 'Ocupado' ? 'Activo' : 'Inactivo' }}
+                                        {{ $slot->status === 'Ocupado' ? 'Disponible' : 'Ocupado' }}
                                     </span>
                                 </td>
                             </tr>
@@ -140,47 +158,65 @@
             </div>
         </div>
 
+        <!-- Acciones del NVR -->
+        <div class="mt-6 flex space-x-3">
+            <a href="{{ route('nvr.edit', $nvr) }}"
+                class="inline-flex items-center px-4 py-2 bg-yellow-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition ease-in-out duration-150">
+                Editar NVR
+            </a>
 
-        {{--   <!-- Tabla de Cámaras Asociadas -->
-        @if ($nvr->camaras->isNotEmpty())
+            <form action="{{ route('nvr.destroy', $nvr) }}" method="POST" class="inline">
+                @csrf
+                @method('DELETE')
+                <button type="submit"
+                    class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition ease-in-out duration-150"
+                    onclick="return confirm('¿Estás seguro de eliminar este NVR?')">
+                    Eliminar NVR
+                </button>
+            </form>
+        </div>
+
+
+        @if ($nvr->camera->isNotEmpty())
             <div class="mt-8">
-                <h3 class="text-lg font-medium text-gray-700 mb-3">Cámaras Asociadas</h3>
+                <h3 class="text-lg font-medium text-gray-700 mb-3">Cámaras Conectadas al Nvr</h3>
                 <div class="overflow-x-auto">
                     <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-sm">
                         <thead class="bg-gray-100">
                             <tr>
-                                <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Serial</th>
-                                <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Modelo</th>
-                                <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Localidad</th>
-                                <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Estado</th>
+                                <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Mac</th>
+                                <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Nombre</th>
+                                <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Ubicación</th>
+                                <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">IP</th>
+                                <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Status</th>
                                 <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-32">Acciones</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200">
-                            @foreach ($nvr->camaras as $camara)
+                            @foreach ($nvr->camera as $camera)
                                 <tr class="hover:bg-gray-50">
-                                    <td class="px-6 py-4 text-sm text-gray-900">{{ $camara->serial }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-900">{{ $camara->modelo }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-900">{{ $camara->localidad }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-900">{{ $camera->mac }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-900">{{ $camera->name }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-900">{{ $camera->location }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-900">{{ $camera->ip }}</td>
                                     <td class="px-6 py-4 text-sm">
                                         <span
                                             class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                            {{ $camara->status === 'Activo' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                            {{ $camara->status }}
+                                            {{ $camera->status === 'Activo' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                            {{ $camera->status }}
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 text-sm space-x-2">
                                         <div class="flex space-x-2">
-                                            <a href="{{ route('camaras.show', $camara->serial) }}"
+                                            <a href="#"
                                                 class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                                 Ver
                                             </a>
-                                            <a href="{{ route('camaras.edit', $camara->serial) }}"
+                                            <a href="#"
                                                 class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
                                                 Editar
                                             </a>
-                                            <form action="{{ route('camaras.destroy', $camara->serial) }}" method="POST"
-                                                class="inline">
+                                            <form action="#" class="inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"
@@ -200,24 +236,8 @@
             <div class="mt-6 bg-gray-100 border border-gray-300 rounded-md p-4 text-gray-700">
                 <p>No hay cámaras asociadas a este NVR.</p>
             </div>
-        @endif --}}
+        @endif
 
-        <!-- Acciones del NVR -->
-        <div class="mt-6 flex space-x-3">
-            <a href="{{ route('nvr.edit', $nvr) }}"
-                class="inline-flex items-center px-4 py-2 bg-yellow-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition ease-in-out duration-150">
-                Editar NVR
-            </a>
 
-            <form action="{{ route('nvr.destroy', $nvr) }}" method="POST" class="inline">
-                @csrf
-                @method('DELETE')
-                <button type="submit"
-                    class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition ease-in-out duration-150"
-                    onclick="return confirm('¿Estás seguro de eliminar este NVR?')">
-                    Eliminar NVR
-                </button>
-            </form>
-        </div>
     </div>
 @endsection

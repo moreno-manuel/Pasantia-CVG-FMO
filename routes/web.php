@@ -23,9 +23,8 @@ Route::get('/home', function () {
 
 Route::resource('switch', SwitchController::class)->middleware('auth');
 Route::resource('enlace', LinkController::class)->middleware('auth');
+Route::resource('nvr', NvrController::class)->middleware('auth');
 
 
 
 Route::resource('camara', CameraController::class)->except(['show', 'destroy', 'edit', 'update']);
-Route::resource('nvr', NvrController::class);
-Route::resource('nvr_hdd', SlotNvr::class)->except(['show', 'edit', 'update', 'index']);
