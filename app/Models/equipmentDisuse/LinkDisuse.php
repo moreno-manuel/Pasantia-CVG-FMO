@@ -11,7 +11,7 @@ class LinkDisuse extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
-    protected $fillable =[
+    protected $fillable = [
         'id',
         'name',
         'ssid',
@@ -19,7 +19,10 @@ class LinkDisuse extends Model
         'ip'
     ];
 
-    public function equipmentDisuse(){
+    //Relacion
+
+    public function equipmentDisuse()
+    {
         return $this->belongsTo(equipmentDisuse::class);
     }
 }

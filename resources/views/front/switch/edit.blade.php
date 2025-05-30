@@ -12,18 +12,45 @@
             </a>
         </div>
 
+        {{-- Errores --}}
+        @if ($errors->any())
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+                <!-- Mensaje singular o plural -->
+                @if ($errors->count() === 1)
+                    <strong class="font-bold">Por favor corrige el siguiente error:</strong>
+                @else
+                    <strong class="font-bold">Por favor corrige los siguientes errores:</strong>
+                @endif
+
+                <ul class="mt-2 list-disc pl-5 space-y-1">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <div class="bg-white shadow overflow-hidden sm:rounded-lg p-6">
             <form action="{{ route('switch.update', $switch) }}" method="POST">
                 @csrf
                 @method('PUT')
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Campo Serial -->
+
+                    <!-- Campo Serial no editable-->
                     <div>
                         <label for="serial" class="block text-sm font-medium text-gray-700">Serial</label>
                         <input type="text" name="serial" id="serial"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             value="{{ old('serial', $switch->serial) }}" readonly disabled>
+                    </div>
+
+                    <!-- Campo Modelo -->
+                    <div>
+                        <label for="model" class="block text-sm font-medium text-gray-700">Modelo</label>
+                        <input type="text" name="model" id="model"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            value="{{ old('model', $switch->model) }}" required>
                     </div>
 
                     <!-- Campo Número de Puertos -->
@@ -34,21 +61,21 @@
                             min="1" value="{{ old('number_ports', $switch->number_ports) }}" required>
                     </div>
 
-                    <!-- Campo Persona Usuario -->
+                    <!-- Campo Localidad -->
                     <div>
-                        <label for="user_person" class="block text-sm font-medium text-gray-700">Ubicación</label>
-                        <input type="text" name="user_person" id="user_person"
+                        <label for="location" class="block text-sm font-medium text-gray-700">Localidad</label>
+                        <input type="text" name="location" id="location"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             value="{{ old('user_person', $switch->location) }}" required>
                     </div>
 
                     <!-- Campo Estado -->
                     <div>
-                        <label for="status" class="block text-sm font-medium text-gray-700">Estado</label>
+                        <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
                         <select name="status" id="status"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
-                            <option value="">Selecciona el estado</option>
+                            <option value="">Selecciona el Status</option>
                             <option value="Activo" {{ $switch->status === 'Activo' ? 'selected' : '' }}>Activo</option>
                             <option value="Inactivo" {{ $switch->status === 'Inactivo' ? 'selected' : '' }}>Inactivo
                             </option>

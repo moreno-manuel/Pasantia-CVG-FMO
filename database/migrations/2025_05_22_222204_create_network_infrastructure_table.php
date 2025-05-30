@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('switches', function (Blueprint $table) { //enlaces
             $table->string('serial')->primary();
             $table->string('model');
-            $table->string('number_ports');
             $table->string('location');
+            $table->string('number_ports');
             $table->string('description')->nullable();
             $table->string('status');
             $table->timestamps();
@@ -28,8 +28,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('ssid');
             $table->string('location');
-            $table->string('status');
             $table->unsignedBigInteger('ip')->unique()->require();
+            $table->string('status');
             $table->string('description')->nullable();
             $table->timestamps();
         });

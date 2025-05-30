@@ -22,8 +22,8 @@ return new class extends Migration
 
         Schema::create('switch_disuses', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->string('number_ports');
             $table->string('location');
+            $table->string('number_ports');
             $table->timestamps();
         });
 
@@ -40,6 +40,7 @@ return new class extends Migration
             $table->string('id')->primary();
             $table->string('name');
             $table->string('location');
+            $table->string('nvr_name');
             $table->string('ip');
             $table->timestamps();
         });
@@ -53,12 +54,10 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('nvr_hdd_disuses', function (Blueprint $table) {
+        Schema::create('slot_nvr_disuses', function (Blueprint $table) {
             $table->id();
-            //clave foranea
             $table->string('nvr_id');
             $table->foreign('nvr_id')->references('id')->on('nvr_disuses');
-            //
             $table->bigInteger('capacity_max');
             $table->timestamps();
         });
@@ -73,6 +72,6 @@ return new class extends Migration
         Schema::dropIfExists('camera_disuses');
         Schema::dropIfExists('link_disuses');
         Schema::dropIfExists('nvr_disuses');
-        Schema::dropIfExists('nvr_hdd_disuses');
+        Schema::dropIfExists('slot_nvr_disuses');
     }
 };

@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\networkInfrastructure\Link;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -55,8 +54,7 @@ class LinkController extends Controller
 
             $link = Link::create($request->all());
             $link->save();
-            Session::flash('success', 'Enlace Agregado Exitosamente');
-            return redirect()->route('enlace.index');
+            return redirect()->route('enlace.index')->with('success', 'Enlace agregado exitosamente.');
         } catch (QueryException $e) {
             if ($e->getCode() === '23000') { // Código de error de integridad para la db *IP*
                 throw ValidationException::withMessages([
@@ -71,8 +69,7 @@ class LinkController extends Controller
         // Recupera el modelo manualmente
         $link = Link::where('mac', $mac)->first();
         $link->delete();
-        Session::flash('success', 'Enlace Eliminado Exitosamente');
-        return redirect()->route('enlace.index');
+        return redirect()->route('enlace.index')->with('success', 'Enlace eliminado exitosamente.');
     }
 
     public function show($mac) //muestra la vista y datos para los detalles un link

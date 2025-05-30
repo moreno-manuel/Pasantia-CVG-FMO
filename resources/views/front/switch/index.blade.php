@@ -25,16 +25,16 @@
 
             <!-- ubicacion -->
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Ubicación</label>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Localidad</label>
                 <input type="text" name="location" value="{{ $filters['location'] ?? '' }}"
                     class="w-full rounded-md border-black shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
             </div>
 
             {{-- Status --}}
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Estado</label>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
                 <select name="status"
-                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm" >
+                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                     <option value="">Todos</option>
                     <option value="Activo">Activo</option>
                     <option value="Inactivo">Inactivo</option>
@@ -63,8 +63,8 @@
                     <tr>
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Serial</th>
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Model</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Número de Puertos</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Ubicación</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">N°/Puertos</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Localidad</th>
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Status</th>
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Acciones</th>
                     </tr>

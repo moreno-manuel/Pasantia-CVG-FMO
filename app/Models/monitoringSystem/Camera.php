@@ -17,8 +17,8 @@ class Camera extends Model
         'mark',
         'model',
         'name',
-        'ip',
         'location',
+        'ip',
         'status',
         'desccription'
     ];

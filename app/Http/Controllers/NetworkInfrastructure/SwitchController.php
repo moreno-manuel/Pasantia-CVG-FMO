@@ -5,7 +5,6 @@ namespace App\Http\Controllers\NetworkInfrastructure;
 use App\Http\Controllers\Controller;
 use App\Models\networkInfrastructure\Switche;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 use function app\Helpers\filter;
@@ -52,15 +51,13 @@ class SwitchController extends Controller
 
         $switch = Switche::create($request->all());
         $switch->save();
-        Session::flash('success', 'Switch Agregado Exitosamente');
-        return redirect()->route('switch.index');
+        return redirect()->route('switch.index')->with('success', 'Switch creado exitosamente.');
     }
 
     public function destroy(Switche $switch) //Elimina un switch
     {
         $switch->delete();
-        Session::flash('success', 'Switch Eliminado Exitosamente');
-        return redirect()->route('switch.index');
+        return redirect()->route('switch.index')->with('success', 'Switch Eliminado exitosamente.');
     }
 
     public function show(Switche $switch) //muestra la vista y datos para los detalles un switch

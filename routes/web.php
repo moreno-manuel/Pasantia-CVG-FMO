@@ -5,7 +5,7 @@ use App\Http\Controllers\MonitoringSystem\CameraController;
 use App\Http\Controllers\MonitoringSystem\NvrController;
 use App\Http\Controllers\NetworkInfrastructure\LinkController;
 use App\Http\Controllers\NetworkInfrastructure\SwitchController;
-use App\Models\monitoringSystem\Hddnvr;
+use App\Models\monitoringSystem\SlotNvr;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -21,11 +21,11 @@ Route::get('/home', function () {
 })->middleware('auth')->name('home');
 
 
-Route::resource('switch', SwitchController::class);
-Route::resource('enlace', LinkController::class);
+Route::resource('switch', SwitchController::class)->middleware('auth');
+Route::resource('enlace', LinkController::class)->middleware('auth');
 
 
 
 Route::resource('camara', CameraController::class)->except(['show', 'destroy', 'edit', 'update']);
-Route::resource('nvr', NvrController::class)->except(['show', 'destroy', 'edit', 'update']);
-Route::resource('nvr_hdd', Hddnvr::class)->except(['show', 'destroy', 'edit', 'update', 'index']);
+Route::resource('nvr', NvrController::class);
+Route::resource('nvr_hdd', SlotNvr::class)->except(['show', 'edit', 'update', 'index']);

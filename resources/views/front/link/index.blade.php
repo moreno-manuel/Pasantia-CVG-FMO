@@ -17,9 +17,9 @@
         <!-- Filtros para búsqueda -->
         <form method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4" onsubmit="return validateFilters()">
 
-            <!-- ubicacion -->
+            <!-- Localidad -->
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Ubicación</label>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Localidad</label>
                 <input type="text" name="location" value="{{ $filters['location'] ?? '' }}"
                     class="w-full rounded-md border-black shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
             </div>
@@ -60,8 +60,8 @@
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Marca</th>
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Modelo</th>
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Nombre</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Localidad</th>
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">IP</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Ubicación</th>
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Status</th>
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Acciones</th>
                     </tr>
@@ -74,8 +74,8 @@
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $link['mark'] }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $link['model'] }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $link['name'] }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $link['ip'] }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $link['location'] }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $link['ip'] }}</td>
                             <td class="px-6 py-4 text-sm">
                                 <span
                                     class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
@@ -126,7 +126,7 @@
                 function validateFilters() {
                     // Obtén los valores de los campos de filtro
                     const location = document.querySelector("input[name='location']")?.value.trim();
-                    const status = document.querySelector("input[name='status']")?.value.trim();
+                    const status = document.querySelector("select[name='status']")?.value.trim();
 
                     // Verifica si estávacíos
                     if (!location && !status) {

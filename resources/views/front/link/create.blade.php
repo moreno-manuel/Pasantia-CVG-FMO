@@ -13,6 +13,24 @@
             </a>
         </div>
 
+        {{-- Errores --}}
+        @if ($errors->any())
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+                <!-- Mensaje singular o plural -->
+                @if ($errors->count() === 1)
+                    <strong class="font-bold">Por favor corrige el siguiente error:</strong>
+                @else
+                    <strong class="font-bold">Por favor corrige los siguientes errores:</strong>
+                @endif
+
+                <ul class="mt-2 list-disc pl-5 space-y-1">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         {{-- Formnulario Enlace (link) --}}
         <div class="bg-white shadow overflow-hidden sm:rounded-lg p-6">
             <form action="{{ route('enlace.store') }}" method="POST">
@@ -27,12 +45,6 @@
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             placeholder="Ejemplo: 00:1A:2B:3C:4D:5E" required>
                     </div>
-                    @error('mac')
-                        <br>
-                        <span class="bg-red-600 text-white py-2 px-4 rounded font-bold"
-                            style="font-size: 12px">{{ $message }}</span>
-                        </br>
-                    @enderror
 
                     <!-- Campo Nombre -->
                     <div>
@@ -41,12 +53,6 @@
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
                     </div>
-                    @error('name')
-                        <br>
-                        <span class="bg-red-600 text-white py-2 px-4 rounded font-bold"
-                            style="font-size: 12px">{{ $message }}</span>
-                        </br>
-                    @enderror
 
                     <!-- Campo Marca -->
                     <div>
@@ -71,14 +77,6 @@
                             required>
                     </div>
 
-                    <!-- Campo ubicacion -->
-                    <div>
-                        <label for="modelo" class="block text-sm font-medium text-gray-700">Modelo</label>
-                        <input type="text" name="location" value="{{ old('location') }}"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            required>
-                    </div>
-
                     <!-- Campo SSID -->
                     <div>
                         <label for="ssid" class="block text-sm font-medium text-gray-700">SSID</label>
@@ -94,28 +92,22 @@
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             placeholder="Ejemplo: 192.168.1.20" required>
                     </div>
-                    @error('ip')
-                        <br>
-                        <span class="bg-red-600 text-white py-2 px-4 rounded font-bold"
-                            style="font-size: 12px">{{ $message }}</span>
-                        </br>
-                    @enderror
 
                     <!-- Campo Localidad -->
                     <div>
-                        <label for="localidad" class="block text-sm font-medium text-gray-700">Localidad</label>
+                        <label for="modelo" class="block text-sm font-medium text-gray-700">Localidad</label>
                         <input type="text" name="location" value="{{ old('location') }}"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
                     </div>
 
-                    <!-- Campo Estado -->
+                    <!-- Campo Status -->
                     <div>
-                        <label for="status" class="block text-sm font-medium text-gray-700">Estado</label>
+                        <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
                         <select name="status" value = '{{ old('status') }}'
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
-                            <option value="">Selecciona el estado</option>
+                            <option value="">Selecciona el Status</option>
                             <option value="Activo">Activo</option>
                             <option value="Inactivo">Inactivo</option>
                         </select>

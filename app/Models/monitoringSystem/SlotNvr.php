@@ -4,15 +4,15 @@ namespace App\Models\monitoringSystem;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Hddnvr extends Model
+class SlotNvr extends Model
 {
-    protected $table = 'hdd_nvrs';
+    protected $table = 'slot_nvrs';
 
     protected $fillable = [
         'nvr_id',
-        'serial_hdd',
-        'capacity_hdd',
         'capacity_max',
+        'hdd_serial',
+        'hdd_capacity',
         'status'
     ];
 

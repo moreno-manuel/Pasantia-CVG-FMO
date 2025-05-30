@@ -18,13 +18,14 @@ class NvrDisuse extends Model
         'number_port',
         'number_hdd'
     ];
-
+    //Relaciones
     public function equipmentDisuse()
     {
         return $this->belongsTo(EquipmentDisuse::class);
     }
 
-    public function hddNvr(){
-        return $this->hasMany(HddNvrDisuse::class);
+    public function slotNvrDisuse()
+    {
+        return $this->hasMany(slotNvrDisuse::class);
     }
 }

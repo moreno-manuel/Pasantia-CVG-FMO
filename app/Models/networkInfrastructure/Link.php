@@ -20,10 +20,12 @@ class Link extends Model
         'ssid',
         'location',
         'ip',
-        'description',
-        'status'
+        'status',
+        'description'
 
     ];
+
+    //casteos
 
     // Convertir IP a entero antes de guardar
     public function setIpAttribute($value)
@@ -37,31 +39,31 @@ class Link extends Model
         return long2ip($value);
     }
 
-    protected function mac(): Attribute
+    protected function mac(): Attribute //mac
     {
         return Attribute::make(
             set: fn($mac) => strtoupper($mac),
         );
     }
 
-    protected function name(): Attribute
+    protected function mark(): Attribute //mark
     {
         return Attribute::make(
-            set: fn($name) => strtoupper($name),
+            set: fn($mark) => strtoupper($mark),
         );
     }
 
-    protected function model(): Attribute
+    protected function model(): Attribute //model
     {
         return Attribute::make(
             set: fn($model) => strtoupper($model),
         );
     }
 
-    protected function mark(): Attribute
+    protected function name(): Attribute //name
     {
         return Attribute::make(
-            set: fn($mark) => strtoupper($mark),
+            set: fn($name) => strtoupper($name),
         );
     }
 }

@@ -11,13 +11,15 @@ class SwitchDisuse extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
-    protected $fillable=[
+    protected $fillable = [
         'id',
-        'number_ports',
-        'person_user'
-    ];
+        'location',
+        'number_ports'
 
-    public function equipmentDisuses(){
+    ];
+    //relacion
+    public function equipmentDisuses()
+    {
         return $this->belongsTo(EquipmentDisuse::class);
     }
 }

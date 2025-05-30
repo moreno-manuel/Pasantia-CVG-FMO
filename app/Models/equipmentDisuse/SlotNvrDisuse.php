@@ -4,9 +4,9 @@ namespace App\Models\equipmentDisuse;
 
 use Illuminate\Database\Eloquent\Model;
 
-class NvrHddDisuse extends Model
+class SlotNvrDisuse extends Model
 {
-    protected $table = 'nvr_hdd_disuses';
+    protected $table = 'slot_nvr_disuses';
 
 
     protected $fillable = [
@@ -14,7 +14,7 @@ class NvrHddDisuse extends Model
         'capacity_max',
 
     ];
-
+    //Relaciones
     public function nvrDisuse()
     {
         return $this->belongsTo(NvrDisuse::class, 'nvr_id', 'id');

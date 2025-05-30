@@ -16,27 +16,28 @@ class Switche extends Model
     protected $fillable = [
         'serial',
         'model',
-        'number_ports',
         'location',
-        'description',
-        'status'
-
+        'number_ports',
+        'status',
+        'description'
     ];
 
-    protected function serial(): Attribute
+    //casteos
+    protected function serial(): Attribute //serial
     {
         return Attribute::make(
             set: fn($serial) => strtoupper($serial),
         );
     }
 
-    protected function model(): Attribute
+    protected function model(): Attribute //model
     {
         return Attribute::make(
             set: fn($model) => strtoupper($model),
         );
     }
-    protected function location(): Attribute
+
+    protected function location(): Attribute //location
     {
         return Attribute::make(
             set: fn($location) => strtoupper($location),

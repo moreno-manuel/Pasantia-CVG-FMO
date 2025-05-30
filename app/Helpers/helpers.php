@@ -69,7 +69,7 @@ function filter(Request $request, string $table)
 
 
                 // Ejecuta la consulta y aplica paginación
-                $links = $query->paginate(5);
+                $links = $query->paginate(10);
 
                 // Mantiene los valores de los filtros en la vista
                 return view('front.link.index', compact('links'))
@@ -80,7 +80,7 @@ function filter(Request $request, string $table)
                 break;
             }
         default:
-            return 'Error s';
+            return 'Error en helpers o controlador';
             break;
     }
 }

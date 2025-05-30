@@ -15,9 +15,11 @@ class EquipmentDisuse extends Model
         'id',
         'mark',
         'model',
-        'date_delete',
+        'date',
         'descripion'
     ];
+
+    //Relaciones
 
     public function switchDisuse()
     {

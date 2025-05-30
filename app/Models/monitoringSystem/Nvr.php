@@ -18,16 +18,17 @@ class Nvr extends Model
         'model',
         'name',
         'ip',
-        'number_ports',
-        'number_hdd',
-        'description',
-        'status'
+        'ports_number',
+        'slot_number',
+        'location',
+        'status',
+        'description'
     ];
 
     //relaciones
-    public function nvrHdd()
+    public function slotNvr()
     {
-        return $this->hasMany(Hddnvr::class);
+        return $this->hasMany(SlotNvr::class,'nvr_id','mac');
     }
 
     public function camera()
@@ -39,6 +40,35 @@ class Nvr extends Model
 
     //casteos 
 
+    protected function mac(): Attribute //mac
+    {
+        return Attribute::make(
+            set: fn($mac) => strtoupper($mac),
+        );
+    }
+
+    protected function mark(): Attribute //mark
+    {
+        return Attribute::make(
+            set: fn($mark) => strtoupper($mark),
+        );
+    }
+
+    protected function model(): Attribute //model
+    {
+        return Attribute::make(
+            set: fn($model) => strtoupper($model),
+        );
+    }
+
+    protected function name(): Attribute //name
+    {
+        return Attribute::make(
+            set: fn($name) => strtoupper($name),
+        );
+    }
+
+
     // Convertir IP a entero antes de guardar
     public function setIpAttribute($value)
     {
@@ -49,33 +79,5 @@ class Nvr extends Model
     public function getIpAttribute($value)
     {
         return long2ip($value);
-    }
-
-    protected function mac(): Attribute
-    {
-        return Attribute::make(
-            set: fn($mac) => strtoupper($mac),
-        );
-    }
-
-    protected function name(): Attribute
-    {
-        return Attribute::make(
-            set: fn($name) => strtoupper($name),
-        );
-    }
-
-    protected function model(): Attribute
-    {
-        return Attribute::make(
-            set: fn($model) => strtoupper($model),
-        );
-    }
-
-    protected function mark(): Attribute
-    {
-        return Attribute::make(
-            set: fn($mark) => strtoupper($mark),
-        );
     }
 }
