@@ -147,7 +147,7 @@
                         @foreach ($slots as $index => $slot)
                             <div class="bg-gray-50 p-4 rounded-md border border-gray-200 mb-4">
                                 <h4 class="text-sm font-medium text-gray-700 mb-2">Volumen #{{ $index + 1 }}</h4>
-                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                     <!-- Serial -->
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700">Serial</label>
@@ -174,21 +174,6 @@
                                             value="{{ old('volumen.' . $loop->iteration . '.capacidad_max_volumen', $slot['capacity_max']) }}"
                                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-gray-100 text-gray-500 sm:text-sm"
                                             min="1" readonly disabled>
-                                    </div>
-
-                                    <!-- Estado del disco -->
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700">Status</label>
-                                        <select name="volumen[{{ $index + 1 }}][status]"
-                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                                            required>
-                                            <option value="">Selecciona...</option>
-                                            <option value="Ocupado" {{ $slot['status'] == 'Ocupado' ? 'selected' : '' }}>
-                                                Ocupado</option>
-                                            <option value="Disponible"
-                                                {{ $slot['status'] == 'Disponible' ? 'selected' : '' }}>Disponible
-                                            </option>
-                                        </select>
                                     </div>
                                 </div>
                             </div>

@@ -7,6 +7,7 @@ use App\Models\monitoringSystem\Nvr;
 use App\Models\monitoringSystem\SlotNvr;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -19,7 +20,7 @@ class NvrController extends Controller
 {
     //
 
-    public function index(Request $request)
+    public function index(Request $request) // Lista de registros
     {
         // Valida si hay algún filtro activo
         $hasFilters = $request->filled('location') ||
@@ -33,12 +34,12 @@ class NvrController extends Controller
         return filter($request, 'nvrs'); //helper
     }
 
-    public function create()
+    public function create() //muestra el  formulario de validacion
     {
         return view('front.nvr.create');
     }
 
-    public function store(Request $request)
+    public function store(Request $request) //validad cuando se crea un nuevo registro
     {
         try { //try para para evitar ip duplicadas
 
@@ -57,19 +58,30 @@ class NvrController extends Controller
             ]);
 
             // Validación de volumenes(slots)
-            $slots = [];
             $slotCount = $request->input('slot_number'); //extrae el numero de volumens 
-            $slotRules = []; //reglas de validacion
-            for ($i = 1; $i <= $slotCount; $i++) { //recorrido para cada slot
-                $slotRules["volumen.{$i}.serial_disco"] = 'nullable';
-                $slotRules["volumen.{$i}.capacidad_disco"] = 'nullable|lt:capacidad_max_volumen';
-                $slotRules["volumen.{$i}.capacidad_max_volumen"] = 'required';
-                $slotRules["volumen.{$i}.status"] = 'required';
+            $slotRules = []; //guarda reglas de validacion
+            $customAttributes = []; //nombre legibles de los campos 
+            $messages = []; //mensajes personalizados
+
+            for ($i = 1; $i <= $slotCount; $i++) {
+                // Reglas principales
+                $slotRules["volumen.{$i}.serial_disco"] = "nullable|string|required_with:volumen.{$i}.capacidad_disco";
+                $slotRules["volumen.{$i}.capacidad_disco"] = "nullable|numeric|lte:volumen.{$i}.capacidad_max_volumen|required_with:volumen.{$i}.serial_disco";
+                $slotRules["volumen.{$i}.capacidad_max_volumen"] = 'required|numeric';
+
+                // Nombres legibles (custom attributes)
+                $customAttributes["volumen.{$i}.serial_disco"] = "Serial Disco";
+                $customAttributes["volumen.{$i}.capacidad_disco"] = "Capacidad Disco";
+                $customAttributes["volumen.{$i}.capacidad_max_volumen"] = "Capacidad Máxima/Volumen";
+
+                // Mensajes personalizados
+                $messages["volumen.{$i}.serial_dico.required_with"] = "El campo :attribute es obligatorio cuando se proporciona una Capacidad/Disco.";
+                $messages["volumen.{$i}.capacidad_disco.required_with"] = "El campo :attribute es obligatorio cuando se proporciona un Serial.";
+                $messages["volumen.{$i}.capacidad_disco.lte"] = "El campo :attribute debe ser menor o igual a Capacidad Máxima/Volumen.";
             }
-            $slotValidator = Validator::make($request->all(), $slotRules); //validacion
-            if ($slotValidator->fails()) { //si captura un error
-                return back()->withErrors($slotValidator)->withInput();
-            }
+
+            $validator = Validator::make($request->all(), $slotRules, $messages, $customAttributes);
+            $validator->validate();
 
             //extrae todos los volumen(slots) y luego la elimina del request
             $slots = $request->input('volumen', []);
@@ -80,12 +92,16 @@ class NvrController extends Controller
 
             // Guarda los datos para cada volumen (slot)
             foreach ($slots as $index => $slot) {
+                $status = 'Disponible';
+                if ($slot['serial_disco'] != null) {
+                    $status = 'Ocupado';
+                }
                 SlotNvr::create([
                     'nvr_id' => $validated['mac'],
-                    'hdd_serial' => $slot['serial_disco'] ?? null,
-                    'hdd_capacity' => $slot['capacidad_disco'] ?? null,
+                    'hdd_serial' => $slot['serial_disco'],
+                    'hdd_capacity' => $slot['capacidad_disco'],
                     'capacity_max' => $slot['capacidad_max_volumen'],
-                    'status' => $slot['status'],
+                    'status' => $status
                 ]);
             }
 
@@ -99,19 +115,19 @@ class NvrController extends Controller
         }
     }
 
-    public function destroy(Nvr $nvr)
+    public function destroy(Nvr $nvr) //elimina un nvr
     {
 
         $nvr->delete();
         return redirect()->route('nvr.index')->with('success', 'Nvr eliminado exitosamnete');
     }
 
-    public function edit(Nvr $nvr)
+    public function edit(Nvr $nvr) //muestra el formulario editar 
     {
         return view('front.nvr.edit', compact('nvr'));
     }
 
-    public function update(Request $request, Nvr $nvr)
+    public function update(Request $request, Nvr $nvr) //valida la actualizacion 
     {
         try { //try para para evitar ip duplicadas
 
@@ -126,20 +142,38 @@ class NvrController extends Controller
                 'description' => 'nullable'
             ]);
 
-            //validación volumen(slots)
-            $slotCount = $request->input('slot_number');
-            $slotRules = []; //reglas de validacion
-            for ($i = 1; $i <= $slotCount; $i++) {
-                $slotRules["volumen.{$i}.serial_disco"] = 'nullable';
-                $slotRules["volumen.{$i}.capacidad_disco"] = 'nullable';
-                $slotRules["volumen.{$i}.status"] = 'required';
-            }
-            $slotValidator = Validator::make($request->all(), $slotRules); //validacion
-            if ($slotValidator->fails()) { //si captura un error
-                return back()->withErrors($slotValidator)->withInput();
+            $existingSlots = []; // Aquí almacena los valores existentes de capacity_max por slot
+            $i = 1;
+            foreach ($nvr->slotNvr as $slot) {
+                // Busca el slot específico por MAC 
+                $existingSlots[$i] = $slot->capacity_max;
+                $i++;
             }
 
-            //extrae todos las volumen(slots) y luego la elimina del request
+            //validacion de volumenes
+            $slotRules = [];
+            $customAttributes = [];
+            $messages = [];
+            for ($i = 1; $i <= $nvr->slot_number; $i++) {
+                $existingMaxCapacity = $existingSlots[$i];
+
+                // Reglas principales (sin capacidad_max_volumen)
+                $slotRules["volumen.{$i}.serial_disco"] = "nullable|string|required_with:volumen.{$i}.capacidad_disco";
+                $slotRules["volumen.{$i}.capacidad_disco"] = "nullable|numeric|lte:{$existingMaxCapacity}|required_with:volumen.{$i}.serial_disco";
+
+                // Nombres legibles
+                $customAttributes["volumen.{$i}.serial_disco"] = "Serial Disco";
+                $customAttributes["volumen.{$i}.capacidad_disco"] = "Capacidad Disco";
+
+                // Mensajes personalizados
+                $messages["volumen.{$i}.serial_dico.required_with"] = "El campo :attribute es obligatorio cuando se proporciona una Capacidad/Disco.";
+                $messages["volumen.{$i}.capacidad_disco.required_with"] = "El campo :attribute es obligatorio cuando se proporciona un Serial.";
+                $messages["volumen.{$i}.capacidad_disco.lte"] = "El campo :attribute debe ser menor o igual a {$existingMaxCapacity}.";
+            }
+            $validator = Validator::make($request->all(), $slotRules, $messages, $customAttributes);
+            $validator->validate();
+
+            //extrae todos los volumen(slots) y luego la elimina del request
             $slotsRequest = $request->input('volumen', []);
             $request->offsetUnset('volumen');
 
@@ -152,11 +186,15 @@ class NvrController extends Controller
             // actualiza volumen (sltos)
             foreach ($slotsRequest as $slotData) {
                 $slot = $slots[$i];
+                $status = 'Disponible';
+                if ($slotData['serial_disco'] != null) {
+                    $status = 'Ocupado';
+                }
                 if ($slot) {
                     $slot->update([
                         'hdd_serial' => $slotData['serial_disco'],
                         'hdd_capacity' => $slotData['capacidad_disco'],
-                        'status' => $slotData['status'],
+                        'status' => $status,
                     ]);
                 }
                 $i++;
@@ -172,7 +210,7 @@ class NvrController extends Controller
         }
     }
 
-    public function show(Nvr $nvr)
+    public function show(Nvr $nvr) //muestra los datos
     {
         return view('front.nvr.show', compact('nvr'));
     }
