@@ -1,10 +1,10 @@
 @extends('layouts.app-home')
 @section('content')
-    <!-- resources/views/front/camera/create.blade.php -->
+    <!-- resources/views/front/camera/edit.blade.php -->
 
     <div class="container mx-auto px-4 py-6">
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold">Crear Nueva Cámara</h1>
+            <h1 class="text-2xl font-bold">Editar Cámara</h1>
 
             <!-- Botón Volver -->
             <a href="{{ route('camara.index') }}"
@@ -33,17 +33,17 @@
 
         {{-- Formulario para camara --}}
         <div class="bg-white shadow overflow-hidden sm:rounded-lg p-6">
-            <form action="{{ route('camara.store') }}" method="POST">
+            <form action="{{ route('camara.update', $camera['mac']) }}" method="POST">
                 @csrf
-
+                @method('PUT')
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
                     <!-- Campo Dirección MAC -->
                     <div>
                         <label for="mac" class="block text-sm font-medium text-gray-700">Dirección MAC</label>
-                        <input type="text" name="mac" id="mac" value="{{ old('mac') }}"
+                        <input type="text" name="mac" id="mac" value="{{ old('mac', $camera->mac) }}"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            placeholder="Ejemplo: 00:1A:2B:3C:4D:5E" required>
+                            readonly disabled>
                     </div>
 
                     <!-- Campo Marca -->
@@ -63,7 +63,7 @@
                     <!-- Campo Modelo -->
                     <div>
                         <label for="modelo" class="block text-sm font-medium text-gray-700">Modelo</label>
-                        <input type="text" name="model" id="model" value="{{ old('model') }}"
+                        <input type="text" name="model" id="model" value="{{ old('model', $camera->model) }}"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
                     </div>
@@ -71,7 +71,7 @@
                     <!-- Campo Nombre -->
                     <div>
                         <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
-                        <input type="text" name="name" id="name" value ="{{ old('name') }}"
+                        <input type="text" name="name" id="name" value ="{{ old('name', $camera->name) }}"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
                     </div>
@@ -84,7 +84,7 @@
                             required>
                             <option value="">Selecciona...</option>
                             @foreach ($nvrs as $nvr)
-                                <option value="{{ $nvr->mac }} {{ old('nvr_id') }}">{{ $nvr->name }}</option>
+                                <option value="{{ old('nvr_id', $nvr->mac) }} ">{{ $nvr->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -92,7 +92,7 @@
                     <!-- Campo IP -->
                     <div>
                         <label for="ip" class="block text-sm font-medium text-gray-700">Dirección IP</label>
-                        <input type="text" name="ip" id="ip" value="{{ old('ip') }}"
+                        <input type="text" name="ip" id="ip" value="{{ old('ip', $camera->ip) }}"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             placeholder="Ejemplo: 192.168.1.10" required>
                     </div>
@@ -100,7 +100,8 @@
                     <!-- Campo Localidad -->
                     <div>
                         <label for="ubicacion" class="block text-sm font-medium text-gray-700">Localidad</label>
-                        <input type="text" name="location" id="location" value="{{ old('location') }}"
+                        <input type="text" name="location" id="location"
+                            value="{{ old('location', $camera->location) }}"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
                     </div>
@@ -111,18 +112,17 @@
                         <select name="status" id="status"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
-                            <option value="">Selecciona el Status</option>
+                            <option value="{{ old('status', $camera->status) }}">{{ $camera->status }}</option>
                             <option value="Activo">Activo</option>
-                            <option value="Inactivo">Inactivo</option>
                         </select>
                     </div>
 
                     <!-- Campo Descripción -->
                     <div class="md:col-span-2">
-                        <label for="description" class="block text-sm font-medium text-gray-700">Descripción</label>
-                        <textarea name="description" id="description" value="{{ old('description') }}" rows="3"
+                        <label for="descripcion" class="block text-sm font-medium text-gray-700">Descripción</label>
+                        <textarea name="description" id="description" rows="3"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            placeholder="Describe brevemente la ubicación o uso de esta cámara..."></textarea>
+                            placeholder="Describe brevemente la ubicación o uso de esta cámara...">{{ old('description', $camera->description) }}</textarea>
                     </div>
                 </div>
 

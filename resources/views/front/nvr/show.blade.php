@@ -208,15 +208,16 @@
                                     </td>
                                     <td class="px-6 py-4 text-sm space-x-2">
                                         <div class="flex space-x-2">
-                                            <a href="#"
+                                            <a href="{{ route('camara.show', $camera['mac']) }}"
                                                 class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                                 Ver
                                             </a>
-                                            <a href="#"
+                                            <a href="{{ route('camara.edit', $camera['mac']) }}"
                                                 class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
                                                 Editar
                                             </a>
-                                            <form action="#" class="inline">
+                                            <form action="{{ route('camara.destroy', $camera['mac']) }}" method="POST"
+                                                class="inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"

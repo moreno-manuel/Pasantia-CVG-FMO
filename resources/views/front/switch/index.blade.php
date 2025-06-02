@@ -129,7 +129,7 @@
         @endif
 
     </div>
-    
+
     {{-- funcion para los filtros --}}
     @push('scripts')
         <script>

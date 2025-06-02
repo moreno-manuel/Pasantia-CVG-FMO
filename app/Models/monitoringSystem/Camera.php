@@ -21,7 +21,7 @@ class Camera extends Model
         'location',
         'ip',
         'status',
-        'desccription'
+        'description'
     ];
     //Relaciones 
     public function conditionAttention()

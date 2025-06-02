@@ -1,6 +1,9 @@
 @extends('layouts.app-home')
 
 @section('content')
+
+    <!-- resources/views/front/camera/show.blade.php -->
+    
     <div class="container mx-auto px-4 py-6">
 
         {{-- encabezado y boton agregar --}}
@@ -72,11 +75,11 @@
                             <tr class="hover:bg-gray-50">
                                 <td class="px-6 py-4 text-sm text-gray-900 truncate">{{ $camera['mac'] }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-900">{{ $camera['nvr_id'] }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-900">{{ $camera['marca'] }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-900">{{ $camera['modelo'] }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-900">{{ $camera['nombre'] }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-900">{{ $camera['mark'] }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-900">{{ $camera['model'] }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-900">{{ $camera['name'] }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-900">{{ $camera['location'] }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-900">{{ $camera['ip'] }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-900">{{ $camera['ubicacion'] }}</td>
                                 <td class="px-6 py-4 text-sm">
                                     <span
                                         class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
@@ -89,17 +92,18 @@
                                 <td class="px-6 py-4 text-sm">
                                     <div class="flex space-x-2">
                                         <!-- Botón Ver -->
-                                        <a href="#"
+                                        <a href="{{ route('camara.show', $camera['mac']) }}"
                                             class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                             Ver
                                         </a>
                                         <!-- Botón Editar -->
-                                        <a href="#"
+                                        <a href="{{ route('camara.edit', $camera['mac']) }}"
                                             class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
                                             Editar
                                         </a>
                                         <!-- Botón Eliminar -->
-                                        <form action="#" method="POST" class="inline">
+                                        <form action="{{ route('camara.destroy', $camera['mac']) }}" method="POST"
+                                            class="inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"

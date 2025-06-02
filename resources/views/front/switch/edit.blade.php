@@ -76,7 +76,7 @@
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
                             <option value="">Selecciona el Status</option>
-                            <option value="Activo" {{ $switch->status === 'Activo' ? 'selected' : '' }}>Activo</option>
+                            <option value="Activo" {{ $switch->status }}>Activo</option>
                             <option value="Inactivo" {{ $switch->status === 'Inactivo' ? 'selected' : '' }}>Inactivo
                             </option>
                         </select>

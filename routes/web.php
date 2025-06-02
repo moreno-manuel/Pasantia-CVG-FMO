@@ -5,7 +5,6 @@ use App\Http\Controllers\MonitoringSystem\CameraController;
 use App\Http\Controllers\MonitoringSystem\NvrController;
 use App\Http\Controllers\NetworkInfrastructure\LinkController;
 use App\Http\Controllers\NetworkInfrastructure\SwitchController;
-use App\Models\monitoringSystem\SlotNvr;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -27,4 +26,4 @@ Route::resource('nvr', NvrController::class)->middleware('auth');
 
 
 
-Route::resource('camara', CameraController::class)->except(['show', 'destroy', 'edit', 'update']);
+Route::resource('camara', CameraController::class)->middleware('auth');
