@@ -14,12 +14,12 @@
         </div>
 
         <!-- Tarjeta de información general -->
-        <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+        <div class="bg-gray-800 shadow overflow-hidden sm:rounded-lg">
             <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
-                <h3 class="text-lg leading-6 font-medium text-gray-900">
+                <h3 class="text-lg leading-6 font-medium text-white">
                     Información General
                 </h3>
-                <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                <p class="mt-1 max-w-2xl text-sm text-white">
                     Detalles del Switch seleccionado.
                 </p>
             </div>

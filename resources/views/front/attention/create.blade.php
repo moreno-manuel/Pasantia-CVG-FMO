@@ -61,7 +61,7 @@
                             required>
                             <option value="">Selecciona...</option>
                             @foreach ($cameras as $camera)
-                                <option value="{{ $camera->mac }} {{ old('camera_id') }}">{{ $camera->name }}</option>
+                                <option value="{{ $camera->mac }}">{{ $camera->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -76,7 +76,7 @@
 
                     <!-- Campo Fecha de Finalización -->
                     <div class="mb-4">
-                        <label for="date_end" class="block text-gray-700 font-medium mb-2">Fecha de finalización</label>
+                        <label for="date_end" class="block text-gray-700 font-medium mb-2">Fecha de Realización</label>
                         <input type="date" name="date_end" id="date_end"
                             class="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
@@ -86,7 +86,7 @@
                         <label for="description" class="block text-sm font-medium text-gray-700">Descripción</label>
                         <textarea name="description" id="description" value="{{ old('description') }}" rows="3"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            placeholder="Describe brevemente la ubicación o uso de esta cámara..."></textarea>
+                            placeholder="Describe brevemente la condición de atención..."></textarea>
                     </div>
                 </div>
 

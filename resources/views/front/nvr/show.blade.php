@@ -4,7 +4,7 @@
 
     <div class="container mx-auto px-4 py-6">
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold">Detalles del NVR</h1>
+            <h1 class="text-2xl font-bold"></h1>
 
             <!-- Botón Volver -->
             <a href="{{ route('nvr.index') }}"
@@ -14,12 +14,12 @@
         </div>
 
         <!-- Tarjeta de información general -->
-        <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+        <div class="bg-gray-800 shadow overflow-hidden sm:rounded-lg">
             <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
-                <h3 class="text-lg leading-6 font-medium text-gray-900">
+                <h3 class="text-lg leading-6 font-medium text-white">
                     Información del NVR
                 </h3>
-                <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                <p class="mt-1 max-w-2xl text-sm text-white">
                     Detalles del NVR seleccionado.
                 </p>
             </div>
@@ -123,12 +123,12 @@
                 <table class="min-w-full shadow-md rounded-lg overflow-hidden bg-white border border-gray-300">
                     <thead class="bg-gray-100">
                         <tr class="bg-gray-800 divide-x divide-blue-400">
-                            <th class="px-6 py-3 text-left text-sm font-medium text-white">Volumen</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-white">Serial</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-white">Capacidad/Disco (GB)</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-white">Capacidad Máxima/volumen (GB)
+                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Volumen</th>
+                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Serial</th>
+                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Capacidad/Disco (GB)</th>
+                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Capacidad Máxima/volumen (GB)
                             </th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-white">Status</th>
+                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Status</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
@@ -137,11 +137,11 @@
                         @endphp
                         @foreach ($nvr->slotNvr as $index => $slot)
                             <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 text-sm text-gray-900">{{ $i }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-900">{{ $slot->hdd_serial }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-900">{{ $slot->hdd_capacity }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-900">{{ $slot->capacity_max }}</td>
-                                <td class="px-6 py-4 text-sm">
+                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $i }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $slot->hdd_serial }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $slot->hdd_capacity }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $slot->capacity_max }}</td>
+                                <td class="px-6 py-4 text-center text-sm">
                                     <span
                                         class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
                                             {{ $slot->status === 'Disponible' ? 'bg-green-300 text-green-900' : 'bg-red-300 text-red-900' }}">
@@ -176,38 +176,38 @@
             </form>
         </div>
 
-
+        <br>
         @if ($cameras->isNotEmpty())
             <div class="mt-8">
-                <h3 class="text-lg font-medium text-white mb-3">Cámaras Conectadas al Nvr</h3>
+                <h3 class="text-lg font-medium text-black mb-3">Cámaras Conectadas al Nvr</h3>
                 <div class="overflow-x-auto">
                     <table class="min-w-full shadow-md rounded-lg overflow-hidden bg-white border border-gray-300">
                         <thead class="bg-gray-100">
                             <tr class="bg-gray-800 divide-x divide-blue-400">
-                                <th class="px-6 py-3 text-left text-sm font-medium text-white">Mac</th>
-                                <th class="px-6 py-3 text-left text-sm font-medium text-white">Nombre</th>
-                                <th class="px-6 py-3 text-left text-sm font-medium text-white">Ubicación</th>
-                                <th class="px-6 py-3 text-left text-sm font-medium text-white">IP</th>
-                                <th class="px-6 py-3 text-left text-sm font-medium text-white">Status</th>
-                                <th class="px-6 py-3 text-left text-sm font-medium text-white w-32">Acciones</th>
+                                <th class="px-6 py-3 text-center text-sm font-medium text-white">Mac</th>
+                                <th class="px-6 py-3 text-center text-sm font-medium text-white">Nombre</th>
+                                <th class="px-6 py-3 text-center text-sm font-medium text-white">Localidad</th>
+                                <th class="px-6 py-3 text-center text-sm font-medium text-white">IP</th>
+                                <th class="px-6 py-3 text-center text-sm font-medium text-white">Status</th>
+                                <th class="px-6 py-3 text-center text-sm font-medium text-white w-32">Acciones</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200">
                             @foreach ($cameras as $camera)
                                 <tr class="hover:bg-gray-50">
-                                    <td class="px-6 py-4 text-sm text-gray-900">{{ $camera->mac }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-900">{{ $camera->name }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-900">{{ $camera->location }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-900">{{ $camera->ip }}</td>
-                                    <td class="px-6 py-4 text-sm">
+                                    <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $camera->mac }}</td>
+                                    <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $camera->name }}</td>
+                                    <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $camera->location }}</td>
+                                    <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $camera->ip }}</td>
+                                    <td class="px-6 py-4 text-center text-sm">
                                         <span
                                             class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
                                             {{ $camera->status === 'Activo' ? 'bg-green-300 text-green-900' : 'bg-red-300 text-red-900' }}">
                                             {{ $camera->status }}
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4 text-sm space-x-2">
-                                        <div class="flex space-x-2">
+                                    <td class="px-6 py-4 text-sm align-middle">
+                                        <div class="flex justify-center space-x-2">
                                             <a href="{{ route('camara.show', $camera['mac']) }}"
                                                 class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                                 Ver
@@ -236,8 +236,8 @@
             {{-- paginacion --}}
             {{ $cameras->links() }}
         @else
-            <div class="mt-6 bg-gray-100 border border-gray-300 rounded-md p-4 text-white">
-                <p>No hay cámaras asociadas a este NVR.</p>
+            <div class="text-center mt-6 bg-gray-800 border border-black rounded-md p-4 text-white">
+                <p>No hay cámaras conectadas al Nvr seleccionado</p>
             </div>
         @endif
 

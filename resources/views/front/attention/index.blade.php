@@ -53,29 +53,29 @@
             <div class="overflow-x-auto">
                 <table class="min-w-full shadow-md rounded-lg overflow-hidden bg-white border border-gray-300">
                     <tr class="bg-gray-800 divide-x divide-blue-400">
-                        <th class="px-6 py-3 text-left text-sm font-medium text-white">Camara</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-white">Condición</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-white">Fecha-Inicio</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-white">Descripción</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-white">Acciones</th>
+                        <th class="px-6 py-3 text-center text-sm font-medium text-white">Camara</th>
+                        <th class="px-6 py-3 text-center text-sm font-medium text-white">Condición</th>
+                        <th class="px-6 py-3 text-center text-sm font-medium text-white">Fecha-Inicio</th>
+                        <th class="px-6 py-3 text-center text-sm font-medium text-white">Descripción</th>
+                        <th class="px-6 py-3 text-center text-sm font-medium text-white">Acciones</th>
                     </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
 
                         @foreach ($conditions as $condition)
                             @php
-                                $camera = $condition->camera;
+                                $camera = $condition->camera; //para tomar el nombre de la camara y no la mac
                             @endphp
                             <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 text-sm text-gray-900">{{ $camera['name'] }} </td>
-                                <td class="px-6 py-4 text-sm text-gray-900">{{ $condition['name'] }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-900">{{ $condition['date_ini'] }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-900">{{ $condition['description'] }}</td>
-
+                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $camera['name'] }} </td>
+                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $condition['name'] }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $condition['date_ini'] }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-gray-900">
+                                    {{ $condition['description'] ?? 'Sin descripción' }}</td>
 
                                 {{-- Acciones --}}
-                                <td class="px-6 py-4 text-sm space-x-2">
-                                    <div class="flex space-x-2">
+                                <td class="px-6 py-4 text-sm align-middle">
+                                    <div class="flex justify-center space-x-2">
                                         <a href="{{ route('atencion.show', $condition) }}"
                                             class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                             Ver
@@ -106,7 +106,7 @@
                     'name' => $filters['name'] ?? '',
                 ])->links() }}
         @else
-            <div class="text-center mt-6 bg-gray-100 border border-gray-300 rounded-md p-4 text-white">
+            <div class="text-center mt-6 bg-gray-800 border border-black rounded-md p-4 text-white">
                 <p>No hay registros existentes</p>
             </div>
         @endif

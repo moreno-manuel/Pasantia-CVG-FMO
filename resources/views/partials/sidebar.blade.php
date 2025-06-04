@@ -1,6 +1,7 @@
 <aside class="w-64 bg-gray-800 text-white h-full flex flex-col">
     <!-- Encabezado con información del usuario -->
     <div class="px-6 py-8 text-center border-b border-gray-700">
+
         <!-- Icono de usuario -->
         <div class="flex justify-center mb-2">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-400" fill="none" viewBox="0 0 24 24"
@@ -52,17 +53,6 @@
                         </svg>
                     </summary>
                     <ul class="mt-1 ml-4 space-y-1">
-                        <li><a href="{{ route('camara.index') }}"
-                                class="flex items-center space-x-2 px-4 py-2 hover:bg-gray-700 rounded">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                                </svg>
-                                <span>Camara</span>
-                            </a></li>
                         <li><a href="{{ route('nvr.index') }}"
                                 class="flex items-center space-x-2 px-4 py-2 hover:bg-gray-700 rounded">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none"
@@ -71,6 +61,18 @@
                                         d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
                                 </svg>
                                 <span>NVR</span>
+                            </a></li>
+
+                        <li><a href="{{ route('camara.index') }}"
+                                class="flex items-center space-x-2 px-4 py-2 hover:bg-gray-700 rounded">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4.5 4.5a3 3 0 0 0-3 3v9a3 3 0 0 0 3 3h8.25a3 3 0 0 0 3-3v-9a3 3 0 0 0-3-3H4.5ZM19.94 18.75l-2.69-2.69V7.94l2.69-2.69c.944-.945 2.56-.276 2.56 1.06v11.38c0 1.336-1.616 2.005-2.56 1.06Z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                                <span>Camara</span>
                             </a></li>
                         <li><a href="{{ route('switch.index') }}"
                                 class="flex items-center space-x-2 px-4 py-2 hover:bg-gray-700 rounded">
@@ -181,7 +183,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                 </svg>
-                <span>Salir</span>
+                <span>Cerrar Sesión</span>
             </button>
         </form>
     </div>

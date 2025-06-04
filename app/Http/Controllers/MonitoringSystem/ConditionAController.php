@@ -22,7 +22,7 @@ class ConditionAController extends Controller
         $hasFilters = $request->filled('name');
 
         if (!$hasFilters) { //si no se aplica un filtro
-            $conditions = ConditionAttention::paginate(10);
+            $conditions = ConditionAttention::orderBy('id', 'desc')->paginate(10);
             return view('front.attention.index', compact('conditions'));
         }
 
@@ -37,17 +37,36 @@ class ConditionAController extends Controller
 
     public function store(Request $request) //guarda el registro nuevo
     {
-
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'camera_id' => 'required',
             'date_ini' => 'required|date',
             'date_end' => 'nullable|date|after_or_equal:date_ini',
             'description' => 'nullable'
+        ], [
+            'after_or_equal' => 'La :attribute debe ser posterior o igual a :date'
+        ], [
+            'date_ini' => 'Fecha de Inicio',
+            'date_end' => 'Fecha de Realización'
         ]);
+
 
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator);
+        } else {
+            //busqueda filtrada [nombre - fecha incial - camara] 
+            $existingCondition = ConditionAttention::where('camera_id', $request->input('camera_id'))
+                ->where('date_ini', $request->input('date_ini'))
+                ->where('name', $request->input('name'))
+                ->first();
+            if ($existingCondition) //valida que no haya una condicion de atencion con el mismo nombre y fecha de inicio
+                return redirect()->back()->withInput()->withErrors('Ya existe una condición de atención con la misma fecha y tipo para la cámara seleccionada');
+            else { //valida que no haya una condición sin cerrar
+                $existingCondition = ConditionAttention::where('camera_id', $request->input('camera_id'))
+                    ->whereNull('date_end')->first();
+                if ($existingCondition)
+                    return redirect()->back()->withInput()->withErrors('Debe finalizar la condición de atención anterior para la cámara selccionada');
+            }
         }
 
         // Determinar el estado
@@ -89,7 +108,7 @@ class ConditionAController extends Controller
         return view('front.attention.edit', compact('condition', 'cameras'));
     }
 
-    public function update(Request $request,  $id)//actualiza los datos de un registro
+    public function update(Request $request,  $id) //actualiza los datos de un registro
     {
         $condition = ConditionAttention::findOrFail($id);
 
@@ -98,6 +117,11 @@ class ConditionAController extends Controller
             'date_ini' => 'required|date',
             'date_end' => 'nullable|date|after_or_equal:date_ini',
             'description' => 'nullable'
+        ], [
+            'after_or_equal' => 'La :attribute debe ser posterior o igual a :date'
+        ], [
+            'date_ini' => 'Fecha de Inicio',
+            'date_end' => 'Fecha de Realización'
         ]);
 
         if ($validator->fails()) {

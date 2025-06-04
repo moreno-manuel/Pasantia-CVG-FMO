@@ -42,7 +42,7 @@ function filter(Request $request, string $table)
                 }
 
                 // Ejecuta la consulta y aplica paginación
-                $switches = $query->paginate(10);
+                $switches = $query->orderBy('created_at', 'desc')->paginate(10);
 
                 // Mantiene los valores de los filtros en la vista
                 return view('front.switch.index', compact('switches'))
@@ -72,7 +72,7 @@ function filter(Request $request, string $table)
 
 
                 // Ejecuta la consulta y aplica paginación
-                $links = $query->paginate(10);
+                $links = $query->orderBy('created_at', 'desc')->paginate(10);
 
                 // Mantiene los valores de los filtros en la vista
                 return view('front.link.index', compact('links'))
@@ -101,7 +101,7 @@ function filter(Request $request, string $table)
 
 
                 // Ejecuta la consulta y aplica paginación
-                $nvrs = $query->paginate(10);
+                $nvrs = $query->orderBy('created_at', 'desc')->paginate(10);
 
                 // Mantiene los valores de los filtros en la vista
                 return view('front.nvr.index', compact('nvrs'))
@@ -129,7 +129,7 @@ function filter(Request $request, string $table)
 
 
                 // Ejecuta la consulta y aplica paginación
-                $cameras = $query->paginate(10);
+                $cameras = $query->orderBy('created_at', 'desc')->paginate(10);
 
                 // Mantiene los valores de los filtros en la vista
                 return view('front.camera.index', compact('cameras'))
@@ -147,9 +147,9 @@ function filter(Request $request, string $table)
                 if ($name) {
                     $query->where('name',  $name);
                 }
-        
+
                 // Ejecuta la consulta y aplica paginación
-                $conditions = $query->paginate(10);
+                $conditions = $query->orderBy('created_at', 'desc')->paginate(10);
 
                 // Mantiene los valores de los filtros en la vista
                 return view('front.attention.index', compact('conditions'))

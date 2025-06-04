@@ -64,23 +64,23 @@
                 <table class="min-w-full shadow-md rounded-lg overflow-hidden bg-white border border-gray-300">
                     <thead class="bg-gray-100">
                         <tr class="bg-gray-800 divide-x divide-blue-400">
-                            <th class="px-6 py-3 text-left text-sm font-medium text-white">Serial</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-white">Model</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-white">N°/Puertos</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-white">Localidad</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-white">Status</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-white">Acciones</th>
+                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Serial</th>
+                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Model</th>
+                            <th class="px-6 py-3 text-center text-sm font-medium text-white">N°/Puertos</th>
+                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Localidad</th>
+                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Status</th>
+                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Acciones</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
 
                         @foreach ($switches as $switch)
                             <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 text-sm text-gray-900">{{ $switch['serial'] }} </td>
-                                <td class="px-6 py-4 text-sm text-gray-900">{{ $switch['model'] }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-900">{{ $switch['number_ports'] }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-900">{{ $switch['location'] }}</td>
-                                <td class="px-6 py-4 text-sm">
+                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $switch['serial'] }} </td>
+                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $switch['model'] }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $switch['number_ports'] }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $switch['location'] }}</td>
+                                <td class="px-6 py-4 text-center text-sm">
                                     <span
                                         class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
                                     {{ $switch['status'] === 'Activo' ? 'bg-green-300 text-green-900' : 'bg-red-300 text-red-900' }}">
@@ -89,8 +89,8 @@
                                 </td>
 
                                 {{-- Acciones --}}
-                                <td class="px-2 py-4 text-sm space-x-3">
-                                    <div class="flex space-x-3">
+                                <td class="px-6 py-4 text-sm align-middle">
+                                    <div class="flex justify-center space-x-2">
                                         <a href="{{ route('switch.show', $switch) }}"
                                             class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                             Ver

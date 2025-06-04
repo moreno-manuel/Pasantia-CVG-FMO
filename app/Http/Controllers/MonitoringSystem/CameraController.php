@@ -7,6 +7,8 @@ use App\Models\monitoringSystem\Camera;
 use App\Models\monitoringSystem\Nvr;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -27,7 +29,7 @@ class CameraController extends Controller
             $request->filled('status');
 
         if (!$hasFilters) { //si no se aplica un filtro
-            $cameras = Camera::paginate(10);
+            $cameras = Camera::orderBy('created_at', 'desc')->paginate(10);
             return view('front.camera.index', compact('cameras'));
         }
 
@@ -44,7 +46,6 @@ class CameraController extends Controller
             $available_ports = $nvr->ports_number - $ports_used;
             return $available_ports > 0; // Mantener si hay puertos disponibles
         });
-
 
         return view('front.camera.create', compact('nvrs'));
     }
@@ -93,7 +94,7 @@ class CameraController extends Controller
         $camera = Camera::where('mac', $mac)->firstOrFail();
 
         // Cargar los registros con paginación
-        $conditions = $camera->conditionAttention()->paginate(5);
+        $conditions = $camera->conditionAttention()->orderBy('created_at', 'desc')->paginate(5);
 
         return view('front.camera.show', compact('camera', 'conditions'));
     }

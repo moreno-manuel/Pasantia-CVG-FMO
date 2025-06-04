@@ -27,7 +27,7 @@ class NvrController extends Controller
             $request->filled('status');
 
         if (!$hasFilters) { //si no se aplica un filtro
-            $nvrs = Nvr::paginate(10);
+            $nvrs = Nvr::orderBy('created_at', 'desc')->paginate(10);
             return view('front.nvr.index', compact('nvrs'));
         }
 
@@ -212,7 +212,7 @@ class NvrController extends Controller
 
     public function show(Nvr $nvr) //muestra los datos
     {
-        $cameras = $nvr->camera()->paginate(5);
+        $cameras = $nvr->camera()->orderBy('created_at', 'desc')->paginate(5);
         return view('front.nvr.show', compact('nvr', 'cameras'));
     }
 }
