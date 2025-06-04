@@ -74,7 +74,7 @@
                         <dd class="mt-1 text-sm sm:mt-0 sm:col-span-2">
                             <span
                                 class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                {{ $camera['status'] === 'Activo' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                {{ $camera['status'] === 'Activo' ? 'bg-green-300 text-green-900' : 'bg-red-300 text-red-900' }}">
                                 {{ $camera['status'] }}
                             </span>
                         </dd>
@@ -107,5 +107,72 @@
                 </button>
             </form>
         </div>
+
+        {{-- valida para mostrar tabla o mensaje --}}
+        @if ($conditions->isNotEmpty())
+            <!-- Tabla -->
+            <div class="mt-8">
+                <h3 class="text-lg font-medium text-gray-700 mb-3">Condición de atención de Cámara seleccionada</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full shadow-md rounded-lg overflow-hidden bg-white border border-gray-300">
+                        <thead class="bg-gray-100">
+                            <tr class="bg-gray-800 divide-x divide-blue-400">
+                                <th class="px-6 py-3 text-left text-sm font-medium text-white">Condición</th>
+                                <th class="px-6 py-3 text-left text-sm font-medium text-white">Fecha-Inicio</th>
+                                <th class="px-6 py-3 text-left text-sm font-medium text-white">Fecha-Fin</th>
+                                <th class="px-6 py-3 text-left text-sm font-medium text-white">Descripción</th>
+                                <th class="px-6 py-3 text-left text-sm font-medium text-white">Status</th>
+                                <th class="px-6 py-3 text-left text-sm font-medium text-white">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            @foreach ($conditions as $condition)
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 text-sm text-gray-900">{{ $condition->name }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-900">{{ $condition->date_ini }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-900">{{ $condition->date_end }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-900">{{ $condition->description }}</td>
+                                    <td class="px-6 py-4 text-sm">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+                                            {{ $condition->status === 'Atendido' ? 'bg-green-300 text-green-900' : 'bg-red-300 text-red-900' }}">
+                                            {{ $condition->status }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm space-x-2">
+                                        <div class="flex space-x-2">
+                                            <a href="{{ route('atencion.show', $condition) }}"
+                                                class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                                Ver
+                                            </a>
+                                            <a href="{{ route('atencion.edit', $condition) }}"
+                                                class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                                                Editar
+                                            </a>
+                                            <form action="{{ route('atencion.destroy', $condition) }}" method="POST"
+                                                class="inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                    class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                                    Eliminar
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {{-- paginacion --}}
+            {{ $conditions->links() }}
+        @else
+            <div class="mt-6 bg-gray-100 border border-gray-300 rounded-md p-4 text-gray-700">
+                <p>No hay condición de atención asociadas a la cámara seleccionada.</p>
+            </div>
+        @endif
+
     </div>
 @endsection

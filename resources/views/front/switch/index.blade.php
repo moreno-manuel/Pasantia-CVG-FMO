@@ -1,6 +1,6 @@
 @extends('layouts.app-home')
 @section('content')
-    <!-- resources/views/front/switch/create.blade.php -->
+    <!-- resources/views/front/switch/index.blade.php -->
 
     <div class="container mx-auto px-4 py-6">
 
@@ -18,21 +18,21 @@
 
             <!-- Serial -->
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Serial</label>
+                <label class="block text-sm font-medium text-black mb-1">Serial</label>
                 <input type="text" name="serial" value="{{ $filters['serial'] ?? '' }}"
                     class="w-full rounded-md border-black shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
             </div>
 
             <!-- ubicacion -->
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Localidad</label>
+                <label class="block text-sm font-medium text-black mb-1">Localidad</label>
                 <input type="text" name="location" value="{{ $filters['location'] ?? '' }}"
                     class="w-full rounded-md border-black shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
             </div>
 
             {{-- Status --}}
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                <label class="block text-sm font-medium text-black mb-1">Status</label>
                 <select name="status"
                     class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                     <option value="">Todos</option>
@@ -61,15 +61,15 @@
         @if ($switches->isNotEmpty())
             <!-- Tabla -->
             <div class="overflow-x-auto">
-                <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-sm">
+                <table class="min-w-full shadow-md rounded-lg overflow-hidden bg-white border border-gray-300">
                     <thead class="bg-gray-100">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Serial</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Model</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">N°/Puertos</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Localidad</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Status</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Acciones</th>
+                        <tr class="bg-gray-800 divide-x divide-blue-400">
+                            <th class="px-6 py-3 text-left text-sm font-medium text-white">Serial</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-white">Model</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-white">N°/Puertos</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-white">Localidad</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-white">Status</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-white">Acciones</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
@@ -83,14 +83,14 @@
                                 <td class="px-6 py-4 text-sm">
                                     <span
                                         class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                    {{ $switch['status'] === 'Activo' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                    {{ $switch['status'] === 'Activo' ? 'bg-green-300 text-green-900' : 'bg-red-300 text-red-900' }}">
                                         {{ $switch['status'] }}
                                     </span>
                                 </td>
 
                                 {{-- Acciones --}}
-                                <td class="px-6 py-4 text-sm space-x-2">
-                                    <div class="flex space-x-2">
+                                <td class="px-2 py-4 text-sm space-x-3">
+                                    <div class="flex space-x-3">
                                         <a href="{{ route('switch.show', $switch) }}"
                                             class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                             Ver
@@ -123,7 +123,7 @@
                     'status' => $filters['status'] ?? '',
                 ])->links() }}
         @else
-            <div class="text-center mt-6 bg-gray-100 border border-gray-300 rounded-md p-4 text-gray-700">
+            <div class="text-center mt-6 bg-gray-800 border border-black rounded-md p-4 text-white">
                 <p>No hay registros existentes</p>
             </div>
         @endif

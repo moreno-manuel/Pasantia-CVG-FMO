@@ -3,6 +3,7 @@
 namespace app\Helpers;
 
 use App\Models\monitoringSystem\Camera;
+use App\Models\monitoringSystem\ConditionAttention;
 use App\Models\monitoringSystem\Nvr;
 use App\Models\networkInfrastructure\Link;
 use App\Models\networkInfrastructure\Switche;
@@ -132,6 +133,26 @@ function filter(Request $request, string $table)
 
                 // Mantiene los valores de los filtros en la vista
                 return view('front.camera.index', compact('cameras'))
+                    ->with('filters', $request->all());
+                break;
+            }
+        case 'conditions': {
+                // Obtén los valores de los filtros
+                $name = $request->input('name');
+
+                // Construye la consulta base
+                $query = ConditionAttention::query();
+
+                // Aplica filtros condicionalmente
+                if ($name) {
+                    $query->where('name',  $name);
+                }
+        
+                // Ejecuta la consulta y aplica paginación
+                $conditions = $query->paginate(10);
+
+                // Mantiene los valores de los filtros en la vista
+                return view('front.attention.index', compact('conditions'))
                     ->with('filters', $request->all());
                 break;
             }

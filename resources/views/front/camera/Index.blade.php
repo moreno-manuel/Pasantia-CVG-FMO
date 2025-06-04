@@ -3,7 +3,7 @@
 @section('content')
 
     <!-- resources/views/front/camera/show.blade.php -->
-    
+
     <div class="container mx-auto px-4 py-6">
 
         {{-- encabezado y boton agregar --}}
@@ -20,14 +20,14 @@
 
             <!-- Localidad -->
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Localidad</label>
+                <label class="block text-sm font-medium text-black mb-1">Localidad</label>
                 <input type="text" name="location" value="{{ $filters['location'] ?? '' }}"
                     class="w-full rounded-md border-black shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
             </div>
 
             {{-- Status --}}
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                <label class="block text-sm font-medium text-black mb-1">Status</label>
                 <select name="status"
                     class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                     <option value="">Todos</option>
@@ -56,18 +56,18 @@
         @if ($cameras->isNotEmpty())
             {{-- tabla --}}
             <div class="overflow-x-auto">
-                <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-sm">
+                <table class="min-w-full shadow-md rounded-lg overflow-hidden bg-white border border-gray-300">
                     <thead class="bg-gray-100">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-32">MAC</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-24">NVR</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-24">Marca</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-24">Modelo</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-32">Nombre</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-32">Ubicación</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-24">IP</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-24">Status</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 w-32">Acciones</th>
+                        <tr class="bg-gray-800 divide-x divide-blue-400">
+                            <th class="px-6 py-3 text-left text-sm font-medium text-white w-32">MAC</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-white w-24">NVR</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-white w-24">Marca</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-white w-24">Modelo</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-white w-32">Nombre</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-white w-32">Ubicación</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-white w-24">IP</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-white w-24">Status</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium text-white w-32">Acciones</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
@@ -83,7 +83,7 @@
                                 <td class="px-6 py-4 text-sm">
                                     <span
                                         class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                {{ $camera['status'] === 'Activo' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                {{ $camera['status'] === 'Activo' ? 'bg-green-300 text-green-900' : 'bg-red-300 text-red-900' }}">
                                         {{ $camera['status'] }}
                                     </span>
                                 </td>
@@ -125,7 +125,7 @@
                     'status' => $filters['status'] ?? '',
                 ])->links() }}
         @else
-            <div class="text-center mt-6 bg-gray-100 border border-gray-300 rounded-md p-4 text-gray-700">
+            <div class="text-center mt-6 bg-gray-100 border border-gray-300 rounded-md p-4 text-white">
                 <p>No hay registros existentes</p>
             </div>
         @endif

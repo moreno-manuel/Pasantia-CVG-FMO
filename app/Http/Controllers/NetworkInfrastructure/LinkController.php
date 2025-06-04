@@ -52,8 +52,8 @@ class LinkController extends Controller
                 return redirect()->back()->withInput()->withErrors($validator);
             }
 
-            $link = Link::create($request->all());
-            $link->save();
+            Link::create($request->all())->save();
+
             return redirect()->route('enlace.index')->with('success', 'Enlace agregado exitosamente.');
         } catch (QueryException $e) {
             if ($e->getCode() === '23000') { // Código de error de integridad para la db *IP*

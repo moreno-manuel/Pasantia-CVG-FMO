@@ -1,77 +1,188 @@
-<nav class="mt-10">
-    <ul class="space-y-2">
-        <!-- Inicio -->
-        <li>
-            <a href="{{ route('home') }}" class="block px-6 py-3 text-gray-700 hover:bg-blue-50 rounded">Inicio</a>
-        </li>
+<aside class="w-64 bg-gray-800 text-white h-full flex flex-col">
+    <!-- Encabezado con información del usuario -->
+    <div class="px-6 py-8 text-center border-b border-gray-700">
+        <!-- Icono de usuario -->
+        <div class="flex justify-center mb-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-400" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+        </div>
 
-        <!-- Menú desplegable con <Equipos> -->
-        <li>
-            <details class="group">
-                <summary
-                    class="flex justify-between items-center px-6 py-3 text-gray-700 hover:bg-blue-50 rounded cursor-pointer list-none group-open:ring-2 group-open:ring-blue-300">
-                    Equipos
-                    <svg class="w-4 h-4 transition-transform transform group-open:rotate-180" fill="none"
-                        stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        <!-- Nombre de usuario y persona -->
+        <div class="text-sm font-medium text-blue-400">{{ auth()->user()->userName }}</div>
+        <div class="mt-1 text-lg font-semibold text-white">Admin</div>
+    </div>
+
+    <!-- Menú de navegación -->
+    <nav class="flex-1 px-2 py-4 overflow-y-auto">
+        <ul class="space-y-2">
+
+            <!-- Inicio -->
+            <li>
+                <a href="{{ route('home') }}"
+                    class="flex items-center space-x-3 px-6 py-3 hover:bg-gray-700 rounded group">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-300 group-hover:text-blue-400"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                     </svg>
-                </summary>
-                <ul class="mt-1 ml-4 space-y-1">
-                    <li><a href="{{ route('camara.index') }}"
-                            class="block px-4 py-2 text-gray-600 hover:bg-blue-100 rounded">Camara</a>
-                    </li>
-                    <li><a href="{{ route('nvr.index') }}"
-                            class="block px-4 py-2 text-gray-600 hover:bg-blue-100 rounded">NVR</a></li>
-                    <li><a href="{{ route('switch.index') }}"
-                            class="block px-4 py-2 text-gray-600 hover:bg-blue-100 rounded">Switch</a>
-                    </li>
-                    <li><a href="{{ route('enlace.index') }}"
-                            class="block px-4 py-2 text-gray-600 hover:bg-blue-100 rounded">Enlace</a>
-                    </li>
+                    <span>Inicio</span>
+                </a>
+            </li>
 
-                </ul>
-            </details>
-        </li>
+            <!-- Menú desplegable con Equipos -->
+            <li>
+                <details class="group">
+                    <summary
+                        class="flex justify-between items-center px-6 py-3 hover:bg-gray-700 rounded cursor-pointer list-none group-open:ring-2 group-open:ring-blue-500">
+                        <div class="flex items-center space-x-3">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="h-5 w-5 text-gray-300 group-hover:text-blue-400" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                            <span>Equipos</span>
+                        </div>
+                        <svg class="w-4 h-4 transition-transform transform group-open:rotate-180" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </summary>
+                    <ul class="mt-1 ml-4 space-y-1">
+                        <li><a href="{{ route('camara.index') }}"
+                                class="flex items-center space-x-2 px-4 py-2 hover:bg-gray-700 rounded">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                                <span>Camara</span>
+                            </a></li>
+                        <li><a href="{{ route('nvr.index') }}"
+                                class="flex items-center space-x-2 px-4 py-2 hover:bg-gray-700 rounded">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                                </svg>
+                                <span>NVR</span>
+                            </a></li>
+                        <li><a href="{{ route('switch.index') }}"
+                                class="flex items-center space-x-2 px-4 py-2 hover:bg-gray-700 rounded">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c-.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                                <span>Switch</span>
+                            </a></li>
+                        <li><a href="{{ route('enlace.index') }}"
+                                class="flex items-center space-x-2 px-4 py-2 hover:bg-gray-700 rounded">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19.657 14.172a4 4 0 00-5.656 0l-4 4a4 4 0 005.656 5.656l4-4a4 4 0 000-5.656z" />
+                                </svg>
+                                <span>Enlace</span>
+                            </a></li>
+                    </ul>
+                </details>
+            </li>
 
-        <!-- Condicion de Atencion -->
-        <li>
-            <a href="#" class="block px-6 py-3 text-gray-700 hover:bg-blue-50 rounded"> Condición de Atención</a>
-        </li>
-
-        <!-- historial equipos eliminados -->
-        <li>
-            <a href="#" class="block px-6 py-3 text-gray-700 hover:bg-blue-50 rounded">Historial Eliminados</a>
-        </li>
-
-        <!-- Configuraciones-->
-        <li>
-            <details class="group">
-                <summary
-                    class="flex justify-between items-center px-6 py-3 text-gray-700 hover:bg-blue-50 rounded cursor-pointer list-none group-open:ring-2 group-open:ring-blue-300">
-                    Configuración
-                    <svg class="w-4 h-4 transition-transform transform group-open:rotate-180" fill="none"
-                        stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            <!-- Condición de Atención -->
+            <li>
+                <a href="{{ route('atencion.index') }}"
+                    class="flex items-center space-x-3 px-6 py-3 hover:bg-gray-700 rounded group">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-300 group-hover:text-blue-400"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
-                </summary>
-                <ul class="mt-1 ml-4 space-y-1">
-                    <li><a href="#" class="block px-4 py-2 text-gray-600 hover:bg-blue-100 rounded">Perfil</a>
-                    </li>
-                    <li><a href="#" class="block px-4 py-2 text-gray-600 hover:bg-blue-100 rounded">Crear Nuevo
-                            Usuario</a></li>
-                </ul>
-            </details>
-        </li>
+                    <span>Condición de Atención</span>
+                </a>
+            </li>
 
-        <!-- Botón de Salir -->
-        <li class="absolute bottom-0 w-full">
-            <form action="{{ route('logout') }}" method="POST">
-                @csrf
-                <button type="submit"
-                    class="w-full text-left px-6 py-3 text-red-600 hover:bg-red-50 rounded transition-colors duration-200">
-                    Salir
-                </button>
-            </form>
-        </li>
-    </ul>
-</nav>
+            <!-- Historial equipos eliminados -->
+            <li>
+                <a href="#" class="flex items-center space-x-3 px-6 py-3 hover:bg-gray-700 rounded group">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-300 group-hover:text-blue-400"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                    <span>Historial Eliminados</span>
+                </a>
+            </li>
+
+            <!-- Configuraciones -->
+            <li>
+                <details class="group">
+                    <summary
+                        class="flex justify-between items-center px-6 py-3 hover:bg-gray-700 rounded cursor-pointer list-none group-open:ring-2 group-open:ring-blue-500">
+                        <div class="flex items-center space-x-3">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="h-5 w-5 text-gray-300 group-hover:text-blue-400" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            <span>Configuración</span>
+                        </div>
+                        <svg class="w-4 h-4 transition-transform transform group-open:rotate-180" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </summary>
+                    <ul class="mt-1 ml-4 space-y-1">
+                        <li><a href="#" class="flex items-center space-x-2 px-4 py-2 hover:bg-gray-700 rounded">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                                <span>Perfil</span>
+                            </a>
+                        </li>
+                        <li><a href="#" class="flex items-center space-x-2 px-4 py-2 hover:bg-gray-700 rounded">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                                </svg>
+                                <span>Crear Nuevo Usuario</span>
+                            </a>
+                        </li>
+                    </ul>
+                </details>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Botón de Salir -->
+    <div class="px-4 py-4 border-t border-gray-700">
+        <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit"
+                class="flex items-center space-x-3 w-full text-left px-4 py-2 text-red-400 hover:bg-red-900 rounded transition-colors duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                <span>Salir</span>
+            </button>
+        </form>
+    </div>
+</aside>

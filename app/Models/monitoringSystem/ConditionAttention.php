@@ -13,8 +13,13 @@ class ConditionAttention extends Model
         'name',
         'date_ini',
         'date_end',
-        'satus',
+        'status',
         'description'
+    ];
+
+    protected $cast = [
+        'date_ini' => 'date',
+        'date_end' => 'date'
     ];
 
     public function camera()

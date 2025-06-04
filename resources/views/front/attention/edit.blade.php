@@ -1,12 +1,12 @@
 @extends('layouts.app-home')
 @section('content')
-    <!-- resources/views/front/switch/edit.blade.php -->
+    <!-- resources/views/front/attention/edit.blade.php -->
     <div class="container mx-auto px-4 py-6">
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold">Editar Switch</h1>
+            <h1 class="text-2xl font-bold">Editar Condición de Atención</h1>
 
             <!-- Botón Volver -->
-            <a href="{{ route('switch.index') }}"
+            <a href="{{ route('atencion.index') }}"
                 class="inline-flex items-center px-4 py-2 bg-gray-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition ease-in-out duration-150">
                 Volver
             </a>
@@ -31,55 +31,53 @@
         @endif
 
         <div class="bg-white shadow overflow-hidden sm:rounded-lg p-6">
-            <form action="{{ route('switch.update', $switch) }}" method="POST">
+            <form action="{{ route('atencion.update', $condition) }}" method="POST">
                 @csrf
                 @method('PUT')
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-                    <!-- Campo Serial no editable-->
+                    <!-- Campo nombre de condicion no editable-->
                     <div>
-                        <label for="serial" class="block text-sm font-medium text-gray-700">Serial</label>
-                        <input type="text" name="serial" id="serial"
+                        <label for="name" class="block text-sm font-medium text-gray-700">Condicion de Atención</label>
+                        <input type="text" name="name" id="name"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            value="{{ old('serial', $switch->serial) }}" readonly disabled>
+                            value="{{ old('name', $condition->name) }}" readonly disabled>
                     </div>
+                    @php
+                        $camera = $condition->camera;
+                    @endphp
 
-                    <!-- Campo Modelo -->
+                    <!-- Campo camara ID -->
                     <div>
-                        <label for="model" class="block text-sm font-medium text-gray-700">Modelo</label>
-                        <input type="text" name="model" id="model"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            value="{{ old('model', $switch->model) }}" required>
-                    </div>
-
-                    <!-- Campo Número de Puertos -->
-                    <div>
-                        <label for="number_ports" class="block text-sm font-medium text-gray-700">Número de Puertos</label>
-                        <input type="number" name="number_ports" id="number_ports"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            min="1" value="{{ old('number_ports', $switch->number_ports) }}" required>
-                    </div>
-
-                    <!-- Campo Localidad -->
-                    <div>
-                        <label for="location" class="block text-sm font-medium text-gray-700">Localidad</label>
-                        <input type="text" name="location" id="location"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            value="{{ old('user_person', $switch->location) }}" required>
-                    </div>
-
-                    <!-- Campo Estado -->
-                    <div>
-                        <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
-                        <select name="status" id="status"
+                        <label for="camera_id" class="block text-sm font-medium text-gray-700">Cámara</label>
+                        <select name="camera_id" id="camera_id"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
-                            <option value="">Selecciona el Status</option>
-                            <option value="Activo" {{ $switch->status }}>Activo</option>
-                            <option value="Inactivo" {{ $switch->status === 'Inactivo' ? 'selected' : '' }}>Inactivo
-                            </option>
+                            <option value="{{ $camera->mac }} {{ old('camera_id') }}">
+                                {{ $camera->name }}</option>
+                            @foreach ($cameras as $camera)
+                                <option value="{{ $camera->mac }} {{ old('camera_id') }}">
+                                    {{ $camera->name === $camera }}</option>
+                            @endforeach
                         </select>
+                    </div>
+
+                    <!-- Campo Fecha de Inicio -->
+                    <div class="mb-4">
+                        <label for="date_ini" class="block text-gray-700 font-medium mb-2">Fecha de inicio</label>
+                        <input type="date" name="date_ini" id="date_ini"
+                            value="{{ old('date_ini', $condition->date_ini) }}"
+                            class="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            required>
+                    </div>
+
+                    <!-- Campo Fecha de Finalización -->
+                    <div class="mb-4">
+                        <label for="date_end" class="block text-gray-700 font-medium mb-2">Fecha de finalización</label>
+                        <input type="date" name="date_end" id="date_end"
+                            value="{{ old('date_end', $condition->date_end) }}"
+                            class="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
 
                     <!-- Campo Descripción -->
@@ -87,7 +85,7 @@
                         <label for="description" class="block text-sm font-medium text-gray-700">Descripción</label>
                         <textarea name="description" id="description" rows="3"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            placeholder="Describe brevemente este switch...">{{ old('description', $switch->description) }}</textarea>
+                            placeholder="Describe brevemente este switch...">{{ old('description', $condition->description) }}</textarea>
                     </div>
                 </div>
 

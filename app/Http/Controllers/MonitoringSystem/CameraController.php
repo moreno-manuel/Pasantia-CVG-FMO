@@ -90,8 +90,12 @@ class CameraController extends Controller
     public function show($mac) //muestra detalles de un registro 
     {
         // Recupera el modelo manualmente
-        $camera = Camera::where('mac', $mac)->first();
-        return view('front.camera.show', compact('camera'));
+        $camera = Camera::where('mac', $mac)->firstOrFail();
+
+        // Cargar los registros con paginación
+        $conditions = $camera->conditionAttention()->paginate(5);
+
+        return view('front.camera.show', compact('camera', 'conditions'));
     }
 
     public function update(Request $request, $mac) //valida los datos d edicion

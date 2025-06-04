@@ -50,8 +50,8 @@ class SwitchController extends Controller
             return redirect()->back()->withInput()->withErrors($validator);
         }
 
-        $switch = Switche::create($request->all());
-        $switch->save();
+        Switche::create($request->all())->save();
+
         return redirect()->route('switch.index')->with('success', 'Switch creado exitosamente.');
     }
 

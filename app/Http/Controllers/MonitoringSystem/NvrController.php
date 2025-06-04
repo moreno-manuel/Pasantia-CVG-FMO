@@ -212,6 +212,7 @@ class NvrController extends Controller
 
     public function show(Nvr $nvr) //muestra los datos
     {
-        return view('front.nvr.show', compact('nvr'));
+        $cameras = $nvr->camera()->paginate(5);
+        return view('front.nvr.show', compact('nvr', 'cameras'));
     }
 }
