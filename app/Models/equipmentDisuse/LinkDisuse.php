@@ -15,7 +15,6 @@ class LinkDisuse extends Model
         'id',
         'name',
         'ssid',
-        'location',
         'ip'
     ];
 
@@ -24,5 +23,18 @@ class LinkDisuse extends Model
     public function equipmentDisuse()
     {
         return $this->belongsTo(equipmentDisuse::class);
+    }
+
+    //casteos 
+    // Convertir IP a entero antes de guardar
+    public function setIpAttribute($value)
+    {
+        $this->attributes['ip'] = ip2long($value);
+    }
+
+    // Convertir entero a IP al recuperar
+    public function getIpAttribute($value)
+    {
+        return long2ip($value);
     }
 }

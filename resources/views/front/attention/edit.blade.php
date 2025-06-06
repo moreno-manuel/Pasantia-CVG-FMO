@@ -44,29 +44,22 @@
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             value="{{ old('name', $condition->name) }}" readonly disabled>
                     </div>
+
+                    <!-- Campo camara ID -->
                     @php
                         $camera = $condition->camera;
                     @endphp
-
-                    <!-- Campo camara ID -->
                     <div>
                         <label for="camera_id" class="block text-sm font-medium text-gray-700">Cámara</label>
-                        <select name="camera_id" id="camera_id"
+                        <input type="text" name="camera_id" id="camera_id"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            required>
-                            <option value="{{ $camera->mac }} {{ old('camera_id') }}">
-                                {{ $camera->name }}</option>
-                            @foreach ($cameras as $camera)
-                                <option value="{{ $camera->mac }} {{ old('camera_id') }}">
-                                    {{ $camera->name === $camera }}</option>
-                            @endforeach
-                        </select>
+                            value="{{ old('camera_id', $camera->name) }}" readonly disabled>
                     </div>
 
                     <!-- Campo Fecha de Inicio -->
                     <div class="mb-4">
                         <label for="date_ini" class="block text-gray-700 font-medium mb-2">Fecha de inicio</label>
-                        <input type="date" name="date_ini" id="date_ini"
+                        <input type="date" name="date_ini" id="date_ini" max="{{ now()->format('Y-m-d') }}"
                             value="{{ old('date_ini', $condition->date_ini) }}"
                             class="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required>

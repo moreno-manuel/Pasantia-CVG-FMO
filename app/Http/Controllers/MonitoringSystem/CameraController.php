@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\MonitoringSystem;
 
 use App\Http\Controllers\Controller;
+use App\Models\EquipmentDisuse\CameraDisuse;
+use App\Models\EquipmentDisuse\EquipmentDisuse;
 use App\Models\monitoringSystem\Camera;
 use App\Models\monitoringSystem\Nvr;
 use Illuminate\Database\QueryException;
@@ -80,10 +82,28 @@ class CameraController extends Controller
         }
     }
 
-    public function destroy($mac) //elimina un registro
+    public function destroy(Request $request, $mac) //elimina un registro
     {
         // Recupera el modelo manualmente
         $camera = Camera::where('mac', $mac)->first();
+
+        EquipmentDisuse::create([
+            'id' => $camera->mac,
+            'mark' => $camera->mark,
+            'model' => $camera->model,
+            'location' => $camera->location,
+            'description' => $request->input('deletion_description')
+        ]);
+
+        $nvr = $camera->nvr;
+
+        CameraDisuse::create([
+            'id' => $camera->mac,
+            'name' => $camera->name,
+            'nvr_name' => $camera->mac,
+            'ip' => $nvr->name
+        ]);
+
         $camera->delete();
         return redirect()->route('camara.index')->with('success', 'Camara eliminado exitosamente.');
     }

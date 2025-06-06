@@ -5,7 +5,7 @@ namespace App\Http\Controllers\MonitoringSystem;
 use App\Http\Controllers\Controller;
 use App\Models\monitoringSystem\Camera;
 use App\Models\monitoringSystem\ConditionAttention;
-
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -54,20 +54,32 @@ class ConditionAController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator);
         } else {
-            //busqueda filtrada [nombre - fecha incial - camara] 
-            $existingCondition = ConditionAttention::where('camera_id', $request->input('camera_id'))
-                ->where('date_ini', $request->input('date_ini'))
-                ->where('name', $request->input('name'))
-                ->first();
-            if ($existingCondition) //valida que no haya una condicion de atencion con el mismo nombre y fecha de inicio
-                return redirect()->back()->withInput()->withErrors('Ya existe una condición de atención con la misma fecha y tipo para la cámara seleccionada');
-            else { //valida que no haya una condición sin cerrar
-                $existingCondition = ConditionAttention::where('camera_id', $request->input('camera_id'))
-                    ->whereNull('date_end')->first();
-                if ($existingCondition)
-                    return redirect()->back()->withInput()->withErrors('Debe finalizar la condición de atención anterior para la cámara selccionada');
+            //busqueda explicita
+            $condition = ConditionAttention::where('camera_id', $request->input('camera_id'))->latest()->first();
+            if ($condition) {
+                //para validar fecha futura
+                $date_max = Carbon::parse($request->input('date_ini'))->isFuture();
+
+                //si ya existe una atencion generada
+                if ((($condition->name == $request->input('name')) > 0) && (($condition->date_ini == $request->input('date_ini')) > 0)) {
+                    return redirect()->back()->withInput()->withErrors('Ya existe una condición de atención con el mismo tipo y fecha para la cámara seleccionada');
+
+                    //si no se ha culminado la ultima atención
+                } else if (!$condition->date_end) {
+                    return redirect()->back()->withInput()->withErrors('Existe una condición de atención sin finalizar para la cámara seleccionada');
+
+                    //si la fecha final de la ultima atencion supera a la fecha inicial de la nueva atencion
+                } else if ($condition->date_end > $request->input('date_ini')) {
+                    return redirect()->back()->withInput()->withErrors('La nueva condición de atención para la cámara seleccionada debe tener una fecha mayor o igual a la anterior (' . $condition->date_end . ")");
+
+                    //si se ingresa fechas futuras
+                } else if ($date_max) {
+                    return redirect()->back()->withInput()->withErrors('La fecha ingresada supera la fecha actual (' . Carbon::now()->format('d/m/Y') . ')');
+                }
             }
         }
+
+
 
         // Determinar el estado
         $status = $request->filled('date_end') ? 'Atendido' : 'Por atender';
@@ -102,10 +114,7 @@ class ConditionAController extends Controller
     public function edit($id) //vista para editar un registro
     {
         $condition = ConditionAttention::findOrFail($id);
-        // Excluir la cámara asociada
-        $cameras = Camera::where('mac', '!=', $condition->camera_id)->get();
-
-        return view('front.attention.edit', compact('condition', 'cameras'));
+        return view('front.attention.edit', compact('condition'));
     }
 
     public function update(Request $request,  $id) //actualiza los datos de un registro
@@ -113,7 +122,6 @@ class ConditionAController extends Controller
         $condition = ConditionAttention::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
-            'camera_id' => 'required',
             'date_ini' => 'required|date',
             'date_end' => 'nullable|date|after_or_equal:date_ini',
             'description' => 'nullable'
@@ -126,13 +134,29 @@ class ConditionAController extends Controller
 
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator);
+        } else {
+            //busqueda explicita
+            $conditionValidate = ConditionAttention::where('camera_id', $request->input('camera_id'))->latest()->first();
+
+            if ($conditionValidate) {
+                //para validar fecha futura
+                $date_max = Carbon::parse($request->input('date_ini'))->isFuture();
+
+                //si la fecha final de la ultima atencion supera a la fecha inicial de la nueva atencion
+                if ($conditionValidate->date_end > $request->input('date_ini')) {
+                    return redirect()->back()->withInput()->withErrors('La nueva condición de atención para la cámara seleccionada debe tener una fecha mayor o igual a la anterior (' . $condition->date_end . ")");
+
+                    //que no se ingreses fechas futuras
+                } else if ($date_max) {
+                    return redirect()->back()->withInput()->withErrors('La fecha ingresada supera la fecha actual (' . Carbon::now()->format('d/m/Y') . ')');
+                }
+            }
         }
 
         // Determinar el estado
         $status = $request->filled('date_end') ? 'Atendido' : 'por atender';
 
         $condition->update([
-            'camera_id' => $request->input('camera_id'),
             'date_ini' => $request->input('date_ini'),
             'date_end' => $request->input('date_end'),
             'description' => $request->input('description'),

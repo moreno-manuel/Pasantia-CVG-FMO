@@ -54,7 +54,7 @@
                 <table class="min-w-full shadow-md rounded-lg overflow-hidden bg-white border border-gray-300">
                     <tr class="bg-gray-800 divide-x divide-blue-400">
                         <th class="px-6 py-3 text-center text-sm font-medium text-white">Camara</th>
-                        <th class="px-6 py-3 text-center text-sm font-medium text-white">Condición</th>
+                        <th class="px-6 py-3 text-center text-sm font-medium text-white">Tipo de Condición</th>
                         <th class="px-6 py-3 text-center text-sm font-medium text-white">Fecha-Inicio</th>
                         <th class="px-6 py-3 text-center text-sm font-medium text-white">Descripción</th>
                         <th class="px-6 py-3 text-center text-sm font-medium text-white">Acciones</th>

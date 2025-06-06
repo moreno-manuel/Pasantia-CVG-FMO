@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\MonitoringSystem;
 
 use App\Http\Controllers\Controller;
+use App\Models\EquipmentDisuse\EquipmentDisuse;
+use App\Models\EquipmentDisuse\NvrDisuse;
+use App\Models\equipmentDisuse\SlotNvrDisuse;
 use App\Models\monitoringSystem\Nvr;
 use App\Models\monitoringSystem\SlotNvr;
 use Illuminate\Database\QueryException;
@@ -115,8 +118,31 @@ class NvrController extends Controller
         }
     }
 
-    public function destroy(Nvr $nvr) //elimina un nvr
+    public function destroy(Request $request, Nvr $nvr) //elimina un nvr
     {
+        EquipmentDisuse::create([
+            'id' => $nvr->mac,
+            'mark' => $nvr->mark,
+            'model' => $nvr->model,
+            'location' => $nvr->location,
+            'description' => $request->input('deletion_description')
+        ]);
+
+        NvrDisuse::create([
+            'id' => $nvr->mac,
+            'name' => $nvr->name,
+            'ports_number' => $nvr->ports_number,
+            'ip' => $nvr->ip,
+            'slot_number' => $nvr->slot_number
+
+        ]);
+
+        foreach ($nvr->slotNvr as  $slot) {
+            SlotNvrDisuse::create([
+                'nvr_id' => $slot->nvr_id,
+                'capacity_max' => $slot->capacity_max
+            ]);
+        }
 
         $nvr->delete();
         return redirect()->route('nvr.index')->with('success', 'Nvr eliminado exitosamnete');

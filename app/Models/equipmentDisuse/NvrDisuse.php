@@ -15,8 +15,8 @@ class NvrDisuse extends Model
         'id',
         'name',
         'ip',
-        'number_port',
-        'number_hdd'
+        'ports_number',
+        'slot_number',
     ];
     //Relaciones
     public function equipmentDisuse()
@@ -27,5 +27,18 @@ class NvrDisuse extends Model
     public function slotNvrDisuse()
     {
         return $this->hasMany(slotNvrDisuse::class);
+    }
+
+    //casteos 
+    // Convertir IP a entero antes de guardar
+    public function setIpAttribute($value)
+    {
+        $this->attributes['ip'] = ip2long($value);
+    }
+
+    // Convertir entero a IP al recuperar
+    public function getIpAttribute($value)
+    {
+        return long2ip($value);
     }
 }

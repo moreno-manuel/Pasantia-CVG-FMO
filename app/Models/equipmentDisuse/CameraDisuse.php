@@ -14,7 +14,6 @@ class CameraDisuse extends Model
     protected $fillable = [
         'id',
         'name',
-        'location',
         'nvr_name',
         'ip'
     ];
@@ -22,5 +21,18 @@ class CameraDisuse extends Model
     public function equipmentDisuse()
     {
         return $this->belongsTo(EquipmentDisuse::class);
+    }
+
+    //casteos 
+    // Convertir IP a entero antes de guardar
+    public function setIpAttribute($value)
+    {
+        $this->attributes['ip'] = ip2long($value);
+    }
+
+    // Convertir entero a IP al recuperar
+    public function getIpAttribute($value)
+    {
+        return long2ip($value);
     }
 }

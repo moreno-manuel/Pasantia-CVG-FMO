@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\NetworkInfrastructure;
 
 use App\Http\Controllers\Controller;
+use App\Models\EquipmentDisuse\EquipmentDisuse;
+use App\Models\EquipmentDisuse\SwitchDisuse;
 use App\Models\networkInfrastructure\Switche;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -55,8 +57,21 @@ class SwitchController extends Controller
         return redirect()->route('switch.index')->with('success', 'Switch creado exitosamente.');
     }
 
-    public function destroy(Switche $switch) //Elimina un switch
+    public function destroy(Switche $switch, Request $request) //Elimina un switch
     {
+        EquipmentDisuse::create([
+            'id' => $switch->serial,
+            'mark' => 'sin marca',
+            'model' => $switch->model,
+            'location' => $switch->location,
+            'description' => $request->input('deletion_description')
+        ]);
+
+        SwitchDisuse::create([
+            'id' => $switch->serial,
+            'number_ports' => $switch->number_ports
+        ]);
+
         $switch->delete();
         return redirect()->route('switch.index')->with('success', 'Switch Eliminado exitosamente.');
     }

@@ -5,8 +5,7 @@
     <div class="container mx-auto px-4 py-6">
 
         <!-- Botón Volver -->
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold">Detalles del Switch</h1>
+        <div class="flex justify-end items-center mb-6">
             <a href="{{ route('switch.index') }}"
                 class="inline-flex items-center px-4 py-2 bg-gray-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition ease-in-out duration-150">
                 Volver
@@ -20,7 +19,7 @@
                     Información General
                 </h3>
                 <p class="mt-1 max-w-2xl text-sm text-white">
-                    Detalles del Switch seleccionado.
+                    Detalles técnicos y operativos del Switch seleccionado.
                 </p>
             </div>
 
@@ -77,20 +76,73 @@
 
         <!-- Acciones -->
         <div class="mt-6 flex space-x-3">
-            <a href="{{ route('switch.edit', $switch['serial']) }}"
+            <a href="{{ route('switch.edit', $switch) }}"
                 class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
                 Editar
             </a>
 
-            <form action="{{ route('switch.destroy', $switch['serial']) }}" method="POST" class="inline">
-                @csrf
-                @method('DELETE')
-                <button type="submit"
-                    class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                    onclick="return confirm('¿Estás seguro de eliminar este Switch?')">
-                    Eliminar
-                </button>
-            </form>
+            <!-- Botón Eliminar -->
+            <button type="button" onclick="openDeleteModal('{{ route('switch.destroy', $switch) }}')"
+                class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                Eliminar
+            </button>
         </div>
     </div>
+
+    <!-- Modal para confirmar eliminación con descripción -->
+    <div id="deleteModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-50">
+        <div class="bg-white rounded-lg p-6 w-full max-w-md">
+            <h3 class="text-lg font-bold mb-4">Confirmar Eliminación</h3>
+            <p>¿Estás seguro de que deseas eliminar este switch?</p>
+
+            <label for="reason" class="block mt-4 mb-2 font-medium">Motivo de eliminación:</label>
+            <textarea id="reason" name="reason" rows="3"
+                class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+                placeholder="Describa el motivo..."></textarea>
+
+            <div class="mt-6 flex justify-end space-x-3">
+                <button type="button" onclick="closeDeleteModal()"
+                    class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">Cancelar</button>
+                <button type="button" onclick="submitDeleteForm()"
+                    class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <form id="deleteForm" method="POST" style="display: none;">
+        @csrf
+        @method('DELETE')
+        <input type="hidden" name="deletion_description" id="deletionReasonInput">
+    </form>
+
+    {{-- funcion para obtener la descripcion --}}
+    @push('scripts')
+        <script>
+            let deleteUrl = '';
+
+            function openDeleteModal(url) {
+                deleteUrl = url;
+                document.getElementById('deleteModal').classList.remove('hidden');
+                document.getElementById('reason').value = '';
+            }
+
+            function closeDeleteModal() {
+                document.getElementById('deleteModal').classList.add('hidden');
+            }
+
+            function submitDeleteForm() {
+                const reason = document.getElementById('reason').value.trim();
+
+                if (!reason) {
+                    alert("Por favor, describa un motivo para eliminar.");
+                    return;
+                }
+
+                const form = document.getElementById('deleteForm');
+                form.action = deleteUrl;
+                document.getElementById('deletionReasonInput').value = reason;
+                form.submit();
+            }
+        </script>
+    @endpush
 @endsection

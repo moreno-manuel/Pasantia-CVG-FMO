@@ -69,9 +69,9 @@
                     <!-- Campo Fecha de Inicio -->
                     <div class="mb-4">
                         <label for="date_ini" class="block text-gray-700 font-medium mb-2">Fecha de inicio</label>
-                        <input type="date" name="date_ini" id="date_ini"
+                        <input type="date" name="date_ini" id="date_ini" max="{{ now()->format('Y-m-d') }}"
                             class="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            required>
+                            required >
                     </div>
 
                     <!-- Campo Fecha de Finalización -->

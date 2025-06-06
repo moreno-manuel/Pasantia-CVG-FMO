@@ -15,8 +15,8 @@ class EquipmentDisuse extends Model
         'id',
         'mark',
         'model',
-        'date',
-        'descripion'
+        'location',
+        'description'
     ];
 
     //Relaciones

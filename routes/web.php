@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\EquipmentDisuse\EquipmentDisuseController;
 use App\Http\Controllers\MonitoringSystem\CameraController;
 use App\Http\Controllers\MonitoringSystem\ConditionAController;
 use App\Http\Controllers\MonitoringSystem\NvrController;
@@ -26,3 +27,15 @@ Route::resource('enlace', LinkController::class)->middleware('auth');
 Route::resource('nvr', NvrController::class)->middleware('auth');
 Route::resource('camara', CameraController::class)->middleware('auth');
 Route::resource('atencion', ConditionAController::class)->middleware('auth');
+
+
+
+
+Route::controller(EquipmentDisuseController::class)
+    ->prefix('historial/eliminados')
+    ->middleware('auth')
+    ->group(function () {
+        Route::get('', 'index')->name('eliminated.index');
+        Route::get('{id}', 'show')->name('eliminated.show');
+        Route::delete('{id}', 'destroy')->name('eliminated.destroy');
+    });

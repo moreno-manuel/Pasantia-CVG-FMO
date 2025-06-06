@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\NetworkInfrastructure;
 
 use App\Http\Controllers\Controller;
+use App\Models\EquipmentDisuse\EquipmentDisuse;
+use App\Models\EquipmentDisuse\LinkDisuse;
 use App\Models\networkInfrastructure\Link;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -64,10 +66,26 @@ class LinkController extends Controller
         }
     }
 
-    public function destroy($mac) //Elimina un link
+    public function destroy(Request $request, $mac) //Elimina un link
     {
         // Recupera el modelo manualmente
         $link = Link::where('mac', $mac)->first();
+
+        EquipmentDisuse::create([
+            'id' => $link->mac,
+            'mark' => $link->mark,
+            'model' => $link->model,
+            'location' => $link->location,
+            'description' => $request->input('deletion_description')
+        ]);
+
+        LinkDisuse::create([
+            'id' => $link->mac,
+            'name' => $link->name,
+            'ssid' => $link->ssid,
+            'ip' => $link->ip
+        ]);
+
         $link->delete();
         return redirect()->route('enlace.index')->with('success', 'Enlace eliminado exitosamente.');
     }

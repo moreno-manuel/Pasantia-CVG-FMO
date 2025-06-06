@@ -13,7 +13,6 @@ class SwitchDisuse extends Model
 
     protected $fillable = [
         'id',
-        'location',
         'number_ports'
 
     ];
