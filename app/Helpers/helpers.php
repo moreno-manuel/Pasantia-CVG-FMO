@@ -2,6 +2,7 @@
 
 namespace app\Helpers;
 
+use App\Models\EquipmentDisuse\EquipmentDisuse;
 use App\Models\monitoringSystem\Camera;
 use App\Models\monitoringSystem\ConditionAttention;
 use App\Models\monitoringSystem\Nvr;
@@ -143,16 +144,34 @@ function filter(Request $request, string $table)
                 // Construye la consulta base
                 $query = ConditionAttention::query();
 
-                // Aplica filtros condicionalmente
-                if ($name) {
-                    $query->where('name',  $name);
-                }
+                // Aplica filtros 
+                $query->where('name',  $name);
 
                 // Ejecuta la consulta y aplica paginación
                 $conditions = $query->orderBy('created_at', 'desc')->paginate(10);
 
                 // Mantiene los valores de los filtros en la vista
                 return view('front.attention.index', compact('conditions'))
+                    ->with('filters', $request->all());
+                break;
+            }
+
+        case 'equipments': {
+                // Obtén los valores de los filtros
+                $equipment = $request->input('equipment');
+
+                // Construye la consulta base
+                $query = EquipmentDisuse::query();
+
+                // Aplica filtros 
+                $query->where('equipment',  $equipment);
+
+
+                // Ejecuta la consulta y aplica paginación
+                $equipments = $query->orderBy('created_at', 'desc')->paginate(10);
+
+                // Mantiene los valores de los filtros en la vista
+                return view('front.eliminated.index', compact('equipments'))
                     ->with('filters', $request->all());
                 break;
             }

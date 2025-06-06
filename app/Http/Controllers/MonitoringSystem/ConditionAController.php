@@ -18,10 +18,7 @@ class ConditionAController extends Controller
 {
     public function index(Request $request) ///muestra todo los registros
     {
-        // Valida si hay algún filtro activo
-        $hasFilters = $request->filled('name');
-
-        if (!$hasFilters) { //si no se aplica un filtro
+        if (!$request->filled('name')) { //si no se aplica un filtro
             $conditions = ConditionAttention::orderBy('id', 'desc')->paginate(10);
             return view('front.attention.index', compact('conditions'));
         }

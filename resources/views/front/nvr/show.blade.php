@@ -132,12 +132,9 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
-                        @php
-                            $i = 1;
-                        @endphp
                         @foreach ($nvr->slotNvr as $index => $slot)
                             <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $i }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $loop->iteration }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $slot->hdd_serial }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $slot->hdd_capacity }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $slot->capacity_max }}</td>
@@ -149,9 +146,6 @@
                                     </span>
                                 </td>
                             </tr>
-                            @php
-                                $i++;
-                            @endphp
                         @endforeach
                     </tbody>
                 </table>
@@ -295,5 +289,5 @@
             }
         </script>
     @endpush
-    
+
 @endsection

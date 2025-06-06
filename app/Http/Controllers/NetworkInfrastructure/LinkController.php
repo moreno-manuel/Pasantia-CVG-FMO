@@ -73,9 +73,9 @@ class LinkController extends Controller
 
         EquipmentDisuse::create([
             'id' => $link->mac,
-            'mark' => $link->mark,
             'model' => $link->model,
             'location' => $link->location,
+            'equipment' => 'Enlace',
             'description' => $request->input('deletion_description')
         ]);
 
@@ -83,6 +83,7 @@ class LinkController extends Controller
             'id' => $link->mac,
             'name' => $link->name,
             'ssid' => $link->ssid,
+            'mark' => $link->mark,
             'ip' => $link->ip
         ]);
 

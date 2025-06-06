@@ -61,9 +61,9 @@ class SwitchController extends Controller
     {
         EquipmentDisuse::create([
             'id' => $switch->serial,
-            'mark' => 'sin marca',
             'model' => $switch->model,
             'location' => $switch->location,
+            'equipment' => 'Switch',
             'description' => $request->input('deletion_description')
         ]);
 

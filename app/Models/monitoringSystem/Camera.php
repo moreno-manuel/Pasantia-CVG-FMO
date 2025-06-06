@@ -35,7 +35,6 @@ class Camera extends Model
     }
 
     //casteos 
-    //casteos 
 
     protected function mac(): Attribute //mac
     {

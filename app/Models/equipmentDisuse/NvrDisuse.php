@@ -2,6 +2,7 @@
 
 namespace App\Models\EquipmentDisuse;
 
+use App\Models\equipmentDisuse\SlotNvrDisuse;
 use Illuminate\Database\Eloquent\Model;
 
 class NvrDisuse extends Model
@@ -16,6 +17,7 @@ class NvrDisuse extends Model
         'name',
         'ip',
         'ports_number',
+        'mark',
         'slot_number',
     ];
     //Relaciones
@@ -26,8 +28,9 @@ class NvrDisuse extends Model
 
     public function slotNvrDisuse()
     {
-        return $this->hasMany(slotNvrDisuse::class);
+        return $this->hasMany(SlotNvrDisuse::class, 'nvr_id', 'id');
     }
+
 
     //casteos 
     // Convertir IP a entero antes de guardar

@@ -122,9 +122,9 @@ class NvrController extends Controller
     {
         EquipmentDisuse::create([
             'id' => $nvr->mac,
-            'mark' => $nvr->mark,
             'model' => $nvr->model,
             'location' => $nvr->location,
+            'equipment' => 'Nvr',
             'description' => $request->input('deletion_description')
         ]);
 
@@ -133,7 +133,9 @@ class NvrController extends Controller
             'name' => $nvr->name,
             'ports_number' => $nvr->ports_number,
             'ip' => $nvr->ip,
+            'mark' => $nvr->mark,
             'slot_number' => $nvr->slot_number
+
 
         ]);
 

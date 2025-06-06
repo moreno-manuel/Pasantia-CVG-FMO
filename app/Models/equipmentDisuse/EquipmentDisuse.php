@@ -13,10 +13,10 @@ class EquipmentDisuse extends Model
 
     protected $fillable = [
         'id',
-        'mark',
         'model',
         'location',
-        'description'
+        'description',
+        'equipment'
     ];
 
     //Relaciones

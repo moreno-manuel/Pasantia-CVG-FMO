@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('equipment_disuses', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->string('mark');
             $table->string('model');
             $table->string('location');
+            $table->string('equipment');
             $table->string('description');
             $table->timestamps();
         });
@@ -32,6 +32,7 @@ return new class extends Migration
             $table->foreign('id')->references('id')->on('equipment_disuses')->onDelete('cascade');
             $table->string('name');
             $table->string('ssid');
+            $table->string('mark');
             $table->unsignedBigInteger('ip');
             $table->timestamps();
         });
@@ -41,6 +42,7 @@ return new class extends Migration
             $table->foreign('id')->references('id')->on('equipment_disuses')->onDelete('cascade');
             $table->string('name');
             $table->string('nvr_name');
+            $table->string('mark');
             $table->string('ip');
             $table->timestamps();
         });
@@ -52,6 +54,7 @@ return new class extends Migration
             $table->unsignedBigInteger('ip');
             $table->integer('ports_number');
             $table->integer('slot_number');
+            $table->string('mark');
             $table->timestamps();
         });
 

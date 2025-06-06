@@ -112,7 +112,7 @@
                     <table class="min-w-full shadow-md rounded-lg overflow-hidden bg-white border border-gray-300">
                         <thead class="bg-gray-100">
                             <tr class="bg-gray-800 divide-x divide-blue-400">
-                                <th class="px-6 py-3 text-center text-sm font-medium text-white">Condición</th>
+                                <th class="px-6 py-3 text-center text-sm font-medium text-white">Tipo de Condición</th>
                                 <th class="px-6 py-3 text-center text-sm font-medium text-white">Fecha-Inicio</th>
                                 <th class="px-6 py-3 text-center text-sm font-medium text-white">Fecha-Fin</th>
                                 <th class="px-6 py-3 text-center text-sm font-medium text-white">Descripción</th>
@@ -137,6 +137,8 @@
                                             {{ $condition->status }}
                                         </span>
                                     </td>
+
+                                    {{-- acciones --}}
                                     <td class="px-6 py-4 text-sm align-middle">
                                         <div class="flex justify-center space-x-2">
                                             <a href="{{ route('atencion.show', $condition) }}"

@@ -89,9 +89,9 @@ class CameraController extends Controller
 
         EquipmentDisuse::create([
             'id' => $camera->mac,
-            'mark' => $camera->mark,
             'model' => $camera->model,
             'location' => $camera->location,
+            'equipment' => 'Cámara',
             'description' => $request->input('deletion_description')
         ]);
 
@@ -101,6 +101,7 @@ class CameraController extends Controller
             'id' => $camera->mac,
             'name' => $camera->name,
             'nvr_name' => $camera->mac,
+            'mark' => $camera->mark,
             'ip' => $nvr->name
         ]);
 

@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\EquipmentDisuse;
 
 use App\Http\Controllers\Controller;
+use App\Models\EquipmentDisuse\CameraDisuse;
 use App\Models\EquipmentDisuse\EquipmentDisuse;
+use App\Models\EquipmentDisuse\LinkDisuse;
+use App\Models\EquipmentDisuse\NvrDisuse;
+use App\Models\EquipmentDisuse\SwitchDisuse;
 use Illuminate\Http\Request;
 
 use function app\Helpers\filter;
@@ -13,19 +17,40 @@ class EquipmentDisuseController extends Controller
     //
     public function index(Request $request)
     {
-        // Valida si hay algún filtro activo
-        $hasFilters = $request->filled('equipments');
 
-        if (!$hasFilters) { //si no se aplica un filtro
-            $equipments = EquipmentDisuse::orderBy('id', 'desc')->paginate(10);
+        if (!$request->filled('equipment')) { //si no se aplica un filtro
+            $equipments = EquipmentDisuse::orderBy('created_at', 'desc')->paginate(10);
             return view('front.eliminated.index', compact('equipments'));
         }
-
 
         return filter($request, 'equipments');
     }
 
-    public function show(EquipmentDisuse $equipment) {}
+    public function show($id)
+    {
+        $equipment = EquipmentDisuse::where('id', $id)->first();
+        switch ($equipment->equipment) {
+            case 'Switch':
+                $switch = SwitchDisuse::where('id', $id)->first();
+                return view('front.eliminated.show', compact('equipment', 'switch'));
+                break;
+            case 'Nvr':
+                $nvr = NvrDisuse::where('id', $id)->first();
+                return view('front.eliminated.show', compact('equipment', 'nvr'));
+                break;
+            case 'Cámara':
+                $camera = CameraDisuse::where('id', $id)->first();
+                return view('front.eliminated.show', compact('equipment', 'camera'));
+                break;
+            case 'Enlace':
+                $link = LinkDisuse::where('id', $id)->first();
+                return view('front.eliminated.show', compact('equipment', 'link'));
+                break;
+            default:
+                return 'hay error';
+                break;
+        }
+    }
 
     public function destroy($id)
     {
