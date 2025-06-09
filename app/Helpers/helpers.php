@@ -6,6 +6,7 @@ use App\Models\EquipmentDisuse\EquipmentDisuse;
 use App\Models\monitoringSystem\Camera;
 use App\Models\monitoringSystem\ConditionAttention;
 use App\Models\monitoringSystem\Nvr;
+use App\Models\networkInfrastructure\CameraInventory;
 use App\Models\networkInfrastructure\Link;
 use App\Models\networkInfrastructure\Switche;
 use Illuminate\Http\Request;
@@ -157,7 +158,7 @@ function filter(Request $request, string $table)
             }
 
         case 'equipments': {
-                // Obtén los valores de los filtros
+
                 $equipment = $request->input('equipment');
 
                 // Construye la consulta base
@@ -175,8 +176,36 @@ function filter(Request $request, string $table)
                     ->with('filters', $request->all());
                 break;
             }
+        case 'camera_inventories': {
+
+                // Obtén los valores de los filtros
+                $delivery_note = $request->input('delivery_note');
+                $mark = $request->input('mark');
+
+
+                // Construye la consulta base
+                $query = CameraInventory::query();
+
+                // Aplica filtros condicionalmente
+                if ($delivery_note) {
+                    $query->where('delivery_note', 'like',  $delivery_note . '%');
+                }
+
+                // Aplica filtros condicionalmente
+                if ($mark) {
+                    $query->where('mark', 'like',  $mark . '%');
+                }
+
+
+                // Ejecuta la consulta y aplica paginación
+                $cameras = $query->orderBy('created_at', 'desc')->paginate(10);
+
+                // Mantiene los valores de los filtros en la vista
+                return view('front.camera.camera_inventories.index', compact('cameras'))
+                    ->with('filters', $request->all());
+                break;
+            }
         default:
-            return 'Error en helpers o controlador';
-            break;
+            return 'error en controlador';
     }
 }

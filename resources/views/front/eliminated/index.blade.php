@@ -49,9 +49,8 @@
                         <tr class="bg-gray-800 divide-x divide-blue-400">
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Tipo de Equipo</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">ID</th>
-                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Model</th>
-                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Marca</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Fecha-Eliminación</th>
+                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Localidad</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Descripción</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Acciones</th>
                         </tr>
@@ -62,10 +61,9 @@
                             <tr class="hover:bg-gray-50">
                                 <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $equipment['equipment'] }} </td>
                                 <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $equipment['id'] }} </td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $equipment['model'] }}</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $equipment['mark'] }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-gray-900">
                                     {{ $equipment['created_at']->format('Y-m-d') }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $equipment['location'] }} </td>
                                 <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $equipment['description'] }}</td>
 
 

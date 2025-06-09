@@ -4,6 +4,7 @@ namespace App\Http\Controllers\EquipmentDisuse;
 
 use App\Http\Controllers\Controller;
 use App\Models\EquipmentDisuse\CameraDisuse;
+use App\Models\EquipmentDisuse\CameraInventoriesDisuse;
 use App\Models\EquipmentDisuse\EquipmentDisuse;
 use App\Models\EquipmentDisuse\LinkDisuse;
 use App\Models\EquipmentDisuse\NvrDisuse;
@@ -47,7 +48,8 @@ class EquipmentDisuseController extends Controller
                 return view('front.eliminated.show', compact('equipment', 'link'));
                 break;
             default:
-                return 'hay error';
+                $camera_inventories = CameraInventoriesDisuse::where('id', $id)->first();
+                return view('front.eliminated.show', compact('equipment', 'camera_inventories'));
                 break;
         }
     }

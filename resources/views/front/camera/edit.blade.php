@@ -13,24 +13,6 @@
             </a>
         </div>
 
-        {{-- Errores --}}
-        @if ($errors->any())
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-                <!-- Mensaje singular o plural -->
-                @if ($errors->count() === 1)
-                    <strong class="font-bold">Por favor corrige el siguiente error:</strong>
-                @else
-                    <strong class="font-bold">Por favor corrige los siguientes errores:</strong>
-                @endif
-
-                <ul class="mt-2 list-disc pl-5 space-y-1">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
         {{-- Formulario para camara --}}
         <div class="bg-white shadow overflow-hidden sm:rounded-lg p-6">
             <form action="{{ route('camara.update', $camera['mac']) }}" method="POST">
@@ -72,8 +54,12 @@
                     <div>
                         <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
                         <input type="text" name="name" id="name" value ="{{ old('name', $camera->name) }}"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('name') border-red-500 @enderror"
                             required>
+
+                        @error('name')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <!-- Campo NVR ID -->
@@ -93,8 +79,12 @@
                     <div>
                         <label for="ip" class="block text-sm font-medium text-gray-700">Dirección IP</label>
                         <input type="text" name="ip" id="ip" value="{{ old('ip', $camera->ip) }}"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm  @error('ip') border-red-500 @enderror"
                             placeholder="Ejemplo: 192.168.1.10" required>
+
+                        @error('ip')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <!-- Campo Localidad -->

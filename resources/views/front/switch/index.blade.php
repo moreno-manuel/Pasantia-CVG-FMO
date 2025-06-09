@@ -19,7 +19,7 @@
             <!-- Serial -->
             <div>
                 <label class="block text-sm font-medium text-black mb-1">Serial</label>
-                <input type="text" name="serial" value="{{ $filters['serial'] ?? '' }}"
+                <input type="text" name="serial" value="{{ $filters['serial'] ?? '' }}" 
                     class="w-full rounded-md border-black shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
             </div>
 

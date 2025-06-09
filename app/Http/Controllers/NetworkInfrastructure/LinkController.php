@@ -9,6 +9,7 @@ use App\Models\networkInfrastructure\Link;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 use function app\Helpers\filter;
@@ -39,14 +40,14 @@ class LinkController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [ //para capturar si hay dato incorrecto
-                'mac' => 'required|unique:links',
+                'mac' => 'required|unique:links,mac',
                 'mark' => 'required',
                 'model' => 'required',
-                'name' => 'required|unique:links',
+                'name' => 'required|unique:links,name',
                 'ssid' => 'required',
                 'location' => 'required',
                 'status' => 'required',
-                'ip' => 'required|ip|unique:links',
+                'ip' => 'required|ip|unique:links,ip',
                 'description' => 'nullable'
             ]);
 
@@ -69,7 +70,7 @@ class LinkController extends Controller
     public function destroy(Request $request, $mac) //Elimina un link
     {
         // Recupera el modelo manualmente
-        $link = Link::where('mac', $mac)->first();
+        $link = Link::find($mac);
 
         EquipmentDisuse::create([
             'id' => $link->mac,
@@ -93,34 +94,39 @@ class LinkController extends Controller
 
     public function show($mac) //muestra la vista y datos para los detalles un link
     {
-        $link = Link::where('mac', $mac)->firstOrFail();
+        $link = Link::find($mac);
         return view('front.link.show', compact('link'));
     }
 
     public function edit($mac) //muestra la vista para editar un link
     {
-        $link = Link::where('mac', $mac)->firstOrFail();
+        $link = Link::find($mac);
         return view('front.link.edit', compact('link'));
     }
 
     public function update(Request $request,  $mac) //Actualiza los datos de un link
     {
+
         try {
+            $link = Link::find($mac);
+
             $validator = Validator::make($request->all(), [ //para capturar si hay dato incorrecto
-                'mark' => 'required',
                 'model' => 'required',
-                'name' => 'required',
+                'name' => [
+                    'required',
+                    Rule::unique('links')->ignore($link->mac, 'mac') //ignora el registro que va actualizar 
+                ],
                 'ssid' => 'required',
                 'location' => 'required',
                 'status' => 'required',
-                'ip' => 'required|ip|unique:links',
+                'ip' => 'required|ip|unique:links,ip',
                 'description' => 'nullable'
             ]);
-
             if ($validator->fails()) {
+
                 return redirect()->back()->withInput()->withErrors($validator);
             }
-            $link = Link::where('mac', $mac)->first();
+
             $link->update($request->all());
             return redirect()->route('enlace.index');
         } catch (QueryException $e) {

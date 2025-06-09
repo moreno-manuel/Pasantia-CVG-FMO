@@ -5,7 +5,7 @@ namespace App\Models\networkInfrastructure;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 
-class Camera_inventory extends Model
+class CameraInventory extends Model
 {
     protected $table = 'camera_inventories';
     protected $primaryKey = 'mac';

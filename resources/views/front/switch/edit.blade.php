@@ -12,23 +12,6 @@
             </a>
         </div>
 
-        {{-- Errores --}}
-        @if ($errors->any())
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-                <!-- Mensaje singular o plural -->
-                @if ($errors->count() === 1)
-                    <strong class="font-bold">Por favor corrige el siguiente error:</strong>
-                @else
-                    <strong class="font-bold">Por favor corrige los siguientes errores:</strong>
-                @endif
-
-                <ul class="mt-2 list-disc pl-5 space-y-1">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
 
         <div class="bg-white shadow overflow-hidden sm:rounded-lg p-6">
             <form action="{{ route('switch.update', $switch) }}" method="POST">

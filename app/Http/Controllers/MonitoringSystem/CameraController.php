@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 use function app\Helpers\filter;
@@ -70,8 +71,9 @@ class CameraController extends Controller
             if ($validator->fails()) {
                 return redirect()->back()->withInput()->withErrors($validator);
             }
-            $camera = Camera::create($request->all());
-            $camera->save();
+
+            Camera::create($request->all())->save();
+
             return redirect()->route('camara.index')->with('success', 'Camara agregada exitosamente.');
         } catch (QueryException $e) {
             if ($e->getCode() === '23000') { // Código de error de integridad para la db *IP*
@@ -85,7 +87,7 @@ class CameraController extends Controller
     public function destroy(Request $request, $mac) //elimina un registro
     {
         // Recupera el modelo manualmente
-        $camera = Camera::where('mac', $mac)->first();
+        $camera = Camera::find($mac);
 
         EquipmentDisuse::create([
             'id' => $camera->mac,
@@ -112,7 +114,7 @@ class CameraController extends Controller
     public function show($mac) //muestra detalles de un registro 
     {
         // Recupera el modelo manualmente
-        $camera = Camera::where('mac', $mac)->firstOrFail();
+        $camera = Camera::find($mac);
 
         // Cargar los registros con paginación
         $conditions = $camera->conditionAttention()->orderBy('created_at', 'desc')->paginate(5);
@@ -123,13 +125,22 @@ class CameraController extends Controller
     public function update(Request $request, $mac) //valida los datos d edicion
     {
         try {
+
+            $camera = Camera::find($mac);
+
             $validator = Validator::make($request->all(), [ //para capturar si hay dato incorrecto
                 'mark' => 'required',
                 'nvr_id' => 'required',
                 'model' => 'required',
-                'name' => 'required',
+                'name' => [
+                    'required',
+                    Rule::unique('cameras')->ignore($camera->mac, 'mac') //ignora el registro que va actualizar 
+                ],
                 'location' => 'required',
-                'ip' => 'required|ip|unique:cameras,ip',
+                'ip' => [
+                    'required',
+                    Rule::unique('cameras')->ignore($camera->mac, 'mac') //ignora el registro que va actualizar 
+                ],
                 'status' => 'required',
                 'description' => 'nullable'
             ]);
@@ -137,7 +148,7 @@ class CameraController extends Controller
             if ($validator->fails()) {
                 return redirect()->back()->withInput()->withErrors($validator);
             }
-            $camera = Camera::where('mac', $mac)->first();
+
             $camera->update($request->all());
             return redirect()->route('camara.index')->with('success', 'Camara agregada exitosamente.');
         } catch (QueryException $e) {
@@ -161,7 +172,7 @@ class CameraController extends Controller
         });
 
         // Recupera el modelo manualmente
-        $camera = Camera::where('mac', $mac)->first();
+        $camera = Camera::find($mac);
         return view('front.camera.edit', compact('camera', 'nvrs'));
     }
 }

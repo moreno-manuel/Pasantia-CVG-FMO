@@ -72,7 +72,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                                 </svg>
-                                <span>Camara</span>
+                                <span>Cámara</span>
                             </a></li>
                         <li><a href="{{ route('switch.index') }}"
                                 class="flex items-center space-x-2 px-4 py-2 hover:bg-gray-700 rounded">

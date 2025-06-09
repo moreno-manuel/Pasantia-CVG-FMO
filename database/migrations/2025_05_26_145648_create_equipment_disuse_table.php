@@ -47,6 +47,15 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::create('camera_inventories_disuses', function (Blueprint $table) {
+            $table->string('id')->primary();
+            $table->foreign('id')->references('id')->on('equipment_disuses')->onDelete('cascade');
+            $table->string('destination');
+            $table->string('mark');
+            $table->string('delivery_note');
+            $table->timestamps();
+        });
+
         Schema::create('nvr_disuses', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->foreign('id')->references('id')->on('equipment_disuses')->onDelete('cascade');

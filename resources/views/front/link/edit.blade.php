@@ -13,47 +13,35 @@
             </a>
         </div>
 
-        {{-- Errores --}}
-        @if ($errors->any())
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-                <!-- Mensaje singular o plural -->
-                @if ($errors->count() === 1)
-                    <strong class="font-bold">Por favor corrige el siguiente error:</strong>
-                @else
-                    <strong class="font-bold">Por favor corrige los siguientes errores:</strong>
-                @endif
-
-                <ul class="mt-2 list-disc pl-5 space-y-1">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
-
         {{-- Formulario de edicion --}}
         <div class="bg-white shadow overflow-hidden sm:rounded-lg p-6">
             <form action="{{ route('enlace.update', $link->mac) }}" method="POST">
                 @csrf
                 @method('PUT')
 
-                <!-- Campo Dirección MAC (no editable) -->
-                <div>
-                    <label for="mac" class="block text-sm font-medium text-gray-700">Dirección MAC</label>
-                    <input type="text" name="mac" id="mac"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm bg-gray-100"
-                        value="{{ $link->mac }}" readonly disabled>
-                </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                    <!-- Campo Dirección MAC (no editable) -->
+                    <div>
+                        <label for="mac" class="block text-sm font-medium text-gray-700">Dirección MAC</label>
+                        <input type="text" name="mac" id="mac"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm bg-gray-100"
+                            value="{{ $link->mac }}" readonly disabled>
+                    </div>
+
 
                     <!-- Campo Nombre -->
                     <div>
                         <label for="name" class="block text-sm font-medium text-gray-700">Nombre</label>
                         <input type="text" name="name" id="name"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm  @error('name') border-red-500 @enderror"
                             value="{{ old('name', $link->name) }}" required>
+
+                        @error('name')
+                            <span class="text-red-500
+                            text-sm">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <!-- Campo Marca -->
@@ -93,8 +81,13 @@
                     <div>
                         <label for="ip" class="block text-sm font-medium text-gray-700">Dirección IP</label>
                         <input type="text" name="ip" id="ip"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('ip') border-red-500 @enderror"
                             value="{{ old('ip', $link->ip) }}" required>
+
+                        @error('ip')
+                            <span class="text-red-500
+                            text-sm">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <!-- Campo Localidad -->

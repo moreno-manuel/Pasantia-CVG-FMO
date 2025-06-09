@@ -19,11 +19,11 @@
                     Información General
                 </h3>
                 <p class="mt-1 max-w-2xl text-sm text-white">
-                    Detalles técnicos y operativos del {{ $equipment->equipment }} seleccionado.
+                    Detalles técnicos y operativos de {{ $equipment->equipment }} seleccionado.
                 </p>
             </div>
 
-            <!-- Datos del Switch -->
+            <!-- Datos del del quipo eliminado -->
             <div class="border-t border-gray-200">
                 <dl>
                     <!-- Campo id -->
@@ -131,9 +131,21 @@
                         @break
 
                         @default
+                            <!-- Campo marca -->
+                            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                <dt class="text-sm font-medium text-gray-700">Nota de Entrega</dt>
+                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                    {{ $camera_inventories['delivery_note'] }}</dd>
+                            </div>
+                            <!-- Campo nombre -->
+                            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                <dt class="text-sm font-medium text-gray-700">Destino</dt>
+                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                    {{ $camera_inventories['destination'] }}</dd>
+                            </div>
                     @endswitch
 
-                    <!-- Campo Modelo -->
+                    <!-- Campo localidad -->
                     <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"">
                         <dt class="text-sm font-medium text-gray-700">Localidad</dt>
                         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $equipment['location'] }}</dd>

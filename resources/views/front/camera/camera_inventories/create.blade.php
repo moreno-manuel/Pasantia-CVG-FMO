@@ -13,27 +13,10 @@
             </a>
         </div>
 
-        {{-- Errores --}}
-        @if ($errors->any())
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-                <!-- Mensaje singular o plural -->
-                @if ($errors->count() === 1)
-                    <strong class="font-bold">Por favor corrige el siguiente error:</strong>
-                @else
-                    <strong class="font-bold">Por favor corrige los siguientes errores:</strong>
-                @endif
-
-                <ul class="mt-2 list-disc pl-5 space-y-1">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
 
         {{-- Formulario para camara --}}
         <div class="bg-white shadow overflow-hidden sm:rounded-lg p-6">
-            <form action="#" method="POST">
+            <form action="{{ route('inventories.store') }}" method="POST">
                 @csrf
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -42,8 +25,12 @@
                     <div>
                         <label for="mac" class="block text-sm font-medium text-gray-700">Dirección MAC</label>
                         <input type="text" name="mac" id="mac" value="{{ old('mac') }}"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            placeholder="Ejemplo: 00:1A:2B:3C:4D:5E" required>
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('mac') border-red-500 @enderror"
+                            placeholder="Ejemplo: 001A2B3C4D5E" required>
+
+                        @error('mac')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <!-- Campo Marca -->
@@ -90,7 +77,7 @@
                         <label for="description" class="block text-sm font-medium text-gray-700">Descripción</label>
                         <textarea name="description" id="description" value="{{ old('description') }}" rows="3"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            placeholder="Describe brevemente la ubicación o uso de esta cámara..."></textarea>
+                            placeholder="Describe brevemente esta cámara..."></textarea>
                     </div>
                 </div>
 
