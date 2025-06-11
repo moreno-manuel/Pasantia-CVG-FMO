@@ -74,37 +74,6 @@ class LinkController extends Controller
         }
     }
 
-    public function destroy(Request $request, $mac) //Elimina un link
-    {
-        // Recupera el modelo manualmente
-        $link = Link::find($mac);
-
-        EquipmentDisuse::create([
-            'id' => $link->mac,
-            'model' => $link->model,
-            'location' => $link->location,
-            'equipment' => 'Enlace',
-            'description' => $request->input('deletion_description')
-        ]);
-
-        LinkDisuse::create([
-            'id' => $link->mac,
-            'name' => $link->name,
-            'ssid' => $link->ssid,
-            'mark' => $link->mark,
-            'ip' => $link->ip
-        ]);
-
-        $link->delete();
-        return redirect()->route('enlace.index')->with('success', 'Enlace eliminado exitosamente.');
-    }
-
-    public function show($mac) //muestra la vista y datos para los detalles un link
-    {
-        $link = Link::find($mac);
-        return view('front.link.show', compact('link'));
-    }
-
     public function edit($mac) //muestra la vista para editar un link
     {
         $link = Link::find($mac);
@@ -153,5 +122,35 @@ class LinkController extends Controller
                 ]);
             }
         }
+    }
+
+    public function show($mac) //muestra la vista y datos para los detalles un link
+    {
+        $link = Link::find($mac);
+        return view('front.link.show', compact('link'));
+    }
+
+    public function destroy(Request $request, $mac) //Elimina un link
+    {
+        $link = Link::find($mac);
+
+        EquipmentDisuse::create([
+            'id' => $link->mac,
+            'model' => $link->model,
+            'location' => $link->location,
+            'equipment' => 'Enlace',
+            'description' => $request->input('deletion_description')
+        ]);
+
+        LinkDisuse::create([
+            'id' => $link->mac,
+            'name' => $link->name,
+            'ssid' => $link->ssid,
+            'mark' => $link->mark,
+            'ip' => $link->ip
+        ]);
+
+        $link->delete();
+        return redirect()->route('enlace.index')->with('success', 'Enlace eliminado exitosamente.');
     }
 }

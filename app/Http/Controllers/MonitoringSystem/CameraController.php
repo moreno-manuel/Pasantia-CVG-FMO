@@ -9,14 +9,12 @@ use App\Models\monitoringSystem\Camera;
 use App\Models\monitoringSystem\Nvr;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 use function app\Helpers\filter;
-use function Pest\Laravel\get;
+use function app\Helpers\marksUpdate;
 
 /* controlador para el 
 crud de Camara */
@@ -27,8 +25,7 @@ class CameraController extends Controller
 
     public function index(Request $request) //muestra tabla con registros de camara
     {
-        // Valida si hay algún filtro  de busqueda activo
-        $hasFilters = $request->filled('location') ||
+        $hasFilters = $request->filled('location') ||    // Valida si hay algún filtro  de busqueda activo
             $request->filled('status');
 
         if (!$hasFilters) { //si no se aplica un filtro
@@ -39,29 +36,85 @@ class CameraController extends Controller
         return filter($request, 'cameras'); //helper
     }
 
-    public function create()
+    public function create() // muestra formulario para nuevo registro
     {
         $nvrsAll = Nvr::all(); //regitros de todos los nvrs
 
-        // Filtrar la colección para mantener solo los NVRs con puertos disponibles
-        $nvrs = $nvrsAll->filter(function ($nvr) {
+        $nvrs = $nvrsAll->filter(function ($nvr) {   // Filtrar la colección para mantener solo los NVRs con puertos disponibles
             $ports_used = $nvr->camera->count();
             $available_ports = $nvr->ports_number - $ports_used;
             return $available_ports > 0; // Mantener si hay puertos disponibles
         });
 
-        return view('front.camera.create', compact('nvrs'));
+        $marks = json_decode(file_get_contents(resource_path('js/marks.json')), true)['marks']; // json con las marcas agregadas
+
+        return view('front.camera.create', compact('nvrs', 'marks'));
     }
 
     public function store(Request $request) //valida los datos para un nuevo registro
     {
         try {
-            $validator = Validator::make($request->all(), [ //para capturar si hay dato incorrecto
+            $validator = Validator::make($request->all(), [
                 'mac' => 'required|unique:cameras,mac',
                 'mark' => 'required',
+                'other_mark' => 'required_if:mark,OTRA',
                 'nvr_id' => 'required',
                 'model' => 'required',
                 'name' => 'required|unique:cameras,name',
+                'location' => 'required',
+                'ip' => 'required|ip|unique:cameras,ip',
+                'status' => 'required',
+                'description' => 'nullable'
+            ], ['required_if' => 'Debe agregar el nombre de la marca']);
+
+            if ($validator->fails()) {
+                return redirect()->back()->withInput()->withErrors($validator);
+            }
+            // si se agrega una nueva marca
+            $request = marksUpdate($request);
+
+            Camera::create($request->all())->save();
+            return redirect()->route('camara.index')->with('success', 'Cámara agregada exitosamente.');
+        } catch (QueryException $e) {
+            if ($e->getCode() === '23000') { // Código de error de integridad para la db *IP*
+                return redirect()->back()->withInput()->withErrors([
+                    'ip' => 'La dirección IP ya está en uso.',
+                ]);
+            }
+        }
+    }
+
+    public function edit($mac) //muestra la vista para editar
+    {
+        $nvrsAll = Nvr::all(); //regitros de todos los nvrs
+
+        $nvrs = $nvrsAll->filter(function ($nvr) {  // Filtrar la colección para mantener solo los NVRs con puertos disponibles
+            $ports_used = $nvr->camera->count();
+            $available_ports = $nvr->ports_number - $ports_used;
+            return $available_ports > 0; // Mantener si hay puertos disponibles
+        });
+
+        $marks = json_decode(file_get_contents(resource_path('js/marks.json')), true)['marks']; // json con las marcas agregadas
+
+        // Recupera el modelo manualmente
+        $camera = Camera::find($mac);
+        return view('front.camera.edit', compact('camera', 'nvrs', 'marks'));
+    }
+
+    public function update(Request $request, $mac) //valida los datos d edicion
+    {
+        try {
+            $camera = Camera::find($mac);
+
+            $validator = Validator::make($request->all(), [ //para capturar si hay dato incorrecto
+                'mark' => 'required',
+                'other_mark' => 'required_if:mark,OTRA',
+                'nvr_id' => 'required',
+                'model' => 'required',
+                'name' => [
+                    'required',
+                    Rule::unique('cameras')->ignore($camera->mac, 'mac') //ignora el nombre registro que va actualizar 
+                ],
                 'location' => 'required',
                 'ip' => 'required|ip|unique:cameras,ip',
                 'status' => 'required',
@@ -71,22 +124,32 @@ class CameraController extends Controller
             if ($validator->fails()) {
                 return redirect()->back()->withInput()->withErrors($validator);
             }
+            // si se agrega una nueva marca
+            $request = marksUpdate($request);
 
-            Camera::create($request->all())->save();
-
-            return redirect()->route('camara.index')->with('success', 'Camara agregada exitosamente.');
+            $camera->update($request->all());
+            return redirect()->route('camara.index')->with('success', 'Cámara agregada exitosamente.');
         } catch (QueryException $e) {
             if ($e->getCode() === '23000') { // Código de error de integridad para la db *IP*
-                throw ValidationException::withMessages([
-                    'ip' => ['La dirección IP ya está en uso.'],
+                return redirect()->back()->withInput()->withErrors([
+                    'ip' => 'La dirección IP ya está en uso.',
                 ]);
             }
         }
     }
 
+    public function show($mac) //muestra detalles de un registro 
+    {
+        $camera = Camera::find($mac);
+
+        $conditions = $camera->conditionAttention()->orderBy('created_at', 'desc')->paginate(5); // Cargar los registros de condicion de atención con paginación
+
+        return view('front.camera.show', compact('camera', 'conditions'));
+    }
+
     public function destroy(Request $request, $mac) //elimina un registro
     {
-        // Recupera el modelo manualmente
+
         $camera = Camera::find($mac);
 
         EquipmentDisuse::create([
@@ -108,71 +171,6 @@ class CameraController extends Controller
         ]);
 
         $camera->delete();
-        return redirect()->route('camara.index')->with('success', 'Camara eliminado exitosamente.');
-    }
-
-    public function show($mac) //muestra detalles de un registro 
-    {
-        // Recupera el modelo manualmente
-        $camera = Camera::find($mac);
-
-        // Cargar los registros de condicion de atención con paginación
-        $conditions = $camera->conditionAttention()->orderBy('created_at', 'desc')->paginate(5);
-
-        return view('front.camera.show', compact('camera', 'conditions'));
-    }
-
-    public function update(Request $request, $mac) //valida los datos d edicion
-    {
-        try {
-
-            $camera = Camera::find($mac);
-
-            $validator = Validator::make($request->all(), [ //para capturar si hay dato incorrecto
-                'mark' => 'required',
-                'nvr_id' => 'required',
-                'model' => 'required',
-                'name' => [
-                    'required',
-                    Rule::unique('cameras')->ignore($camera->mac, 'mac') //ignora el registro que va actualizar 
-                ],
-                'location' => 'required',
-                'ip' => [
-                    'required',
-                    Rule::unique('cameras')->ignore($camera->mac, 'mac') //ignora el registro que va actualizar 
-                ],
-                'status' => 'required',
-                'description' => 'nullable'
-            ]);
-
-            if ($validator->fails()) {
-                return redirect()->back()->withInput()->withErrors($validator);
-            }
-
-            $camera->update($request->all());
-            return redirect()->route('camara.index')->with('success', 'Camara agregada exitosamente.');
-        } catch (QueryException $e) {
-            if ($e->getCode() === '23000') { // Código de error de integridad para la db *IP*
-                throw ValidationException::withMessages([
-                    'ip' => ['La dirección IP ya está en uso.'],
-                ]);
-            }
-        }
-    }
-
-    public function edit($mac) //muestra la vista para editar
-    {
-        $nvrsAll = Nvr::all(); //regitros de todos los nvrs
-
-        // Filtrar la colección para mantener solo los NVRs con puertos disponibles
-        $nvrs = $nvrsAll->filter(function ($nvr) {
-            $ports_used = $nvr->camera->count();
-            $available_ports = $nvr->ports_number - $ports_used;
-            return $available_ports > 0; // Mantener si hay puertos disponibles
-        });
-
-        // Recupera el modelo manualmente
-        $camera = Camera::find($mac);
-        return view('front.camera.edit', compact('camera', 'nvrs'));
+        return redirect()->route('camara.index')->with('success', 'Cámara eliminado exitosamente.');
     }
 }

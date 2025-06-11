@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
+use function app\Helpers\conditionValidate;
 use function app\Helpers\filter;
 
 /* Controlador crud 
@@ -50,36 +51,16 @@ class ConditionAController extends Controller
 
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator);
-        } else {
-            //busqueda explicita
-            $condition = ConditionAttention::where('camera_id', $request->input('camera_id'))->latest()->first();
-            if ($condition) {
-                //para validar fecha futura
-                $date_max = Carbon::parse($request->input('date_ini'))->isFuture();
-
-                //si ya existe una atencion generada
-                if ((($condition->name == $request->input('name')) > 0) && (($condition->date_ini == $request->input('date_ini')) > 0)) {
-                    return redirect()->back()->withInput()->withErrors('Ya existe una condición de atención con el mismo tipo y fecha para la cámara seleccionada');
-
-                    //si no se ha culminado la ultima atención
-                } else if (!$condition->date_end) {
-                    return redirect()->back()->withInput()->withErrors('Existe una condición de atención sin finalizar para la cámara seleccionada');
-
-                    //si la fecha final de la ultima atencion supera a la fecha inicial de la nueva atencion
-                } else if ($condition->date_end > $request->input('date_ini')) {
-                    return redirect()->back()->withInput()->withErrors('La nueva condición de atención para la cámara seleccionada debe tener una fecha mayor o igual a la anterior (' . $condition->date_end . ")");
-
-                    //si se ingresa fechas futuras
-                } else if ($date_max) {
-                    return redirect()->back()->withInput()->withErrors('La fecha ingresada supera la fecha actual (' . Carbon::now()->format('d/m/Y') . ')');
-                }
-            }
         }
 
+        $condition = ConditionAttention::where('camera_id', $request->input('camera_id'))->latest()->first(); //busqueda explicita
+        if ($condition) {
+            $validate = conditionValidate($request, $condition); //reglas de validación 
+            if ($validate != 'success') //retorna el tipo de error en caso de que exista  
+                return redirect()->back()->withInput()->withErrors($validate);
+        }
 
-
-        // Determinar el estado
-        $status = $request->filled('date_end') ? 'Atendido' : 'Por atender';
+        $status = $request->filled('date_end') ? 'Atendido' : 'Por atender'; // Determinar el estado
 
         ConditionAttention::create([
             'name' => $request->input('name'),
@@ -94,23 +75,9 @@ class ConditionAController extends Controller
         return redirect()->route('atencion.index')->with('success', 'Condición de Atención agregada exitosamente');
     }
 
-    public function destroy($id) //Elimina un regitro 
-    {
-        // Recupera el modelo manualmente
-        $condition = ConditionAttention::where('id', $id)->first();
-        $condition->delete();
-        return redirect()->route('atencion.index')->with('success', 'Conición de atención eliminado exitosamente.');
-    }
-
-    public function show($id) //muestra los detalles de un registro
-    {
-        $condition = ConditionAttention::where('id', $id)->first();
-        return view('front.attention.show', compact('condition'));
-    }
-
     public function edit($id) //vista para editar un registro
     {
-        $condition = ConditionAttention::findOrFail($id);
+        $condition = ConditionAttention::find($id);
         return view('front.attention.edit', compact('condition'));
     }
 
@@ -162,5 +129,18 @@ class ConditionAController extends Controller
         ]);
 
         return redirect()->route('atencion.index')->with('success', 'Condición de Atención actualizada exitosamente');
+    }
+
+    public function show($id) //muestra los detalles de un registro
+    {
+        $condition = ConditionAttention::find($id);
+        return view('front.attention.show', compact('condition'));
+    }
+
+    public function destroy($id) //Elimina un regitro 
+    {
+        $condition = ConditionAttention::find($id);
+        $condition->delete();
+        return redirect()->route('atencion.index')->with('success', 'Conición de atención eliminado exitosamente.');
     }
 }

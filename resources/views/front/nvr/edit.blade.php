@@ -28,7 +28,7 @@
                     <div>
                         <label for="mac" class="block text-sm font-semibold text-white">Dirección MAC</label>
                         <input type="text" name="mac" id="mac" value="{{ $nvr->mac }}"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            class="mt-1 block w-full rounded-md bg-gray-900 border border-gray-600 text-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             readonly disabled>
                     </div>
 
@@ -36,7 +36,7 @@
                     <div>
                         <label for="name" class="block text-sm font-semibold text-white">Nombre</label>
                         <input type="text" name="name" id="name" value="{{ $nvr->name }}"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            class="mt-1 block w-full rounded-md bg-gray-900 border border-gray-600 text-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             readonly disabled>
                     </div>
 
@@ -95,7 +95,7 @@
                     <div>
                         <label for="slot_number" class="block text-sm font-semibold text-white">N° de Volumen</label>
                         <input type="number" name="slot_number" id="slot_number"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            class="mt-1 block w-full rounded-md bg-gray-900 border border-gray-600 text-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             min="1" max="4" value="{{ old('slot_number', $nvr->slot_number) }}" readonly
                             disabled>
                     </div>
@@ -137,14 +137,11 @@
                     <p class="text-sm text-gray-300 mb-4">Ingresa la información del Volumen y/o Disco Duro</p>
 
                     <div class="space-y-4" id="hdd-fields">
-                        @php
-                            $slots = $nvr->slotNvr;
-                        @endphp
-
-                        @foreach ($slots as $index => $slot)
+                        @foreach ($nvr->slotNvr as $index => $slot)
                             <div class="bg-gray-700 p-4 rounded-md border border-gray-600 mb-4">
                                 <h4 class="text-sm font-medium text-white mb-2">Volumen #{{ $index + 1 }}</h4>
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    
                                     <!-- Serial del disco -->
                                     <div>
                                         <label class="block text-sm font-medium text-white">Serial</label>
@@ -174,7 +171,7 @@
                                             (TB)
                                         </label>
                                         <input type="number" name="volumen[{{ $index }}][capacidad_max_volumen]"
-                                            class="mt-1 block w-full rounded-md bg-gray-600 border border-gray-500 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm   "
+                                            class="mt-1 block w-full rounded-md bg-gray-900 border border-gray-600 text-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm   "
                                             min="1"
                                             value="{{ old("volumen.$index.capacidad_max_volumen", $slot['capacity_max']) }}"
                                             readonly disabled>

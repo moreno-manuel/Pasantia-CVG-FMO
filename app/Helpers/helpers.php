@@ -9,6 +9,7 @@ use App\Models\monitoringSystem\Nvr;
 use App\Models\networkInfrastructure\CameraInventory;
 use App\Models\networkInfrastructure\Link;
 use App\Models\networkInfrastructure\Switche;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -252,7 +253,7 @@ function marksUpdate(Request $request)
 
 
 /* para liberar el metodo 
-store de nvr con las validaciones 
+store de NvrController con las validaciones 
 de los slots*/
 
 function nvrSlotValidateCreate(Request $request)
@@ -290,7 +291,7 @@ function nvrSlotValidateCreate(Request $request)
 
 
 /* para liberar el metodo 
-store de nvr con las validaciones */
+store de NvrController con las validaciones */
 
 function nvrSlotValidateUpdate(Request $request, Nvr $nvr)
 {
@@ -331,4 +332,33 @@ function nvrSlotValidateUpdate(Request $request, Nvr $nvr)
     $request->offsetUnset('volumen');
 
     return $slotsRequest;
+}
+
+
+
+/* para liberar el metodo store
+de ConditionACotroller  */
+function conditionValidate(Request $request, $condition)
+{
+    //para validar fecha futura
+    $date_max = Carbon::parse($request->input('date_ini'))->isFuture();
+
+    //si ya existe una atencion generada
+    if ((($condition->name == $request->input('name')) > 0) && (($condition->date_ini == $request->input('date_ini')) > 0)) {
+        return ['camera_id' => 'Ya existe una condición de atención con el mismo tipo y fecha para la cámara seleccionada'];
+
+        //si no se ha culminado la ultima atención
+    } else if (!$condition->date_end) {
+        return ['camera_id' => 'Existe una condición de atención sin finalizar para la cámara seleccionada'];
+
+        //si la fecha final de la ultima atencion supera a la fecha inicial de la nueva atencion
+    } else if ($condition->date_end > $request->input('date_ini')) {
+        return ['camera_id' => 'La nueva condición de atención para la cámara seleccionada debe tener una fecha mayor o igual a la anterior (' . $condition->date_end . ")"];
+
+        //si se ingresa fechas futuras
+    } else if ($date_max) {
+        return ['date_ini' => 'La fecha ingresada supera la fecha actual (' . Carbon::now()->format('d/m/Y') . ')'];
+    }
+
+    return 'success';
 }

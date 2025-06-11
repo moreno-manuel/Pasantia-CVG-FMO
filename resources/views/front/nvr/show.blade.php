@@ -65,22 +65,17 @@
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $nvr->ports_number }}</dd>
                     </div>
 
-                    {{-- Para calcular el N° de puertos usados y disponibles --}}
-                    @php
-                        $ports_use = $nvr->camera;
-                    @endphp
-
                     <!-- Campo Puertos Usados -->
                     <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">N° Puertos/Usados</dt>
-                        <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $ports_use->count() }}</dd>
+                        <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $nvr->camera()->count() }}</dd>
                     </div>
 
                     <!-- Campo Puertos Disponibles -->
                     <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">N° Puertos/Disponibles</dt>
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
-                            {{ $nvr->ports_number - $ports_use->count() }}
+                            {{ $nvr->ports_number - $nvr->camera()->count() }}
                         </dd>
                     </div>
 
@@ -162,11 +157,20 @@
                 Editar
             </a>
 
-            <!-- Botón Eliminar -->
-            <button type="button" onclick="openDeleteModal('{{ route('nvr.destroy', $nvr) }}')"
-                class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-red-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                Eliminar
-            </button>
+            @if ($nvr->camera()->count() > 0)
+                {{-- si el nvr tiene cámaras conectadas no se puede eliminar --}}
+                <!-- Botón Eliminar -->
+                <button type="button" onclick="submit()"
+                    class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-red-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                    Eliminar
+                </button>
+            @else
+                <!-- Botón Eliminar -->
+                <button type="button" onclick="openDeleteModal('{{ route('nvr.destroy', $nvr) }}')"
+                    class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-red-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                    Eliminar
+                </button>
+            @endif
         </div>
 
         <br>
@@ -238,8 +242,6 @@
 
     </div>
 
-
-
     <!-- Modal para confirmar eliminación con descripción -->
     <div id="deleteModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-50">
         <div class="bg-white rounded-lg p-6 w-full max-w-md">
@@ -293,6 +295,11 @@
                 form.action = deleteUrl;
                 document.getElementById('deletionReasonInput').value = reason;
                 form.submit();
+            }
+
+            function submit() {
+                alert("El Nvr a eliminar tiene cámaras conectadas.");
+                return;
             }
         </script>
     @endpush

@@ -26,7 +26,7 @@
                     <div>
                         <label for="mac" class="block text-sm font-semibold text-white">Dirección MAC</label>
                         <input type="text" name="mac" id="mac"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            class="mt-1 block w-full rounded-md bg-gray-900 border border-gray-600 text-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             value="{{ $link->mac }}" readonly disabled>
                     </div>
 

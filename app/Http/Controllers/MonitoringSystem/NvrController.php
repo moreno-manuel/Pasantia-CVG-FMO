@@ -72,8 +72,8 @@ class NvrController extends Controller
 
             Nvr::create($request->all());       // Guarda el NVR
 
-            // Guarda los datos para cada volumen (slot)
-            foreach ($slots as $index => $slot) {
+
+            foreach ($slots as $index => $slot) { // Guarda los datos para cada volumen (slot)
                 $status = 'Disponible';
                 if ($slot['serial_disco'] != null) {
                     $status = 'Ocupado';

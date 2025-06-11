@@ -26,7 +26,7 @@
                     <div>
                         <label for="serial" class="block text-sm font-semibold text-white">Serial</label>
                         <input type="text" name="serial" id="serial"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            class="mt-1 block w-full rounded-md bg-gray-900 border border-gray-600 text-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             value="{{ old('serial', $switch->serial) }}" readonly disabled>
                     </div>
 
