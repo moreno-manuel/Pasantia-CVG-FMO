@@ -72,12 +72,9 @@
                     </thead>
                     <tbody class="divide-y divide-gray-200">
                         @foreach ($cameras as $camera)
-                            @php
-                                $nvr = $camera->nvr; //para tomar el nombre de nvr y no la mac
-                            @endphp
                             <tr class="hover:bg-gray-50">
                                 <td class="px-6 py-4 text-center text-sm text-gray-900 truncate">{{ $camera['mac'] }}</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $nvr['name'] }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $camera->nvr->name }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $camera['mark'] }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $camera['model'] }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $camera['name'] }}</td>

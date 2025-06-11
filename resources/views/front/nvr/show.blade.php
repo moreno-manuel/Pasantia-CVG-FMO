@@ -3,111 +3,115 @@
     <!-- resources/views/front/nvr/show.blade.php -->
 
     <div class="container mx-auto px-4 py-6">
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold"></h1>
+
+        <div class="flex justify-end items-center mb-6">
 
             <!-- Botón Volver -->
             <a href="{{ route('nvr.index') }}"
-                class="inline-flex items-center px-4 py-2 bg-gray-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition ease-in-out duration-150">
+                class="inline-flex items-center px-3 py-1.5 bg-gray-500 text-white font-semibold rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-gray-600 hover:shadow-md hover:-translate-y-px text-xs uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
                 Volver
             </a>
         </div>
 
         <!-- Tarjeta de información general -->
-        <div class="bg-gray-800 shadow overflow-hidden sm:rounded-lg">
-            <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+        <div class="bg-gray-800 shadow overflow-hidden sm:rounded-lg border border-gray-700">
+
+            <div class="px-4 py-5 sm:px-6 border-b border-gray-700">
                 <h3 class="text-lg leading-6 font-medium text-white">
                     Información General
                 </h3>
-                <p class="mt-1 max-w-2xl text-sm text-white">
+                <p class="mt-1 max-w-2xl text-sm text-gray-300">
                     Detalles técnicos y operativos del NVR seleccionado.
                 </p>
             </div>
 
             <!-- Datos del NVR -->
-            <div class="border-t border-gray-200">
+            <div class="border-t border-gray-700">
                 <dl>
+
                     <!-- Campo MAC -->
-                    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-700">Dirección MAC</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $nvr->mac }}</dd>
+                    <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-300">Dirección MAC</dt>
+                        <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $nvr->mac }}</dd>
                     </div>
 
                     <!-- Campo Nombre -->
-                    <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-700">Nombre</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $nvr->name }}</dd>
+                    <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-300">Nombre</dt>
+                        <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $nvr->name }}</dd>
                     </div>
 
                     <!-- Campo Marca -->
-                    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-700">Marca</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $nvr->mark }}</dd>
+                    <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-300">Marca</dt>
+                        <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $nvr->mark }}</dd>
                     </div>
 
                     <!-- Campo Modelo -->
-                    <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-700">Modelo</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $nvr->model }}</dd>
+                    <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-300">Modelo</dt>
+                        <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $nvr->model }}</dd>
                     </div>
 
                     <!-- Campo IP -->
-                    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-700">Dirección IP</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $nvr->ip }}</dd>
+                    <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-300">Dirección IP</dt>
+                        <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $nvr->ip }}</dd>
                     </div>
 
                     <!-- Campo Puertos Disponibles -->
-                    <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-700">N° Puertos</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $nvr->ports_number }}</dd>
+                    <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-300">N° Puertos</dt>
+                        <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $nvr->ports_number }}</dd>
                     </div>
 
-                    {{-- Para calcular el N° de puertos usados/disponibles --}}
+                    {{-- Para calcular el N° de puertos usados y disponibles --}}
                     @php
                         $ports_use = $nvr->camera;
                     @endphp
+
                     <!-- Campo Puertos Usados -->
-                    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-700">N° Puertos/Usados</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $ports_use->count() }}</dd>
+                    <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-300">N° Puertos/Usados</dt>
+                        <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $ports_use->count() }}</dd>
                     </div>
 
                     <!-- Campo Puertos Disponibles -->
-                    <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-700">N° Puertos/Disponibles</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                            {{ $nvr->ports_number - $ports_use->count() }}</dd>
+                    <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-300">N° Puertos/Disponibles</dt>
+                        <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
+                            {{ $nvr->ports_number - $ports_use->count() }}
+                        </dd>
                     </div>
 
                     <!-- Campo Ranuras de Disco -->
-                    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-700">N° Volumen</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $nvr->slot_number }}</dd>
+                    <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-300">N° Volumen</dt>
+                        <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $nvr->slot_number }}</dd>
                     </div>
 
                     <!-- Campo Localidad -->
-                    <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-700">Localidad</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $nvr->location }}</dd>
+                    <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-300">Localidad</dt>
+                        <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $nvr->location }}</dd>
                     </div>
 
-                    <!-- Campo Estado -->
-                    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-700">Status</dt>
+                    <!-- Campo Status -->
+                    <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-300">Status</dt>
                         <dd class="mt-1 text-sm sm:mt-0 sm:col-span-2">
                             <span
                                 class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                {{ $nvr->status === 'Activo' ? 'bg-green-300 text-green-900' : 'bg-red-300 text-red-900' }}">
+                            {{ $nvr->status === 'Activo' ? 'bg-green-600 text-white' : 'bg-red-600 text-white' }}">
                                 {{ $nvr->status }}
                             </span>
                         </dd>
                     </div>
 
                     <!-- Campo Descripción -->
-                    <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-700">Descripción</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                    <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-300">Descripción</dt>
+                        <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
                             {{ $nvr->description ?? 'Sin descripción' }}
                         </dd>
                     </div>
@@ -116,17 +120,16 @@
         </div>
 
         <!-- Tabla de Volumenes-->
-
         <div class="mt-8">
-            <h3 class="text-lg font-medium text-black mb-3">Detalles Volumen</h3>
+            <h3 class="text-lg font-medium text-gray-700 mb-3">Detalles Volumen</h3>
             <div class="overflow-x-auto">
                 <table class="min-w-full shadow-md rounded-lg overflow-hidden bg-white border border-gray-300">
                     <thead class="bg-gray-100">
                         <tr class="bg-gray-800 divide-x divide-blue-400">
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Volumen</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Serial</th>
-                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Capacidad/Disco (GB)</th>
-                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Capacidad Máxima/volumen (GB)
+                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Capacidad/Disco (TB)</th>
+                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Capacidad Máxima/volumen (TB)
                             </th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Status</th>
                         </tr>
@@ -152,21 +155,23 @@
             </div>
         </div>
 
-        <!-- Acciones del NVR -->
+        <!-- Acciones -->
         <div class="mt-6 flex space-x-3">
             <a href="{{ route('nvr.edit', $nvr) }}"
-                class="inline-flex items-center px-4 py-2 bg-yellow-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition ease-in-out duration-150">
-                Editar NVR
+                class="inline-flex items-center px-3 py-1.5 bg-yellow-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-yellow-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                Editar
             </a>
 
             <!-- Botón Eliminar -->
             <button type="button" onclick="openDeleteModal('{{ route('nvr.destroy', $nvr) }}')"
-                class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-red-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                 Eliminar
             </button>
         </div>
 
         <br>
+
+        {{-- tabla de cámaras conectadas al nvr --}}
         @if ($cameras->isNotEmpty())
             <div class="mt-8">
                 <h3 class="text-lg font-medium text-black mb-3">Cámaras Conectadas al Nvr</h3>
@@ -232,6 +237,8 @@
         @endif
 
     </div>
+
+
 
     <!-- Modal para confirmar eliminación con descripción -->
     <div id="deleteModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-50">

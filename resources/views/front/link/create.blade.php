@@ -1,21 +1,21 @@
 @extends('layouts.app-home')
 @section('content')
     <!-- resources/views/front/link/create.blade.php -->
-
     <div class="container mx-auto px-4 py-6">
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold">Crear Nuevo Enlace</h1>
+        <div class="bg-gray-800 shadow overflow-hidden sm:rounded-lg p-6 border border-gray-700">
 
-            <!-- Botón Volver -->
-            <a href="{{ route('enlace.index') }}"
-                class="inline-flex items-center px-4 py-2 bg-gray-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition ease-in-out duration-150">
-                Volver
-            </a>
-        </div>
+            {{-- Título y botón volver --}}
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-2xl font-bold text-white">Crear Nuevo Enlace</h1>
 
+                <!-- Botón Volver -->
+                <a href="{{ route('enlace.index') }}"
+                    class="inline-flex items-center px-3 py-1.5 bg-gray-500 text-white font-semibold rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-gray-600 hover:shadow-md hover:-translate-y-px text-xs uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                    Volver
+                </a>
+            </div>
 
-        {{-- Formnulario Enlace (link) --}}
-        <div class="bg-white shadow overflow-hidden sm:rounded-lg p-6">
+            {{-- Formulario --}}
             <form action="{{ route('enlace.store') }}" method="POST">
                 @csrf
 
@@ -23,108 +23,112 @@
 
                     <!-- Campo Dirección MAC -->
                     <div>
-                        <label for="mac" class="block text-sm font-medium text-gray-700">Dirección MAC</label>
+                        <label for="mac" class="block text-sm font-semibold text-white">Dirección MAC</label>
                         <input type="text" name="mac" value="{{ old('mac') }}"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm
-                            @error('mac') border-red-500 @enderror"
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('mac') border-red-500 @enderror"
                             placeholder="Ejemplo: 001A2B3C4D5E" required>
-
                         @error('mac')
-                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                            <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
                         @enderror
                     </div>
 
                     <!-- Campo Nombre -->
                     <div>
-                        <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
-                        <input type="text" name="name" value = '{{ old('name') }}'
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('name') border-red-500 @enderror"
+                        <label for="name" class="block text-sm font-semibold text-white">Nombre</label>
+                        <input type="text" name="name" value="{{ old('name') }}"
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('name') border-red-500 @enderror"
                             required>
-
                         @error('name')
-                            <span class="text-red-500
-                            text-sm">{{ $message }}</span>
+                            <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
                         @enderror
                     </div>
 
                     <!-- Campo Marca -->
                     <div>
-                        <label for="marca" class="block text-sm font-medium text-gray-700">Marca</label>
-                        <select name="mark" value='{{ old('mark') }}'
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        <label for="mark" class="block text-sm font-semibold text-white">Marca</label>
+                        <select name="mark" id="mark"
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
-                            <option value="">Selecciona una marca</option>
-                            <option value="Hikvision">Hikvision</option>
-                            <option value="Dahua">Dahua</option>
-                            <option value="Axis">Axis</option>
-                            <option value="Ubiquiti">Ubiquiti</option>
-                            <option value="Other">Otra</option>
+                            <option value="">Seleccione..</option>
+                            @foreach ($marks as $mark)
+                                <option value="{{ $mark }}" {{ old('mark') == $mark ? 'selected' : '' }}>
+                                    {{ $mark }}
+                                </option>
+                            @endforeach
                         </select>
+                    </div>
+
+                    <!-- Campo para marca personalizada -->
+                    <div id="other-brand-field" class="hidden">
+                        <label for="other_brand" class="block text-sm font-semibold text-white">Especifica la marca</label>
+                        <input type="text" name="other_mark" id="other_mark" value="{{ old('other_mark') }}"
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('other_mark') border-red-500 @enderror"
+                            placeholder="Nombre de la marca">
+                        @error('other_mark')
+                            <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <!-- Campo Modelo -->
                     <div>
-                        <label for="modelo" class="block text-sm font-medium text-gray-700">Modelo</label>
+                        <label for="model" class="block text-sm font-semibold text-white">Modelo</label>
                         <input type="text" name="model" value="{{ old('model') }}"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
                     </div>
 
                     <!-- Campo SSID -->
                     <div>
-                        <label for="ssid" class="block text-sm font-medium text-gray-700">SSID</label>
+                        <label for="ssid" class="block text-sm font-semibold text-white">SSID</label>
                         <input type="text" name="ssid" value="{{ old('ssid') }}"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             placeholder="Nombre de red Wi-Fi" required>
                     </div>
 
                     <!-- Campo IP -->
                     <div>
-                        <label for="ip" class="block text-sm font-medium text-gray-700">Dirección IP</label>
+                        <label for="ip" class="block text-sm font-semibold text-white">Dirección IP</label>
                         <input type="text" name="ip" value="{{ old('ip') }}"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm
-                            @error('ip') border-red-500 @enderror"
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('ip') border-red-500 @enderror"
                             placeholder="Ejemplo: 192.168.1.20" required>
-
                         @error('ip')
-                            <span class="text-red-500
-                            text-sm">{{ $message }}</span>
+                            <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
                         @enderror
                     </div>
 
                     <!-- Campo Localidad -->
                     <div>
-                        <label for="modelo" class="block text-sm font-medium text-gray-700">Localidad</label>
+                        <label for="location" class="block text-sm font-semibold text-white">Localidad</label>
                         <input type="text" name="location" value="{{ old('location') }}"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
                     </div>
 
                     <!-- Campo Status -->
                     <div>
-                        <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
-                        <select name="status" value = '{{ old('status') }}'
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        <label for="status" class="block text-sm font-semibold text-white">Status</label>
+                        <select name="status" id="status"
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
-                            <option value="">Selecciona el Status</option>
-                            <option value="Activo">Activo</option>
-                            <option value="Inactivo">Inactivo</option>
+                            <option value="">Seleccione..</option>
+                            <option value="Activo" {{ old('status') == 'Activo' ? 'selected' : '' }}>Activo</option>
+                            <option value="Inactivo" {{ old('status') == 'Inactivo' ? 'selected' : '' }}>Inactivo</option>
                         </select>
                     </div>
 
                     <!-- Campo Descripción -->
                     <div class="md:col-span-2">
-                        <label for="descripcion" class="block text-sm font-medium text-gray-700">Descripción</label>
-                        <textarea name="description" value="{{ old('description') }}" rows="3"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            placeholder="Describe brevemente este enlace..."></textarea>
+                        <label for="description" class="block text-sm font-semibold text-white">Descripción</label>
+                        <textarea name="description" rows="3"
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            placeholder="Describe brevemente este enlace...">{{ old('description') }}</textarea>
                     </div>
                 </div>
 
                 <!-- Botón Guardar -->
                 <div class="mt-6 flex justify-end">
                     <button type="submit"
-                        class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:outline-none focus:ring ring-green-300 disabled:opacity-25 transition ease-in-out duration-150"
+                        class="inline-flex items-center px-3 py-1.5 bg-green-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-green-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                         onclick="return confirm('¿Estás seguro de guardar este Enlace?')">
                         Guardar Enlace
                     </button>
@@ -132,4 +136,27 @@
             </form>
         </div>
     </div>
+
+    {{-- para el campo marca  --}}
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const select = document.getElementById('mark');
+                const otherField = document.getElementById('other-brand-field');
+
+                select.addEventListener('change', function() {
+                    if (select.value === 'OTRA') {
+                        otherField.classList.remove('hidden');
+                    } else {
+                        otherField.classList.add('hidden');
+                    }
+                });
+
+                // Mostrar campo si ya se había seleccionado "Other" (ej: tras error de validación)
+                if (select.value === 'OTRA') {
+                    otherField.classList.remove('hidden');
+                }
+            });
+        </script>
+    @endpush
 @endsection

@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 use function app\Helpers\filter;
+use function app\Helpers\marksUpdate;
 
 /* controlador para el 
 crud de camaras en inventario */
@@ -25,7 +26,10 @@ class CameraInventoriesController extends Controller
 
         if (!$hasFilters) {
             $cameras = CameraInventory::orderBy('created_at', 'desc')->paginate(10);
-            return view('front.camera.camera_inventories.index', compact('cameras'));
+
+            $marks = json_decode(file_get_contents(resource_path('js/marks.json')), true)['marks']; // json con las marcas agregadas
+
+            return view('front.camera.camera_inventories.index', compact('cameras', 'marks'));
         }
 
         return filter($request, 'camera_inventories');
@@ -33,7 +37,8 @@ class CameraInventoriesController extends Controller
 
     public function create() //muestra el formulario 
     {
-        return view('front.camera.camera_inventories.create');
+        $marks = json_decode(file_get_contents(resource_path('js/marks.json')), true)['marks']; // json con las marcas agregadas
+        return view('front.camera.camera_inventories.create', compact('marks'));
     }
 
     public function store(Request $request) // registra un nuevo registro
@@ -51,6 +56,11 @@ class CameraInventoriesController extends Controller
 
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator);
+        }
+
+        // si se agrega una nueva marca
+        if ($request->filled('other_mark')) {
+            $request = marksUpdate($request);
         }
 
         CameraInventory::create($request->all())->save();

@@ -8,13 +8,17 @@ use App\Models\EquipmentDisuse\NvrDisuse;
 use App\Models\equipmentDisuse\SlotNvrDisuse;
 use App\Models\monitoringSystem\Nvr;
 use App\Models\monitoringSystem\SlotNvr;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Log;
+
 
 use function app\Helpers\filter;
+use function app\Helpers\marksUpdate;
+use function app\Helpers\nvrSlotValidateCreate;
+use function app\Helpers\nvrSlotValidateUpdate;
+use Exception;
 
 /* controlador para el crud de nvr
 y sus volumenes */
@@ -25,8 +29,8 @@ class NvrController extends Controller
 
     public function index(Request $request) // Lista de registros
     {
-        // Valida si hay algún filtro activo
-        $hasFilters = $request->filled('location') ||
+
+        $hasFilters = $request->filled('location') ||     // Valida si hay algún filtro activo
             $request->filled('status');
 
         if (!$hasFilters) { //si no se aplica un filtro
@@ -39,17 +43,18 @@ class NvrController extends Controller
 
     public function create() //muestra el  formulario de validacion
     {
-        return view('front.nvr.create');
+        $marks = json_decode(file_get_contents(resource_path('js/marks.json')), true)['marks']; // json con las marcas agregadas
+        return view('front.nvr.create', compact('marks'));
     }
 
     public function store(Request $request) //validad cuando se crea un nuevo registro
     {
         try { //try para para evitar ip duplicadas
 
-            // Validación principal del NVR
-            $validated = $request->validate([
+            $validated = $request->validate([  // Validación principal del NVR
                 'mac' => 'required|unique:nvrs,mac',
                 'mark' => 'required',
+                'other_mark' => 'required_if:mark,OTRA',
                 'model' => 'required',
                 'name' => 'required|unique:nvrs,name',
                 'ip' => 'required|ip|unique:nvrs,ip',
@@ -58,40 +63,14 @@ class NvrController extends Controller
                 'location' => 'required',
                 'status' => 'required',
                 'description' => 'nullable'
-            ]);
+            ], ['required_if' => 'Debe agregar el nombre de la marca']);
 
-            // Validación de volumenes(slots)
-            $slotCount = $request->input('slot_number'); //extrae el numero de volumens 
-            $slotRules = []; //guarda reglas de validacion
-            $customAttributes = []; //nombre legibles de los campos 
-            $messages = []; //mensajes personalizados
 
-            for ($i = 1; $i <= $slotCount; $i++) {
-                // Reglas principales
-                $slotRules["volumen.{$i}.serial_disco"] = "nullable|string|required_with:volumen.{$i}.capacidad_disco";
-                $slotRules["volumen.{$i}.capacidad_disco"] = "nullable|numeric|lte:volumen.{$i}.capacidad_max_volumen|required_with:volumen.{$i}.serial_disco";
-                $slotRules["volumen.{$i}.capacidad_max_volumen"] = 'required|numeric';
+            $slots = nvrSlotValidateCreate($request); //valida slot y devuelve un arreglo con datos de los slots 
 
-                // Nombres legibles (custom attributes)
-                $customAttributes["volumen.{$i}.serial_disco"] = "Serial Disco";
-                $customAttributes["volumen.{$i}.capacidad_disco"] = "Capacidad Disco";
-                $customAttributes["volumen.{$i}.capacidad_max_volumen"] = "Capacidad Máxima/Volumen";
+            $request = marksUpdate($request);   // para nueva marca 
 
-                // Mensajes personalizados
-                $messages["volumen.{$i}.serial_dico.required_with"] = "El campo :attribute es obligatorio cuando se proporciona una Capacidad/Disco.";
-                $messages["volumen.{$i}.capacidad_disco.required_with"] = "El campo :attribute es obligatorio cuando se proporciona un Serial.";
-                $messages["volumen.{$i}.capacidad_disco.lte"] = "El campo :attribute debe ser menor o igual a Capacidad Máxima/Volumen.";
-            }
-
-            $validator = Validator::make($request->all(), $slotRules, $messages, $customAttributes);
-            $validator->validate();
-
-            //extrae todos los volumen(slots) y luego la elimina del request
-            $slots = $request->input('volumen', []);
-            $request->offsetUnset('volumen');
-
-            // Guarda el NVR
-            Nvr::create($request->all());
+            Nvr::create($request->all());       // Guarda el NVR
 
             // Guarda los datos para cada volumen (slot)
             foreach ($slots as $index => $slot) {
@@ -111,15 +90,79 @@ class NvrController extends Controller
             return redirect()->route('nvr.index')->with('success', 'NVR creado exitosamente.');
         } catch (QueryException $e) {
             if ($e->getCode() === '23000') { // Código de error de integridad para la db *IP*
-                throw ValidationException::withMessages([
-                    'ip' => ['La dirección IP ya está en uso.'],
+                return redirect()->back()->withInput()->withErrors([
+                    'ip' => 'La dirección IP ya está en uso.',
                 ]);
             }
         }
     }
 
+    public function edit(Nvr $nvr) //muestra el formulario editar 
+    {
+        $marks = json_decode(file_get_contents(resource_path('js/marks.json')), true)['marks']; // json con las marcas agregadas
+        return view('front.nvr.edit', compact('nvr', 'marks'));
+    }
+
+    public function update(Request $request, Nvr $nvr) //valida la actualizacion 
+    {
+        try { //try para para evitar ip duplicadas
+
+            $validated = $request->validate([       // Validación principal del NVR
+                'mark' => 'required',
+                'other_mark' => 'required_if:mark,OTRA',
+                'model' => 'required',
+                'ip' => 'required|ip|unique:nvrs',
+                'ports_number' => 'required',
+                'location' => 'required',
+                'status' => 'required',
+                'description' => 'nullable'
+            ], ['required_if' => 'Debe agregar el nombre de la marca']);
+
+
+            $slotsRequest = nvrSlotValidateUpdate($request, $nvr); //validación para los slots
+
+            $request = marksUpdate($request);   // para nueva marca 
+
+            $nvr->update($request->all());   // actualiza nvr
+
+
+            $slots = $nvr->slotNvr;  //slots que seran actualizados 
+            $i = 0;
+            foreach ($slotsRequest as $slotData) { // actualiza volumen (sltos)
+                $slot = $slots[$i];
+                $status = 'Disponible';
+                if ($slotData['serial_disco'] != null) {
+                    $status = 'Ocupado';
+                }
+                if ($slot) {
+                    $slot->update([
+                        'hdd_serial' => $slotData['serial_disco'],
+                        'hdd_capacity' => $slotData['capacidad_disco'],
+                        'status' => $status,
+                    ]);
+                }
+                $i++;
+            }
+
+            return redirect()->route('nvr.index')->with('success', 'NVR actualizado exitosamente.');
+        } catch (QueryException $e) {
+            if ($e->getCode() === '23000') { // Código de error de integridad para la db *IP*
+                return redirect()->back()->withInput()->withErrors([
+                    'ip' => 'La dirección IP ya está en uso.',
+                ]);
+            }
+        }
+    }
+
+    public function show(Nvr $nvr) //muestra los datos de un registro
+    {
+        $cameras = $nvr->camera()->orderBy('created_at', 'desc')->paginate(5);
+        return view('front.nvr.show', compact('nvr', 'cameras'));
+    }
+
     public function destroy(Request $request, Nvr $nvr) //elimina un nvr
     {
+
         EquipmentDisuse::create([
             'id' => $nvr->mac,
             'model' => $nvr->model,
@@ -146,101 +189,9 @@ class NvrController extends Controller
             ]);
         }
 
+        // Eliminar el NVR
         $nvr->delete();
-        return redirect()->route('nvr.index')->with('success', 'Nvr eliminado exitosamnete');
-    }
 
-    public function edit(Nvr $nvr) //muestra el formulario editar 
-    {
-        return view('front.nvr.edit', compact('nvr'));
-    }
-
-    public function update(Request $request, Nvr $nvr) //valida la actualizacion 
-    {
-        try { //try para para evitar ip duplicadas
-
-            // Validación principal del NVR
-            $validated = $request->validate([
-                'mark' => 'required',
-                'model' => 'required',
-                'ip' => 'required|ip|unique:nvrs',
-                'ports_number' => 'required',
-                'location' => 'required',
-                'status' => 'required',
-                'description' => 'nullable'
-            ]);
-
-            $existingSlots = []; // Aquí almacena los valores existentes de capacity_max por slot
-            $i = 1;
-            foreach ($nvr->slotNvr as $slot) {
-                // Busca el slot específico por MAC 
-                $existingSlots[$i] = $slot->capacity_max;
-                $i++;
-            }
-
-            //validacion de volumenes
-            $slotRules = [];
-            $customAttributes = [];
-            $messages = [];
-            for ($i = 1; $i <= $nvr->slot_number; $i++) {
-                $existingMaxCapacity = $existingSlots[$i];
-
-                // Reglas principales (sin capacidad_max_volumen)
-                $slotRules["volumen.{$i}.serial_disco"] = "nullable|string|required_with:volumen.{$i}.capacidad_disco";
-                $slotRules["volumen.{$i}.capacidad_disco"] = "nullable|numeric|lte:{$existingMaxCapacity}|required_with:volumen.{$i}.serial_disco";
-
-                // Nombres legibles
-                $customAttributes["volumen.{$i}.serial_disco"] = "Serial Disco";
-                $customAttributes["volumen.{$i}.capacidad_disco"] = "Capacidad Disco";
-
-                // Mensajes personalizados
-                $messages["volumen.{$i}.serial_dico.required_with"] = "El campo :attribute es obligatorio cuando se proporciona una Capacidad/Disco.";
-                $messages["volumen.{$i}.capacidad_disco.required_with"] = "El campo :attribute es obligatorio cuando se proporciona un Serial.";
-                $messages["volumen.{$i}.capacidad_disco.lte"] = "El campo :attribute debe ser menor o igual a {$existingMaxCapacity}.";
-            }
-            $validator = Validator::make($request->all(), $slotRules, $messages, $customAttributes);
-            $validator->validate();
-
-            //extrae todos los volumen(slots) y luego la elimina del request
-            $slotsRequest = $request->input('volumen', []);
-            $request->offsetUnset('volumen');
-
-            // actualiza nvr
-            $nvr->update($request->all());
-
-            //slots que seran actualizados 
-            $slots = $nvr->slotNvr;
-            $i = 0;
-            // actualiza volumen (sltos)
-            foreach ($slotsRequest as $slotData) {
-                $slot = $slots[$i];
-                $status = 'Disponible';
-                if ($slotData['serial_disco'] != null) {
-                    $status = 'Ocupado';
-                }
-                if ($slot) {
-                    $slot->update([
-                        'hdd_serial' => $slotData['serial_disco'],
-                        'hdd_capacity' => $slotData['capacidad_disco'],
-                        'status' => $status,
-                    ]);
-                }
-                $i++;
-            }
-
-            return redirect()->route('nvr.index')->with('success', 'NVR actualizado exitosamente.');
-        } catch (QueryException $e) {
-            if ($e->getCode() === '23000') { // Código de error de integridad para la db *IP*
-                throw ValidationException::withMessages([
-                    'ip' => ['La dirección IP ya está en uso.'],
-                ]);
-            }
-        }
-    }
-
-    public function show(Nvr $nvr) //muestra los datos
-    {
-        $cameras = $nvr->camera()->orderBy('created_at', 'desc')->paginate(5);
-        return view('front.nvr.show', compact('nvr', 'cameras'));
+        return redirect()->route('nvr.index')->with('success', 'Enlace eliminado exitosamente.');
     }
 }

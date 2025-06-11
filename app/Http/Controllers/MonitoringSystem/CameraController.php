@@ -27,7 +27,7 @@ class CameraController extends Controller
 
     public function index(Request $request) //muestra tabla con registros de camara
     {
-        // Valida si hay algún filtro activo
+        // Valida si hay algún filtro  de busqueda activo
         $hasFilters = $request->filled('location') ||
             $request->filled('status');
 
@@ -116,7 +116,7 @@ class CameraController extends Controller
         // Recupera el modelo manualmente
         $camera = Camera::find($mac);
 
-        // Cargar los registros con paginación
+        // Cargar los registros de condicion de atención con paginación
         $conditions = $camera->conditionAttention()->orderBy('created_at', 'desc')->paginate(5);
 
         return view('front.camera.show', compact('camera', 'conditions'));

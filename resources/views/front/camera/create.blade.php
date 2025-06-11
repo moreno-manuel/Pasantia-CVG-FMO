@@ -67,15 +67,17 @@
                         @enderror
                     </div>
 
-                    <!-- Campo NVR ID -->
+                    {{-- Campo nvr id --}}
                     <div>
                         <label for="nvr_id" class="block text-sm font-medium text-gray-700">NVR</label>
                         <select name="nvr_id" id="nvr_id"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
-                            <option value="">Selecciona...</option>
+                            <option value="">Seleccione..</option>
                             @foreach ($nvrs as $nvr)
-                                <option value="{{ $nvr->mac }} {{ old('nvr_id') }}">{{ $nvr->name }}</option>
+                                <option value="{{ $nvr->mac }}" {{ old('nvr_id') == $nvr->mac ? 'selected' : '' }}>
+                                    {{ $nvr->name }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
@@ -106,11 +108,13 @@
                         <select name="status" id="status"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
-                            <option value="">Selecciona el Status</option>
-                            <option value="Activo">Activo</option>
-                            <option value="Inactivo">Inactivo</option>
+                            <option value="">Seleccione..</option>
+                            <option value="Activo" {{ old('status') == 'Activo' ? 'selected' : '' }}>Activo</option>
+                            <option value="Inactivo" {{ old('status') == 'Inactivo' ? 'selected' : '' }}>Inactivo
+                            </option>
                         </select>
                     </div>
+
 
                     <!-- Campo Descripción -->
                     <div class="md:col-span-2">

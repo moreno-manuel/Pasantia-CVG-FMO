@@ -9,7 +9,9 @@ use App\Models\monitoringSystem\Nvr;
 use App\Models\networkInfrastructure\CameraInventory;
 use App\Models\networkInfrastructure\Link;
 use App\Models\networkInfrastructure\Switche;
+use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 /* busqueda filtrada
 --el string recibe el nombre 
@@ -199,13 +201,134 @@ function filter(Request $request, string $table)
 
                 // Ejecuta la consulta y aplica paginación
                 $cameras = $query->orderBy('created_at', 'desc')->paginate(10);
+                $marks = json_decode(file_get_contents(resource_path('js/marks.json')), true)['marks']; // json con las marcas agregadas
 
                 // Mantiene los valores de los filtros en la vista
-                return view('front.camera.camera_inventories.index', compact('cameras'))
+                return view('front.camera.camera_inventories.index', compact('cameras', 'marks'))
                     ->with('filters', $request->all());
                 break;
             }
         default:
             return 'error en controlador';
     }
+}
+
+
+/* para actualizar el json marks 
+para el manejo de las marcas */
+
+function marksUpdate(Request $request)
+{
+    if ($request->filled('other_mark')) {
+        $newMark = strtoupper($request->input('other_mark'));
+
+        // Ruta del archivo JSON
+        $filePath = resource_path('js/marks.json');
+
+        // Cargar marcas actuales
+        if (File::exists($filePath)) {
+            $json = json_decode(File::get($filePath), true);
+            $marks = $json['marks'];
+
+            // Solo agregar si no existe ya
+            if (!in_array($newMark, $marks)) {
+                array_unshift($marks, $newMark);
+
+                // Guardar nuevamente el archivo JSON con la nueva marca
+                File::put($filePath, json_encode(['marks' => $marks], JSON_PRETTY_PRINT));
+            }
+        }
+
+        // se elimina el campo other_mark y se agrega el valor en el campo mark
+        $request->offsetUnset('other_mark');
+        $request['mark'] = $newMark;
+    } else {
+        $request->offsetUnset('other_mark'); //elimina el campo para nueva marca
+    }
+
+
+    return $request;
+}
+
+
+/* para liberar el metodo 
+store de nvr con las validaciones 
+de los slots*/
+
+function nvrSlotValidateCreate(Request $request)
+{
+    $slotRules = []; //guarda reglas de validacion
+    $customAttributes = []; //nombre legibles de los campos 
+    $messages = []; //mensajes personalizados
+
+    for ($i = 0; $i <= $request->slot_number - 1; $i++) {
+        // Reglas principales
+        $slotRules["volumen.{$i}.serial_disco"] = "nullable|string|required_with:volumen.{$i}.capacidad_disco";
+        $slotRules["volumen.{$i}.capacidad_disco"] = "nullable|numeric|lte:volumen.{$i}.capacidad_max_volumen|required_with:volumen.{$i}.serial_disco";
+        $slotRules["volumen.{$i}.capacidad_max_volumen"] = 'required|numeric';
+
+        // Nombres legibles (custom attributes)
+        $customAttributes["volumen.{$i}.serial_disco"] = "Serial Disco";
+        $customAttributes["volumen.{$i}.capacidad_disco"] = "Capacidad Disco";
+        $customAttributes["volumen.{$i}.capacidad_max_volumen"] = "Capacidad Máxima/Volumen";
+
+        // Mensajes personalizados
+        $messages["volumen.{$i}.serial_dico.required_with"] = "El campo :attribute es obligatorio cuando se proporciona una Capacidad/Disco.";
+        $messages["volumen.{$i}.capacidad_disco.required_with"] = "El campo :attribute es obligatorio cuando se proporciona un Serial.";
+        $messages["volumen.{$i}.capacidad_disco.lte"] = "El campo :attribute debe ser menor o igual a Capacidad Máxima/Volumen.";
+    }
+
+    $validator = Validator::make($request->all(), $slotRules, $messages, $customAttributes);
+    $validator->validate();
+
+    //extrae todos los volumen(slots) y luego la elimina del request
+    $slots = $request->input('volumen', []);
+    $request->offsetUnset('volumen');
+
+    return $slots;
+}
+
+
+/* para liberar el metodo 
+store de nvr con las validaciones */
+
+function nvrSlotValidateUpdate(Request $request, Nvr $nvr)
+{
+    $existingSlots = []; // Aquí almacena los valores existentes de capacity_max por slot
+    $i = 0;
+    foreach ($nvr->slotNvr as $slot) {
+        // Busca el slot específico por MAC 
+        $existingSlots[$i] = $slot->capacity_max;
+        $i++;
+    }
+
+    //validacion de volumenes
+    $slotRules = [];
+    $customAttributes = [];
+    $messages = [];
+    for ($i = 0; $i <= $nvr->slot_number - 1; $i++) {
+        $existingMaxCapacity = $existingSlots[$i];
+
+        // Reglas principales (sin capacidad_max_volumen)
+        $slotRules["volumen.{$i}.serial_disco"] = "nullable|string|required_with:volumen.{$i}.capacidad_disco";
+        $slotRules["volumen.{$i}.capacidad_disco"] = "nullable|numeric|lte:{$existingMaxCapacity}|required_with:volumen.{$i}.serial_disco";
+
+        // Nombres legibles
+        $customAttributes["volumen.{$i}.serial_disco"] = "Serial Disco";
+        $customAttributes["volumen.{$i}.capacidad_disco"] = "Capacidad Disco";
+
+        // Mensajes personalizados
+        $messages["volumen.{$i}.serial_dico.required_with"] = "El campo :attribute es obligatorio cuando se proporciona una Capacidad/Disco.";
+        $messages["volumen.{$i}.capacidad_disco.required_with"] = "El campo :attribute es obligatorio cuando se proporciona un Serial.";
+        $messages["volumen.{$i}.capacidad_disco.lte"] = "El campo :attribute debe ser menor o igual a Capacidad Máxima/volumen.";
+    }
+
+    $validator = Validator::make($request->all(), $slotRules, $messages, $customAttributes);
+    $validator->validate();
+
+    //extrae todos los volumen(slots) y luego la elimina del request
+    $slotsRequest = $request->input('volumen', []);
+    $request->offsetUnset('volumen');
+
+    return $slotsRequest;
 }

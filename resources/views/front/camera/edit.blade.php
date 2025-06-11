@@ -63,14 +63,18 @@
                     </div>
 
                     <!-- Campo NVR ID -->
+
                     <div>
                         <label for="nvr_id" class="block text-sm font-medium text-gray-700">NVR</label>
                         <select name="nvr_id" id="nvr_id"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
-                            <option value="">Selecciona...</option>
+                            <option value="">Seleccione...</option>
                             @foreach ($nvrs as $nvr)
-                                <option value="{{ old('nvr_id', $nvr->mac) }} ">{{ $nvr->name }}</option>
+                                <option value="{{ $nvr->mac }}"
+                                    {{ old('nvr_id', isset($camera) ? $camera->nvr_id : '') == $nvr->mac ? 'selected' : '' }}>
+                                    {{ $nvr->name }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
@@ -102,8 +106,15 @@
                         <select name="status" id="status"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
-                            <option value="{{ old('status', $camera->status) }}">{{ $camera->status }}</option>
-                            <option value="Activo">Activo</option>
+                            <option value="">Seleccione..</option>
+                            <option value="Activo"
+                                {{ old('status', isset($camera) ? $camera->status : '') == 'Activo' ? 'selected' : '' }}>
+                                Activo
+                            </option>
+                            <option value="Inactivo"
+                                {{ old('status', isset($camera) ? $camera->status : '') == 'Inactivo' ? 'selected' : '' }}>
+                                Inactivo
+                            </option>
                         </select>
                     </div>
 
