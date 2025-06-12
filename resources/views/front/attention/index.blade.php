@@ -29,7 +29,7 @@
                 <select name="name" id="name"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                     required>
-                    <option value="">Selecciona...</option>
+                    <option value="">Seleccione..</option>
                     <option value="Camión cesta" {{ ($filters['name'] ?? '') == 'Camión cesta' ? 'selected' : '' }}>
                         Camión cesta</option>
                     <option value="En proceso de atención"
@@ -131,7 +131,7 @@
                 ])->links() }}
         @else
             <div class="text-center mt-6 bg-gray-800 border border-black rounded-md p-4 text-white">
-                <p>No hay registros existentes</p>
+                <p>No hay Condición de Atención por atender</p>
             </div>
         @endif
 

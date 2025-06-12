@@ -59,7 +59,7 @@
                         <dd class="mt-1 text-sm sm:mt-0 sm:col-span-2">
                             <span
                                 class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                            {{ $condition['status'] === 'Activo' ? 'bg-green-600 text-white' : 'bg-red-600 text-white' }}">
+                            {{ $condition['status'] === 'Atendido' ? 'bg-green-600 text-white' : 'bg-red-600 text-white' }}">
                                 {{ $condition['status'] }}
                             </span>
                         </dd>

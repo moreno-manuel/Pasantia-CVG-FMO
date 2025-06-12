@@ -116,7 +116,7 @@
 
         <!-- Tabla de Volumenes-->
         <div class="mt-8">
-            <h3 class="text-lg font-medium text-gray-700 mb-3">Detalles Volumen</h3>
+            <h3 class="text-lg font-medium text-black mb-3">Detalles Volumen</h3>
             <div class="overflow-x-auto">
                 <table class="min-w-full shadow-md rounded-lg overflow-hidden bg-white border border-gray-300">
                     <thead class="bg-gray-100">

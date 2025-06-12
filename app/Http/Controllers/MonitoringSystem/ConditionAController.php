@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 use function app\Helpers\conditionValidate;
+use function app\Helpers\conditionValidateUpdate;
 use function app\Helpers\filter;
 
 /* Controlador crud 
@@ -20,7 +21,9 @@ class ConditionAController extends Controller
     public function index(Request $request) ///muestra todo los registros
     {
         if (!$request->filled('name')) { //si no se aplica un filtro
-            $conditions = ConditionAttention::orderBy('id', 'desc')->paginate(10);
+            $conditions = ConditionAttention::where('status', 'por atender')
+                ->orderBy('id', 'desc')
+                ->paginate(10);
             return view('front.attention.index', compact('conditions'));
         }
 
@@ -53,16 +56,17 @@ class ConditionAController extends Controller
             return redirect()->back()->withInput()->withErrors($validator);
         }
 
-        $condition = ConditionAttention::where('camera_id', $request->input('camera_id'))->latest()->first(); //busqueda explicita
+        $condition = ConditionAttention::where('camera_id', $request->input('camera_id'))->latest()->first(); //busqueda explicita,last condición
+
         if ($condition) {
             $validate = conditionValidate($request, $condition); //reglas de validación 
-            if ($validate != 'success') //retorna el tipo de error en caso de que exista  
-                return redirect()->back()->withInput()->withErrors($validate);
+            if ($validate != 'success')
+                return redirect()->back()->withInput()->withErrors($validate); //retorna el tipo de error 
         }
 
-        $status = $request->filled('date_end') ? 'Atendido' : 'Por atender'; // Determinar el estado
+        $status = $request->filled('date_end') ? 'Atendido' : 'Por atender'; // Determinar el status de la condicion
 
-        ConditionAttention::create([
+        $condition = ConditionAttention::create([
             'name' => $request->input('name'),
             'camera_id' => $request->input('camera_id'),
             'date_ini' => $request->input('date_ini'),
@@ -72,8 +76,14 @@ class ConditionAController extends Controller
 
         ]);
 
+        //atualiza el estado de la cámara
+        if ($status == 'Por atender')
+            $condition->camera->update(['status' => 'Inactivo']);
+
+
         return redirect()->route('atencion.index')->with('success', 'Condición de Atención agregada exitosamente');
     }
+
 
     public function edit($id) //vista para editar un registro
     {
@@ -81,9 +91,10 @@ class ConditionAController extends Controller
         return view('front.attention.edit', compact('condition'));
     }
 
+
     public function update(Request $request,  $id) //actualiza los datos de un registro
     {
-        $condition = ConditionAttention::findOrFail($id);
+        $conditionUpdate = ConditionAttention::find($id);
 
         $validator = Validator::make($request->all(), [
             'date_ini' => 'required|date',
@@ -96,31 +107,22 @@ class ConditionAController extends Controller
             'date_end' => 'Fecha de Realización'
         ]);
 
+
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator);
-        } else {
-            //busqueda explicita
-            $conditionValidate = ConditionAttention::where('camera_id', $request->input('camera_id'))->latest()->first();
-
-            if ($conditionValidate) {
-                //para validar fecha futura
-                $date_max = Carbon::parse($request->input('date_ini'))->isFuture();
-
-                //si la fecha final de la ultima atencion supera a la fecha inicial de la nueva atencion
-                if ($conditionValidate->date_end > $request->input('date_ini')) {
-                    return redirect()->back()->withInput()->withErrors('La nueva condición de atención para la cámara seleccionada debe tener una fecha mayor o igual a la anterior (' . $condition->date_end . ")");
-
-                    //que no se ingreses fechas futuras
-                } else if ($date_max) {
-                    return redirect()->back()->withInput()->withErrors('La fecha ingresada supera la fecha actual (' . Carbon::now()->format('d/m/Y') . ')');
-                }
-            }
         }
 
-        // Determinar el estado
-        $status = $request->filled('date_end') ? 'Atendido' : 'por atender';
+        $condition = ConditionAttention::where('camera_id', $request->input('camera_id'))->latest()->first(); //busqueda explicita,last condición
 
-        $condition->update([
+        if ($condition) {
+            $validate = conditionValidateUpdate($request, $condition); //reglas de validación 
+            if ($validate != 'success')
+                return redirect()->back()->withInput()->withErrors($validate); //retorna el tipo de error 
+        }
+
+        $status = $request->filled('date_end') ? 'Atendido' : 'Por atender';
+
+        $conditionUpdate->update([
             'date_ini' => $request->input('date_ini'),
             'date_end' => $request->input('date_end'),
             'description' => $request->input('description'),
@@ -128,8 +130,13 @@ class ConditionAController extends Controller
 
         ]);
 
+        //atualiza el estado de la cámara
+        if ($status == 'Atendido')
+            $conditionUpdate->camera->update(['status' => 'Activo']);
+
         return redirect()->route('atencion.index')->with('success', 'Condición de Atención actualizada exitosamente');
     }
+
 
     public function show($id) //muestra los detalles de un registro
     {
@@ -137,9 +144,19 @@ class ConditionAController extends Controller
         return view('front.attention.show', compact('condition'));
     }
 
+
     public function destroy($id) //Elimina un regitro 
     {
         $condition = ConditionAttention::find($id);
+
+        $conditionLast = ConditionAttention::where('camera_id', $condition->camera_id)->latest()->first(); //busqueda explicita,last condición
+
+        if ($conditionLast) {
+            if ($condition->is($conditionLast)) { //si la que se elimina es la ultima condición 
+                $condition->camera->update(['status' => 'Activo']); // cámara regresa a su status original
+            }
+        }
+
         $condition->delete();
         return redirect()->route('atencion.index')->with('success', 'Conición de atención eliminado exitosamente.');
     }

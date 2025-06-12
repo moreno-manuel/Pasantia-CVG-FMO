@@ -1,174 +1,193 @@
 @extends('layouts.app-home')
 @section('content')
     <!-- resources/views/front/eliminated/show.blade.php -->
-
     <div class="container mx-auto px-4 py-6">
-
         <!-- Botón Volver -->
         <div class="flex justify-end items-center mb-6">
             <a href="{{ route('eliminated.index') }}"
-                class="inline-flex items-center px-4 py-2 bg-gray-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition ease-in-out duration-150">
+                class="inline-flex items-center px-3 py-1.5 bg-gray-500 text-white font-semibold rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-gray-600 hover:shadow-md hover:-translate-y-px text-xs uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
                 Volver
             </a>
         </div>
 
         <!-- Tarjeta de información general -->
-        <div class="bg-gray-800 shadow overflow-hidden sm:rounded-lg">
-            <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+        <div class="bg-gray-800 shadow overflow-hidden sm:rounded-lg border border-gray-700">
+
+            <div class="px-4 py-5 sm:px-6 border-b border-gray-700">
                 <h3 class="text-lg leading-6 font-medium text-white">
                     Información General
                 </h3>
-                <p class="mt-1 max-w-2xl text-sm text-white">
-                    Detalles técnicos y operativos de {{ $equipment->equipment }} seleccionado.
+                <p class="mt-1 max-w-2xl text-sm text-gray-300">
+                    Detalles técnicos y operativos del {{ $equipment->equipment }} seleccionado.
                 </p>
             </div>
 
-            <!-- Datos del del quipo eliminado -->
-            <div class="border-t border-gray-200">
+            <!-- Datos del equipo eliminado -->
+            <div class="border-t border-gray-700">
                 <dl>
-                    <!-- Campo id -->
-                    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-700">ID</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $equipment['id'] }}</dd>
+                    <!-- Campo ID -->
+                    <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-semibold text-gray-300">ID</dt>
+                        <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $equipment['id'] }}</dd>
                     </div>
 
                     <!-- Campo Modelo -->
-                    <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-700">Modelo</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $equipment['model'] }}</dd>
+                    <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-semibold text-gray-300">Modelo</dt>
+                        <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $equipment['model'] }}</dd>
                     </div>
-                    {{-- dependiendo del equipo hay campos especificos  --}}
+
+                    {{-- Mostrar campos específicos según el tipo de equipo --}}
                     @switch($equipment->equipment)
                         @case('Switch')
-                            <!-- Campo numero de puertos -->
-                            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-medium text-gray-700">N°/Puertos</dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $switch['number_ports'] }}</dd>
+                            <!-- Switch - Número de puertos -->
+                            <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                <dt class="text-sm font-semibold text-gray-300">N° Puertos</dt>
+                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $switch['number_ports'] ?? 'N/A' }}
+                                </dd>
                             </div>
                         @break
 
                         @case('Nvr')
-                            <!-- Campo marca -->
-                            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-medium text-gray-700">Marca</dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $nvr['mark'] }}</dd>
-                            </div>
-                            <!-- Campo nombre -->
-                            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-medium text-gray-700">Nombre</dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $nvr['name'] }}</dd>
-                            </div>
-                            <!-- Campo ip -->
-                            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-medium text-gray-700">IP</dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $nvr['ip'] }}</dd>
-                            </div>
-                            <!-- Campo numero de puertos -->
-                            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-medium text-gray-700">N°/Puertos</dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $nvr['ports_number'] }}</dd>
-                            </div>
-                            <!-- Campo numero de volumen -->
-                            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-medium text-gray-700">N°/Volumen</dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $nvr['slot_number'] }}</dd>
+                            <!-- NVR - Marca -->
+                            <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                <dt class="text-sm font-semibold text-gray-300">Marca</dt>
+                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $nvr['mark'] ?? 'N/A' }}</dd>
                             </div>
 
+                            <!-- NVR - Nombre -->
+                            <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                <dt class="text-sm font-semibold text-gray-300">Nombre</dt>
+                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $nvr['name'] ?? 'N/A' }}</dd>
+                            </div>
+
+                            <!-- NVR - IP -->
+                            <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                <dt class="text-sm font-semibold text-gray-300">Dirección IP</dt>
+                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $nvr['ip'] ?? 'N/A' }}</dd>
+                            </div>
+
+                            <!-- NVR - Número de puertos -->
+                            <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                <dt class="text-sm font-semibold text-gray-300">Puertos Disponibles</dt>
+                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $nvr['ports_number'] ?? 'N/A' }}</dd>
+                            </div>
+
+                            <!-- NVR - Número de volumen -->
+                            <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                <dt class="text-sm font-semibold text-gray-300">N° de Volumen</dt>
+                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $nvr['slot_number'] ?? 'N/A' }}</dd>
+                            </div>
+
+                            <!-- NVR - Capacidad de cada volumen -->
                             @foreach ($nvr->slotNvrDisuse as $slot)
-                                <!-- Campo numero de volumen -->
-                                <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                    <dt class="text-sm font-medium text-gray-700">Capacidad Máxima/(GB) Volumen
+                                <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                    <dt class="text-sm font-semibold text-gray-300">Capacidad Máxima / Volumen
                                         {{ $loop->iteration }}</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $slot['capacity_max'] }}</dd>
+                                    <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $slot['capacity_max'] ?? 'N/A' }}
+                                    </dd>
                                 </div>
                             @endforeach
                         @break
 
                         @case('Cámara')
-                            <!-- Campo marca -->
-                            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-medium text-gray-700">Marca</dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $camera['mark'] }}</dd>
+                            <!-- Cámara - Marca -->
+                            <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                <dt class="text-sm font-semibold text-gray-300">Marca</dt>
+                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $camera['mark'] ?? 'N/A' }}</dd>
                             </div>
-                            <!-- Campo nombre -->
-                            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-medium text-gray-700">Nombre</dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $camera['name'] }}</dd>
+
+                            <!-- Cámara - Nombre -->
+                            <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                <dt class="text-sm font-semibold text-gray-300">Nombre</dt>
+                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $camera['name'] ?? 'N/A' }}</dd>
                             </div>
-                            <!-- Campo nombre del nvr donde estaba conectada la camara -->
-                            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-medium text-gray-700">NVR/Conexión</dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $camera['nvr_name'] }}</dd>
+
+                            <!-- Cámara - NVR donde estaba conectada -->
+                            <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                <dt class="text-sm font-semibold text-gray-300">NVR/Conexión</dt>
+                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $camera['nvr_name'] ?? 'N/A' }}</dd>
                             </div>
-                            <!-- Campo ip -->
-                            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-medium text-gray-700">IP</dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $camera['ip'] }}</dd>
+
+                            <!-- Cámara - Dirección IP -->
+                            <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                <dt class="text-sm font-semibold text-gray-300">IP</dt>
+                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $camera['ip'] ?? 'N/A' }}</dd>
                             </div>
                         @break
 
                         @case('Enlace')
-                            <!-- Campo marca -->
-                            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-medium text-gray-700">Marca</dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $link['mark'] }}</dd>
+                            <!-- Enlace - Marca -->
+                            <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                <dt class="text-sm font-semibold text-gray-300">Marca</dt>
+                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $link['mark'] ?? 'N/A' }}</dd>
                             </div>
-                            <!-- Campo nombre -->
-                            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-medium text-gray-700">Nombre</dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $link['name'] }}</dd>
+
+                            <!-- Enlace - Nombre -->
+                            <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                <dt class="text-sm font-semibold text-gray-300">Nombre</dt>
+                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $link['name'] ?? 'N/A' }}</dd>
                             </div>
-                            <!-- Campo ssid -->
-                            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-medium text-gray-700">Ssid</dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $link['ssid'] }}</dd>
+
+                            <!-- Enlace - SSID -->
+                            <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                <dt class="text-sm font-semibold text-gray-300">SSID</dt>
+                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $link['ssid'] ?? 'N/A' }}</dd>
                             </div>
-                            <!-- Campo ip -->
-                            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-medium text-gray-700">IP</dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $link['ip'] }}</dd>
+
+                            <!-- Enlace - Dirección IP -->
+                            <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                <dt class="text-sm font-semibold text-gray-300">IP</dt>
+                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $link['ip'] ?? 'N/A' }}</dd>
                             </div>
                         @break
 
                         @default
-                            <!-- Campo marca -->
-                            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-medium text-gray-700">Nota de Entrega</dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                    {{ $camera_inventories['delivery_note'] }}</dd>
+                            <!-- Por defecto: Cámaras inventario o similares -->
+                            <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                <dt class="text-sm font-semibold text-gray-300">Nota de Entrega</dt>
+                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
+                                    {{ $camera_inventories['delivery_note'] ?? 'N/A' }}
+                                </dd>
                             </div>
-                            <!-- Campo nombre -->
-                            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-medium text-gray-700">Destino</dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                    {{ $camera_inventories['destination'] }}</dd>
+
+                            <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                <dt class="text-sm font-semibold text-gray-300">Destino</dt>
+                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
+                                    {{ $camera_inventories['destination'] ?? 'N/A' }}
+                                </dd>
                             </div>
                     @endswitch
 
-                    <!-- Campo localidad -->
-                    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"">
-                        <dt class="text-sm font-medium text-gray-700">Localidad</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $equipment['location'] }}</dd>
+                    <!-- Campo Localidad -->
+                    <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-semibold text-gray-300">Localidad</dt>
+                        <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
+                            {{ $equipment['location'] ?? 'N/A' }}
+                        </dd>
                     </div>
 
                     <!-- Campo Descripción -->
-                    <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-700">Descripción</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                            {{ $equipment['description'] }}
+                    <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-semibold text-gray-300">Descripción</dt>
+                        <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
+                            {{ $equipment['description'] ?? 'Sin descripción' }}
                         </dd>
                     </div>
                 </dl>
             </div>
         </div>
-        {{-- Acciones --}}
-        <div class="mt-6 flex space-x-3"> <!-- Nuevo contenedor de pie -->
-            <form action="{{ route('eliminated.destroy', $equipment['id']) }}" method="POST">
+
+        <!-- Acciones -->
+        <div class="mt-6 flex justify-end space-x-3">
+            <form action="{{ route('eliminated.destroy', $equipment['id']) }}" method="POST"
+                onsubmit="return confirm('¿Estás seguro de eliminar este equipo permanentemente?');">
                 @csrf
                 @method('DELETE')
+
                 <button type="submit"
-                    class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                    Eliminar
+                    class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-red-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                    Eliminar Permanentemente
                 </button>
             </form>
         </div>
