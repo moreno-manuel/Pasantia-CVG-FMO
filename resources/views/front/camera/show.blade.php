@@ -115,7 +115,7 @@
         @if ($conditions->isNotEmpty())
             <!-- Tabla -->
             <div class="mt-8">
-                <h3 class="text-lg font-medium text-gray-700 mb-3">Condición de atención de Cámara seleccionada</h3>
+                <h3 class="text-lg font-medium text-black mb-3">Condición de atención de Cámara seleccionada</h3>
                 <div class="overflow-x-auto">
                     <table class="min-w-full shadow-md rounded-lg overflow-hidden bg-white border border-gray-300">
                         <thead class="bg-gray-100">

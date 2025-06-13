@@ -30,26 +30,33 @@ class EquipmentDisuseController extends Controller
     public function show($id)
     {
         $equipment = EquipmentDisuse::where('id', $id)->first();
+
+        $camera_inventories = CameraInventoriesDisuse::where('id', $id)->first();
+        if ($equipment->id == $camera_inventories->id) { // si la camara pertenece a la tabla de camara_inventories_disuses
+            $equipment_type = 'camera_inventories';
+            return view('front.eliminated.show', compact('equipment', 'camera_inventories', 'equipment_type'));
+        }
+
         switch ($equipment->equipment) {
             case 'Switch':
                 $switch = SwitchDisuse::where('id', $id)->first();
-                return view('front.eliminated.show', compact('equipment', 'switch'));
+                $equipment_type = $equipment->equipment;
+                return view('front.eliminated.show', compact('equipment', 'switch', 'equipment_type'));
                 break;
             case 'Nvr':
                 $nvr = NvrDisuse::where('id', $id)->first();
-                return view('front.eliminated.show', compact('equipment', 'nvr'));
+                $equipment_type = $equipment->equipment;
+                return view('front.eliminated.show', compact('equipment', 'nvr', 'equipment_type'));
                 break;
             case 'Cámara':
                 $camera = CameraDisuse::where('id', $id)->first();
-                return view('front.eliminated.show', compact('equipment', 'camera'));
+                $equipment_type = $equipment->equipment;
+                return view('front.eliminated.show', compact('equipment', 'camera', 'equipment_type'));
                 break;
             case 'Enlace':
                 $link = LinkDisuse::where('id', $id)->first();
-                return view('front.eliminated.show', compact('equipment', 'link'));
-                break;
-            default:
-                $camera_inventories = CameraInventoriesDisuse::where('id', $id)->first();
-                return view('front.eliminated.show', compact('equipment', 'camera_inventories'));
+                $equipment_type = $equipment->equipment;
+                return view('front.eliminated.show', compact('equipment', 'link', 'equipment_type'));
                 break;
         }
     }

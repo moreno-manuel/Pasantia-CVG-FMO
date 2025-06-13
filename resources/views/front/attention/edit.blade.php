@@ -43,8 +43,8 @@
                     <div class="mb-4">
                         <label for="date_ini" class="block text-sm font-semibold text-white">Fecha de inicio</label>
                         <input type="date" name="date_ini" id="date_ini" max="{{ now()->format('Y-m-d') }}"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('date_ini') border-red-500 @enderror"
-                            value="{{ old('date_ini', $condition->date_ini) }}" required>
+                            class="mt-1 block w-full rounded-md bg-gray-900 border border-gray-600 text-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('date_ini') border-red-500 @enderror"
+                            value="{{ old('date_ini', $condition->date_ini) }}" required disabled>
 
                         @error('date_ini')
                             <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
@@ -73,7 +73,7 @@
                 <div class="mt-6 flex justify-end">
                     <button type="submit"
                         class="inline-flex items-center px-3 py-1.5 bg-green-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-green-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                        onclick="return confirm('¿Estás seguro de guardar esta condición?')">
+                        onclick="return confirm('¿Estás seguro de actualizar datos de condición?')">
                         Guardar Condición
                     </button>
                 </div>

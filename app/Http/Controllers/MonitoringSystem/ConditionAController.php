@@ -24,7 +24,10 @@ class ConditionAController extends Controller
             $conditions = ConditionAttention::where('status', 'por atender')
                 ->orderBy('id', 'desc')
                 ->paginate(10);
-            return view('front.attention.index', compact('conditions'));
+
+            $names = json_decode(file_get_contents(resource_path('js/data.json')), true)['conditions']; // json con los tipos de condicion
+
+            return view('front.attention.index', compact('conditions', 'names'));
         }
 
         return filter($request, 'conditions'); //helper
@@ -33,7 +36,10 @@ class ConditionAController extends Controller
     public function create()
     {
         $cameras = Camera::all();
-        return view('front.attention.create', compact('cameras'));
+
+        $names = json_decode(file_get_contents(resource_path('js/data.json')), true)['conditions']; // json con los tipos de condicion
+
+        return view('front.attention.create', compact('cameras', 'names'));
     }
 
     public function store(Request $request) //guarda el registro nuevo

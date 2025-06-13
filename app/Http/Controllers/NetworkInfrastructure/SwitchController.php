@@ -17,8 +17,8 @@ class SwitchController extends Controller
 
     public function index(Request $request) //muestra los registros en la tabla principal switch
     {
-        // Valida si hay algún filtro activo
-        $hasFilters = $request->filled('serial') ||
+
+        $hasFilters = $request->filled('serial') || // Valida si hay algún filtro activo
             $request->filled('location') ||
             $request->filled('status');
 
@@ -57,30 +57,6 @@ class SwitchController extends Controller
         return redirect()->route('switch.index')->with('success', 'Switch creado exitosamente.');
     }
 
-    public function destroy(Switche $switch, Request $request) //Elimina un switch
-    {
-        EquipmentDisuse::create([
-            'id' => $switch->serial,
-            'model' => $switch->model,
-            'location' => $switch->location,
-            'equipment' => 'Switch',
-            'description' => $request->input('deletion_description')
-        ]);
-
-        SwitchDisuse::create([
-            'id' => $switch->serial,
-            'number_ports' => $switch->number_ports
-        ]);
-
-        $switch->delete();
-        return redirect()->route('switch.index')->with('success', 'Switch Eliminado exitosamente.');
-    }
-
-    public function show(Switche $switch) //muestra la vista y datos para los detalles un switch
-    {
-        return view('front.switch.show', compact('switch'));
-    }
-
     public function edit(Switche $switch) //muestra la vista para editar un switch
     {
         return view('front.switch.edit', compact('switch'));
@@ -103,5 +79,35 @@ class SwitchController extends Controller
 
         $switch->update($request->all());
         return redirect()->route('switch.show', $switch);
+    }
+
+    public function show(Switche $switch) //muestra la vista y datos para los detalles un switch
+    {
+        return view('front.switch.show', compact('switch'));
+    }
+
+    public function destroy(Switche $switch, Request $request) //Elimina un switch
+    {
+        $equipment = EquipmentDisuse::find($switch->serial);
+
+        if ($equipment)
+            return redirect()->route('switch.index')->with('success', 'Ya existe un registro eliminado con el mismo ID.');
+
+
+        EquipmentDisuse::create([
+            'id' => $switch->serial,
+            'model' => $switch->model,
+            'location' => $switch->location,
+            'equipment' => 'Switch',
+            'description' => $request->input('deletion_description')
+        ]);
+
+        SwitchDisuse::create([
+            'id' => $switch->serial,
+            'number_ports' => $switch->number_ports
+        ]);
+
+        $switch->delete();
+        return redirect()->route('switch.index')->with('success', 'Switch Eliminado exitosamente.');
     }
 }

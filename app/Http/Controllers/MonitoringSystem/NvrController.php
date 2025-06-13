@@ -43,7 +43,7 @@ class NvrController extends Controller
 
     public function create() //muestra el  formulario de validacion
     {
-        $marks = json_decode(file_get_contents(resource_path('js/marks.json')), true)['marks']; // json con las marcas agregadas
+        $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['marks']; // json con las marcas agregadas
         return view('front.nvr.create', compact('marks'));
     }
 
@@ -99,7 +99,7 @@ class NvrController extends Controller
 
     public function edit(Nvr $nvr) //muestra el formulario editar 
     {
-        $marks = json_decode(file_get_contents(resource_path('js/marks.json')), true)['marks']; // json con las marcas agregadas
+        $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['marks']; // json con las marcas agregadas
         return view('front.nvr.edit', compact('nvr', 'marks'));
     }
 
@@ -162,6 +162,10 @@ class NvrController extends Controller
 
     public function destroy(Request $request, Nvr $nvr) //elimina un nvr
     {
+        $equipment = EquipmentDisuse::find($nvr->mac);
+        if ($equipment)
+            return redirect()->route('nvr.index')->with('success', 'Ya existe un registro eliminado con el mismo ID.');
+
 
         EquipmentDisuse::create([
             'id' => $nvr->mac,

@@ -30,14 +30,11 @@
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                     required>
                     <option value="">Seleccione..</option>
-                    <option value="Camión cesta" {{ ($filters['name'] ?? '') == 'Camión cesta' ? 'selected' : '' }}>
-                        Camión cesta</option>
-                    <option value="En proceso de atención"
-                        {{ ($filters['name'] ?? '') == 'En proceso de atención' ? 'selected' : '' }}>En proceso de atención
-                    </option>
-                    <option value="Inventario" {{ ($filters['name'] ?? '') == 'Inventario' ? 'selected' : '' }}>Inventario
-                    </option>
-                    <option value="Otros" {{ ($filters['name'] ?? '') == 'Otros' ? 'selected' : '' }}>Otros</option>
+                    @foreach ($names as $name)
+                        <option value="{{ $name }}" {{ ($filters['name'] ?? '') == $name ? 'selected' : '' }}>
+                            {{ $name }}</option>
+                    @endforeach
+
                 </select>
             </div>
 

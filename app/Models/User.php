@@ -3,10 +3,13 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
@@ -51,6 +54,13 @@ class User extends Authenticatable
         return $this->belongsTo(Person::class, 'person_id', 'license');
     }
 
+    //casteo 
+    protected function password(): Attribute
+    {
+        return Attribute::make(
+            set: fn($value) => Hash::make($value),
+        );
+    }
     // Métodos obligatorios por el contrato Authenticatable
     public function getAuthIdentifierName()
     {

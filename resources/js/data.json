@@ -1,0 +1,14 @@
+{
+    "marks": [
+        "HIKVISION",
+        "DAHUA",
+        "AXIS",
+        "OTRA"
+    ],
+    "conditions": [
+        "Camión cesta",
+        "En proceso de atención",
+        "Inventario",
+        "Otros"
+    ]
+}

@@ -155,8 +155,10 @@ function filter(Request $request, string $table)
                 // Ejecuta la consulta y aplica paginación
                 $conditions = $query->orderBy('created_at', 'desc')->paginate(10);
 
+                $names = json_decode(file_get_contents(resource_path('js/data.json')), true)['conditions']; // json con los tipos de condicion
+
                 // Mantiene los valores de los filtros en la vista
-                return view('front.attention.index', compact('conditions'))
+                return view('front.attention.index', compact('conditions', 'names'))
                     ->with('filters', $request->all());
                 break;
             }

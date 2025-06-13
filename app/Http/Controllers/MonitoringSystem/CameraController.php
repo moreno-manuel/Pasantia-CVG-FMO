@@ -11,7 +11,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\ValidationException;
+
 
 use function app\Helpers\filter;
 use function app\Helpers\marksUpdate;
@@ -46,7 +46,7 @@ class CameraController extends Controller
             return $available_ports > 0; // Mantener si hay puertos disponibles
         });
 
-        $marks = json_decode(file_get_contents(resource_path('js/marks.json')), true)['marks']; // json con las marcas agregadas
+        $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['marks']; // json con las marcas agregadas
 
         return view('front.camera.create', compact('nvrs', 'marks'));
     }
@@ -94,7 +94,7 @@ class CameraController extends Controller
             return $available_ports > 0; // Mantener si hay puertos disponibles
         });
 
-        $marks = json_decode(file_get_contents(resource_path('js/marks.json')), true)['marks']; // json con las marcas agregadas
+        $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['marks']; // json con las marcas agregadas
 
         // Recupera el modelo manualmente
         $camera = Camera::find($mac);
@@ -151,6 +151,10 @@ class CameraController extends Controller
     {
 
         $camera = Camera::find($mac);
+
+        $equipment = EquipmentDisuse::find($mac);
+        if ($equipment)
+            return redirect()->route('camara.index')->with('success', 'Ya existe un registro eliminado con el mismo ID.');
 
         EquipmentDisuse::create([
             'id' => $camera->mac,

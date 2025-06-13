@@ -27,7 +27,7 @@ class CameraInventoriesController extends Controller
         if (!$hasFilters) {
             $cameras = CameraInventory::orderBy('created_at', 'desc')->paginate(10);
 
-            $marks = json_decode(file_get_contents(resource_path('js/marks.json')), true)['marks']; // json con las marcas agregadas
+            $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['marks']; // json con las marcas agregadas
 
             return view('front.camera.camera_inventories.index', compact('cameras', 'marks'));
         }
@@ -37,7 +37,7 @@ class CameraInventoriesController extends Controller
 
     public function create() //muestra el formulario 
     {
-        $marks = json_decode(file_get_contents(resource_path('js/marks.json')), true)['marks']; // json con las marcas agregadas
+        $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['marks']; // json con las marcas agregadas
         return view('front.camera.camera_inventories.create', compact('marks'));
     }
 
@@ -72,10 +72,14 @@ class CameraInventoriesController extends Controller
     {
         $camera = CameraInventory::find($mac);
 
+        $equipment = EquipmentDisuse::find($mac);
+        if ($equipment)
+            return redirect()->route('inventories.index')->with('success', 'Ya existe un registro eliminado con el mismo ID.');
+
         EquipmentDisuse::create([
             'id' => $camera->mac,
             'model' => $camera->model,
-            'equipment' => 'camara_inventories',
+            'equipment' => 'Cámara',
             'location' => 'No Aplica',
             'description' => $request->input('deletion_description')
         ]);
@@ -88,6 +92,6 @@ class CameraInventoriesController extends Controller
 
         ]);
         $camera->delete();
-        return redirect()->route('inventories.index')->with('succes', 'Caámara eliminada exitosamente');
+        return redirect()->route('inventories.index')->with('success', 'Cámara eliminada exitosamente');
     }
 }

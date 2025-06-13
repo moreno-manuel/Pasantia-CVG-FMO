@@ -48,15 +48,11 @@
 
                     <br>
                     <br>
-
-
                     <div>
                         <a class="block text-gray-700 mb-2 text-center">¿Olvidó su password?<a>
-
                     </div>
 
                 </form>
-
             </div>
         </main>
 

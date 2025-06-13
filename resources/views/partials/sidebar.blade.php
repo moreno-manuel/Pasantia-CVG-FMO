@@ -13,7 +13,8 @@
 
         <!-- Nombre de usuario y persona -->
         <div class="text-sm font-medium text-blue-400">{{ auth()->user()->userName }}</div>
-        <div class="mt-1 text-lg font-semibold text-white">Admin</div>
+        <div class="mt-1 text-lg font-semibold text-white">{{ auth()->user()->person->name }}
+            {{ auth()->user()->person->last_name }}</div>
     </div>
 
     <!-- Menú de navegación -->
@@ -161,7 +162,8 @@
                         </svg>
                     </summary>
                     <ul class="mt-1 ml-4 space-y-1">
-                        <li><a href="#" class="flex items-center space-x-2 px-4 py-2 hover:bg-gray-700 rounded">
+                        <li><a href="{{ route('perfil.edit', ['user' => auth()->user()->userName]) }}"
+                                class="flex items-center space-x-2 px-4 py-2 hover:bg-gray-700 rounded">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -170,8 +172,7 @@
                                 <span>Perfil</span>
                             </a>
                         </li>
-                        <li><a href="{{ route('usuarios.index') }}"
-                                class="flex items-center space-x-2 px-4 py-2 hover:bg-gray-700 rounded">
+                        <li><a href="#" class="flex items-center space-x-2 px-4 py-2 hover:bg-gray-700 rounded">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

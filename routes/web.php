@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\Auth\PersonUserController;
+use App\Http\Controllers\Auth\PerfilController;
 use App\Http\Controllers\EquipmentDisuse\EquipmentDisuseController;
 use App\Http\Controllers\MonitoringSystem\CameraController;
 use App\Http\Controllers\MonitoringSystem\ConditionAController;
@@ -44,13 +44,17 @@ Route::controller(CameraInventoriesController::class)
     ->prefix('inventario/camara')
     ->middleware('auth')
     ->group(function () {
-        Route::get('', 'index')->name('inventories.index');       
-        Route::get('crear', 'create')->name('inventories.create'); 
-        Route::post('', 'store')->name('inventories.store');       
-        Route::delete('{id}', 'destroy')->name('inventories.destroy'); 
+        Route::get('', 'index')->name('inventories.index');
+        Route::get('crear', 'create')->name('inventories.create');
+        Route::post('', 'store')->name('inventories.store');
+        Route::delete('{id}', 'destroy')->name('inventories.destroy');
     });
 
 
-
-//falta configuraciones 
-Route::resource('usuarios', PersonUserController::class)->middleware('auth');
+Route::controller(PerfilController::class)
+    ->prefix('perfil')
+    ->middleware('auth')
+    ->group(function () {
+        Route::get('{user}', 'edit')->name('perfil.edit');
+        Route::post('{user}', 'update')->name('perfil.update');
+    });
