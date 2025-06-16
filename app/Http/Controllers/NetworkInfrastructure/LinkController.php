@@ -34,7 +34,7 @@ class LinkController extends Controller
 
     public function create() //muestra la vista para crear un nuevo link
     {
-        $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['marks']; // json con las marcas agregadas
+        $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['link_marks']; // json con las marcas agregadas
 
         return view('front.link.create', compact('marks'));
     }
@@ -59,9 +59,7 @@ class LinkController extends Controller
                 return redirect()->back()->withInput()->withErrors($validator);
             }
 
-            // si se agrega una nueva marca
-            $request = marksUpdate($request);
-
+            $request = marksUpdate($request, 'link_marks');
 
             Link::create($request->all())->save();
             return redirect()->route('enlace.index')->with('success', 'Enlace agregado exitosamente.');
@@ -78,7 +76,7 @@ class LinkController extends Controller
     {
         $link = Link::find($mac);
 
-        $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['marks']; // json con las marcas agregadas
+        $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['link_marks']; // json con las marcas agregadas
 
         return view('front.link.edit', compact('link', 'marks'));
     }
@@ -108,10 +106,8 @@ class LinkController extends Controller
                 return redirect()->back()->withInput()->withErrors($validator);
             }
 
-            // si se agrega una nueva marca
-            if ($request->filled('other_mark')) {
-                $request = marksUpdate($request);
-            }
+            $request = marksUpdate($request, 'link_marks');
+
 
             $link->update($request->all());
             return redirect()->route('enlace.index');
@@ -140,6 +136,7 @@ class LinkController extends Controller
 
         EquipmentDisuse::create([
             'id' => $link->mac,
+            'mark' => $link->mark,
             'model' => $link->model,
             'location' => $link->location,
             'equipment' => 'Enlace',
@@ -150,7 +147,6 @@ class LinkController extends Controller
             'id' => $link->mac,
             'name' => $link->name,
             'ssid' => $link->ssid,
-            'mark' => $link->mark,
             'ip' => $link->ip
         ]);
 

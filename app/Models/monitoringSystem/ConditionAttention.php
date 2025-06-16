@@ -14,7 +14,6 @@ class ConditionAttention extends Model
         'date_ini',
         'date_end',
         'status',
-        'description'
     ];
 
     protected $cast = [
@@ -25,5 +24,10 @@ class ConditionAttention extends Model
     public function camera()
     {
         return $this->belongsTo(Camera::class, 'camera_id', 'mac');
+    }
+
+    public function description()
+    {
+        return $this->hasMany(Descriptions::class);
     }
 }

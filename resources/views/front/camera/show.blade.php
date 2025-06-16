@@ -123,7 +123,6 @@
                                 <th class="px-6 py-3 text-center text-sm font-medium text-white">Tipo de Condición</th>
                                 <th class="px-6 py-3 text-center text-sm font-medium text-white">Fecha-Inicio</th>
                                 <th class="px-6 py-3 text-center text-sm font-medium text-white">Fecha-Fin</th>
-                                <th class="px-6 py-3 text-center text-sm font-medium text-white">Descripción</th>
                                 <th class="px-6 py-3 text-center text-sm font-medium text-white">Status</th>
                                 <th class="px-6 py-3 text-center text-sm font-medium text-white">Acciones</th>
                             </tr>
@@ -135,9 +134,6 @@
                                     <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $condition->date_ini }}</td>
                                     <td class="px-6 py-4 text-center text-sm text-gray-900">
                                         {{ $condition->date_end ?? 'Sin fecha de realización' }}</td>
-                                    <td class="px-6 py-4 text-center text-sm text-gray-900">
-                                        {{ $condition->description ?? 'Sin descripción' }}
-                                    </td>
                                     <td class="px-6 py-4 text-center text-sm">
                                         <span
                                             class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 

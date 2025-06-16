@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('switches', function (Blueprint $table) { //enlaces
             $table->string('serial')->primary();
+            $table->string('mark');
             $table->string('model');
             $table->string('location');
             $table->string('number_ports');

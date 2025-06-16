@@ -32,17 +32,6 @@
                         @enderror
                     </div>
 
-                    <!-- Campo Nombre -->
-                    <div>
-                        <label for="name" class="block text-sm font-semibold text-white">Nombre</label>
-                        <input type="text" name="name" value="{{ old('name') }}"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('name') border-red-500 @enderror"
-                            required>
-                        @error('name')
-                            <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
-                        @enderror
-                    </div>
-
                     <!-- Campo Marca -->
                     <div>
                         <label for="mark" class="block text-sm font-semibold text-white">Marca</label>
@@ -55,6 +44,7 @@
                                     {{ $mark }}
                                 </option>
                             @endforeach
+                            <option value="Otra">Otra</option>
                         </select>
                     </div>
 
@@ -76,6 +66,19 @@
                             class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
                     </div>
+
+
+                    <!-- Campo Nombre -->
+                    <div>
+                        <label for="name" class="block text-sm font-semibold text-white">Nombre</label>
+                        <input type="text" name="name" value="{{ old('name') }}"
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('name') border-red-500 @enderror"
+                            required>
+                        @error('name')
+                            <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
+                        @enderror
+                    </div>
+
 
                     <!-- Campo SSID -->
                     <div>
@@ -145,7 +148,7 @@
                 const otherField = document.getElementById('other-brand-field');
 
                 select.addEventListener('change', function() {
-                    if (select.value === 'OTRA') {
+                    if (select.value === 'Otra') {
                         otherField.classList.remove('hidden');
                     } else {
                         otherField.classList.add('hidden');
@@ -153,7 +156,7 @@
                 });
 
                 // Mostrar campo si ya se había seleccionado "Other" (ej: tras error de validación)
-                if (select.value === 'OTRA') {
+                if (select.value === 'Otra') {
                     otherField.classList.remove('hidden');
                 }
             });

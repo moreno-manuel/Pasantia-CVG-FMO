@@ -45,15 +45,16 @@
                                     {{ $mark }}
                                 </option>
                             @endforeach
+                            <option value="Otra">Otra</option>
                         </select>
                     </div>
 
-                    <!-- Campo Especificar otra marca -->
+                    <!-- Campo Especificar Otra marca -->
                     <div id="other-brand-field" class="hidden md:col-span-2">
                         <label for="other_brand" class="block text-sm font-semibold text-white">Especifica la marca</label>
                         <input type="text" name="other_mark" id="other_mark"
                             class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            placeholder="Nombre de la marca" value="{{ old('other_mark') }}">
+                            placeholder="Nombre de la marca" value="{{ old('other_mark') }}" required>
                     </div>
 
                     <!-- Campo Modelo -->
@@ -88,7 +89,7 @@
 
                     <!-- Campo Puertos Disponibles -->
                     <div>
-                        <label for="ports_number" class="block text-sm font-semibold text-white">Puertos Disponibles</label>
+                        <label for="ports_number" class="block text-sm font-semibold text-white">N° de Puertos</label>
                         <input type="number" name="ports_number" id="ports_number"
                             class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             min="1" max="64" value="{{ old('ports_number') }}" required>
@@ -195,7 +196,7 @@
 
                 <!-- Botón Guardar -->
                 <div class="mt-6 flex justify-end">
-                    <button type="submit"  onclick="return confirm('¿Estás seguro de guardar este Nvr?')"
+                    <button type="submit" onclick="return confirm('¿Estás seguro de guardar este Nvr?')"
                         class="inline-flex items-center px-3 py-1.5 bg-green-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-green-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                         Guardar NVR
                     </button>
@@ -212,15 +213,15 @@
                 const otherBrandField = document.getElementById('other-brand-field');
 
                 markSelect.addEventListener('change', function() {
-                    if (markSelect.value === 'OTRA') {
+                    if (markSelect.value === 'Otra') {
                         otherBrandField.classList.remove('hidden');
                     } else {
                         otherBrandField.classList.add('hidden');
                     }
                 });
 
-                // Si ya se había seleccionado "OTRA" previamente (ej: al regresar por errores)
-                if (markSelect.value === 'OTRA') {
+                // Si ya se había seleccionado "Otra" previamente (ej: al regresar por errores)
+                if (markSelect.value === 'Otra') {
                     otherBrandField.classList.remove('hidden');
                 }
             });

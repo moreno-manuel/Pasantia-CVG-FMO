@@ -91,6 +91,7 @@
                     <thead class="bg-gray-100">
                         <tr class="bg-gray-800 divide-x divide-blue-400">
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Serial</th>
+                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Mark</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Model</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">N°/Puertos</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Localidad</th>
@@ -103,6 +104,7 @@
                         @foreach ($switches as $switch)
                             <tr class="hover:bg-gray-50">
                                 <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $switch['serial'] }} </td>
+                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $switch['mark'] }} </td>
                                 <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $switch['model'] }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $switch['number_ports'] }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $switch['location'] }}</td>

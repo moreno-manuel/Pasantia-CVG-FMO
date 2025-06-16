@@ -70,8 +70,8 @@ class CameraController extends Controller
             if ($validator->fails()) {
                 return redirect()->back()->withInput()->withErrors($validator);
             }
-            // si se agrega una nueva marca
-            $request = marksUpdate($request);
+
+            $request = marksUpdate($request, 'marks');
 
             Camera::create($request->all())->save();
             return redirect()->route('camara.index')->with('success', 'Cámara agregada exitosamente.');
@@ -124,8 +124,8 @@ class CameraController extends Controller
             if ($validator->fails()) {
                 return redirect()->back()->withInput()->withErrors($validator);
             }
-            // si se agrega una nueva marca
-            $request = marksUpdate($request);
+
+            $request = marksUpdate($request, 'marks');
 
             $camera->update($request->all());
             return redirect()->route('camara.index')->with('success', 'Cámara agregada exitosamente.');
@@ -158,6 +158,7 @@ class CameraController extends Controller
 
         EquipmentDisuse::create([
             'id' => $camera->mac,
+            'mark' => $camera->mark,
             'model' => $camera->model,
             'location' => $camera->location,
             'equipment' => 'Cámara',
@@ -170,7 +171,6 @@ class CameraController extends Controller
             'id' => $camera->mac,
             'name' => $camera->name,
             'nvr_name' => $camera->mac,
-            'mark' => $camera->mark,
             'ip' => $nvr->name
         ]);
 

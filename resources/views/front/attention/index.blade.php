@@ -92,7 +92,7 @@
                                 <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $condition['name'] }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $condition['date_ini'] }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-gray-900">
-                                    {{ $condition['description'] ?? 'Sin descripción' }}</td>
+                                    {{ $condition->description()->latest()->value('text') }}</td>
 
                                 {{-- Acciones --}}
                                 <td class="px-6 py-4 text-sm align-middle">

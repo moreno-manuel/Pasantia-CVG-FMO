@@ -5,12 +5,11 @@ namespace App\Http\Controllers\MonitoringSystem;
 use App\Http\Controllers\Controller;
 use App\Models\monitoringSystem\Camera;
 use App\Models\monitoringSystem\ConditionAttention;
-use Carbon\Carbon;
+use App\Models\monitoringSystem\Descriptions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 use function app\Helpers\conditionValidate;
-use function app\Helpers\conditionValidateUpdate;
 use function app\Helpers\filter;
 
 /* Controlador crud 
@@ -49,7 +48,7 @@ class ConditionAController extends Controller
             'camera_id' => 'required',
             'date_ini' => 'required|date',
             'date_end' => 'nullable|date|after_or_equal:date_ini',
-            'description' => 'nullable'
+            'description' => 'required'
         ], [
             'after_or_equal' => 'La :attribute debe ser posterior o igual a :date'
         ], [
@@ -63,7 +62,6 @@ class ConditionAController extends Controller
         }
 
         $condition = ConditionAttention::where('camera_id', $request->input('camera_id'))->latest()->first(); //busqueda explicita,last condición
-
         if ($condition) {
             $validate = conditionValidate($request, $condition); //reglas de validación 
             if ($validate != 'success')
@@ -77,15 +75,17 @@ class ConditionAController extends Controller
             'camera_id' => $request->input('camera_id'),
             'date_ini' => $request->input('date_ini'),
             'date_end' => $request->input('date_end'),
-            'description' => $request->input('description'),
             'status' => $status,
 
         ]);
 
-        //atualiza el estado de la cámara
-        if ($status == 'Por atender')
-            $condition->camera->update(['status' => 'Inactivo']);
+        Descriptions::create([ //descripción de la condición
+            'condition_attention_id' => $condition->id,
+            'text' => $request->input('description'),
+        ]);
 
+        if ($status == 'Por atender')
+            $condition->camera->update(['status' => 'Inactivo']);   //atualiza el estado de la cámara
 
         return redirect()->route('atencion.index')->with('success', 'Condición de Atención agregada exitosamente');
     }
@@ -100,17 +100,10 @@ class ConditionAController extends Controller
 
     public function update(Request $request,  $id) //actualiza los datos de un registro
     {
-        $conditionUpdate = ConditionAttention::find($id);
 
         $validator = Validator::make($request->all(), [
-            'date_ini' => 'required|date',
-            'date_end' => 'nullable|date|after_or_equal:date_ini',
-            'description' => 'nullable'
-        ], [
-            'after_or_equal' => 'La :attribute debe ser posterior o igual a :date'
-        ], [
-            'date_ini' => 'Fecha de Inicio',
-            'date_end' => 'Fecha de Realización'
+            'date_end' => 'nullable|date',
+            'description' => 'required'
         ]);
 
 
@@ -118,27 +111,25 @@ class ConditionAController extends Controller
             return redirect()->back()->withInput()->withErrors($validator);
         }
 
-        $condition = ConditionAttention::where('camera_id', $request->input('camera_id'))->latest()->first(); //busqueda explicita,last condición
+        $condition = ConditionAttention::find($id);
 
-        if ($condition) {
-            $validate = conditionValidateUpdate($request, $condition); //reglas de validación 
-            if ($validate != 'success')
-                return redirect()->back()->withInput()->withErrors($validate); //retorna el tipo de error 
+        if ($request->filled('description')) { //si se agrega una descripción
+            Descriptions::create([
+                'condition_attention_id' => $condition->id,
+                'text' => $request->input('description'),
+            ]);
         }
 
         $status = $request->filled('date_end') ? 'Atendido' : 'Por atender';
-
-        $conditionUpdate->update([
-            'date_ini' => $request->input('date_ini'),
+        $condition->update([
             'date_end' => $request->input('date_end'),
-            'description' => $request->input('description'),
             'status' => $status,
 
         ]);
 
         //atualiza el estado de la cámara
         if ($status == 'Atendido')
-            $conditionUpdate->camera->update(['status' => 'Activo']);
+            $condition->camera->update(['status' => 'Activo']);
 
         return redirect()->route('atencion.index')->with('success', 'Condición de Atención actualizada exitosamente');
     }
@@ -147,7 +138,8 @@ class ConditionAController extends Controller
     public function show($id) //muestra los detalles de un registro
     {
         $condition = ConditionAttention::find($id);
-        return view('front.attention.show', compact('condition'));
+        $descriptions = $condition->description()->orderBy('created_at', 'desc')->paginate(5); //obtiene las descripciones de la condición
+        return view('front.attention.show', compact('condition', 'descriptions'));
     }
 
 
@@ -156,7 +148,6 @@ class ConditionAController extends Controller
         $condition = ConditionAttention::find($id);
 
         $conditionLast = ConditionAttention::where('camera_id', $condition->camera_id)->latest()->first(); //busqueda explicita,last condición
-
         if ($conditionLast) {
             if ($condition->is($conditionLast)) { //si la que se elimina es la ultima condición 
                 $condition->camera->update(['status' => 'Activo']); // cámara regresa a su status original

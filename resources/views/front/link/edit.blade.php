@@ -54,6 +54,7 @@
                                     {{ $mark }}
                                 </option>
                             @endforeach
+                            <option value="Otra">Otra</option>
                         </select>
                     </div>
 
@@ -143,7 +144,7 @@
                 const otherField = document.getElementById('other-brand-field');
 
                 select.addEventListener('change', function() {
-                    if (select.value === 'OTRA') {
+                    if (select.value === 'Otra') {
                         otherField.classList.remove('hidden');
                     } else {
                         otherField.classList.add('hidden');
@@ -151,7 +152,7 @@
                 });
 
                 // Mostrar campo si ya se había seleccionado "Other" (ej: tras error de validación)
-                if (select.value === 'OTRA') {
+                if (select.value === 'Otra') {
                     otherField.classList.remove('hidden');
                 }
             });

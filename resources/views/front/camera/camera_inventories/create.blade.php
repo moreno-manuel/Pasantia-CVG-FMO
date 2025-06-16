@@ -44,6 +44,7 @@
                                     {{ $mark }}
                                 </option>
                             @endforeach
+                            <option value="Otra">Otra</option>
                         </select>
                     </div>
 
@@ -59,7 +60,7 @@
                     </div>
 
 
-                    <!-- Campo Especificar otra marca -->
+                    <!-- Campo Especificar Otra marca -->
                     <div id="other-brand-field" class="hidden md:col-span-2">
                         <label for="other_mark" class="block text-sm font-semibold text-white">Especifica la marca</label>
                         <input type="text" name="other_mark" id="other_mark"
@@ -120,7 +121,7 @@
                 const otherField = document.getElementById('other-brand-field');
 
                 select.addEventListener('change', function() {
-                    if (select.value === 'OTRA') {
+                    if (select.value === 'Otra') {
                         otherField.classList.remove('hidden');
                     } else {
                         otherField.classList.add('hidden');
@@ -128,7 +129,7 @@
                 });
 
                 // Mostrar campo si ya se había seleccionado "Other" (ej: tras error de validación)
-                if (select.value === 'OTRA') {
+                if (select.value === 'Otra') {
                     otherField.classList.remove('hidden');
                 }
             });

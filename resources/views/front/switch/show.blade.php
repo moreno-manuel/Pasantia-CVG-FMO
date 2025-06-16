@@ -34,26 +34,32 @@
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $switch['serial'] }}</dd>
                     </div>
 
-                    <!-- Campo Modelo -->
+                    <!-- Campo marca -->
                     <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-300">Marca</dt>
+                        <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $switch['mark'] }}</dd>
+                    </div>
+
+                    <!-- Campo Modelo -->
+                    <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">Modelo</dt>
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $switch['model'] }}</dd>
                     </div>
 
                     <!-- Campo Número de Puertos -->
-                    <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">Número de Puertos</dt>
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $switch['number_ports'] }}</dd>
                     </div>
 
                     <!-- Campo Localidad -->
-                    <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">Localidad</dt>
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $switch['location'] }}</dd>
                     </div>
 
                     <!-- Campo Status -->
-                    <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">Status</dt>
                         <dd class="mt-1 text-sm sm:mt-0 sm:col-span-2">
                             <span
@@ -65,7 +71,7 @@
                     </div>
 
                     <!-- Campo Descripción -->
-                    <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">Descripción</dt>
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
                             {{ $switch['description'] ?? 'Sin descripción' }}
@@ -78,13 +84,13 @@
 
         <!-- Acciones -->
         <div class="mt-6 flex space-x-3">
-            <a href="{{ route('enlace.edit', $switch) }}"
+            <a href="{{ route('switch.edit', $switch) }}"
                 class="inline-flex items-center px-3 py-1.5 bg-yellow-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-yellow-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
                 Editar
             </a>
 
             <!-- Botón Eliminar -->
-            <button type="button" onclick="openDeleteModal('{{ route('enlace.destroy', $switch) }}')"
+            <button type="button" onclick="openDeleteModal('{{ route('switch.destroy', $switch) }}')"
                 class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-red-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                 Eliminar
             </button>

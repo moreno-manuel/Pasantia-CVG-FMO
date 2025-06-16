@@ -8,17 +8,16 @@ use App\Models\EquipmentDisuse\NvrDisuse;
 use App\Models\equipmentDisuse\SlotNvrDisuse;
 use App\Models\monitoringSystem\Nvr;
 use App\Models\monitoringSystem\SlotNvr;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+
 
 
 use function app\Helpers\filter;
 use function app\Helpers\marksUpdate;
 use function app\Helpers\nvrSlotValidateCreate;
 use function app\Helpers\nvrSlotValidateUpdate;
-use Exception;
+
 
 /* controlador para el crud de nvr
 y sus volumenes */
@@ -54,7 +53,7 @@ class NvrController extends Controller
             $validated = $request->validate([  // Validación principal del NVR
                 'mac' => 'required|unique:nvrs,mac',
                 'mark' => 'required',
-                'other_mark' => 'required_if:mark,OTRA',
+                'other_mark' => 'required_if:mark,Otra',
                 'model' => 'required',
                 'name' => 'required|unique:nvrs,name',
                 'ip' => 'required|ip|unique:nvrs,ip',
@@ -65,13 +64,11 @@ class NvrController extends Controller
                 'description' => 'nullable'
             ], ['required_if' => 'Debe agregar el nombre de la marca']);
 
-
             $slots = nvrSlotValidateCreate($request); //valida slot y devuelve un arreglo con datos de los slots 
 
-            $request = marksUpdate($request);   // para nueva marca 
+            $request = marksUpdate($request, 'marks');
 
             Nvr::create($request->all());       // Guarda el NVR
-
 
             foreach ($slots as $index => $slot) { // Guarda los datos para cada volumen (slot)
                 $status = 'Disponible';
@@ -121,10 +118,9 @@ class NvrController extends Controller
 
             $slotsRequest = nvrSlotValidateUpdate($request, $nvr); //validación para los slots
 
-            $request = marksUpdate($request);   // para nueva marca 
+            $request = marksUpdate($request, 'marks');
 
             $nvr->update($request->all());   // actualiza nvr
-
 
             $slots = $nvr->slotNvr;  //slots que seran actualizados 
             $i = 0;
@@ -169,6 +165,7 @@ class NvrController extends Controller
 
         EquipmentDisuse::create([
             'id' => $nvr->mac,
+            'mark' => $nvr->mark,
             'model' => $nvr->model,
             'location' => $nvr->location,
             'equipment' => 'Nvr',
@@ -180,10 +177,7 @@ class NvrController extends Controller
             'name' => $nvr->name,
             'ports_number' => $nvr->ports_number,
             'ip' => $nvr->ip,
-            'mark' => $nvr->mark,
             'slot_number' => $nvr->slot_number
-
-
         ]);
 
         foreach ($nvr->slotNvr as  $slot) {

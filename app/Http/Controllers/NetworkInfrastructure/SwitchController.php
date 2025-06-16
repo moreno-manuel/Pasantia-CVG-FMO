@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 use function app\Helpers\filter;
+use function app\Helpers\marksUpdate;
 
 //controlador para el crud del switch
 class SwitchController extends Controller
@@ -32,7 +33,8 @@ class SwitchController extends Controller
 
     public function create() //muestra la vista para crear un nuevo switch
     {
-        return view('front.switch.create');
+        $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['switch_marks']; // json con las marcas agregadas
+        return view('front.switch.create', compact('marks'));
     }
 
     public function store(Request $request) //guarda los datos de un switch nuevo
@@ -40,6 +42,8 @@ class SwitchController extends Controller
 
         $validator = Validator::make($request->all(), [ //para capturar si hay dato incorrecto
             'serial' => 'required|unique:switches',
+            'mark' => 'required',
+            'other_mark' => 'required_if:mark,OTRA',
             'model' => 'required',
             'location' => 'required',
             'number_ports' => 'required',
@@ -52,20 +56,24 @@ class SwitchController extends Controller
             return redirect()->back()->withInput()->withErrors($validator);
         }
 
-        Switche::create($request->all())->save();
+        $request = marksUpdate($request, 'switch_marks');
 
+        Switche::create($request->all())->save();
         return redirect()->route('switch.index')->with('success', 'Switch creado exitosamente.');
     }
 
     public function edit(Switche $switch) //muestra la vista para editar un switch
     {
-        return view('front.switch.edit', compact('switch'));
+        $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['switch_marks']; // json con las marcas agregadas
+        return view('front.switch.edit', compact('switch', 'marks'));
     }
 
     public function update(Request $request, Switche $switch) //Actualiza los datos de un switch
     {
 
         $validator = Validator::make($request->all(), [ //para capturar si hay dato incorrecto
+            'mark' => 'required',
+            'other_mark' => 'required_if:mark,OTRA',
             'number_ports' => 'required',
             'location' => 'required',
             'status' => 'required',
@@ -96,6 +104,7 @@ class SwitchController extends Controller
 
         EquipmentDisuse::create([
             'id' => $switch->serial,
+            'mark' => $switch->mark,
             'model' => $switch->model,
             'location' => $switch->location,
             'equipment' => 'Switch',

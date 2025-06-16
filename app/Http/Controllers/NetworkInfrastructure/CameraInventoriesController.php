@@ -58,13 +58,9 @@ class CameraInventoriesController extends Controller
             return redirect()->back()->withInput()->withErrors($validator);
         }
 
-        // si se agrega una nueva marca
-        if ($request->filled('other_mark')) {
-            $request = marksUpdate($request);
-        }
+        $request = marksUpdate($request, 'marks');
 
         CameraInventory::create($request->all())->save();
-
         return redirect()->route('inventories.index')->with('succes', 'Caámara eliminada exitosamente');
     }
 
@@ -78,6 +74,7 @@ class CameraInventoriesController extends Controller
 
         EquipmentDisuse::create([
             'id' => $camera->mac,
+            'mark' => $camera->mark,
             'model' => $camera->model,
             'equipment' => 'Cámara',
             'location' => 'No Aplica',
@@ -86,7 +83,6 @@ class CameraInventoriesController extends Controller
 
         CameraInventoriesDisuse::create([
             'id' => $camera->mac,
-            'mark' => $camera->mark,
             'destination' => $camera->destination,
             'delivery_note' => $camera->delivery_note
 

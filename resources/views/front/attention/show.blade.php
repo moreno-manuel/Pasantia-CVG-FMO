@@ -24,7 +24,7 @@
                 </p>
             </div>
 
-            <!-- Datos del Enlace -->
+            <!-- Datos de la condicion -->
             <div class="border-t border-gray-700">
                 <dl>
 
@@ -64,14 +64,6 @@
                             </span>
                         </dd>
                     </div>
-
-                    <!-- Campo Descripción -->
-                    <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-300">Descripción</dt>
-                        <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
-                            {{ $condition['description'] ?? 'Sin descripción' }}
-                        </dd>
-                    </div>
                 </dl>
             </div>
         </div>
@@ -93,5 +85,35 @@
                 </button>
             </form>
         </div>
+
+
+        <br>
+
+        <!-- Tabla -->
+        <div class="mt-8">
+            <h3 class="text-lg font-medium text-black mb-3">Control de Condición de Atención</h3>
+            <div class="overflow-x-auto">
+                <table class="min-w-full shadow-md rounded-lg overflow-hidden bg-white border border-gray-300">
+                    <thead class="bg-gray-100">
+                        <tr class="bg-gray-800 divide-x divide-blue-400">
+                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Fecha</th>
+                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Descripción</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        @foreach ($descriptions as $description)
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 text-center text-sm text-gray-900">
+                                    {{ $description->created_at->format('Y/m/d') }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $description->text }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {{-- {{-- paginacion 
+        {{ $conditions->links() }} --}}
+
     </div>
 @endsection

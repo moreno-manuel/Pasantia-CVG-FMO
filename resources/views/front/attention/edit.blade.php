@@ -9,7 +9,6 @@
             <div class="flex justify-between items-center mb-6">
                 <h1 class="text-2xl font-bold text-white">Editar Condición de Atención</h1>
 
-                <!-- Botón Volver -->
                 <a href="{{ route('atencion.index') }}"
                     class="inline-flex items-center px-3 py-1.5 bg-gray-500 text-white font-semibold rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-gray-600 hover:shadow-md hover:-translate-y-px text-xs uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
                     Volver
@@ -43,14 +42,9 @@
                     <div class="mb-4">
                         <label for="date_ini" class="block text-sm font-semibold text-white">Fecha de inicio</label>
                         <input type="date" name="date_ini" id="date_ini" max="{{ now()->format('Y-m-d') }}"
-                            class="mt-1 block w-full rounded-md bg-gray-900 border border-gray-600 text-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('date_ini') border-red-500 @enderror"
+                            class="mt-1 block w-full rounded-md bg-gray-900 border border-gray-600 text-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             value="{{ old('date_ini', $condition->date_ini) }}" required disabled>
-
-                        @error('date_ini')
-                            <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
-                        @enderror
                     </div>
-
 
                     <!-- Campo Fecha de Finalización -->
                     <div class="mb-4">
@@ -60,13 +54,18 @@
                             value="{{ old('date_end', $condition->date_end) }}">
                     </div>
 
+
                     <!-- Campo Descripción -->
                     <div class="md:col-span-2">
                         <label for="description" class="block text-sm font-semibold text-white">Descripción</label>
                         <textarea name="description" id="description" value="{{ old('description') }}" rows="3"
                             class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            placeholder="Describe brevemente la condición de atención...">{{ $condition->description }}</textarea>
+                            placeholder="Describe brevemente la condición de atención..."required></textarea>
+                        <label for="date_end" class="block text-xs font-semibold text-green-400">útlima descripción generada
+                            el
+                            ({{ $condition->description()->latest()->value('created_at')->format('Y/m/d') }})</label>
                     </div>
+
                 </div>
 
                 <!-- Botón Guardar -->

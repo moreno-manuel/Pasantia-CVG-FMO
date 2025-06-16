@@ -15,6 +15,7 @@ class Switche extends Model
 
     protected $fillable = [
         'serial',
+        'mark',
         'model',
         'location',
         'number_ports',

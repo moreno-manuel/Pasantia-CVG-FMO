@@ -1,14 +1,21 @@
 {
     "marks": [
+        "HJKH",
         "HIKVISION",
         "DAHUA",
-        "AXIS",
-        "OTRA"
+        "AXIS"
     ],
     "conditions": [
-        "Camión cesta",
-        "En proceso de atención",
+        "Cami\u00f3n cesta",
+        "En proceso de atenci\u00f3n",
         "Inventario",
         "Otros"
+    ],
+    "switch_marks": [
+        "HIKVISION",
+        "TP-LINK"
+    ],
+    "link_marks": [
+        "UBIQUITI"
     ]
 }

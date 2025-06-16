@@ -5,7 +5,7 @@
     <div class="container mx-auto px-4 py-6">
         <div class="bg-gray-800 shadow overflow-hidden sm:rounded-lg p-6 border border-gray-700">
 
-            {{-- Título y botón volver --}}
+            {{-- Título --}}
             <div class="flex justify-between items-center mb-6">
                 <h1 class="text-2xl font-bold text-white">Crear Nueva Condición de Atención</h1>
 
@@ -35,7 +35,6 @@
                                 </option>
                             @endforeach
                         </select>
-
                     </div>
 
                     <!-- Campo camara ID -->
@@ -64,11 +63,11 @@
                         <input type="date" name="date_ini" id="date_ini" max="{{ now()->format('Y-m-d') }}"
                             class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('date_ini') border-red-500 @enderror"
                             value="{{ old('date_ini') }}" required>
+
                         @error('date_ini')
                             <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
                         @enderror
                     </div>
-
 
                     <!-- Campo Fecha de Finalización -->
                     <div class="mb-4">
@@ -83,7 +82,7 @@
                         <label for="description" class="block text-sm font-semibold text-white">Descripción</label>
                         <textarea name="description" id="description" value="{{ old('description') }}" rows="3"
                             class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            placeholder="Describe brevemente la condición de atención..."></textarea>
+                            placeholder="Describe brevemente la condición de atención..." required></textarea>
                     </div>
                 </div>
 

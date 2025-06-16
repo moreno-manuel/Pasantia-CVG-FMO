@@ -44,6 +44,7 @@
                                     {{ $mark }}
                                 </option>
                             @endforeach
+                            <option value="Otra">Otra</option>
                         </select>
                     </div>
 
@@ -136,7 +137,7 @@
 
                 <!-- Botón Actualizar -->
                 <div class="mt-6 flex justify-end">
-                    <button type="submit"  onclick="return confirm('¿Estás seguro de actualizar datos de Cámara?')"
+                    <button type="submit" onclick="return confirm('¿Estás seguro de actualizar datos de Cámara?')"
                         class="inline-flex items-center px-3 py-1.5 bg-green-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-green-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                         Actualizar Cámara
                     </button>
@@ -153,7 +154,7 @@
                 const otherField = document.getElementById('other-brand-field');
 
                 select.addEventListener('change', function() {
-                    if (select.value === 'OTRA') {
+                    if (select.value === 'Otra') {
                         otherField.classList.remove('hidden');
                     } else {
                         otherField.classList.add('hidden');
@@ -161,7 +162,7 @@
                 });
 
                 // Mostrar campo si ya se había seleccionado "Other" (ej: tras error de validación)
-                if (select.value === 'OTRA') {
+                if (select.value === 'Otra') {
                     otherField.classList.remove('hidden');
                 }
             });

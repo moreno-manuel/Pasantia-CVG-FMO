@@ -22,7 +22,6 @@ para la busqueda*/
 
 function filter(Request $request, string $table)
 {
-
     switch ($table) {
         case 'switches': {
                 // Obtén el valor del filtro
@@ -220,45 +219,38 @@ function filter(Request $request, string $table)
 
 /* para actualizar el json marks 
 para el manejo de las marcas */
-
-function marksUpdate(Request $request)
+function marksUpdate(Request $request, $data)
 {
     if ($request->filled('other_mark')) {
         $newMark = strtoupper($request->input('other_mark'));
 
-        // Ruta del archivo JSON
-        $filePath = resource_path('js/marks.json');
+        $filePath = resource_path('js/data.json'); // Ruta del archivo JSON
 
-        // Cargar marcas actuales
         if (File::exists($filePath)) {
-            $json = json_decode(File::get($filePath), true);
-            $marks = $json['marks'];
+            $jsonData = json_decode(File::get($filePath), true); // Cargar TODO el contenido JSON actual
 
-            // Solo agregar si no existe ya
-            if (!in_array($newMark, $marks)) {
-                array_unshift($marks, $newMark);
+            if (isset($jsonData[$data])) {   // Verificar si la clave existe en el JSON
+                $currentArray = $jsonData[$data];  // Obtener el arreglo específico
 
-                // Guardar nuevamente el archivo JSON con la nueva marca
-                File::put($filePath, json_encode(['marks' => $marks], JSON_PRETTY_PRINT));
+                if (!in_array($newMark, $currentArray)) { // Verificar si el nuevo valor ya existe
+                    array_unshift($currentArray, $newMark);  // Agregar el nuevo valor al principio
+
+                    $jsonData[$data] = $currentArray;   // Actualizar SOLO el arreglo modificado
+
+                    File::put($filePath, json_encode($jsonData, JSON_PRETTY_PRINT)); // Guardar TODO el JSON con los cambios
+                }
             }
+            $request['mark'] = $newMark;
         }
 
-        // se elimina el campo other_mark y se agrega el valor en el campo mark
-        $request->offsetUnset('other_mark');
-        $request['mark'] = $newMark;
-    } else {
-        $request->offsetUnset('other_mark'); //elimina el campo para nueva marca
+        $request->offsetUnset('other_mark'); // se elimina el campo other_mark y se agrega el valor en el campo mark
+        return $request;
     }
-
-
-    return $request;
 }
-
 
 /* para liberar el metodo 
 store de NvrController con las validaciones 
 de los slots*/
-
 function nvrSlotValidateCreate(Request $request)
 {
     $slotRules = []; //guarda reglas de validacion
@@ -295,7 +287,6 @@ function nvrSlotValidateCreate(Request $request)
 
 /* para liberar el metodo 
 store de NvrController con las validaciones */
-
 function nvrSlotValidateUpdate(Request $request, Nvr $nvr)
 {
     $existingSlots = []; // Aquí almacena los valores existentes de capacity_max por slot
@@ -357,28 +348,6 @@ function conditionValidate(Request $request, $condition)
         //si la fecha final de la ultima atencion supera a la fecha inicial de la nueva atencion
     } else if ($condition->date_end > $request->input('date_ini')) {
         return ['camera_id' => 'La nueva condición de atención para la cámara seleccionada debe tener una fecha mayor o igual a la anterior (' . $condition->date_end . ")"];
-
-        //si se ingresa fechas futuras
-    } else if ($date_max) {
-        return ['date_ini' => 'La fecha ingresada supera la fecha actual (' . Carbon::now()->format('d/m/Y') . ')'];
-    }
-
-    return 'success';
-}
-
-
-
-/* para liberar el metodo update
-de ConditionACotroller  */
-
-function conditionValidateUpdate(Request $request, $condition)
-{
-    //para validar fecha futura
-    $date_max = Carbon::parse($request->input('date_ini'))->isFuture();
-
-    //si la fecha final de la ultima atencion supera a la fecha inicial de la nueva atencion
-    if ($condition->date_end > $request->input('date_ini')) {
-        return ['camera_id' => 'La condición de atención para la cámara seleccionada debe tener una fecha mayor o igual a la anterior (' . $condition->date_end . ")"];
 
         //si se ingresa fechas futuras
     } else if ($date_max) {

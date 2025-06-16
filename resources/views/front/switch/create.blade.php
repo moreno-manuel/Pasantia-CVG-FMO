@@ -33,6 +33,33 @@
                         @enderror
                     </div>
 
+                    <!-- Campo Marca -->
+                    <div>
+                        <label for="mark" class="block text-sm font-semibold text-white">Marca</label>
+                        <select name="mark" id="mark"
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            required>
+                            <option value="">Seleccione..</option>
+                            @foreach ($marks as $mark)
+                                <option value="{{ $mark }}" {{ old('mark') == $mark ? 'selected' : '' }}>
+                                    {{ $mark }}
+                                </option>
+                            @endforeach
+                            <option value="Otra">Otra</option>
+                        </select>
+                    </div>
+
+                    <!-- Campo para marca personalizada -->
+                    <div id="other-brand-field" class="hidden">
+                        <label for="other_brand" class="block text-sm font-semibold text-white">Especifica la marca</label>
+                        <input type="text" name="other_mark" id="other_mark" value="{{ old('other_mark') }}"
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('other_mark') border-red-500 @enderror"
+                            placeholder="Nombre de la marca">
+                        @error('other_mark')
+                            <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
+                        @enderror
+                    </div>
+
                     <!-- Campo Modelo -->
                     <div>
                         <label for="model" class="block text-sm font-semibold text-white">Modelo</label>
@@ -89,4 +116,27 @@
             </form>
         </div>
     </div>
+
+    {{-- para el campo marca  --}}
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const select = document.getElementById('mark');
+                const otherField = document.getElementById('other-brand-field');
+
+                select.addEventListener('change', function() {
+                    if (select.value === 'Otra') {
+                        otherField.classList.remove('hidden');
+                    } else {
+                        otherField.classList.add('hidden');
+                    }
+                });
+
+                // Mostrar campo si ya se había seleccionado "Other" (ej: tras error de validación)
+                if (select.value === 'Otra') {
+                    otherField.classList.remove('hidden');
+                }
+            });
+        </script>
+    @endpush
 @endsection
