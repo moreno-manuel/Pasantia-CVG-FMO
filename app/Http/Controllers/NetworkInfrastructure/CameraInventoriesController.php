@@ -66,9 +66,9 @@ class CameraInventoriesController extends Controller
 
     public function destroy($mac, Request $request) //elimina un registro
     {
-        $camera = CameraInventory::find($mac);
+        $camera = CameraInventory::findOrFail($mac);
 
-        $equipment = EquipmentDisuse::find($mac);
+        $equipment = EquipmentDisuse::findOrFail($mac);
         if ($equipment)
             return redirect()->route('inventories.index')->with('success', 'Ya existe un registro eliminado con el mismo ID.');
 

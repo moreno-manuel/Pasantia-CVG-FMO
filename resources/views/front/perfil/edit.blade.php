@@ -11,7 +11,7 @@
             </div>
 
             {{-- Formulario --}}
-            <form action="#" method="POST">
+            <form action="{{ route('perfil.update', $user->userName) }}" method="POST">
                 @csrf
                 @method('PUT')
 
@@ -21,18 +21,17 @@
                     <!-- Campo ficha  -->
                     <div>
                         <label for="ficha" class="block text-sm font-semibold text-white">Ficha</label>
-                        <input type="text" name="ficha" value="{{ old('ficha', $user->person->license) }}"
+                        <input type="text" name="ficha" value="{{ $user->person->license }}"
                             class="mt-1 block w-full rounded-md bg-gray-900 border border-gray-600 text-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            required>
+                            disabled readonly>
                     </div>
-
 
                     <!-- Campo nombre -->
                     <div>
                         <label for="name" class="block text-sm font-semibold text-white">Nombre</label>
                         <input type="text" name="name" id="name"
                             class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            value="{{ old('name', $user->person->name) }}" readonly>
+                            value="{{ old('name', $user->person->name) }}" required>
                     </div>
 
                     <!-- Campo apellido  -->
@@ -61,47 +60,95 @@
                 </div>
 
                 <br>
+
                 {{-- datos usuario --}}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
                     <!-- Campo nombre de usuario  -->
                     <div>
-                        <label for="ficha" class="block text-sm font-semibold text-white">Nombre de Usuario</label>
-                        <input type="text" name="ficha" value="{{ old('ficha', $user->userName) }}"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            required>
+                        <label for="name" class="block text-sm font-semibold text-white">Nombre de Usuario</label>
+                        <input type="text" name="name" value="{{ $user->userName }}"
+                            class="mt-1 block w-full rounded-md bg-gray-900 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            disabled readonly>
                     </div>
 
                     <!-- Campo email -->
                     <div>
                         <label for="email" class="block text-sm font-semibold text-white">Email</label>
-                        <input type="text" name="email" value="{{ old('email', $user->email) }}"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        <input type="email" name="email" value="{{ old('email', $user->email) }}"
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm  @error('email') border-red-500 @enderror"
                             required>
+                        @error('email')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                     </div>
-                
+
+                    <!-- Campo contraseña -->
                     <div>
                         <label for="password" class="block text-sm font-semibold text-white">Contraseña</label>
-                        <input id="password" type="password"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('password') border-red-500 @enderror"
-                            name="password" value="{{ old('password', $user->password) }}" required
-                            autocomplete="current-password">
-
+                        <div class="relative">
+                            <input id="password" type="password"
+                                class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('password') border-red-500 @enderror"
+                                name="password" value="{{ old('password') }}" autocomplete="current-password">
+                            <!-- Botón para mostrar/ocultar contraseña -->
+                            <button type="button" onclick="togglePasswordVisibility('password')"
+                                class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+                                <i id="eye-icon-password" class="fas fa-eye"></i>
+                            </button>
+                        </div>
                         @error('password')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
                     </div>
 
-
-                    <!-- Botón Actualizar -->
-                    <div class="mt-6 flex justify-end">
-                        <button type="submit"
-                            class="inline-flex items-end px-3 py-1.5 bg-green-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-green-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                            onclick="return confirm('¿Está seguro de actualizar datos de usuario?')">
-                            Actualizar Datos
-                        </button>
+                    <!-- Campo confirmar contraseña -->
+                    <div>
+                        <label for="password_confirmation" class="block text-sm font-semibold text-white">Confirmar
+                            Contraseña</label>
+                        <div class="relative">
+                            <input id="password_confirmation" type="password"
+                                class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('password_confirmation') border-red-500 @enderror"
+                                name="password_confirmation">
+                            <!-- Botón para mostrar/ocultar contraseña -->
+                            <button type="button" onclick="togglePasswordVisibility('password_confirmation')"
+                                class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+                                <i id="eye-icon-password_confirmation" class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        @error('password_confirmation')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                     </div>
+                </div>
+
+                <!-- Botón Actualizar -->
+                <div class="mt-6 flex justify-end">
+                    <button type="submit"
+                        class="inline-flex items-end px-3 py-1.5 bg-green-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-green-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                        onclick="return confirm('¿Está seguro de actualizar datos de usuario?')">
+                        Actualizar Datos
+                    </button>
                 </div>
             </form>
         </div>
     </div>
+
+    {{-- para visualizar las contraseñas  --}}
+    @push('scripts')
+        <script>
+            function togglePasswordVisibility(id) {
+                const input = document.getElementById(id);
+                const icon = document.getElementById(`eye-icon-${id}`);
+                if (input.type === "password") {
+                    input.type = "text";
+                    icon.classList.remove("fa-eye");
+                    icon.classList.add("fa-eye-slash");
+                } else {
+                    input.type = "password";
+                    icon.classList.remove("fa-eye-slash");
+                    icon.classList.add("fa-eye");
+                }
+            }
+        </script>
+    @endpush
 @endsection

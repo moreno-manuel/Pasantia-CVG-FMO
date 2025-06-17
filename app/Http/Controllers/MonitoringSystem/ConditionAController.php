@@ -37,7 +37,6 @@ class ConditionAController extends Controller
         $cameras = Camera::all();
 
         $names = json_decode(file_get_contents(resource_path('js/data.json')), true)['conditions']; // json con los tipos de condicion
-
         return view('front.attention.create', compact('cameras', 'names'));
     }
 
@@ -93,7 +92,7 @@ class ConditionAController extends Controller
 
     public function edit($id) //vista para editar un registro
     {
-        $condition = ConditionAttention::find($id);
+        $condition = ConditionAttention::findOrFail($id);
         return view('front.attention.edit', compact('condition'));
     }
 
@@ -145,7 +144,7 @@ class ConditionAController extends Controller
 
     public function destroy($id) //Elimina un regitro 
     {
-        $condition = ConditionAttention::find($id);
+        $condition = ConditionAttention::findOrFail($id);
 
         $conditionLast = ConditionAttention::where('camera_id', $condition->camera_id)->latest()->first(); //busqueda explicita,last condición
         if ($conditionLast) {

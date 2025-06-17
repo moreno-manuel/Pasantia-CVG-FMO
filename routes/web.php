@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\PerfilController;
+use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\EquipmentDisuse\EquipmentDisuseController;
 use App\Http\Controllers\MonitoringSystem\CameraController;
 use App\Http\Controllers\MonitoringSystem\ConditionAController;
@@ -11,11 +12,8 @@ use App\Http\Controllers\NetworkInfrastructure\LinkController;
 use App\Http\Controllers\NetworkInfrastructure\SwitchController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('auth.login');
-});
 
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
@@ -29,17 +27,6 @@ Route::resource('enlace', LinkController::class)->middleware('auth');
 Route::resource('nvr', NvrController::class)->middleware('auth');
 Route::resource('camara', CameraController::class)->middleware('auth');
 Route::resource('atencion', ConditionAController::class)->middleware('auth');
-
-
-Route::controller(EquipmentDisuseController::class)
-    ->prefix('historial/eliminados')
-    ->middleware('auth')
-    ->group(function () {
-        Route::get('', 'index')->name('eliminated.index');
-        Route::get('{id}', 'show')->name('eliminated.show');
-        Route::delete('{id}', 'destroy')->name('eliminated.destroy');
-    });
-
 Route::controller(CameraInventoriesController::class)
     ->prefix('inventario/camara')
     ->middleware('auth')
@@ -51,10 +38,22 @@ Route::controller(CameraInventoriesController::class)
     });
 
 
+Route::controller(EquipmentDisuseController::class)
+    ->prefix('historial/eliminados')
+    ->middleware('auth')
+    ->group(function () {
+        Route::get('', 'index')->name('eliminated.index');
+        Route::get('{id}', 'show')->name('eliminated.show');
+        Route::delete('{id}', 'destroy')->name('eliminated.destroy');
+    });
+
+
 Route::controller(PerfilController::class)
     ->prefix('perfil')
     ->middleware('auth')
     ->group(function () {
         Route::get('{user}', 'edit')->name('perfil.edit');
-        Route::post('{user}', 'update')->name('perfil.update');
+        Route::put('{user}', 'update')->name('perfil.update');
     });
+
+Route::resource('users', UserController::class)->middleware('auth');

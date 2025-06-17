@@ -31,8 +31,14 @@
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $equipment['id'] }}</dd>
                     </div>
 
-                    <!-- Campo Modelo -->
+                    <!-- NVR - Marca -->
                     <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-semibold text-gray-300">Marca</dt>
+                        <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $equipment['mark'] }}</dd>
+                    </div>
+
+                    <!-- Campo Modelo -->
+                    <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-semibold text-gray-300">Modelo</dt>
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $equipment['model'] }}</dd>
                     </div>
@@ -41,36 +47,14 @@
                     @switch($equipment_type)
                         @case('Switch')
                             <!-- Switch - Número de puertos -->
-                            <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                 <dt class="text-sm font-semibold text-gray-300">N° Puertos</dt>
                                 <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $switch['number_ports'] ?? 'N/A' }}
-                                </dd>
-                            </div>
-
-                            <!-- Campo Localidad -->
-                            <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-semibold text-gray-300">Localidad</dt>
-                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
-                                    {{ $equipment['location'] ?? 'N/A' }}
-                                </dd>
-                            </div>
-
-                            <!-- Campo Descripción -->
-                            <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-semibold text-gray-300">Descripción</dt>
-                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
-                                    {{ $equipment['description'] ?? 'Sin descripción' }}
                                 </dd>
                             </div>
                         @break
 
                         @case('Nvr')
-                            <!-- NVR - Marca -->
-                            <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-semibold text-gray-300">Marca</dt>
-                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $nvr['mark'] ?? 'N/A' }}</dd>
-                            </div>
-
                             <!-- NVR - Nombre -->
                             <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                 <dt class="text-sm font-semibold text-gray-300">Nombre</dt>
@@ -104,31 +88,9 @@
                                     </dd>
                                 </div>
                             @endforeach
-
-                            <!-- Campo Localidad -->
-                            <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-semibold text-gray-300">Localidad</dt>
-                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
-                                    {{ $equipment['location'] ?? 'N/A' }}
-                                </dd>
-                            </div>
-
-                            <!-- Campo Descripción -->
-                            <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-semibold text-gray-300">Descripción</dt>
-                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
-                                    {{ $equipment['description'] ?? 'Sin descripción' }}
-                                </dd>
-                            </div>
                         @break
 
                         @case('Cámara')
-                            <!-- Cámara - Marca -->
-                            <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-semibold text-gray-300">Marca</dt>
-                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $camera['mark'] ?? 'N/A' }}</dd>
-                            </div>
-
                             <!-- Cámara - Nombre -->
                             <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                 <dt class="text-sm font-semibold text-gray-300">Nombre</dt>
@@ -146,31 +108,9 @@
                                 <dt class="text-sm font-semibold text-gray-300">IP</dt>
                                 <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $camera['ip'] ?? 'N/A' }}</dd>
                             </div>
-
-                            <!-- Campo Localidad -->
-                            <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-semibold text-gray-300">Localidad</dt>
-                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
-                                    {{ $equipment['location'] ?? 'N/A' }}
-                                </dd>
-                            </div>
-
-                            <!-- Campo Descripción -->
-                            <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-semibold text-gray-300">Descripción</dt>
-                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
-                                    {{ $equipment['description'] ?? 'Sin descripción' }}
-                                </dd>
-                            </div>
                         @break
 
                         @case('Enlace')
-                            <!-- Enlace - Marca -->
-                            <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-semibold text-gray-300">Marca</dt>
-                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $link['mark'] ?? 'N/A' }}</dd>
-                            </div>
-
                             <!-- Enlace - Nombre -->
                             <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                 <dt class="text-sm font-semibold text-gray-300">Nombre</dt>
@@ -188,33 +128,10 @@
                                 <dt class="text-sm font-semibold text-gray-300">IP</dt>
                                 <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $link['ip'] ?? 'N/A' }}</dd>
                             </div>
-
-                            <!-- Campo Localidad -->
-                            <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-semibold text-gray-300">Localidad</dt>
-                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
-                                    {{ $equipment['location'] ?? 'N/A' }}
-                                </dd>
-                            </div>
-
-                            <!-- Campo Descripción -->
-                            <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-semibold text-gray-300">Descripción</dt>
-                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
-                                    {{ $equipment['description'] ?? 'Sin descripción' }}
-                                </dd>
-                            </div>
                         @break
 
                         @default
                             <!-- Por defecto: Cámaras inventario o similares -->
-                            <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-semibold text-gray-300">Marca</dt>
-                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
-                                    {{ $camera_inventories['mark'] ?? 'N/A' }}
-                                </dd>
-                            </div>
-
                             <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                 <dt class="text-sm font-semibold text-gray-300">Nota de Entrega</dt>
                                 <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
@@ -247,6 +164,22 @@
                         @break
                     @endswitch
 
+                    <!-- Campo Localidad -->
+                    <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-semibold text-gray-300">Localidad</dt>
+                        <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
+                            {{ $equipment['location'] ?? 'N/A' }}
+                        </dd>
+                    </div>
+
+                    <!-- Campo Descripción -->
+                    <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-semibold text-gray-300">Descripción</dt>
+                        <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
+                            {{ $equipment['description'] }}
+                        </dd>
+                    </div>
+
                 </dl>
             </div>
         </div>
@@ -258,7 +191,7 @@
                 @csrf
                 @method('DELETE')
 
-                <button type="submit"  onclick="return confirm('¿Estás seguro?')"
+                <button type="submit" onclick="return confirm('¿Estás seguro?')"
                     class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-red-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                     Eliminar Permanentemente
                 </button>

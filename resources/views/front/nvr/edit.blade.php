@@ -53,7 +53,7 @@
                                     {{ $mark }}
                                 </option>
                             @endforeach
-                            <option value="Otra">Otra</option>
+                            <option value="Otra" {{ old('mark') == 'Otra' ? 'selected' : '' }}>Otra
                         </select>
                     </div>
 

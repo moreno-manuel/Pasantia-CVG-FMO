@@ -35,7 +35,6 @@ class LinkController extends Controller
     public function create() //muestra la vista para crear un nuevo link
     {
         $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['link_marks']; // json con las marcas agregadas
-
         return view('front.link.create', compact('marks'));
     }
 
@@ -74,7 +73,7 @@ class LinkController extends Controller
 
     public function edit($mac) //muestra la vista para editar un link
     {
-        $link = Link::find($mac);
+        $link = Link::findOrFail($mac);
 
         $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['link_marks']; // json con las marcas agregadas
 
@@ -85,7 +84,7 @@ class LinkController extends Controller
     {
 
         try {
-            $link = Link::find($mac);
+            $link = Link::findOrFail($mac);
 
             $validator = Validator::make($request->all(), [ //para capturar si hay dato incorrecto
                 'model' => 'required',
@@ -122,15 +121,15 @@ class LinkController extends Controller
 
     public function show($mac) //muestra la vista y datos para los detalles un link
     {
-        $link = Link::find($mac);
+        $link = Link::findOrFail($mac);
         return view('front.link.show', compact('link'));
     }
 
     public function destroy(Request $request, $mac) //Elimina un link
     {
-        $link = Link::find($mac);
+        $link = Link::findOrFail($mac);
 
-        $equipment = EquipmentDisuse::find($mac);
+        $equipment = EquipmentDisuse::findOrFail($mac);
         if ($equipment)
             return redirect()->route('enlace.index')->with('success', 'Ya existe un registro eliminado con el mismo ID.');
 

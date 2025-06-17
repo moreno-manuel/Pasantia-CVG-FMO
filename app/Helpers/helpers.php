@@ -233,8 +233,9 @@ function marksUpdate(Request $request, $data)
                 $currentArray = $jsonData[$data];  // Obtener el arreglo específico
 
                 if (!in_array($newMark, $currentArray)) { // Verificar si el nuevo valor ya existe
-                    array_unshift($currentArray, $newMark);  // Agregar el nuevo valor al principio
+                    array_unshift($currentArray, $newMark);  // Agregar el valor
 
+                    sort($currentArray); //ordena array A-Z
                     $jsonData[$data] = $currentArray;   // Actualizar SOLO el arreglo modificado
 
                     File::put($filePath, json_encode($jsonData, JSON_PRETTY_PRINT)); // Guardar TODO el JSON con los cambios
@@ -242,10 +243,9 @@ function marksUpdate(Request $request, $data)
             }
             $request['mark'] = $newMark;
         }
-
-        $request->offsetUnset('other_mark'); // se elimina el campo other_mark y se agrega el valor en el campo mark
-        return $request;
     }
+    $request->offsetUnset('other_mark'); // se elimina el campo other_mark y se agrega el valor en el campo mark
+    return $request;
 }
 
 /* para liberar el metodo 

@@ -43,7 +43,7 @@
                                     {{ $mark }}
                                 </option>
                             @endforeach
-                            <option value="Otra">Otra</option>
+                            <option value="Otra" {{ old('mark') == 'Otra' ? 'selected' : '' }}>Otra
                         </select>
                     </div>
 
@@ -71,7 +71,8 @@
                         <label for="number_ports" class="block text-sm font-semibold text-white">Número de Puertos</label>
                         <input type="number" name="number_ports" id="number_ports"
                             class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            min="1" max="48" value="{{ old('number_ports', $switch->number_ports) }}" required>
+                            min="1" max="48" value="{{ old('number_ports', $switch->number_ports) }}"
+                            required>
                     </div>
 
                     <!-- Campo Localidad -->

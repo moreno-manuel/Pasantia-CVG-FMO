@@ -73,7 +73,7 @@ class CameraController extends Controller
 
             $request = marksUpdate($request, 'marks');
 
-            Camera::create($request->all())->save();
+            Camera::create($request->all());
             return redirect()->route('camara.index')->with('success', 'Cámara agregada exitosamente.');
         } catch (QueryException $e) {
             if ($e->getCode() === '23000') { // Código de error de integridad para la db *IP*
@@ -97,14 +97,14 @@ class CameraController extends Controller
         $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['marks']; // json con las marcas agregadas
 
         // Recupera el modelo manualmente
-        $camera = Camera::find($mac);
+        $camera = Camera::findOrFail($mac);
         return view('front.camera.edit', compact('camera', 'nvrs', 'marks'));
     }
 
     public function update(Request $request, $mac) //valida los datos d edicion
     {
         try {
-            $camera = Camera::find($mac);
+            $camera = Camera::findOrFail($mac);
 
             $validator = Validator::make($request->all(), [ //para capturar si hay dato incorrecto
                 'mark' => 'required',
@@ -140,7 +140,7 @@ class CameraController extends Controller
 
     public function show($mac) //muestra detalles de un registro 
     {
-        $camera = Camera::find($mac);
+        $camera = Camera::findOrFail($mac);
 
         $conditions = $camera->conditionAttention()->orderBy('created_at', 'desc')->paginate(5); // Cargar los registros de condicion de atención con paginación
 
@@ -150,9 +150,9 @@ class CameraController extends Controller
     public function destroy(Request $request, $mac) //elimina un registro
     {
 
-        $camera = Camera::find($mac);
+        $camera = Camera::findOrFail($mac);
 
-        $equipment = EquipmentDisuse::find($mac);
+        $equipment = EquipmentDisuse::findOrFail($mac);
         if ($equipment)
             return redirect()->route('camara.index')->with('success', 'Ya existe un registro eliminado con el mismo ID.');
 
