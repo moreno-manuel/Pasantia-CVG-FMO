@@ -105,12 +105,12 @@ class ConditionAController extends Controller
             'description' => 'required'
         ]);
 
-
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator);
         }
 
-        $condition = ConditionAttention::find($id);
+        
+        $condition = ConditionAttention::findOrFail($id);
 
         if ($request->filled('description')) { //si se agrega una descripción
             Descriptions::create([
@@ -136,7 +136,7 @@ class ConditionAController extends Controller
 
     public function show($id) //muestra los detalles de un registro
     {
-        $condition = ConditionAttention::find($id);
+        $condition = ConditionAttention::findOrFail($id);
         $descriptions = $condition->description()->orderBy('created_at', 'desc')->paginate(5); //obtiene las descripciones de la condición
         return view('front.attention.show', compact('condition', 'descriptions'));
     }

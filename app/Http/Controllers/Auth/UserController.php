@@ -71,10 +71,8 @@ class UserController extends Controller
     {
         $user = User::where('userName', $userName)->first();
 
-        $person = $user->person;
-
         $roles = json_decode(file_get_contents(resource_path('js/data.json')), true)['rol']; // json con las marcas agregadas
-        return view('front.user.edit', compact('person', 'roles'));
+        return view('front.user.edit', compact('user', 'roles'));
     }
 
     public function update(Request $request, $person)

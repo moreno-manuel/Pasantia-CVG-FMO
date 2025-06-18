@@ -63,7 +63,7 @@
                             placeholder="Describe brevemente la condición de atención..."required></textarea>
                         <label for="date_end" class="block text-xs font-semibold text-green-400">útlima descripción generada
                             el
-                            ({{ $condition->description()->latest()->value('created_at')->format('Y/m/d') }})</label>
+                            ({{ $condition->description()->latest()->value('created_at')->format('d/m/Y - H:i:s') }})</label>
                     </div>
 
                 </div>

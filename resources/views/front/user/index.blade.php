@@ -6,7 +6,7 @@
 
         <!-- Encabezado y botón agregar -->
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold text-white bg-gray-600 dark:bg-blue-900/20 rounded-md px-3 py-1">
+            <h1 class="text-2xl font-bold text-white bg-gray-600  rounded-md px-3 py-1">
                 Usuarios
             </h1>
 
@@ -25,10 +25,10 @@
         {{-- valida para mostrar tabla o mensaje --}}
         @if ($persons->isNotEmpty())
             <!-- Tabla -->
-            <div class="overflow-x-auto">
-                <table class="min-w-full shadow-md rounded-lg overflow-hidden bg-white border border-gray-300">
-                    <thead class="bg-gray-100">
-                        <tr class="bg-gray-800 divide-x divide-blue-400">
+            <div class="overflow-x-auto rounded-lg shadow border border-gray-700 bg-gray-800">
+                <table class="min-w-full shadow-md rounded-lg overflow-hidden divide-gray-700">
+                    <thead class="bg-gray-700 divide-x divide-blue-400">
+                        <tr class="divide-x divide-blue-400">
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Ficha</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Nombre</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Nombre/Usuario</th>
@@ -40,12 +40,12 @@
                     <tbody class="divide-y divide-gray-200">
 
                         @foreach ($persons as $person)
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $person['license'] }} </td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $person['name'] }} </td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $person->user->userName }}</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $person->user->email }}</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $person->user->rol }}</td>
+                            <tr class="hover:bg-gray-900 transition-colors duration-150">
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $person['license'] }} </td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $person['name'] }} </td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $person->user->userName }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $person->user->email }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $person->user->rol }}</td>
 
                                 {{-- Acciones --}}
                                 <td class="px-6 py-4 text-sm align-middle">

@@ -55,7 +55,7 @@
                         <label for="other_brand" class="block text-sm font-semibold text-white">Especifica la marca</label>
                         <input type="text" name="other_mark" id="other_mark"
                             class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            placeholder="Nombre de la marca" value="{{ old('other_mark') }}" required>
+                            placeholder="Nombre de la marca" value="{{ old('other_mark') }}">
                     </div>
 
                     <!-- Campo Modelo -->

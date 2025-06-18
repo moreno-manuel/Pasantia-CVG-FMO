@@ -17,7 +17,7 @@
             </div>
 
             {{-- Formulario Persona + Usuario --}}
-            <form action="{{ route('users.update', $person) }}" method="POST">
+            <form action="{{ route('users.update', $user->person) }}" method="POST">
                 @csrf
                 @method('PUT')
 
@@ -28,7 +28,8 @@
                         <!-- Campo nombre -->
                         <div>
                             <label for="name" class="block text-sm font-semibold text-white">Nombre</label>
-                            <input type="text" name="name" id="name" value="{{ old('name', $person->name) }}"
+                            <input type="text" name="name" id="name"
+                                value="{{ old('name', $user->person->name) }}"
                                 class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('name') border-red-500 @enderror"
                                 required>
                             @error('name')
@@ -40,7 +41,7 @@
                         <div>
                             <label for="last_name" class="block text-sm font-semibold text-white">Apellido</label>
                             <input type="text" name="last_name" id="last_name"
-                                value="{{ old('last_name', $person->last_name) }}"
+                                value="{{ old('last_name', $user->person->last_name) }}"
                                 class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('last_name') border-red-500 @enderror"
                                 required>
                             @error('last_name')
@@ -55,10 +56,12 @@
                                 class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('sex') border-red-500 @enderror"
                                 required>
                                 <option value="">Seleccione..</option>
-                                <option value="Masculino" {{ old('sex', $person->sex) == 'Masculino' ? 'selected' : '' }}>
+                                <option value="Masculino"
+                                    {{ old('sex', $user->person->sex) == 'Masculino' ? 'selected' : '' }}>
                                     Masculino
                                 </option>
-                                <option value="Femenino" {{ old('sex', $person->sex) == 'Femenino' ? 'selected' : '' }}>
+                                <option value="Femenino"
+                                    {{ old('sex', $user->person->sex) == 'Femenino' ? 'selected' : '' }}>
                                     Femenino</option>
                             </select>
                             @error('sex')
@@ -69,7 +72,7 @@
                         <!-- Campo ficha -->
                         <div>
                             <label for="license" class="block text-sm font-semibold text-white">Ficha</label>
-                            <input type="text" name="license" id="license" value="{{ $person->license }}"
+                            <input type="text" name="license" id="license" value="{{ $user->person->license }}"
                                 class="mt-1 block w-full rounded-md bg-gray-900 border border-gray-600 text-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('license') border-red-500 @enderror"
                                 disabled readonly>
                             @error('license')
@@ -87,7 +90,7 @@
                         <div>
                             <label for="userName" class="block text-sm font-semibold text-white">Nombre de Usuario</label>
                             <input type="text" name="userName" id="userName"
-                                value="{{ old('userName', $person->user->userName) }}"
+                                value="{{ old('userName', $user->userName) }}"
                                 class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('userName') border-red-500 @enderror"
                                 required>
                             @error('userName')
@@ -98,8 +101,7 @@
                         <!-- Campo correo -->
                         <div>
                             <label for="email" class="block text-sm font-semibold text-white">Correo Electrónico</label>
-                            <input type="email" name="email" id="email"
-                                value="{{ old('email', $person->user->email) }}"
+                            <input type="email" name="email" id="email" value="{{ old('email', $user->email) }}"
                                 class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('email') border-red-500 @enderror"
                                 required>
                             @error('email')
@@ -116,7 +118,7 @@
                                 <option value="">Seleccione..</option>
                                 @foreach ($roles as $rol)
                                     <option value="{{ $rol }}"
-                                        {{ old('rol', isset($person->user) ? $person->user->rol : '') == $rol ? 'selected' : '' }}>
+                                        {{ old('rol', isset($user) ? $user->rol : '') == $rol ? 'selected' : '' }}>
                                         {{ $rol }}
                                     </option>
                                 @endforeach

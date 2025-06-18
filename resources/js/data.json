@@ -17,8 +17,16 @@
         "UBIQUITI"
     ],
     "rol": [
-        "ADMIN",
-        "EDITOR",
-        "LECTOR"
+        "admin",
+        "editor",
+        "lector"
+    ],
+    "questions": [
+        "Primer nombre del padre",
+        "Segunda nombre de la madre",
+        "Lugar de Nacimiento",
+        "Comida favorita",
+        "Deporte favorito",
+        "Nombre de mascota"
     ]
 }

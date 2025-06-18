@@ -9,6 +9,7 @@ use App\Models\EquipmentDisuse\EquipmentDisuse;
 use App\Models\EquipmentDisuse\LinkDisuse;
 use App\Models\EquipmentDisuse\NvrDisuse;
 use App\Models\EquipmentDisuse\SwitchDisuse;
+use App\Models\networkInfrastructure\CameraInventory;
 use Illuminate\Http\Request;
 
 use function app\Helpers\filter;
@@ -29,32 +30,34 @@ class EquipmentDisuseController extends Controller
 
     public function show($id)
     {
-        $equipment = EquipmentDisuse::where('id', $id)->first();
+        $equipment = EquipmentDisuse::find($id);
 
-        $camera_inventories = CameraInventoriesDisuse::where('id', $id)->first();
-        if ($equipment->id == $camera_inventories->id) { // si la camara pertenece a la tabla de camara_inventories_disuses
-            $equipment_type = 'camera_inventories';
-            return view('front.eliminated.show', compact('equipment', 'camera_inventories', 'equipment_type'));
+        $camera_inventories = CameraInventoriesDisuse::find($id);
+        if ($camera_inventories) {
+            if ($equipment->id == $camera_inventories->id) { // si la camara pertenece a la tabla de camara_inventories_disuses
+                $equipment_type = 'camera_inventories';
+                return view('front.eliminated.show', compact('equipment', 'camera_inventories', 'equipment_type'));
+            }
         }
 
         switch ($equipment->equipment) {
             case 'Switch':
-                $switch = SwitchDisuse::where('id', $id)->first();
+                $switch = SwitchDisuse::find($id);
                 $equipment_type = $equipment->equipment;
                 return view('front.eliminated.show', compact('equipment', 'switch', 'equipment_type'));
                 break;
             case 'Nvr':
-                $nvr = NvrDisuse::where('id', $id)->first();
+                $nvr = NvrDisuse::find($id);
                 $equipment_type = $equipment->equipment;
                 return view('front.eliminated.show', compact('equipment', 'nvr', 'equipment_type'));
                 break;
             case 'Cámara':
-                $camera = CameraDisuse::where('id', $id)->first();
+                $camera = CameraDisuse::find($id);
                 $equipment_type = $equipment->equipment;
                 return view('front.eliminated.show', compact('equipment', 'camera', 'equipment_type'));
                 break;
             case 'Enlace':
-                $link = LinkDisuse::where('id', $id)->first();
+                $link = LinkDisuse::find($id);
                 $equipment_type = $equipment->equipment;
                 return view('front.eliminated.show', compact('equipment', 'link', 'equipment_type'));
                 break;
@@ -63,7 +66,7 @@ class EquipmentDisuseController extends Controller
 
     public function destroy($id)
     {
-        $equipment = EquipmentDisuse::where('id', $id)->first();
+        $equipment = EquipmentDisuse::findOrFail($id);
         $equipment->delete();
         return redirect()->route('eliminated.index')->with('success', 'Registro eliminado exitosamente.');
     }

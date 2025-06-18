@@ -79,10 +79,10 @@
         {{-- valida para mostrar tabla o mensaje --}}
         @if ($cameras->isNotEmpty())
             {{-- tabla --}}
-            <div class="overflow-x-auto">
-                <table class="min-w-full shadow-md rounded-lg overflow-hidden bg-white border border-gray-300">
-                    <thead class="bg-gray-100">
-                        <tr class="bg-gray-800 divide-x divide-blue-400">
+            <div class="overflow-x-auto rounded-lg shadow border border-gray-700 bg-gray-800">
+                <table class="min-w-full shadow-md rounded-lg overflow-hidden divide-gray-700">
+                    <thead class="bg-gray-700 divide-x divide-blue-400">
+                        <tr class="divide-x divide-blue-400">
                             <th class="px-6 py-3 text-center text-sm font-medium text-white w-32">MAC</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white w-24">Marca</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white w-24">Modelo</th>
@@ -94,13 +94,14 @@
                     </thead>
                     <tbody class="divide-y divide-gray-200">
                         @foreach ($cameras as $camera)
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 text-center text-sm text-gray-900 truncate">{{ $camera['mac'] }}</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $camera['mark'] }}</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $camera['model'] }}</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $camera['destination'] }}</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $camera['delivery_note'] }}</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $camera['description'] }}</td>
+                            <tr class="hover:bg-gray-900 transition-colors duration-150">
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $camera['mac'] }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $camera['mark'] }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $camera['model'] }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $camera['destination'] }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $camera['delivery_note'] }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-white">
+                                    {{ $camera['description'] ?? 'Sin descripción' }}</td>
 
                                 {{-- Acciones --}}
                                 <td class="px-6 py-4 text-sm align-middle">
@@ -109,6 +110,7 @@
                                         <!-- Botón Eliminar -->
                                         <button type="button"
                                             onclick="openDeleteModal('{{ route('inventories.destroy', $camera['mac']) }}')"
+                                            onsubmit="return confirm('¿Estás seguro de eliminar este equipo permanentemente?');"
                                             class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                                             Eliminar
                                         </button>

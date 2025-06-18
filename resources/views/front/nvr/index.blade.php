@@ -75,10 +75,10 @@
         {{-- valida para mostrar tabla o mensaje --}}
         @if ($nvrs->isNotEmpty())
             <!-- Tabla -->
-            <div class="overflow-x-auto">
-                <table class="min-w-full shadow-md rounded-lg overflow-hidden bg-white border border-gray-300">
-                    <thead class="bg-gray-100">
-                        <tr class="bg-gray-800 divide-x divide-blue-400">
+            <div class="overflow-x-auto rounded-lg shadow border border-gray-700 bg-gray-800">
+                <table class="min-w-full shadow-md rounded-lg overflow-hidden divide-gray-700">
+                    <thead class="bg-gray-700 divide-x divide-blue-400">
+                        <tr class="divide-x divide-blue-400">
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">MAC</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Marca</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Modelo</th>
@@ -93,14 +93,14 @@
                     <tbody class="divide-y divide-gray-200">
 
                         @foreach ($nvrs as $nvr)
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 text-center text-sm text-gray-900 truncate">{{ $nvr['mac'] }}</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $nvr['mark'] }}</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $nvr['model'] }}</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $nvr['name'] }}</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $nvr['ports_number'] }}</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $nvr['location'] }}</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $nvr['ip'] }}</td>
+                            <tr class="hover:bg-gray-900 transition-colors duration-150">
+                                <td class="px-6 py-4 text-center text-sm text-white truncate">{{ $nvr['mac'] }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $nvr['mark'] }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $nvr['model'] }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $nvr['name'] }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $nvr['ports_number'] }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $nvr['location'] }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $nvr['ip'] }}</td>
                                 <td class="px-6 py-4 text-center text-sm">
                                     <span
                                         class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 

@@ -63,10 +63,10 @@
         {{-- valida para mostrar tabla o mensaje --}}
         @if ($equipments->isNotEmpty())
             <!-- Tabla -->
-            <div class="overflow-x-auto">
-                <table class="min-w-full shadow-md rounded-lg overflow-hidden bg-white border border-gray-300">
-                    <thead class="bg-gray-100">
-                        <tr class="bg-gray-800 divide-x divide-blue-400">
+            <div class="overflow-x-auto rounded-lg shadow border border-gray-700 bg-gray-800">
+                <table class="min-w-full shadow-md rounded-lg overflow-hidden divide-gray-700">
+                    <thead class="bg-gray-700 divide-x divide-blue-400">
+                        <tr class="divide-x divide-blue-400">
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Tipo de Equipo</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">ID</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Fecha-Eliminación</th>
@@ -78,13 +78,13 @@
                     <tbody class="divide-y divide-gray-200">
 
                         @foreach ($equipments as $equipment)
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $equipment['equipment'] }} </td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $equipment['id'] }} </td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">
+                            <tr class="hover:bg-gray-900 transition-colors duration-150">
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $equipment['equipment'] }} </td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $equipment['id'] }} </td>
+                                <td class="px-6 py-4 text-center text-sm text-white">
                                     {{ $equipment['created_at']->format('Y-m-d') }}</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $equipment['location'] }} </td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $equipment['description'] }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $equipment['location'] }} </td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $equipment['description'] }}</td>
 
 
                                 {{-- Acciones --}}

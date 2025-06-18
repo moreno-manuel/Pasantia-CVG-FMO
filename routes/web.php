@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\PerfilController;
+use App\Http\Controllers\Auth\QuestionsSecurityController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\EquipmentDisuse\EquipmentDisuseController;
 use App\Http\Controllers\MonitoringSystem\CameraController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\MonitoringSystem\NvrController;
 use App\Http\Controllers\NetworkInfrastructure\CameraInventoriesController;
 use App\Http\Controllers\NetworkInfrastructure\LinkController;
 use App\Http\Controllers\NetworkInfrastructure\SwitchController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -38,7 +40,7 @@ Route::controller(CameraInventoriesController::class)
     });
 
 
-Route::controller(EquipmentDisuseController::class)
+Route::controller(EquipmentDisuseController::class) //equipos eliminados
     ->prefix('historial/eliminados')
     ->middleware('auth')
     ->group(function () {
@@ -48,7 +50,15 @@ Route::controller(EquipmentDisuseController::class)
     });
 
 
-Route::controller(PerfilController::class)
+Route::controller(ReportController::class) //reportes
+    ->prefix('report')
+    ->middleware('auth')
+    ->group(function () {
+        Route::get('', 'index')->name('report.index');
+    });
+
+
+Route::controller(PerfilController::class) //perfil del usuario logueado
     ->prefix('perfil')
     ->middleware('auth')
     ->group(function () {
@@ -56,4 +66,13 @@ Route::controller(PerfilController::class)
         Route::put('{user}', 'update')->name('perfil.update');
     });
 
-Route::resource('users', UserController::class)->middleware('auth');
+Route::controller(QuestionsSecurityController::class) // preguntas de seguridad para el usuario logueado
+    ->prefix('security')
+    ->middleware('auth')
+    ->group(function () {
+        Route::get('', 'showForm')->name('security.showForm');
+        Route::post('', 'store')->name('security.store');
+        Route::put('{user}', 'update')->name('security.update');
+    });
+
+Route::resource('users', UserController::class)->middleware('auth'); //para el control de los usuarios registrados  

@@ -38,12 +38,10 @@ class CameraController extends Controller
 
     public function create() // muestra formulario para nuevo registro
     {
-        $nvrsAll = Nvr::all(); //regitros de todos los nvrs
+        $nvrsAll = Nvr::with('camera')->get();
 
-        $nvrs = $nvrsAll->filter(function ($nvr) {   // Filtrar la colección para mantener solo los NVRs con puertos disponibles
-            $ports_used = $nvr->camera->count();
-            $available_ports = $nvr->ports_number - $ports_used;
-            return $available_ports > 0; // Mantener si hay puertos disponibles
+        $nvrs = $nvrsAll->filter(function ($nvr) { // Filtrar la colección para mantener solo los NVRs con puertos disponibles
+            return $nvr->available_ports > 0;
         });
 
         $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['marks']; // json con las marcas agregadas
@@ -86,18 +84,20 @@ class CameraController extends Controller
 
     public function edit($mac) //muestra la vista para editar
     {
-        $nvrsAll = Nvr::all(); //regitros de todos los nvrs
+        $nvrsAll = Nvr::with('camera')->get();
 
-        $nvrs = $nvrsAll->filter(function ($nvr) {  // Filtrar la colección para mantener solo los NVRs con puertos disponibles
-            $ports_used = $nvr->camera->count();
-            $available_ports = $nvr->ports_number - $ports_used;
-            return $available_ports > 0; // Mantener si hay puertos disponibles
+        $camera = Camera::findOrFail($mac);
+        $currentNvrId = $camera->nvr->mac;
+
+        $nvrs = $nvrsAll->filter(function ($nvr) use ($currentNvrId) {
+            if ($nvr->mac == $currentNvrId) { //mantiene el nvr de la cámara seleccionada 
+                return true;
+            }
+            return $nvr->available_ports > 0;
         });
 
         $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['marks']; // json con las marcas agregadas
 
-        // Recupera el modelo manualmente
-        $camera = Camera::findOrFail($mac);
         return view('front.camera.edit', compact('camera', 'nvrs', 'marks'));
     }
 
@@ -152,7 +152,7 @@ class CameraController extends Controller
 
         $camera = Camera::findOrFail($mac);
 
-        $equipment = EquipmentDisuse::findOrFail($mac);
+        $equipment = EquipmentDisuse::find($mac);
         if ($equipment)
             return redirect()->route('camara.index')->with('success', 'Ya existe un registro eliminado con el mismo ID.');
 
@@ -171,10 +171,10 @@ class CameraController extends Controller
             'id' => $camera->mac,
             'name' => $camera->name,
             'nvr_name' => $camera->mac,
-            'ip' => $nvr->name
+            'ip' => $camera->ip
         ]);
 
         $camera->delete();
-        return redirect()->route('camara.index')->with('success', 'Cámara eliminado exitosamente.');
+        return redirect()->route('camara.index')->with('success', 'Cámara eliminada exitosamente.');
     }
 }

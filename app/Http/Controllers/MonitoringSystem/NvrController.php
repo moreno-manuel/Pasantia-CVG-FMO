@@ -158,7 +158,7 @@ class NvrController extends Controller
 
     public function destroy(Request $request, Nvr $nvr) //elimina un nvr
     {
-        $equipment = EquipmentDisuse::findOrFail($nvr->mac);
+        $equipment = EquipmentDisuse::find($nvr->mac);
         if ($equipment)
             return redirect()->route('nvr.index')->with('success', 'Ya existe un registro eliminado con el mismo ID.');
 
@@ -190,6 +190,6 @@ class NvrController extends Controller
         // Eliminar el NVR
         $nvr->delete();
 
-        return redirect()->route('nvr.index')->with('success', 'Enlace eliminado exitosamente.');
+        return redirect()->route('nvr.index')->with('success', 'Nvr eliminado exitosamente.');
     }
 }

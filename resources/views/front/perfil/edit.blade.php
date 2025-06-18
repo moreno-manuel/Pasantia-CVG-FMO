@@ -8,6 +8,12 @@
             {{-- Título  --}}
             <div class="flex justify-between items-center mb-6">
                 <h1 class="text-2xl font-bold text-white">Datos de Usuario</h1>
+
+                <!-- Botón preguntas de seguridad -->
+                <a href="{{ route('security.showForm') }}"
+                    class="inline-flex items-center px-3 py-1.5 bg-gray-500 text-white font-semibold rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-gray-600 hover:shadow-md hover:-translate-y-px text-xs uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                    Preguntas de Seguridad
+                </a>
             </div>
 
             {{-- Formulario --}}
@@ -106,7 +112,7 @@
                         <label for="password_confirmation" class="block text-sm font-semibold text-white">Confirmar
                             Contraseña</label>
                         <div class="relative">
-                            <input id="password_confirmation" type="password"
+                            <input id="password_confirmation" type="password" value="{{ old('password_confirmation') }}"
                                 class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('password_confirmation') border-red-500 @enderror"
                                 name="password_confirmation">
                             <!-- Botón para mostrar/ocultar contraseña -->

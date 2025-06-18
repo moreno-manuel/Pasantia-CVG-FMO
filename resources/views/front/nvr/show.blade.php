@@ -97,7 +97,7 @@
                         <dd class="mt-1 text-sm sm:mt-0 sm:col-span-2">
                             <span
                                 class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                            {{ $nvr->status === 'Activo' ? 'bg-green-600 text-white' : 'bg-red-600 text-white' }}">
+                            {{ $nvr->status === 'Activo' ? 'bg-green-600 text-green-100' : 'bg-red-600 text-red-100' }}">
                                 {{ $nvr->status }}
                             </span>
                         </dd>
@@ -116,11 +116,10 @@
 
         <!-- Tabla de Volumenes-->
         <div class="mt-8">
-            <h3 class="text-lg font-medium text-black mb-3">Detalles Volumen</h3>
-            <div class="overflow-x-auto">
-                <table class="min-w-full shadow-md rounded-lg overflow-hidden bg-white border border-gray-300">
-                    <thead class="bg-gray-100">
-                        <tr class="bg-gray-800 divide-x divide-blue-400">
+            <div class="overflow-x-auto rounded-lg shadow border border-gray-700 bg-gray-800">
+                <table class="min-w-full shadow-md rounded-lg overflow-hidden divide-gray-700">
+                    <thead class="bg-gray-700 divide-x divide-blue-400">
+                        <tr class="divide-x divide-blue-400">
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Volumen</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Serial</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Capacidad/Disco (TB)</th>
@@ -131,15 +130,15 @@
                     </thead>
                     <tbody class="divide-y divide-gray-200">
                         @foreach ($nvr->slotNvr as $index => $slot)
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $loop->iteration }}</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $slot->hdd_serial }}</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $slot->hdd_capacity }}</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $slot->capacity_max }}</td>
+                            <tr class="hover:bg-gray-900 transition-colors duration-150">
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $loop->iteration }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $slot->hdd_serial }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $slot->hdd_capacity }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $slot->capacity_max }}</td>
                                 <td class="px-6 py-4 text-center text-sm">
                                     <span
                                         class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                            {{ $slot->status === 'Disponible' ? 'bg-green-300 text-green-900' : 'bg-red-300 text-red-900' }}">
+                                            {{ $slot->status === 'Disponible' ? 'bg-green-600 text-green-100' : 'bg-red-600 text-red-100' }}">
                                         {{ $slot->status }}
                                     </span>
                                 </td>
@@ -174,15 +173,19 @@
         </div>
 
         <br>
+        <br>
+
+        <div class="flex justify-left items-center mb-6">
+            <h1 class="font-bold text-white bg-gray-800 rounded-md px-3 py-1">Cámaras Conectadas al Nvr seleccionado</h1>
+        </div>
 
         {{-- tabla de cámaras conectadas al nvr --}}
         @if ($cameras->isNotEmpty())
             <div class="mt-8">
-                <h3 class="text-lg font-medium text-black mb-3">Cámaras Conectadas al Nvr</h3>
-                <div class="overflow-x-auto">
-                    <table class="min-w-full shadow-md rounded-lg overflow-hidden bg-white border border-gray-300">
-                        <thead class="bg-gray-100">
-                            <tr class="bg-gray-800 divide-x divide-blue-400">
+                <div class="overflow-x-auto rounded-lg shadow border border-gray-700 bg-gray-800">
+                    <table class="min-w-full shadow-md rounded-lg overflow-hidden divide-gray-700">
+                        <thead class="bg-gray-700 divide-x divide-blue-400">
+                            <tr class="divide-x divide-blue-400">
                                 <th class="px-6 py-3 text-center text-sm font-medium text-white">Mac</th>
                                 <th class="px-6 py-3 text-center text-sm font-medium text-white">Nombre</th>
                                 <th class="px-6 py-3 text-center text-sm font-medium text-white">Localidad</th>
@@ -193,15 +196,15 @@
                         </thead>
                         <tbody class="divide-y divide-gray-200">
                             @foreach ($cameras as $camera)
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $camera->mac }}</td>
-                                    <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $camera->name }}</td>
-                                    <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $camera->location }}</td>
-                                    <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $camera->ip }}</td>
+                                <tr class="hover:bg-gray-900 transition-colors duration-150">
+                                    <td class="px-6 py-4 text-center text-sm text-white">{{ $camera->mac }}</td>
+                                    <td class="px-6 py-4 text-center text-sm text-white">{{ $camera->name }}</td>
+                                    <td class="px-6 py-4 text-center text-sm text-white">{{ $camera->location }}</td>
+                                    <td class="px-6 py-4 text-center text-sm text-white">{{ $camera->ip }}</td>
                                     <td class="px-6 py-4 text-center text-sm">
                                         <span
                                             class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                            {{ $camera->status === 'Activo' ? 'bg-green-300 text-green-900' : 'bg-red-300 text-red-900' }}">
+                                            {{ $camera->status === 'Activo' ? 'bg-green-600 text-green-100' : 'bg-red-600 text-red-100' }}">
                                             {{ $camera->status }}
                                         </span>
                                     </td>

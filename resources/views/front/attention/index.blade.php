@@ -71,27 +71,25 @@
         {{-- valida para mostrar tabla o mensaje --}}
         @if ($conditions->isNotEmpty())
             <!-- Tabla -->
-            <div class="overflow-x-auto">
-                <table class="min-w-full shadow-md rounded-lg overflow-hidden bg-white border border-gray-300">
-                    <tr class="bg-gray-800 divide-x divide-blue-400">
-                        <th class="px-6 py-3 text-center text-sm font-medium text-white">Camara</th>
-                        <th class="px-6 py-3 text-center text-sm font-medium text-white">Tipo de Condición</th>
-                        <th class="px-6 py-3 text-center text-sm font-medium text-white">Fecha-Inicio</th>
-                        <th class="px-6 py-3 text-center text-sm font-medium text-white">Descripción</th>
-                        <th class="px-6 py-3 text-center text-sm font-medium text-white">Acciones</th>
-                    </tr>
+            <div class="overflow-x-auto rounded-lg shadow border border-gray-700 bg-gray-800">
+                <table class="min-w-full shadow-md rounded-lg overflow-hidden divide-gray-700">
+                    <thead class="bg-gray-700 divide-x divide-blue-400">
+                        <tr class="divide-x divide-blue-400">
+                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Camara</th>
+                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Tipo de Condición</th>
+                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Fecha-Inicio</th>
+                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Descripción</th>
+                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Acciones</th>
+                        </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
 
                         @foreach ($conditions as $condition)
-                            @php
-                                $camera = $condition->camera; //para tomar el nombre de la camara y no la mac
-                            @endphp
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $camera['name'] }} </td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $condition['name'] }}</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $condition['date_ini'] }}</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">
+                            <tr class="hover:bg-gray-900 transition-colors duration-150">
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $condition->camera->name }} </td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $condition['name'] }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $condition['date_ini'] }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-white">
                                     {{ $condition->description()->latest()->value('text') }}</td>
 
                                 {{-- Acciones --}}

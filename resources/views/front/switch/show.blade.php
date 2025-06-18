@@ -64,7 +64,7 @@
                         <dd class="mt-1 text-sm sm:mt-0 sm:col-span-2">
                             <span
                                 class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                            {{ $switch['status'] === 'Activo' ? 'bg-green-600 text-white' : 'bg-red-600 text-white' }}">
+                            {{ $switch['status'] === 'Activo' ? 'bg-green-600 text-green-100' : 'bg-red-600 text-red-100' }}">
                                 {{ $switch['status'] }}
                             </span>
                         </dd>

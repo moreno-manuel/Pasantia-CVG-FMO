@@ -96,11 +96,10 @@ class SwitchController extends Controller
 
     public function destroy(Switche $switch, Request $request) //Elimina un switch
     {
-        $equipment = EquipmentDisuse::findOrFail($switch->serial);
+        $equipment = EquipmentDisuse::find($switch->serial);
 
         if ($equipment)
             return redirect()->route('switch.index')->with('success', 'Ya existe un registro eliminado con el mismo ID.');
-
 
         EquipmentDisuse::create([
             'id' => $switch->serial,

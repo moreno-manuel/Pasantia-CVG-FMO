@@ -87,4 +87,10 @@ class Nvr extends Model
     {
         return long2ip($value);
     }
+
+    //para calcular el nvr hay puertos disponibles 
+    public function getAvailablePortsAttribute()
+    {
+        return $this->ports_number - $this->camera->count();
+    }
 }

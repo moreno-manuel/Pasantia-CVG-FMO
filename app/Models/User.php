@@ -54,6 +54,11 @@ class User extends Authenticatable
         return $this->belongsTo(Person::class, 'person_id', 'license');
     }
 
+    public function questionsRecovery()
+    {
+        return $this->hasOne(UserRecoveries::class);
+    }
+
     //casteo 
     protected function password(): Attribute
     {

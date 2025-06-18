@@ -77,10 +77,10 @@
         {{-- valida para mostrar tabla o mensaje --}}
         @if ($cameras->isNotEmpty())
             {{-- tabla --}}
-            <div class="overflow-x-auto">
-                <table class="min-w-full shadow-md rounded-lg overflow-hidden bg-white border border-gray-300">
-                    <thead class="bg-gray-100">
-                        <tr class="bg-gray-800 divide-x divide-blue-400">
+            <div class="overflow-x-auto rounded-lg shadow border border-gray-700 bg-gray-800">
+                <table class="min-w-full shadow-md rounded-lg overflow-hidden divide-gray-700">
+                    <thead class="bg-gray-700 divide-x divide-blue-400">
+                        <tr class="divide-x divide-blue-400">
                             <th class="px-6 py-3 text-center text-sm font-medium text-white w-32">MAC</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white w-24">Marca</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white w-24">Modelo</th>
@@ -94,18 +94,18 @@
                     </thead>
                     <tbody class="divide-y divide-gray-200">
                         @foreach ($cameras as $camera)
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 text-center text-sm text-gray-900 truncate">{{ $camera['mac'] }}</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $camera['mark'] }}</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $camera['model'] }}</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $camera->nvr->name }}</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $camera['name'] }}</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $camera['location'] }}</td>
-                                <td class="px-6 py-4 text-center text-sm text-gray-900">{{ $camera['ip'] }}</td>
+                            <tr class="hover:bg-gray-900 transition-colors duration-150">
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $camera['mac'] }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $camera['mark'] }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $camera['model'] }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $camera->nvr->name }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $camera['name'] }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $camera['location'] }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $camera['ip'] }}</td>
                                 <td class="px-6 py-4 text-center text-sm">
                                     <span
                                         class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                {{ $camera['status'] === 'Activo' ? 'bg-green-300 text-green-900' : 'bg-red-300 text-red-900' }}">
+                                {{ $camera['status'] === 'Activo' ? 'bg-green-600 text-green-100' : 'bg-red-600 text-red-100' }}">
                                         {{ $camera['status'] }}
                                     </span>
                                 </td>

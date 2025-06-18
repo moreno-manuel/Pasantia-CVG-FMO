@@ -129,7 +129,7 @@ class LinkController extends Controller
     {
         $link = Link::findOrFail($mac);
 
-        $equipment = EquipmentDisuse::findOrFail($mac);
+        $equipment = EquipmentDisuse::find($mac);
         if ($equipment)
             return redirect()->route('enlace.index')->with('success', 'Ya existe un registro eliminado con el mismo ID.');
 

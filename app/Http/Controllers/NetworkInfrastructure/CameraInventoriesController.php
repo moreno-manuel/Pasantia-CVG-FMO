@@ -68,7 +68,7 @@ class CameraInventoriesController extends Controller
     {
         $camera = CameraInventory::findOrFail($mac);
 
-        $equipment = EquipmentDisuse::findOrFail($mac);
+        $equipment = EquipmentDisuse::find($mac);
         if ($equipment)
             return redirect()->route('inventories.index')->with('success', 'Ya existe un registro eliminado con el mismo ID.');
 
