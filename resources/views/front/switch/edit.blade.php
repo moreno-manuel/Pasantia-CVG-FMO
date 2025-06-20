@@ -61,9 +61,12 @@
                     <!-- Campo Modelo -->
                     <div>
                         <label for="model" class="block text-sm font-semibold text-white">Modelo</label>
-                        <input type="text" name="model" value="{{ old('model', $switch->model) }}"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        <input type="text" name="model" value="{{ old('model', $switch->model) }}" minlength="3"
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('model') border-red-500 @enderror"
                             required>
+                        @error('model')
+                            <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <!-- Campo Número de Puertos -->
@@ -78,9 +81,12 @@
                     <!-- Campo Localidad -->
                     <div>
                         <label for="location" class="block text-sm font-semibold text-white">Localidad</label>
-                        <input type="text" name="location" id="location"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        <input type="text" name="location" id="location" minlength="5"
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm  @error('location') border-red-500 @enderror"
                             value="{{ old('location', $switch->location) }}" required>
+                        @error('location')
+                            <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <!-- Campo Status -->

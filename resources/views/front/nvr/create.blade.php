@@ -25,7 +25,7 @@
                     <!-- Campo Dirección MAC -->
                     <div>
                         <label for="mac" class="block text-sm font-semibold text-white">Dirección MAC</label>
-                        <input type="text" name="mac" id="mac"
+                        <input type="text" name="mac" id="mac" minlength="12" maxlength="12"
                             class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('mac') border-red-500 @enderror"
                             value="{{ old('mac') }}" placeholder="Ejemplo: 001A2B3C4D5E" required>
                         @error('mac')
@@ -53,23 +53,29 @@
                     <!-- Campo Especificar Otra marca -->
                     <div id="other-brand-field" class="hidden md:col-span-2">
                         <label for="other_brand" class="block text-sm font-semibold text-white">Especifica la marca</label>
-                        <input type="text" name="other_mark" id="other_mark"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        <input type="text" name="other_mark" id="other_mark" minlength="3"
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('other_mark') border-red-500 @enderror"
                             placeholder="Nombre de la marca" value="{{ old('other_mark') }}">
+                        @error('other_mark')
+                            <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <!-- Campo Modelo -->
                     <div>
                         <label for="model" class="block text-sm font-semibold text-white">Modelo</label>
-                        <input type="text" name="model" id="model"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        <input type="text" name="model" id="model" minlength="3"
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('model') border-red-500 @enderror"
                             value="{{ old('model') }}" required>
+                        @error('model')
+                            <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <!-- Campo Nombre -->
                     <div>
                         <label for="name" class="block text-sm font-semibold text-white">Nombre</label>
-                        <input type="text" name="name" id="name"
+                        <input type="text" name="name" id="name" minlength="5"
                             class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('name') border-red-500 @enderror"
                             value="{{ old('name') }}" required>
                         @error('name')
@@ -108,9 +114,12 @@
                     <!-- Campo Localidad -->
                     <div>
                         <label for="location" class="block text-sm font-semibold text-white">Localidad</label>
-                        <input type="text" name="location" id="location"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        <input type="text" name="location" id="location" minlength="5"
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('location') border-red-500 @enderror"
                             value="{{ old('location') }}" required>
+                        @error('location')
+                            <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <!-- Campo Status -->
@@ -255,8 +264,8 @@
                     <!-- Serial del disco -->
                     <div>
                         <label class="block text-sm font-medium text-white">Serial</label>
-                        <input type="text" name="volumen[${index}][serial_disco]"
-                            class="mt-1 block w-full rounded-md bg-gray-600 border border-gray-500 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                        <input type="text" name="volumen[${index}][serial_disco]" 
+                            class="mt-1 block w-full rounded-md bg-gray-600 border border-gray-500 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" minlength="4">
                         <span class="text-red-400 text-sm mt-1 hidden">Este campo es obligatorio</span>
                     </div>
                     <!-- Capacidad del disco -->

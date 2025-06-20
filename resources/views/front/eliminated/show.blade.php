@@ -191,18 +191,20 @@
             </div>
         </div>
 
-        <!-- Acciones -->
-        <div class="mt-6 flex justify-end space-x-3">
-            <form action="{{ route('eliminated.destroy', $equipment['id']) }}" method="POST"
-                onsubmit="return confirm('¿Estás seguro de eliminar este equipo permanentemente?');">
-                @csrf
-                @method('DELETE')
+        @if (auth()->user()->rol != 'lector')
+            <!-- Acciones -->
+            <div class="mt-6 flex justify-end space-x-3">
+                <form action="{{ route('eliminated.destroy', $equipment['id']) }}" method="POST"
+                    onsubmit="return confirm('¿Estás seguro de eliminar este equipo permanentemente?');">
+                    @csrf
+                    @method('DELETE')
 
-                <button type="submit"
-                    class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-red-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                    Eliminar Permanentemente
-                </button>
-            </form>
-        </div>
+                    <button type="submit"
+                        class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-red-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                        Eliminar Permanentemente
+                    </button>
+                </form>
+            </div>
+        @endif
     </div>
 @endsection

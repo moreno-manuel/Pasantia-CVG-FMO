@@ -24,7 +24,7 @@
                     <!-- Campo Dirección MAC -->
                     <div>
                         <label for="mac" class="block text-sm font-semibold text-white">Dirección MAC</label>
-                        <input type="text" name="mac" value="{{ old('mac') }}"
+                        <input type="text" name="mac" value="{{ old('mac') }}" minlength="12" maxlength="12"
                             class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('mac') border-red-500 @enderror"
                             placeholder="Ejemplo: 001A2B3C4D5E" required>
                         @error('mac')
@@ -52,6 +52,7 @@
                     <div id="other-brand-field" class="hidden">
                         <label for="other_brand" class="block text-sm font-semibold text-white">Especifica la marca</label>
                         <input type="text" name="other_mark" id="other_mark" value="{{ old('other_mark') }}"
+                            minlength="3"
                             class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('other_mark') border-red-500 @enderror"
                             placeholder="Nombre de la marca">
                         @error('other_mark')
@@ -62,16 +63,19 @@
                     <!-- Campo Modelo -->
                     <div>
                         <label for="model" class="block text-sm font-semibold text-white">Modelo</label>
-                        <input type="text" name="model" value="{{ old('model') }}"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        <input type="text" name="model" value="{{ old('model') }}" minlength="3"
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('model') border-red-500 @enderror"
                             required>
+                        @error('model')
+                            <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
+                        @enderror
                     </div>
 
 
                     <!-- Campo Nombre -->
                     <div>
                         <label for="name" class="block text-sm font-semibold text-white">Nombre</label>
-                        <input type="text" name="name" value="{{ old('name') }}"
+                        <input type="text" name="name" value="{{ old('name') }}" minlength="5"
                             class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('name') border-red-500 @enderror"
                             required>
                         @error('name')
@@ -83,10 +87,14 @@
                     <!-- Campo SSID -->
                     <div>
                         <label for="ssid" class="block text-sm font-semibold text-white">SSID</label>
-                        <input type="text" name="ssid" value="{{ old('ssid') }}"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        <input type="text" name="ssid" value="{{ old('ssid') }}" minlength="5"
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('ssid') border-red-500 @enderror"
                             placeholder="Nombre de red Wi-Fi" required>
+                        @error('ssid')
+                            <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
+                        @enderror
                     </div>
+
 
                     <!-- Campo IP -->
                     <div>
@@ -102,9 +110,12 @@
                     <!-- Campo Localidad -->
                     <div>
                         <label for="location" class="block text-sm font-semibold text-white">Localidad</label>
-                        <input type="text" name="location" value="{{ old('location') }}"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        <input type="text" name="location" value="{{ old('location') }}" minlength="5"
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('location') border-red-500 @enderror"
                             required>
+                        @error('location')
+                            <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <!-- Campo Status -->

@@ -31,7 +31,9 @@
                         <tr class="divide-x divide-blue-400">
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Ficha</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Nombre</th>
-                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Nombre/Usuario</th>
+                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Apellido</th>
+                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Género</th>
+                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Usuario</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Correo</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Rol</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Acciones</th>
@@ -43,6 +45,8 @@
                             <tr class="hover:bg-gray-900 transition-colors duration-150">
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $person['license'] }} </td>
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $person['name'] }} </td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $person['last_name'] }} </td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $person['sex'] }} </td>
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $person->user->userName }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $person->user->email }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $person->user->rol }}</td>
@@ -50,10 +54,6 @@
                                 {{-- Acciones --}}
                                 <td class="px-6 py-4 text-sm align-middle">
                                     <div class="flex justify-center space-x-2">
-                                        <a href="{{ route('users.show', $person->user->userName) }}"
-                                            class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                            Ver
-                                        </a>
                                         <a href="{{ route('users.edit', $person->user->userName) }}"
                                             class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
                                             Editar

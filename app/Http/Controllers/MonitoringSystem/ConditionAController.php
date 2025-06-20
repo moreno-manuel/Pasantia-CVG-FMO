@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\monitoringSystem\Camera;
 use App\Models\monitoringSystem\ConditionAttention;
 use App\Models\monitoringSystem\ControlCondition;
-use App\Models\monitoringSystem\Descriptions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -103,7 +102,7 @@ class ConditionAController extends Controller
             'description' => [
                 Rule::when(
                     $request->filled('date_end'), // Si se proporcionó una fecha
-                    'sometimes',                   // Entonces es opcionale
+                    'sometimes',                   // Entonces es opcional
                     'required'                   // Si no, es requerido
                 ),
             ],

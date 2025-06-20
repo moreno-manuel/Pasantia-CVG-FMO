@@ -44,15 +44,21 @@ class CameraInventoriesController extends Controller
     public function store(Request $request) // registra un nuevo registro
     {
 
-        $validator = Validator::make($request->all(), [
-            'mac' => 'required|unique:camera_inventories',
-            'model' => 'required',
-            'mark' => 'required',
-            'delivery_note' => 'required',
-            'destination' => 'required',
-            'description' => 'nullable'
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'mac' => 'required|unique:camera_inventories|alpha_num|size:12',
+                'model' => 'required|alpha_num|min:3',
+                'mark' => 'required',
+                'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
+                'delivery_note' => 'required|numeric|min:3',
+                'destination' => 'required|regex:/^[a-zA-Z0-9\/\- ]+$/|min:5',
+                'description' => 'nullable'
 
-        ]);
+            ],
+            ['required_if' => 'Debe agregar el nombre de la marca'],
+            ['location' => 'Localidad', 'model' => 'Modelo']
+        );
 
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator);

@@ -53,18 +53,23 @@ class CameraController extends Controller
     public function store(Request $request) //valida los datos para un nuevo registro
     {
         try {
-            $validator = Validator::make($request->all(), [
-                'mac' => 'required|unique:cameras,mac',
-                'mark' => 'required',
-                'other_mark' => 'required_if:mark,OTRA',
-                'nvr_id' => 'required',
-                'model' => 'required',
-                'name' => 'required|unique:cameras,name',
-                'location' => 'required',
-                'ip' => 'required|ip|unique:cameras,ip',
-                'status' => 'required',
-                'description' => 'nullable'
-            ], ['required_if' => 'Debe agregar el nombre de la marca']);
+            $validator = Validator::make(
+                $request->all(),
+                [
+                    'mac' => 'required|unique:cameras,mac|alpha_num|size:12',
+                    'mark' => 'required',
+                    'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
+                    'nvr_id' => 'required',
+                    'model' => 'required|alpha_num|min:3',
+                    'name' => 'required|unique:cameras,name|regex:/^[a-zA-Z0-9\/\- ]+$/|min:5',
+                    'location' => 'required|regex:/^[a-zA-Z0-9\/\- ]+$/|min:5',
+                    'ip' => 'required|ip|unique:cameras,ip',
+                    'status' => 'required',
+                    'description' => 'nullable'
+                ],
+                ['required_if' => 'Debe agregar el nombre de la marca'],
+                ['name' => 'Nombre', 'location' => 'Localidad', 'model' => 'Modelo']
+            );
 
             if ($validator->fails()) {
                 return redirect()->back()->withInput()->withErrors($validator);
@@ -113,20 +118,27 @@ class CameraController extends Controller
         try {
             $camera = Camera::findOrFail($mac);
 
-            $validator = Validator::make($request->all(), [ //para capturar si hay dato incorrecto
-                'mark' => 'required',
-                'other_mark' => 'required_if:mark,OTRA',
-                'nvr_id' => 'required',
-                'model' => 'required',
-                'name' => [
-                    'required',
-                    Rule::unique('cameras')->ignore($camera->mac, 'mac') //ignora el nombre registro que va actualizar 
+            $validator = Validator::make(
+                $request->all(),
+                [ //para capturar si hay dato incorrecto
+                    'mark' => 'required',
+                    'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
+                    'nvr_id' => 'required',
+                    'model' => 'required|alpha_num|min:3',
+                    'name' => [
+                        'required',
+                        'regex:/^[a-zA-Z0-9\/\- ]+$/',
+                        'min:5',
+                        Rule::unique('cameras')->ignore($camera->mac, 'mac') //ignora el nombre registro que va actualizar 
+                    ],
+                    'location' => 'required|regex:/^[a-zA-Z0-9\/\- ]+$/|min:5',
+                    'ip' => 'required|ip|unique:cameras,ip',
+                    'status' => 'required',
+                    'description' => 'nullable'
                 ],
-                'location' => 'required',
-                'ip' => 'required|ip|unique:cameras,ip',
-                'status' => 'required',
-                'description' => 'nullable'
-            ]);
+                ['required_if' => 'Debe agregar el nombre de la marca'],
+                ['location' => 'Localidad', 'model' => 'Modelo']
+            );
 
             if ($validator->fails()) {
                 return redirect()->back()->withInput()->withErrors($validator);

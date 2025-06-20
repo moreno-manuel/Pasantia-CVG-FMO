@@ -28,7 +28,7 @@
                         <!-- Campo nombre -->
                         <div>
                             <label for="name" class="block text-sm font-semibold text-white">Nombre</label>
-                            <input type="text" name="name" id="name"
+                            <input type="text" name="name" id="name" minlength="3"
                                 value="{{ old('name', $user->person->name) }}"
                                 class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('name') border-red-500 @enderror"
                                 required>
@@ -40,7 +40,7 @@
                         <!-- Campo apellido -->
                         <div>
                             <label for="last_name" class="block text-sm font-semibold text-white">Apellido</label>
-                            <input type="text" name="last_name" id="last_name"
+                            <input type="text" name="last_name" id="last_name" minlength="3"
                                 value="{{ old('last_name', $user->person->last_name) }}"
                                 class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('last_name') border-red-500 @enderror"
                                 required>
@@ -73,11 +73,8 @@
                         <div>
                             <label for="license" class="block text-sm font-semibold text-white">Ficha</label>
                             <input type="text" name="license" id="license" value="{{ $user->person->license }}"
-                                class="mt-1 block w-full rounded-md bg-gray-900 border border-gray-600 text-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('license') border-red-500 @enderror"
+                                class="mt-1 block w-full rounded-md bg-gray-900 border border-gray-600 text-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm "
                                 disabled readonly>
-                            @error('license')
-                                <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
-                            @enderror
                         </div>
                     </div>
                 </div>
@@ -89,7 +86,7 @@
                         <!-- Campo nombre de Usuario -->
                         <div>
                             <label for="userName" class="block text-sm font-semibold text-white">Nombre de Usuario</label>
-                            <input type="text" name="userName" id="userName"
+                            <input type="text" name="userName" id="userName" minlength="6" maxlength="12"
                                 value="{{ old('userName', $user->userName) }}"
                                 class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('userName') border-red-500 @enderror"
                                 required>
@@ -137,7 +134,7 @@
                             <div class="sm:col-span-1">
                                 <label for="password" class="block text-sm font-semibold text-white">Contraseña</label>
                                 <div class="relative">
-                                    <input id="password" type="password" name="password"
+                                    <input id="password" type="password" name="password" minlength="8" value="{{old('password')}}"
                                         class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('password') border-red-500 @enderror">
                                     <!-- Botón para mostrar/ocultar -->
                                     <button type="button" onclick="togglePasswordVisibility('password')"
@@ -155,7 +152,7 @@
                                 <label for="password_confirmation" class="block text-sm font-semibold text-white">Confirmar
                                     Contraseña</label>
                                 <div class="relative">
-                                    <input id="password_confirmation" type="password" name="password_confirmation"
+                                    <input id="password_confirmation" type="password" name="password_confirmation" minlength="8" value="{{old('password_confirmation')}}"
                                         class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('password_confirmation') border-red-500 @enderror">
                                     <!-- Botón para mostrar/ocultar -->
                                     <button type="button" onclick="togglePasswordVisibility('password_confirmation')"

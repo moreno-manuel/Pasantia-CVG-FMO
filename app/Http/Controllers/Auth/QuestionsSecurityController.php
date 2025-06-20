@@ -32,10 +32,10 @@ class QuestionsSecurityController extends Controller
             'question_1' => 'required',
             'question_2' => 'required',
             'question_3' => 'required',
-            'answer_1' => 'required',
-            'answer_2' => 'required',
-            'answer_3' => 'required',
-        ]);
+            'answer_1' => 'required|regex:/^[a-zA-Z0-9\s]+$/',
+            'answer_2' => 'required|regex:/^[a-zA-Z0-9\s]+$/',
+            'answer_3' => 'required|regex:/^[a-zA-Z0-9\s]+$/',
+        ], [], ['answer_1' => 'Respuesta 1', 'answer_2' => 'Respuesta 2', 'answer_3' => 'Respuesta 3']);
 
         if ($validator->fails())
             return redirect()->back()->withInput()->withErrors($validator);
@@ -49,7 +49,8 @@ class QuestionsSecurityController extends Controller
             'answer_2' => $request->input('answer_2'),
             'answer_3' => $request->input('answer_3'),
         ]);
-        return redirect()->route('perfil.edit', ['user' => Auth::user()->userName])->with('succes', 'Preguntas de seguridad creadas exitosamente.');
+
+        return redirect()->route('perfil.edit', ['user' => Auth::user()->userName])->with('success', 'Preguntas de seguridad creadas exitosamente.');
     }
 
 
@@ -60,10 +61,10 @@ class QuestionsSecurityController extends Controller
             'question_1' => 'required',
             'question_2' => 'required',
             'question_3' => 'required',
-            'answer_1' => 'required',
-            'answer_2' => 'required',
-            'answer_3' => 'required',
-        ]);
+            'answer_1' => 'required|regex:/^[a-zA-Z0-9\s]+$/',
+            'answer_2' => 'required|regex:/^[a-zA-Z0-9\s]+$/',
+            'answer_3' => 'required|regex:/^[a-zA-Z0-9\s]+$/',
+        ], [], ['answer_1' => 'Respuesta 1', 'answer_2' => 'Respuesta 2', 'answer_3' => 'Respuesta 3']);
 
         if ($validator->fails())
             return redirect()->back()->withInput()->withErrors($validator);
@@ -79,6 +80,6 @@ class QuestionsSecurityController extends Controller
             'answer_3' => $request->input('answer_3'),
         ]);
 
-        return redirect()->route('perfil.edit', ['user' => Auth::user()->userName])->with('succes', 'Preguntas de seguridad actualizadas exitosamente.');
+        return redirect()->route('perfil.edit', ['user' => Auth::user()->userName])->with('success', 'Preguntas de seguridad actualizadas exitosamente.');
     }
 }

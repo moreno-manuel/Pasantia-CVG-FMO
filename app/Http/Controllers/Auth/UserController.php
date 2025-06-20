@@ -32,24 +32,26 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'last_name' => 'required',
+            'name' => 'required|min:3|alpha',
+            'last_name' => 'required|min:3|alpha',
             'sex' => 'required',
-            'license' => 'required|unique:persons,license',
+            'license' => 'required|alpha_num|unique:persons,license|min:3',
             'userName' => [
                 'required',
                 'unique:users,userName',
                 'min:6',
                 'max:12',
-                'regex:/^(?=.*[A-Za-z])[A-Za-z0-9.]+$/', // Letras, números y puntos (al menos una letra)
+                'alpha_num', // Letras, números y puntos (al menos una letra)
             ],
             'rol' => 'required',
             'email' => 'required|string|email|max:255|unique:users,email',
-            'password' => 'required|confirmed|min:8',
+            'password' => 'required|confirmed|min:8|regex:/^(?=.*[A-Za-z])(?=.*\d).+$/',
             'password_confirmation' => 'required_with:password'
-        ], [
-            'license' => 'El campo ficha ya ha sido registrado',
-            'userName' => 'El campo nombre de usuario ya ha sido registrado',
+        ], [], [
+            'userName' => 'Nombre de usuario',
+            'license' => 'Ficha',
+            'name' => 'Nombre',
+            'last_name' => 'Apellido'
         ]);
 
         if ($validator->fails())
@@ -87,15 +89,15 @@ class UserController extends Controller
         $person = Person::findorFail($person);
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'last_name' => 'required',
+            'name' => 'required|min:3|alpha',
+            'last_name' => 'required|min:3|alpha',
             'sex' => 'required',
             'userName' =>
             [
                 'required',
                 'min:6',
                 'max:12',
-                'regex:/^(?=.*[A-Za-z])[A-Za-z0-9.]+$/', // Letras, números y puntos (al menos una letra)
+                'alpha_num', // Letras, números y puntos (al menos una letra)
                 Rule::unique('users')->ignore($person->user->userName, 'userName')
             ],
             'rol' => 'required',
@@ -107,11 +109,12 @@ class UserController extends Controller
                 'max:255',
                 Rule::unique('users')->ignore($person->user->email, 'email')
             ],
-            'password' => 'nullable|confirmed|min:8',
+            'password' => 'nullable|confirmed|min:8|regex:/^(?=.*[A-Za-z])(?=.*\d).+$/',
             'password_confirmation' => 'required_with:password'
         ], [], [
             'userName' => 'Nombre de usuario',
-            'license' => 'Ficha',
+            'name' => 'Nombre',
+            'last_name' => 'Apellido'
         ]);
 
         if ($validator->fails())
@@ -140,14 +143,6 @@ class UserController extends Controller
 
 
         return redirect()->route('users.index')->with('success', 'Datos de usuario actualizados exitosamente ');
-    }
-
-    public function show($userName)
-    {
-        $user = User::where('userName', $userName)->first();
-
-        $person = $user->person;
-        return view('front.user.show', compact('person'));
     }
 
     public function destroy($person)

@@ -24,7 +24,7 @@
                     <!-- Campo Dirección MAC -->
                     <div>
                         <label for="mac" class="block text-sm font-semibold text-white">Dirección MAC</label>
-                        <input type="text" name="mac" id="mac"
+                        <input type="text" name="mac" id="mac" minlength="12" maxlength="12"
                             class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('mac') border-red-500 @enderror"
                             value="{{ old('mac') }}" placeholder="Ejemplo: 001A2B3C4D5E" required>
                         @error('mac')
@@ -59,38 +59,38 @@
                         @enderror
                     </div>
 
-
-                    <!-- Campo Especificar Otra marca -->
-                    <div id="other-brand-field" class="hidden md:col-span-2">
-                        <label for="other_mark" class="block text-sm font-semibold text-white">Especifica la marca</label>
-                        <input type="text" name="other_mark" id="other_mark"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            placeholder="Nombre de la marca">
-                    </div>
-
                     <!-- Campo Modelo -->
                     <div>
                         <label for="model" class="block text-sm font-semibold text-white">Modelo</label>
-                        <input type="text" name="model" id="model"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        <input type="text" name="model" id="model" minlength="3"
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('model') border-red-500 @enderror"
                             value="{{ old('model') }}" required>
+                        @error('model')
+                            <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <!-- Campo Nota de Entrega -->
                     <div>
                         <label for="delivery_note" class="block text-sm font-semibold text-white">Nota de Entrega</label>
-                        <input type="text" name="delivery_note" id="delivery_note"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        <input type="text" name="delivery_note" id="delivery_note" minlength="3"
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('delivery_note') border-red-500 @enderror"
                             value="{{ old('delivery_note') }}" required>
+                        @error('delivery_note')
+                            <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <!-- Campo Destino de Instalación -->
                     <div>
                         <label for="destination" class="block text-sm font-semibold text-white">Destino de
                             Instalación</label>
-                        <input type="text" name="destination" id="destination"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        <input type="text" name="destination" id="destination" minlength="5"
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm  @error('destination') border-red-500 @enderror"
                             value="{{ old('destination') }}" required>
+                        @error('destination')
+                            <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <!-- Campo Descripción -->

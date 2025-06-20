@@ -35,17 +35,24 @@
                     <!-- Campo nombre -->
                     <div>
                         <label for="name" class="block text-sm font-semibold text-white">Nombre</label>
-                        <input type="text" name="name" id="name"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        <input type="text" name="name" id="name" minlength="3"
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm  @error('name') border-red-500 @enderror"
                             value="{{ old('name', $user->person->name) }}" required>
+                        @error('name')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <!-- Campo apellido  -->
                     <div>
                         <label for="last_name" class="block text-sm font-semibold text-white">Apellido</label>
                         <input type="text" name="last_name" value="{{ old('last_name', $user->person->last_name) }}"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            minlength="3"
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm  @error('last_name') border-red-500 @enderror"
                             required>
+                        @error('last_name')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <!-- Campo genero -->
@@ -93,7 +100,7 @@
                     <div>
                         <label for="password" class="block text-sm font-semibold text-white">Contraseña</label>
                         <div class="relative">
-                            <input id="password" type="password"
+                            <input id="password" type="password" minlength="8"
                                 class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('password') border-red-500 @enderror"
                                 name="password" value="{{ old('password') }}" autocomplete="current-password">
                             <!-- Botón para mostrar/ocultar contraseña -->
@@ -113,6 +120,7 @@
                             Contraseña</label>
                         <div class="relative">
                             <input id="password_confirmation" type="password" value="{{ old('password_confirmation') }}"
+                                minlength="8"
                                 class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('password_confirmation') border-red-500 @enderror"
                                 name="password_confirmation">
                             <!-- Botón para mostrar/ocultar contraseña -->

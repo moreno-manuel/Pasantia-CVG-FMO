@@ -52,6 +52,7 @@
                     <div id="other-brand-field" class="hidden">
                         <label for="other_brand" class="block text-sm font-semibold text-white">Especifica la marca</label>
                         <input type="text" name="other_mark" id="other_mark" value="{{ old('other_mark') }}"
+                            minlength="3"
                             class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('other_mark') border-red-500 @enderror"
                             placeholder="Nombre de la marca">
                         @error('other_mark')
@@ -62,9 +63,12 @@
                     <!-- Campo Modelo -->
                     <div>
                         <label for="model" class="block text-sm font-semibold text-white">Modelo</label>
-                        <input type="text" name="model" id="model"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            value="{{ old('model', $camera->model) }}" required>
+                        <input type="text" name="model" id="model" minlength="3"
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('model') border-red-500 @enderror"
+                            value="{{ old('model', $camera->model) }} " required>
+                        @error('model')
+                            <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <!-- Campo NVR ID -->
@@ -86,7 +90,7 @@
                     <!-- Campo Nombre -->
                     <div>
                         <label for="name" class="block text-sm font-semibold text-white">Nombre</label>
-                        <input type="text" name="name" id="name"
+                        <input type="text" name="name" id="name" minlength="5"
                             class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('name') border-red-500 @enderror"
                             value="{{ old('name', $camera->name) }}" required>
                         @error('name')
@@ -108,9 +112,12 @@
                     <!-- Campo Localidad -->
                     <div>
                         <label for="location" class="block text-sm font-semibold text-white">Localidad</label>
-                        <input type="text" name="location" id="location"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        <input type="text" name="location" id="location" minlength="5"
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm  @error('location') border-red-500 @enderror"
                             value="{{ old('location', $camera->location) }}" required>
+                        @error('location')
+                            <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <!-- Campo Status -->

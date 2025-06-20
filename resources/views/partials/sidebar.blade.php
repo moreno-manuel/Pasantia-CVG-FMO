@@ -101,19 +101,8 @@
                 </details>
             </li>
 
-            <!-- Condición de Atención -->
-            <li>
-                <a href="{{ route('atencion.index') }}"
-                    class="flex items-center space-x-3 px-6 py-3 hover:bg-gray-700 rounded group">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-300 group-hover:text-blue-400"
-                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                    <span>Condición de Atención</span>
-                </a>
 
-                <!-- Camara inventario-->
+            <!-- Camara inventario-->
             <li>
                 <a href="{{ route('inventories.index') }}"
                     class="flex items-center space-x-3 px-6 py-3 hover:bg-gray-700 rounded group">
@@ -126,20 +115,37 @@
                 </a>
             </li>
 
-            <!-- Historial equipos eliminados -->
+            <!-- Condición de Atención -->
             <li>
-                <a href="{{ route('report.index') }}"
+                <a href="{{ route('atencion.index') }}"
                     class="flex items-center space-x-3 px-6 py-3 hover:bg-gray-700 rounded group">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-300 group-hover:text-blue-400"
                         fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
-                    <span>Reporte</span>
+                    <span>Condición de Atención</span>
                 </a>
             </li>
 
-            <!-- listado de reportes que se pueden generar -->
+            <!-- reportes que se pueden generar -->
+            @if (auth()->user()->rol != 'lector')
+                <li>
+                    <a href="{{ route('report.index') }}"
+                        class="flex items-center space-x-3 px-6 py-3 hover:bg-gray-700 rounded group">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            class="h-5 w-5 text-gray-300 group-hover:text-blue-400" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                        </svg>
+                        <span>Reporte</span>
+                    </a>
+                </li>
+            @endif
+
+
+            <!-- historial de equipos eliminados -->
             <li>
                 <a href="{{ route('eliminated.index') }}"
                     class="flex items-center space-x-3 px-6 py-3 hover:bg-gray-700 rounded group">
@@ -185,16 +191,18 @@
                                 <span>Perfil</span>
                             </a>
                         </li>
-                        <li><a href="{{ route('users.index') }}"
-                                class="flex items-center space-x-2 px-4 py-2 hover:bg-gray-700 rounded">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-                                </svg>
-                                <span>Usuarios</span>
-                            </a>
-                        </li>
+                        @if (auth()->user()->rol === 'admin')
+                            <li><a href="{{ route('users.index') }}"
+                                    class="flex items-center space-x-2 px-4 py-2 hover:bg-gray-700 rounded">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                                    </svg>
+                                    <span>Usuarios</span>
+                                </a>
+                            </li>
+                        @endif
                     </ul>
                 </details>
             </li>

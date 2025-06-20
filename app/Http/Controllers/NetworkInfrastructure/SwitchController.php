@@ -40,16 +40,21 @@ class SwitchController extends Controller
     public function store(Request $request) //guarda los datos de un switch nuevo
     {
 
-        $validator = Validator::make($request->all(), [ //para capturar si hay dato incorrecto
-            'serial' => 'required|unique:switches',
-            'mark' => 'required',
-            'other_mark' => 'required_if:mark,OTRA',
-            'model' => 'required',
-            'location' => 'required',
-            'number_ports' => 'required',
-            'status' => 'required',
-            'description' => 'nullable'
-        ]);
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'serial' => 'required|unique:switches|alpha_num|size:10',
+                'mark' => 'required',
+                'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
+                'location' => 'required|regex:/^[a-zA-Z0-9\/\- ]+$/|min:5',
+                'model' => 'required|alpha_num|min:3',
+                'number_ports' => 'required',
+                'status' => 'required',
+                'description' => 'nullable'
+            ],
+            ['required_if' => 'Debe agregar el nombre de la marca'],
+            ['serial' => 'Serial', 'location' => 'Localidad', 'model' => 'Modelo']
+        );
 
 
         if ($validator->fails()) {
@@ -71,14 +76,20 @@ class SwitchController extends Controller
     public function update(Request $request, Switche $switch) //Actualiza los datos de un switch
     {
 
-        $validator = Validator::make($request->all(), [ //para capturar si hay dato incorrecto
-            'mark' => 'required',
-            'other_mark' => 'required_if:mark,OTRA',
-            'number_ports' => 'required',
-            'location' => 'required',
-            'status' => 'required',
-            'description' => 'nullable'
-        ]);
+        $validator = Validator::make(
+            $request->all(),
+            [ //para capturar si hay dato incorrecto
+                'mark' => 'required',
+                'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
+                'number_ports' => 'required',
+                'location' => 'required|regex:/^[a-zA-Z0-9\/\- ]+$/|min:5',
+                'model' => 'required|alpha_num|min:3',
+                'status' => 'required',
+                'description' => 'nullable'
+            ],
+            ['required_if' => 'Debe agregar el nombre de la marca'],
+            ['serial' => 'Serial', 'location' => 'Localidad', 'model' => 'Modelo']
+        );
 
 
         if ($validator->fails()) {

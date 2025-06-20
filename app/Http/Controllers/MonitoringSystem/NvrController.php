@@ -51,19 +51,23 @@ class NvrController extends Controller
     {
         try { //try para para evitar ip duplicadas
 
-            $validated = $request->validate([  // Validación principal del NVR
-                'mac' => 'required|unique:nvrs,mac',
-                'mark' => 'required',
-                'other_mark' => 'required_if:mark,Otra',
-                'model' => 'required',
-                'name' => 'required|unique:nvrs,name',
-                'ip' => 'required|ip|unique:nvrs,ip',
-                'ports_number' => 'required',
-                'slot_number' => 'required',
-                'location' => 'required',
-                'status' => 'required',
-                'description' => 'nullable'
-            ], ['required_if' => 'Debe agregar el nombre de la marca']);
+            $validated = $request->validate(
+                [  // Validación principal del NVR
+                    'mac' => 'required|unique:nvrs,mac|alpha_num|size:12',
+                    'mark' => 'required',
+                    'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
+                    'model' => 'required|alpha_num|min:3',
+                    'name' => 'required|unique:nvrs,name|regex:/^[a-zA-Z0-9\/\- ]+$/|min:5',
+                    'ip' => 'required|ip|unique:nvrs,ip',
+                    'ports_number' => 'required',
+                    'slot_number' => 'required',
+                    'location' => 'required|regex:/^[a-zA-Z0-9\/\- ]+$/|min:5',
+                    'status' => 'required',
+                    'description' => 'nullable'
+                ],
+                ['required_if' => 'Debe agregar el nombre de la marca'],
+                ['name' => 'Nombre', 'location' => 'Localidad', 'model' => 'Modelo']
+            );
 
             $slots = nvrSlotValidateCreate($request); //valida slot y devuelve un arreglo con datos de los slots 
 
@@ -106,20 +110,25 @@ class NvrController extends Controller
             return redirect()->route('nvr.index')->with('warnings', 'Nvr no encontrado');
         }
     }
+
     public function update(Request $request, Nvr $nvr) //valida la actualizacion 
     {
         try { //try para para evitar ip duplicadas
 
-            $validated = $request->validate([       // Validación principal del NVR
-                'mark' => 'required',
-                'other_mark' => 'required_if:mark,OTRA',
-                'model' => 'required',
-                'ip' => 'required|ip|unique:nvrs',
-                'ports_number' => 'required',
-                'location' => 'required',
-                'status' => 'required',
-                'description' => 'nullable'
-            ], ['required_if' => 'Debe agregar el nombre de la marca']);
+            $validated = $request->validate(
+                [       // Validación principal del NVR
+                    'mark' => 'required',
+                    'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
+                    'model' => 'required|alpha_num|min:3',
+                    'ip' => 'required|ip|unique:nvrs',
+                    'ports_number' => 'required',
+                    'location' => 'required|regex:/^[a-zA-Z0-9\/\- ]+$/|min:5',
+                    'status' => 'required',
+                    'description' => 'nullable'
+                ],
+                ['required_if' => 'Debe agregar el nombre de la marca'],
+                ['location' => 'Localidad', 'model' => 'Modelo']
+            );
 
 
             $slotsRequest = nvrSlotValidateUpdate($request, $nvr); //validación para los slots

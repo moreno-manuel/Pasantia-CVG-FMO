@@ -259,7 +259,7 @@ function nvrSlotValidateCreate(Request $request)
 
     for ($i = 0; $i <= $request->slot_number - 1; $i++) {
         // Reglas principales
-        $slotRules["volumen.{$i}.serial_disco"] = "nullable|string|required_with:volumen.{$i}.capacidad_disco";
+        $slotRules["volumen.{$i}.serial_disco"] = "nullable|alpha_num|min:4|required_with:volumen.{$i}.capacidad_disco";
         $slotRules["volumen.{$i}.capacidad_disco"] = "nullable|numeric|lte:volumen.{$i}.capacidad_max_volumen|required_with:volumen.{$i}.serial_disco";
         $slotRules["volumen.{$i}.capacidad_max_volumen"] = 'required|numeric';
 
@@ -305,7 +305,7 @@ function nvrSlotValidateUpdate(Request $request, Nvr $nvr)
         $existingMaxCapacity = $existingSlots[$i];
 
         // Reglas principales (sin capacidad_max_volumen)
-        $slotRules["volumen.{$i}.serial_disco"] = "nullable|string|required_with:volumen.{$i}.capacidad_disco";
+        $slotRules["volumen.{$i}.serial_disco"] = "nullable|alpha_num|min:4|required_with:volumen.{$i}.capacidad_disco";
         $slotRules["volumen.{$i}.capacidad_disco"] = "nullable|numeric|lte:{$existingMaxCapacity}|required_with:volumen.{$i}.serial_disco";
 
         // Nombres legibles

@@ -25,7 +25,7 @@
                     <!-- Campo Serial -->
                     <div>
                         <label for="serial" class="block text-sm font-semibold text-white">Serial</label>
-                        <input type="text" name="serial" value="{{ old('serial') }}"
+                        <input type="text" name="serial" value="{{ old('serial') }}" minlength="10" maxlength="10"
                             class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('serial') border-red-500 @enderror"
                             placeholder="Ejemplo: AK890123" required>
                         @error('serial')
@@ -53,6 +53,7 @@
                     <div id="other-brand-field" class="hidden">
                         <label for="other_brand" class="block text-sm font-semibold text-white">Especifica la marca</label>
                         <input type="text" name="other_mark" id="other_mark" value="{{ old('other_mark') }}"
+                            minlength="3"
                             class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('other_mark') border-red-500 @enderror"
                             placeholder="Nombre de la marca">
                         @error('other_mark')
@@ -63,9 +64,12 @@
                     <!-- Campo Modelo -->
                     <div>
                         <label for="model" class="block text-sm font-semibold text-white">Modelo</label>
-                        <input type="text" name="model" value="{{ old('model') }}"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        <input type="text" name="model" value="{{ old('model') }}" minlength="3"
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('model') border-red-500 @enderror"
                             required>
+                        @error('model')
+                            <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <!-- Campo Número de Puertos -->
@@ -79,9 +83,12 @@
                     <!-- Campo Localidad -->
                     <div>
                         <label for="location" class="block text-sm font-semibold text-white">Localidad</label>
-                        <input type="text" name="location" value="{{ old('location') }}"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        <input type="text" name="location" value="{{ old('location') }}" minlength="5"
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('location') border-red-500 @enderror"
                             placeholder="Ubicación de Instalación" required>
+                        @error('location')
+                            <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <!-- Campo Status -->

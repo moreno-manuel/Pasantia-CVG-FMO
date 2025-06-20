@@ -27,7 +27,7 @@
                         <!-- Campo nombre -->
                         <div>
                             <label for="name" class="block text-sm font-semibold text-white">Nombre</label>
-                            <input type="text" name="name" id="name" value="{{ old('name') }}"
+                            <input type="text" name="name" id="name" value="{{ old('name') }}" minlength="3"
                                 class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('name') border-red-500 @enderror"
                                 required>
                             @error('name')
@@ -38,7 +38,7 @@
                         <!-- Campo apellido -->
                         <div>
                             <label for="last_name" class="block text-sm font-semibold text-white">Apellido</label>
-                            <input type="text" name="last_name" id="last_name" value="{{ old('last_name') }}"
+                            <input type="text" name="last_name" id="last_name" value="{{ old('last_name') }}" minlength="3"
                                 class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('last_name') border-red-500 @enderror"
                                 required>
                             @error('last_name')
@@ -65,7 +65,7 @@
                         <!-- Campo ficha -->
                         <div>
                             <label for="license" class="block text-sm font-semibold text-white">Ficha</label>
-                            <input type="text" name="license" id="license" value="{{ old('license') }}"
+                            <input type="text" name="license" id="license" value="{{ old('license') }}" minlength="3"
                                 class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('license') border-red-500 @enderror"
                                 required>
                             @error('license')
@@ -82,7 +82,7 @@
                         <!-- Campo nombre de Usuario -->
                         <div>
                             <label for="userName" class="block text-sm font-semibold text-white">Nombre de Usuario</label>
-                            <input type="text" name="userName" id="userName" value="{{ old('userName') }}"
+                            <input type="text" name="userName" id="userName" value="{{ old('userName') }}" minlength="6" maxlength="12"
                                 class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('userName') border-red-500 @enderror"
                                 required min="6" max="12">
                             @error('userName')
@@ -128,7 +128,7 @@
                             <div class="sm:col-span-1">
                                 <label for="password" class="block text-sm font-semibold text-white">Contraseña</label>
                                 <div class="relative">
-                                    <input id="password" type="password" name="password" value="{{ old('password') }}"
+                                    <input id="password" type="password" name="password" value="{{ old('password') }}" minlength="8"
                                         class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('password') border-red-500 @enderror"
                                         required>
                                     <!-- Botón para mostrar/ocultar -->
@@ -148,7 +148,7 @@
                                     Contraseña</label>
                                 <div class="relative">
                                     <input id="password_confirmation" type="password" name="password_confirmation"
-                                        value="{{ old('password_confrimation') }}"
+                                        value="{{ old('password_confrimation') }}" minlength="8"
                                         class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('password_confirmation') border-red-500 @enderror"
                                         required>
                                     <!-- Botón para mostrar/ocultar -->

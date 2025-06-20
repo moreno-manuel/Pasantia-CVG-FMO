@@ -42,18 +42,23 @@ class LinkController extends Controller
     public function store(Request $request) //guarda los datos de un link nuevo
     {
         try {
-            $validator = Validator::make($request->all(), [ //para capturar si hay dato incorrecto
-                'mac' => 'required|unique:links,mac',
-                'mark' => 'required',
-                'other_mark' => 'required_if:mark,OTRA',
-                'model' => 'required',
-                'name' => 'required|unique:links,name',
-                'ssid' => 'required',
-                'location' => 'required',
-                'status' => 'required',
-                'ip' => 'required|ip|unique:links,ip',
-                'description' => 'nullable'
-            ], ['required_if' => 'Debe agregar el nombre de la marca']);
+            $validator = Validator::make(
+                $request->all(),
+                [ //para capturar si hay dato incorrecto
+                    'mac' => 'required|unique:links,mac|alpha_num|size:12',
+                    'mark' => 'required',
+                    'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
+                    'model' => 'required|alpha_num|min:3',
+                    'name' => 'required|unique:links,name|regex:/^[a-zA-Z0-9\/\- ]+$/|min:5',
+                    'ssid' => 'required|alpha_num|min:5',
+                    'location' => 'required|regex:/^[a-zA-Z0-9\/\- ]+$/|min:5',
+                    'status' => 'required',
+                    'ip' => 'required|ip|unique:links,ip',
+                    'description' => 'nullable'
+                ],
+                ['required_if' => 'Debe agregar el nombre de la marca'],
+                ['name' => 'Nombre', 'location' => 'Localidad', 'model' => 'Modelo', 'ssid' => 'SSID']
+            );
 
             if ($validator->fails()) {
                 return redirect()->back()->withInput()->withErrors($validator);
@@ -89,20 +94,27 @@ class LinkController extends Controller
         try {
             $link = Link::findOrFail($mac);
 
-            $validator = Validator::make($request->all(), [ //para capturar si hay dato incorrecto
-                'model' => 'required',
-                'name' => [
-                    'required',
-                    Rule::unique('links')->ignore($link->mac, 'mac') //ignora el registro que va actualizar 
+            $validator = Validator::make(
+                $request->all(),
+                [ //para capturar si hay dato incorrecto
+                    'model' => 'required|alpha_num|min:3',
+                    'name' => [
+                        'required',
+                        'regex:/^[a-zA-Z0-9\/\- ]+$/',
+                        'min:5',
+                        Rule::unique('links')->ignore($link->mac, 'mac') //ignora el registro que va actualizar 
+                    ],
+                    'mark' => 'required',
+                    'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
+                    'ssid' => 'required|alpha_num|min:5',
+                    'location' => 'required|regex:/^[a-zA-Z0-9\/\- ]+$/|min:5',
+                    'status' => 'required',
+                    'ip' => 'required|ip|unique:links,ip',
+                    'description' => 'nullable'
                 ],
-                'mark' => 'required',
-                'other_mark' => 'required_if:mark,Otra',
-                'ssid' => 'required',
-                'location' => 'required',
-                'status' => 'required',
-                'ip' => 'required|ip|unique:links,ip',
-                'description' => 'nullable'
-            ], ['required_if' => 'Debe agregar el nombre de la marca']);
+                ['required_if' => 'Debe agregar el nombre de la marca'],
+                ['name' => 'Nombre', 'location' => 'Localidad', 'model' => 'Modelo', 'ssid' => 'SSID']
+            );
 
             if ($validator->fails()) {
                 return redirect()->back()->withInput()->withErrors($validator);

@@ -30,7 +30,6 @@ Route::resource('switch', SwitchController::class)->middleware('auth');
 Route::resource('enlace', LinkController::class)->middleware('auth');
 Route::resource('nvr', NvrController::class)->middleware('auth');
 Route::resource('camara', CameraController::class)->middleware('auth');
-Route::resource('atencion', ConditionAController::class)->middleware('auth');
 Route::controller(CameraInventoriesController::class)
     ->prefix('inventario/camara')
     ->middleware('auth')
@@ -40,6 +39,7 @@ Route::controller(CameraInventoriesController::class)
         Route::post('', 'store')->name('inventories.store');
         Route::delete('{id}', 'destroy')->name('inventories.destroy');
     });
+Route::resource('atencion', ConditionAController::class)->middleware('auth');
 
 
 Route::controller(EquipmentDisuseController::class) //equipos eliminados
@@ -57,6 +57,11 @@ Route::controller(ReportController::class) //reportes
     ->middleware(ReportlAccesMiddleware::class)
     ->group(function () {
         Route::get('', 'index')->name('report.index');
+        Route::get('export/switch', 'exportSwitch')->name('report.switch');
+        Route::get('export/link', 'exportLink')->name('report.link');
+        Route::get('export/camera-stock', 'exportCameraStock')->name('report.cameraStock');
+        Route::get('export/camera-by-nvr', 'exportCameraByNvr')->name('report.cameraByNvr');
+        Route::get('export/report', 'exporReport')->name('report.report');
     });
 
 
@@ -77,4 +82,4 @@ Route::controller(QuestionsSecurityController::class) // preguntas de seguridad 
         Route::put('{user}', 'update')->name('security.update');
     });
 
-Route::resource('users', UserController::class)->middleware(UsersAccesMiddleware::class); //para el control de los usuarios registrados  
+Route::resource('users', UserController::class)->middleware(UsersAccesMiddleware::class)->except('show'); //para el control de los usuarios registrados  

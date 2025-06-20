@@ -9,16 +9,17 @@
         <!-- Encabezado y botón agregar -->
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-white bg-gray-600 rounded-md px-3 py-1">Inventario Cámaras</h1>
-
-            <a href="{{ route('inventories.create') }}"
-                class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-blue-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                <!-- Icono de agregar -->
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                </svg>
-                Agregar Nueva Cámara
-            </a>
+            @if (auth()->user()->rol != 'lector')
+                <a href="{{ route('inventories.create') }}"
+                    class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-blue-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    <!-- Icono de agregar -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    Agregar Nueva Cámara
+                </a>
+            @endif
         </div>
 
         <!-- Filtros para búsqueda -->
@@ -89,7 +90,9 @@
                             <th class="px-6 py-3 text-center text-sm font-medium text-white w-32">Destino/instalación</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white w-24">Nota/entrega</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white w-32">Descripción</th>
-                            <th class="px-6 py-3 text-center text-sm font-medium text-white w-32">Acción</th>
+                            @if (auth()->user()->rol != 'lector')
+                                <th class="px-6 py-3 text-center text-sm font-medium text-white w-32">Acción</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
@@ -102,20 +105,21 @@
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $camera['delivery_note'] }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-white">
                                     {{ $camera['description'] ?? 'Sin descripción' }}</td>
+                                @if (auth()->user()->rol != 'lector')
+                                    {{-- Acciones --}}
+                                    <td class="px-6 py-4 text-sm align-middle">
+                                        <div class="flex justify-center space-x-2">
 
-                                {{-- Acciones --}}
-                                <td class="px-6 py-4 text-sm align-middle">
-                                    <div class="flex justify-center space-x-2">
-
-                                        <!-- Botón Eliminar -->
-                                        <button type="button"
-                                            onclick="openDeleteModal('{{ route('inventories.destroy', $camera['mac']) }}')"
-                                            onsubmit="return confirm('¿Estás seguro de eliminar este equipo permanentemente?');"
-                                            class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                            Eliminar
-                                        </button>
-                                    </div>
-                                </td>
+                                            <!-- Botón Eliminar -->
+                                            <button type="button"
+                                                onclick="openDeleteModal('{{ route('inventories.destroy', $camera['mac']) }}')"
+                                                onsubmit="return confirm('¿Estás seguro de eliminar este equipo permanentemente?');"
+                                                class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                                Eliminar
+                                            </button>
+                                        </div>
+                                    </td>
+                                @endif
                             </tr>
                         @endforeach
                     </tbody>

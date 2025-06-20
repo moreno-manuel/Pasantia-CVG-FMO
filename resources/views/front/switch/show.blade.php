@@ -81,20 +81,21 @@
                 </dl>
             </div>
         </div>
+        @if (auth()->user()->rol != 'lector')
+            <!-- Acciones -->
+            <div class="mt-6 flex space-x-3">
+                <a href="{{ route('switch.edit', $switch) }}"
+                    class="inline-flex items-center px-3 py-1.5 bg-yellow-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-yellow-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                    Editar
+                </a>
 
-        <!-- Acciones -->
-        <div class="mt-6 flex space-x-3">
-            <a href="{{ route('switch.edit', $switch) }}"
-                class="inline-flex items-center px-3 py-1.5 bg-yellow-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-yellow-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
-                Editar
-            </a>
-
-            <!-- Botón Eliminar -->
-            <button type="button" onclick="openDeleteModal('{{ route('switch.destroy', $switch) }}')"
-                class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-red-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                Eliminar
-            </button>
-        </div>
+                <!-- Botón Eliminar -->
+                <button type="button" onclick="openDeleteModal('{{ route('switch.destroy', $switch) }}')"
+                    class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-red-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                    Eliminar
+                </button>
+            </div>
+        @endif
     </div>
 
     <!-- Modal para confirmar eliminación con descripción -->
