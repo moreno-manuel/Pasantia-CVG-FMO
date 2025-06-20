@@ -12,6 +12,8 @@ use App\Http\Controllers\NetworkInfrastructure\CameraInventoriesController;
 use App\Http\Controllers\NetworkInfrastructure\LinkController;
 use App\Http\Controllers\NetworkInfrastructure\SwitchController;
 use App\Http\Controllers\ReportController;
+use App\Http\Middleware\ReportlAccesMiddleware;
+use App\Http\Middleware\UsersAccesMiddleware;
 use Illuminate\Support\Facades\Route;
 
 
@@ -52,7 +54,7 @@ Route::controller(EquipmentDisuseController::class) //equipos eliminados
 
 Route::controller(ReportController::class) //reportes
     ->prefix('report')
-    ->middleware('auth')
+    ->middleware(ReportlAccesMiddleware::class)
     ->group(function () {
         Route::get('', 'index')->name('report.index');
     });
@@ -75,4 +77,4 @@ Route::controller(QuestionsSecurityController::class) // preguntas de seguridad 
         Route::put('{user}', 'update')->name('security.update');
     });
 
-Route::resource('users', UserController::class)->middleware('auth'); //para el control de los usuarios registrados  
+Route::resource('users', UserController::class)->middleware(UsersAccesMiddleware::class); //para el control de los usuarios registrados  

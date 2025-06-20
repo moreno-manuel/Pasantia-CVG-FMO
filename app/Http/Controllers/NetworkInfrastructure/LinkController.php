@@ -6,11 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\EquipmentDisuse\EquipmentDisuse;
 use App\Models\EquipmentDisuse\LinkDisuse;
 use App\Models\networkInfrastructure\Link;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\ValidationException;
+
 
 use function app\Helpers\filter;
 use function app\Helpers\marksUpdate;
@@ -71,13 +72,15 @@ class LinkController extends Controller
         }
     }
 
-    public function edit($mac) //muestra la vista para editar un link
+    public function edit($name) //muestra la vista para editar un link
     {
-        $link = Link::findOrFail($mac);
-
-        $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['link_marks']; // json con las marcas agregadas
-
-        return view('front.link.edit', compact('link', 'marks'));
+        try {
+            $link = Link::where('name', $name)->firstOrFail();
+            $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['link_marks']; // json con las marcas agregadas
+            return view('front.link.edit', compact('link', 'marks'));
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route('enlace.index')->with('warnings', 'Nvr no encontrado');
+        }
     }
 
     public function update(Request $request,  $mac) //Actualiza los datos de un link
@@ -109,7 +112,7 @@ class LinkController extends Controller
 
 
             $link->update($request->all());
-            return redirect()->route('enlace.index');
+            return redirect()->route('enlace.index')->with('success', 'Enlace actualizado exitosamente.');
         } catch (QueryException $e) {
             if ($e->getCode() === '23000') { // Código de error de integridad para la db *IP*
                 return redirect()->back()->withInput()->withErrors([
@@ -119,10 +122,14 @@ class LinkController extends Controller
         }
     }
 
-    public function show($mac) //muestra la vista y datos para los detalles un link
+    public function show($name) //muestra la vista y datos para los detalles un link
     {
-        $link = Link::findOrFail($mac);
-        return view('front.link.show', compact('link'));
+        try {
+            $link = Link::where('name', $name)->firstOrFail();
+            return view('front.link.show', compact('link'));
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route('enlace.index')->with('warnings', 'Nvr no encontrado');
+        }
     }
 
     public function destroy(Request $request, $mac) //Elimina un link
@@ -131,7 +138,7 @@ class LinkController extends Controller
 
         $equipment = EquipmentDisuse::find($mac);
         if ($equipment)
-            return redirect()->route('enlace.index')->with('success', 'Ya existe un registro eliminado con el mismo ID.');
+            return redirect()->route('enlace.index')->with('warning', 'Ya existe un registro eliminado con el mismo ID.');
 
         EquipmentDisuse::create([
             'id' => $link->mac,

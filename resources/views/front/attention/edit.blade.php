@@ -57,13 +57,23 @@
 
                     <!-- Campo Descripción -->
                     <div class="md:col-span-2">
-                        <label for="description" class="block text-sm font-semibold text-white">Descripción</label>
+                        <label for="description" class="block text-sm font-semibold text-white">Control de condición</label>
                         <textarea name="description" id="description" value="{{ old('description') }}" rows="3"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            placeholder="Describe brevemente la condición de atención..."required></textarea>
-                        <label for="date_end" class="block text-xs font-semibold text-green-400">útlima descripción generada
-                            el
-                            ({{ $condition->description()->latest()->value('created_at')->format('d/m/Y - H:i:s') }})</label>
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('description') border-red-500 @enderror"
+                            placeholder="Agrega nueva descripción para el control de seguimiento"></textarea>
+                        @php
+                            // Obtener el último registro relacionado
+                            $latestControl = $condition->controlCondition()->latest()->first();
+                        @endphp
+                        <span
+                            class=" {{ $latestControl ? 'text-green-400' : 'text-yellow-500' }} block text-xs font-semibold">
+                            {{ $latestControl
+                                ? 'Última descripción agregada (' . \Carbon\Carbon::parse($latestControl->created_at)->format('d/m/Y - H:i:s') . ')'
+                                : 'No se ha generado una descripción de seguimiento' }}
+                        </span>
+                        @error('description')
+                            <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
+                        @enderror
                     </div>
 
                 </div>

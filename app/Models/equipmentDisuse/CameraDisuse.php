@@ -15,7 +15,7 @@ class CameraDisuse extends Model
         'id',
         'name',
         'mark',
-        'nvr_name',
+        'nvr',
         'ip'
     ];
 

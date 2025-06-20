@@ -84,7 +84,7 @@
                             <label for="userName" class="block text-sm font-semibold text-white">Nombre de Usuario</label>
                             <input type="text" name="userName" id="userName" value="{{ old('userName') }}"
                                 class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('userName') border-red-500 @enderror"
-                                required>
+                                required min="6" max="12">
                             @error('userName')
                                 <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
                             @enderror
@@ -128,7 +128,7 @@
                             <div class="sm:col-span-1">
                                 <label for="password" class="block text-sm font-semibold text-white">Contraseña</label>
                                 <div class="relative">
-                                    <input id="password" type="password" name="password"
+                                    <input id="password" type="password" name="password" value="{{ old('password') }}"
                                         class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('password') border-red-500 @enderror"
                                         required>
                                     <!-- Botón para mostrar/ocultar -->
@@ -148,6 +148,7 @@
                                     Contraseña</label>
                                 <div class="relative">
                                     <input id="password_confirmation" type="password" name="password_confirmation"
+                                        value="{{ old('password_confrimation') }}"
                                         class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('password_confirmation') border-red-500 @enderror"
                                         required>
                                     <!-- Botón para mostrar/ocultar -->

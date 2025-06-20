@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -19,7 +20,6 @@ class PerfilController extends Controller
     public function edit($user)
     {
         $user = User::where('userName', $user)->first();
-
         return view('front.perfil.edit', compact('user'));
     }
 

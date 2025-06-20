@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Person;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -35,7 +36,13 @@ class UserController extends Controller
             'last_name' => 'required',
             'sex' => 'required',
             'license' => 'required|unique:persons,license',
-            'userName' => 'required|unique:users,userName',
+            'userName' => [
+                'required',
+                'unique:users,userName',
+                'min:6',
+                'max:12',
+                'regex:/^(?=.*[A-Za-z])[A-Za-z0-9.]+$/', // Letras, números y puntos (al menos una letra)
+            ],
             'rol' => 'required',
             'email' => 'required|string|email|max:255|unique:users,email',
             'password' => 'required|confirmed|min:8',
@@ -64,7 +71,7 @@ class UserController extends Controller
 
         ]);
 
-        return redirect()->route('users.index')->with('success', 'Usuario creardo exitosamente');
+        return redirect()->route('users.index')->with('success', 'Usuario creado exitosamente');
     }
 
     public function edit($userName)
@@ -86,6 +93,9 @@ class UserController extends Controller
             'userName' =>
             [
                 'required',
+                'min:6',
+                'max:12',
+                'regex:/^(?=.*[A-Za-z])[A-Za-z0-9.]+$/', // Letras, números y puntos (al menos una letra)
                 Rule::unique('users')->ignore($person->user->userName, 'userName')
             ],
             'rol' => 'required',
@@ -99,9 +109,9 @@ class UserController extends Controller
             ],
             'password' => 'nullable|confirmed|min:8',
             'password_confirmation' => 'required_with:password'
-        ], [
-            'license' => 'El campo ficha ya ha sido registrado',
-            'userName' => 'El campo nombre de usuario ya ha sido registrado',
+        ], [], [
+            'userName' => 'Nombre de usuario',
+            'license' => 'Ficha',
         ]);
 
         if ($validator->fails())
@@ -144,8 +154,11 @@ class UserController extends Controller
     {
 
         $person = Person::findOrFail($person);
-        $person->delete();
 
-        return redirect()->route('users.index')->with('success', 'Usuario Eliminado exitosamente');
+        if ($person->is(Auth::user()->person))
+            return redirect()->route('users.index')->with('warning', 'No se puede eliminar el usuario logueado');
+
+        $person->delete();
+        return redirect()->route('users.index')->with('success', 'Usuario Eliminado exitosamente.');
     }
 }

@@ -13,6 +13,7 @@ class ConditionAttention extends Model
         'name',
         'date_ini',
         'date_end',
+        'description',
         'status',
     ];
 
@@ -26,8 +27,8 @@ class ConditionAttention extends Model
         return $this->belongsTo(Camera::class, 'camera_id', 'mac');
     }
 
-    public function description()
+    public function controlCondition()
     {
-        return $this->hasMany(Descriptions::class);
+        return $this->hasMany(ControlCondition::class);
     }
 }

@@ -7,16 +7,18 @@
         <!-- Encabezado y botón agregar -->
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-white bg-gray-600 rounded-md px-3 py-1">NVRs</h1>
-
-            <a href="{{ route('nvr.create') }}"
-                class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-blue-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                <!-- Icono de agregar -->
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                </svg>
-                Agregar Nuevo NVR
-            </a>
+            
+            @if (auth()->user()->rol != 'lector')
+                <a href="{{ route('nvr.create') }}"
+                    class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-blue-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    <!-- Icono de agregar -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    Agregar Nuevo NVR
+                </a>
+            @endif
         </div>
 
         <!-- Filtros para búsqueda -->
@@ -104,36 +106,39 @@
                                 <td class="px-6 py-4 text-center text-sm">
                                     <span
                                         class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                    {{ $nvr['status'] === 'Activo' ? 'bg-green-300 text-green-900' : 'bg-red-300 text-red-900' }}">
+                                    {{ $nvr['status'] === 'Activo' ? 'bg-green-600 text-green-100' : 'bg-red-600 text-red-100' }}">
                                         {{ $nvr['status'] }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 text-sm align-middle">
                                     <div class="flex justify-center space-x-2">
                                         <!-- Botón Ver -->
-                                        <a href="{{ route('nvr.show', $nvr) }}"
+                                        <a href="{{ route('nvr.show', $nvr->name) }}"
                                             class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                             Ver
                                         </a>
-                                        <!-- Botón Editar -->
-                                        <a href="{{ route('nvr.edit', $nvr) }}"
-                                            class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
-                                            Editar
-                                        </a>
-                                        @if ($nvr->camera()->count() > 0)
-                                            {{-- si el nvr tiene cámaras conectadas no se puede eliminar --}}
-                                            <!-- Botón Eliminar -->
-                                            <button type="button" onclick="submit()"
-                                                class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                                Eliminar
-                                            </button>
-                                        @else
-                                            <!-- Botón Eliminar -->
-                                            <button type="button"
-                                                onclick="openDeleteModal('{{ route('nvr.destroy', $nvr) }}')"
-                                                class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                                Eliminar
-                                            </button>
+
+                                        @if (auth()->user()->rol != 'lector')
+                                            <!-- Botón Editar -->
+                                            <a href="{{ route('nvr.edit', $nvr->name) }}"
+                                                class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                                                Editar
+                                            </a>
+                                            @if ($nvr->camera()->count() > 0)
+                                                {{-- si el nvr tiene cámaras conectadas no se puede eliminar --}}
+                                                <!-- Botón Eliminar -->
+                                                <button type="button" onclick="submit()"
+                                                    class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                                    Eliminar
+                                                </button>
+                                            @else
+                                                <!-- Botón Eliminar -->
+                                                <button type="button"
+                                                    onclick="openDeleteModal('{{ route('nvr.destroy', $nvr) }}')"
+                                                    class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                                    Eliminar
+                                                </button>
+                                            @endif
                                         @endif
                                     </div>
                                 </td>

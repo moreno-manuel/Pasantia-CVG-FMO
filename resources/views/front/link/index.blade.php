@@ -109,11 +109,11 @@
 
                                 <td class="px-6 py-4 text-sm align-middle">
                                     <div class="flex justify-center space-x-2">
-                                        <a href="{{ route('enlace.show', $link['mac']) }}"
+                                        <a href="{{ route('enlace.show', $link['name']) }}"
                                             class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                             Ver
                                         </a>
-                                        <a href="{{ route('enlace.edit', $link['mac']) }}"
+                                        <a href="{{ route('enlace.edit', $link['name']) }}"
                                             class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
                                             Editar
                                         </a>

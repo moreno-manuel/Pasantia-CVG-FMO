@@ -67,55 +67,66 @@
                 </dl>
             </div>
         </div>
+        @if (auth()->user()->rol != 'lector')
+            <!-- Acciones -->
+            <div class="mt-6 flex space-x-3">
+                <a href="{{ route('atencion.edit', $condition) }}"
+                    class="inline-flex items-center px-3 py-1.5 bg-yellow-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-yellow-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                    Editar
+                </a>
 
-        <!-- Acciones -->
-        <div class="mt-6 flex space-x-3">
-            <a href="{{ route('atencion.edit', $condition) }}"
-                class="inline-flex items-center px-3 py-1.5 bg-yellow-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-yellow-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
-                Editar
-            </a>
-
-            <form action="{{ route('atencion.destroy', $condition) }}" method="POST" class="inline">
-                @csrf
-                @method('DELETE')
-                <button type="submit"
-                    class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-red-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                    onclick="return confirm('¿Estás seguro de eliminar esta Condición?')">
-                    Eliminar
-                </button>
-            </form>
-        </div>
-
+                <form action="{{ route('atencion.destroy', $condition) }}" method="POST" class="inline">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit"
+                        class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-red-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                        onclick="return confirm('¿Estás seguro de eliminar esta Condición?')">
+                        Eliminar
+                    </button>
+                </form>
+            </div>
+        @endif
 
         <br>
-
-        <!-- Tabla -->
-        <div class="mt-8">
-            <div class="flex justify-left items-center mb-6">
-                <h1 class="font-bold text-white bg-gray-800 rounded-md px-3 py-1">Control de la condición</h1>
-            </div>
-            <div class="overflow-x-auto rounded-lg shadow border border-gray-700 bg-gray-800">
-                <table class="min-w-full shadow-md rounded-lg overflow-hidden divide-gray-700">
-                    <thead class="bg-gray-700 divide-x divide-blue-400">
-                        <tr class="divide-x divide-blue-400">
-                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Fecha/Hora</th>
-                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Descripción</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-200">
-                        @foreach ($descriptions as $description)
-                            <tr class="hover:bg-gray-900 transition-colors duration-150">
-                                <td class="px-6 py-4 text-center text-sm text-white">
-                                    {{ $description->created_at->format('d/m/Y - H:i:s') }}</td>
-                                <td class="px-6 py-4 text-center text-sm text-white">{{ $description->text }}</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+        <br>
+        <div class="flex justify-left items-center mb-6">
+            <h1 class="font-bold text-white bg-gray-800 rounded-md px-3 py-1">Control de la condición</h1>
         </div>
-        {{--  paginacion --}}
-        {{ $descriptions->links() }}
+        @if ($condition->controlCondition->isNotEmpty())
+            <!-- Tabla -->
+            <div class="mt-8">
+
+                <div class="overflow-x-auto rounded-lg shadow border border-gray-700 bg-gray-800">
+                    <table class="min-w-full shadow-md rounded-lg overflow-hidden divide-gray-700">
+                        <thead class="bg-gray-700 divide-x divide-blue-400">
+                            <tr class="divide-x divide-blue-400">
+                                <th class="px-6 py-3 text-center text-sm font-medium text-white">Descripción</th>
+                                <th class="px-6 py-3 text-center text-sm font-medium text-white">Fecha</th>
+                                <th class="px-6 py-3 text-center text-sm font-medium text-white">Hora</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            @foreach ($controlConditions as $controlCondition)
+                                <tr class="hover:bg-gray-900 transition-colors duration-150">
+                                    <td class="px-6 py-4 text-center text-sm text-white">{{ $controlCondition->text }}</td>
+                                    <td class="px-6 py-4 text-center text-sm text-white">
+                                        {{ $controlCondition->created_at->format('d/m/Y') }}</td>
+                                    <td class="px-6 py-4 text-center text-sm text-white">
+                                        {{ $controlCondition->created_at->format('H:i:s') }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {{--  paginacion --}}
+            {{ $controlConditions->links() }}
+        @else
+            <div class="text-center mt-6 bg-gray-800 border border-black rounded-md p-4 text-white">
+                <p>No se han agregado registros.</p>
+            </div>
+        @endif
+
 
     </div>
 @endsection

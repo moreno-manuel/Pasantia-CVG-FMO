@@ -86,7 +86,7 @@ class SwitchController extends Controller
         }
 
         $switch->update($request->all());
-        return redirect()->route('switch.show', $switch);
+        return redirect()->route('switch.index')->with('success', 'Switch actualizado exitosamente.');
     }
 
     public function show(Switche $switch) //muestra la vista y datos para los detalles un switch
@@ -99,7 +99,7 @@ class SwitchController extends Controller
         $equipment = EquipmentDisuse::find($switch->serial);
 
         if ($equipment)
-            return redirect()->route('switch.index')->with('success', 'Ya existe un registro eliminado con el mismo ID.');
+            return redirect()->route('switch.index')->with('warning', 'Ya existe un registro eliminado con el mismo ID.');
 
         EquipmentDisuse::create([
             'id' => $switch->serial,
@@ -116,6 +116,6 @@ class SwitchController extends Controller
         ]);
 
         $switch->delete();
-        return redirect()->route('switch.index')->with('success', 'Switch Eliminado exitosamente.');
+        return redirect()->route('switch.index')->with('success', 'Switch eliminado exitosamente.');
     }
 }

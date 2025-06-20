@@ -12,8 +12,7 @@ class ReportController extends Controller
     {
         $reports = [
 
-            ['name' => 'Inventario NVR', 'url' => '#'],
-            ['name' => 'Inventario Cámaras conectadas', 'url' => '#'],
+            ['name' => 'Inventario Cámaras por Nvr', 'url' => '#'],
             ['name' => 'Inventario Cámaras en stock', 'url' => '#'],
             ['name' => 'Inventario Switches', 'url' => '#'],
             ['name' => 'Inventario Enlaces', 'url' => '#'],

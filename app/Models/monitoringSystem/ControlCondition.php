@@ -4,10 +4,10 @@ namespace App\Models\monitoringSystem;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Descriptions extends Model
+class ControlCondition extends Model
 {
 
-    protected $table = 'descriptions';
+    protected $table = 'control_conditions';
 
     protected $fillable = [
         'condition_attention_id',

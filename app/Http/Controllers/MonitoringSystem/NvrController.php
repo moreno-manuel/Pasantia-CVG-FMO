@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\MonitoringSystem;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Models\EquipmentDisuse\EquipmentDisuse;
 use App\Models\EquipmentDisuse\NvrDisuse;
 use App\Models\equipmentDisuse\SlotNvrDisuse;
@@ -94,12 +95,17 @@ class NvrController extends Controller
         }
     }
 
-    public function edit(Nvr $nvr) //muestra el formulario editar 
+    public function edit($name) //muestra el formulario editar 
     {
-        $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['marks']; // json con las marcas agregadas
-        return view('front.nvr.edit', compact('nvr', 'marks'));
-    }
+        try {
+            $nvr = Nvr::where('name', $name)->firstOrFail();
 
+            $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['marks']; // json con las marcas agregadas
+            return view('front.nvr.edit', compact('nvr', 'marks'));
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route('nvr.index')->with('warnings', 'Nvr no encontrado');
+        }
+    }
     public function update(Request $request, Nvr $nvr) //valida la actualizacion 
     {
         try { //try para para evitar ip duplicadas
@@ -150,17 +156,22 @@ class NvrController extends Controller
         }
     }
 
-    public function show(Nvr $nvr) //muestra los datos de un registro
+    public function show($name) //muestra los datos de un registro
     {
-        $cameras = $nvr->camera()->orderBy('created_at', 'desc')->paginate(5);
-        return view('front.nvr.show', compact('nvr', 'cameras'));
+        try {
+            $nvr = Nvr::where('name', $name)->firstOrFail();
+            $cameras = $nvr->camera()->orderBy('created_at', 'desc')->paginate(5);
+            return view('front.nvr.show', compact('nvr', 'cameras'));
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route('nvr.index')->with('warnings', 'Nvr no encontrado');
+        }
     }
 
     public function destroy(Request $request, Nvr $nvr) //elimina un nvr
     {
         $equipment = EquipmentDisuse::find($nvr->mac);
         if ($equipment)
-            return redirect()->route('nvr.index')->with('success', 'Ya existe un registro eliminado con el mismo ID.');
+            return redirect()->route('nvr.index')->with('warning', 'Ya existe un registro eliminado con el mismo ID.');
 
 
         EquipmentDisuse::create([

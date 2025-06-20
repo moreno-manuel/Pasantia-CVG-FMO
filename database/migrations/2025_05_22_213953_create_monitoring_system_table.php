@@ -54,11 +54,12 @@ return new class extends Migration
             $table->string('name');
             $table->date('date_ini');
             $table->date('date_end')->nullable();
+            $table->string('description');
             $table->string('status');
             $table->timestamps();
         });
 
-        Schema::create('descriptions', function (Blueprint $table) {
+        Schema::create('control_conditions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('condition_attention_id')
                 ->constrained('condition_attentions')
@@ -77,6 +78,6 @@ return new class extends Migration
         Schema::dropIfExists('slot_nvrs');
         Schema::dropIfExists('cameras');
         Schema::dropIfExists('condition_attentions');
-        Schema::dropIfExists('descriptions');
+        Schema::dropIfExists('control_conditions');
     }
 };

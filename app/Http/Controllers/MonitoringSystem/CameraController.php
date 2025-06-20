@@ -7,6 +7,7 @@ use App\Models\EquipmentDisuse\CameraDisuse;
 use App\Models\EquipmentDisuse\EquipmentDisuse;
 use App\Models\monitoringSystem\Camera;
 use App\Models\monitoringSystem\Nvr;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -82,23 +83,29 @@ class CameraController extends Controller
         }
     }
 
-    public function edit($mac) //muestra la vista para editar
+    public function edit($name) //muestra la vista para editar
     {
-        $nvrsAll = Nvr::with('camera')->get();
+        try {
 
-        $camera = Camera::findOrFail($mac);
-        $currentNvrId = $camera->nvr->mac;
+            $camera = Camera::where('name', $name)->firstOrFail();
+            $nvrsAll = Nvr::with('camera')->get();
 
-        $nvrs = $nvrsAll->filter(function ($nvr) use ($currentNvrId) {
-            if ($nvr->mac == $currentNvrId) { //mantiene el nvr de la cámara seleccionada 
-                return true;
-            }
-            return $nvr->available_ports > 0;
-        });
+            $camera = Camera::where('name', $name)->firstOrFail();
+            $currentNvrId = $camera->nvr->mac;
 
-        $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['marks']; // json con las marcas agregadas
+            $nvrs = $nvrsAll->filter(function ($nvr) use ($currentNvrId) {
+                if ($nvr->mac == $currentNvrId) { //mantiene el nvr de la cámara seleccionada 
+                    return true;
+                }
+                return $nvr->available_ports > 0;
+            });
 
-        return view('front.camera.edit', compact('camera', 'nvrs', 'marks'));
+            $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['marks']; // json con las marcas agregadas
+
+            return view('front.camera.edit', compact('camera', 'nvrs', 'marks'));
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route('camera.index')->with('warnings', 'cámara no encontrada');
+        }
     }
 
     public function update(Request $request, $mac) //valida los datos d edicion
@@ -128,7 +135,7 @@ class CameraController extends Controller
             $request = marksUpdate($request, 'marks');
 
             $camera->update($request->all());
-            return redirect()->route('camara.index')->with('success', 'Cámara agregada exitosamente.');
+            return redirect()->route('camara.index')->with('success', 'Cámara actualizada exitosamente.');
         } catch (QueryException $e) {
             if ($e->getCode() === '23000') { // Código de error de integridad para la db *IP*
                 return redirect()->back()->withInput()->withErrors([
@@ -138,13 +145,17 @@ class CameraController extends Controller
         }
     }
 
-    public function show($mac) //muestra detalles de un registro 
+    public function show($name) //muestra detalles de un registro 
     {
-        $camera = Camera::findOrFail($mac);
+        try {
 
-        $conditions = $camera->conditionAttention()->orderBy('created_at', 'desc')->paginate(5); // Cargar los registros de condicion de atención con paginación
+            $camera = Camera::where('name', $name)->firstOrFail();
+            $conditions = $camera->conditionAttention()->orderBy('created_at', 'desc')->paginate(5); // Cargar los registros de condicion de atención con paginación
 
-        return view('front.camera.show', compact('camera', 'conditions'));
+            return view('front.camera.show', compact('camera', 'conditions'));
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route('camera.index')->with('warnings', 'cámara  no encontrada');
+        }
     }
 
     public function destroy(Request $request, $mac) //elimina un registro
@@ -154,7 +165,7 @@ class CameraController extends Controller
 
         $equipment = EquipmentDisuse::find($mac);
         if ($equipment)
-            return redirect()->route('camara.index')->with('success', 'Ya existe un registro eliminado con el mismo ID.');
+            return redirect()->route('camara.index')->with('warning', 'Ya existe un registro eliminado con el mismo ID.');
 
         EquipmentDisuse::create([
             'id' => $camera->mac,
@@ -165,12 +176,12 @@ class CameraController extends Controller
             'description' => $request->input('deletion_description')
         ]);
 
-        $nvr = $camera->nvr;
+        $nvr = $camera->nvr->mac . " - " . $camera->nvr->name; // para almecenar mac y nombre del nvr 
 
         CameraDisuse::create([
             'id' => $camera->mac,
             'name' => $camera->name,
-            'nvr_name' => $camera->mac,
+            'nvr' => $nvr,
             'ip' => $camera->ip
         ]);
 

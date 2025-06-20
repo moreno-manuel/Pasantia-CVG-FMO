@@ -52,7 +52,7 @@
                                 <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $switch['number_ports'] ?? 'N/A' }}
                                 </dd>
                             </div>
-                            
+
                             <!-- Campo Localidad -->
                             <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                 <dt class="text-sm font-semibold text-gray-300">Localidad</dt>
@@ -114,8 +114,8 @@
 
                             <!-- Cámara - NVR donde estaba conectada -->
                             <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-semibold text-gray-300">NVR/Conexión</dt>
-                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $camera['nvr_name'] ?? 'N/A' }}</dd>
+                                <dt class="text-sm font-semibold text-gray-300">NVR/Conexión (mac - nombre)</dt>
+                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $camera['nvr'] ?? 'N/A' }}</dd>
                             </div>
 
                             <!-- Cámara - Dirección IP -->

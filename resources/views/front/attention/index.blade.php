@@ -8,16 +8,19 @@
         <!-- Encabezado y botón agregar -->
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-white bg-gray-600 rounded-md px-3 py-1">Condicion de Atención</h1>
+            
+            @if (auth()->user()->rol != 'lector')
+                <a href="{{ route('atencion.create') }}"
+                    class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-blue-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    <!-- Icono de agregar -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    Agregar Nueva Condición
+                </a>
+            @endif
 
-            <a href="{{ route('atencion.create') }}"
-                class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-blue-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                <!-- Icono de agregar -->
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                </svg>
-                Agregar Nueva Condición
-            </a>
         </div>
 
         <!-- Filtros para búsqueda -->
@@ -90,7 +93,7 @@
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $condition['name'] }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $condition['date_ini'] }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-white">
-                                    {{ $condition->description()->latest()->value('text') }}</td>
+                                    {{ $condition['description'] }}</td>
 
                                 {{-- Acciones --}}
                                 <td class="px-6 py-4 text-sm align-middle">
@@ -99,19 +102,22 @@
                                             class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                             Ver
                                         </a>
-                                        <a href="{{ route('atencion.edit', $condition) }}"
-                                            class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
-                                            Editar
-                                        </a>
-                                        <form action="{{ route('atencion.destroy', $condition) }}" method="POST"
-                                            class="inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"
-                                                class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                                Eliminar
-                                            </button>
-                                        </form>
+
+                                        @if (auth()->user()->rol != 'lector')
+                                            <a href="{{ route('atencion.edit', $condition) }}"
+                                                class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                                                Editar
+                                            </a>
+                                            <form action="{{ route('atencion.destroy', $condition) }}" method="POST"
+                                                class="inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                    class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                                    Eliminar
+                                                </button>
+                                            </form>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>

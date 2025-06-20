@@ -5,9 +5,11 @@ namespace App\Http\Controllers\MonitoringSystem;
 use App\Http\Controllers\Controller;
 use App\Models\monitoringSystem\Camera;
 use App\Models\monitoringSystem\ConditionAttention;
+use App\Models\monitoringSystem\ControlCondition;
 use App\Models\monitoringSystem\Descriptions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 use function app\Helpers\conditionValidate;
 use function app\Helpers\filter;
@@ -74,19 +76,15 @@ class ConditionAController extends Controller
             'camera_id' => $request->input('camera_id'),
             'date_ini' => $request->input('date_ini'),
             'date_end' => $request->input('date_end'),
-            'status' => $status,
+            'description' => $request->input('description'),
+            'status' => $status
 
-        ]);
-
-        Descriptions::create([ //descripción de la condición
-            'condition_attention_id' => $condition->id,
-            'text' => $request->input('description'),
         ]);
 
         if ($status == 'Por atender')
             $condition->camera->update(['status' => 'Inactivo']);   //atualiza el estado de la cámara
 
-        return redirect()->route('atencion.index')->with('success', 'Condición de Atención agregada exitosamente');
+        return redirect()->route('atencion.index')->with('success', 'Condición de Atención agregada exitosamente.');
     }
 
 
@@ -102,18 +100,24 @@ class ConditionAController extends Controller
 
         $validator = Validator::make($request->all(), [
             'date_end' => 'nullable|date',
-            'description' => 'required'
+            'description' => [
+                Rule::when(
+                    $request->filled('date_end'), // Si se proporcionó una fecha
+                    'sometimes',                   // Entonces es opcionale
+                    'required'                   // Si no, es requerido
+                ),
+            ],
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator);
         }
 
-        
+
         $condition = ConditionAttention::findOrFail($id);
 
         if ($request->filled('description')) { //si se agrega una descripción
-            Descriptions::create([
+            ControlCondition::create([
                 'condition_attention_id' => $condition->id,
                 'text' => $request->input('description'),
             ]);
@@ -130,15 +134,15 @@ class ConditionAController extends Controller
         if ($status == 'Atendido')
             $condition->camera->update(['status' => 'Activo']);
 
-        return redirect()->route('atencion.index')->with('success', 'Condición de Atención actualizada exitosamente');
+        return redirect()->route('atencion.index')->with('success', 'Condición de Atención actualizada exitosamente.');
     }
 
 
     public function show($id) //muestra los detalles de un registro
     {
         $condition = ConditionAttention::findOrFail($id);
-        $descriptions = $condition->description()->orderBy('created_at', 'desc')->paginate(5); //obtiene las descripciones de la condición
-        return view('front.attention.show', compact('condition', 'descriptions'));
+        $controlConditions = $condition->controlCondition()->orderBy('created_at', 'desc')->paginate(5); //obtiene las descripciones de la condición
+        return view('front.attention.show', compact('condition', 'controlConditions'));
     }
 
 
@@ -154,6 +158,6 @@ class ConditionAController extends Controller
         }
 
         $condition->delete();
-        return redirect()->route('atencion.index')->with('success', 'Conición de atención eliminado exitosamente.');
+        return redirect()->route('atencion.index')->with('success', 'Condición de atención eliminada exitosamente.');
     }
 }

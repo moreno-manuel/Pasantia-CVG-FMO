@@ -49,7 +49,7 @@ class QuestionsSecurityController extends Controller
             'answer_2' => $request->input('answer_2'),
             'answer_3' => $request->input('answer_3'),
         ]);
-        return redirect()->route('perfil.edit', ['user' => Auth::user()->userName]);
+        return redirect()->route('perfil.edit', ['user' => Auth::user()->userName])->with('succes', 'Preguntas de seguridad creadas exitosamente.');
     }
 
 
@@ -79,6 +79,6 @@ class QuestionsSecurityController extends Controller
             'answer_3' => $request->input('answer_3'),
         ]);
 
-        return redirect()->route('perfil.edit', ['user' => Auth::user()->userName]);
+        return redirect()->route('perfil.edit', ['user' => Auth::user()->userName])->with('succes', 'Preguntas de seguridad actualizadas exitosamente.');
     }
 }

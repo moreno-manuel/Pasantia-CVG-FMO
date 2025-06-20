@@ -149,28 +149,31 @@
             </div>
         </div>
 
-        <!-- Acciones -->
-        <div class="mt-6 flex space-x-3">
-            <a href="{{ route('nvr.edit', $nvr) }}"
-                class="inline-flex items-center px-3 py-1.5 bg-yellow-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-yellow-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
-                Editar
-            </a>
+        @if (auth()->user()->rol != 'lector')
+            <!-- Acciones -->
+            <div class="mt-6 flex space-x-3">
+                <a href="{{ route('nvr.edit', $nvr->name) }}"
+                    class="inline-flex items-center px-3 py-1.5 bg-yellow-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-yellow-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                    Editar
+                </a>
 
-            @if ($nvr->camera()->count() > 0)
-                {{-- si el nvr tiene cámaras conectadas no se puede eliminar --}}
-                <!-- Botón Eliminar -->
-                <button type="button" onclick="submit()"
-                    class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-red-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                    Eliminar
-                </button>
-            @else
-                <!-- Botón Eliminar -->
-                <button type="button" onclick="openDeleteModal('{{ route('nvr.destroy', $nvr) }}')"
-                    class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-red-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                    Eliminar
-                </button>
-            @endif
-        </div>
+                @if ($nvr->camera()->count() > 0)
+                    {{-- si el nvr tiene cámaras conectadas no se puede eliminar --}}
+                    <!-- Botón Eliminar -->
+                    <button type="button" onclick="submit()"
+                        class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-red-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                        Eliminar
+                    </button>
+                @else
+                    <!-- Botón Eliminar -->
+                    <button type="button" onclick="openDeleteModal('{{ route('nvr.destroy', $nvr) }}')"
+                        class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-red-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                        Eliminar
+                    </button>
+                @endif
+            </div>
+        @endif
+
 
         <br>
         <br>
@@ -210,23 +213,27 @@
                                     </td>
                                     <td class="px-6 py-4 text-sm align-middle">
                                         <div class="flex justify-center space-x-2">
-                                            <a href="{{ route('camara.show', $camera['mac']) }}"
+                                            <a href="{{ route('camara.show', $camera['name']) }}"
                                                 class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                                 Ver
                                             </a>
-                                            <a href="{{ route('camara.edit', $camera['mac']) }}"
-                                                class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
-                                                Editar
-                                            </a>
-                                            <form action="{{ route('camara.destroy', $camera['mac']) }}" method="POST"
-                                                class="inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit"
-                                                    class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                                    Eliminar
-                                                </button>
-                                            </form>
+
+                                            @if (auth()->user()->rol != 'lector')
+                                                <a href="{{ route('camara.edit', $camera['name']) }}"
+                                                    class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                                                    Editar
+                                                </a>
+                                                <form action="{{ route('camara.destroy', $camera['mac']) }}"
+                                                    method="POST" class="inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit"
+                                                        class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                                        Eliminar
+                                                    </button>
+                                                </form>
+                                            @endif
+
                                         </div>
                                     </td>
                                 </tr>

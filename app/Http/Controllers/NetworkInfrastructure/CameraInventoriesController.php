@@ -61,7 +61,7 @@ class CameraInventoriesController extends Controller
         $request = marksUpdate($request, 'marks');
 
         CameraInventory::create($request->all())->save();
-        return redirect()->route('inventories.index')->with('succes', 'Caámara eliminada exitosamente');
+        return redirect()->route('inventories.index')->with('succes', 'Cámara agregada exitosamente');
     }
 
     public function destroy($mac, Request $request) //elimina un registro
@@ -70,7 +70,7 @@ class CameraInventoriesController extends Controller
 
         $equipment = EquipmentDisuse::find($mac);
         if ($equipment)
-            return redirect()->route('inventories.index')->with('success', 'Ya existe un registro eliminado con el mismo ID.');
+            return redirect()->route('inventories.index')->with('warning', 'Ya existe un registro eliminado con el mismo ID.');
 
         EquipmentDisuse::create([
             'id' => $camera->mac,

@@ -41,7 +41,7 @@ return new class extends Migration
             $table->string('id')->primary();
             $table->foreign('id')->references('id')->on('equipment_disuses')->onDelete('cascade');
             $table->string('name');
-            $table->string('nvr_name');
+            $table->string('nvr');
             $table->string('ip');
             $table->timestamps();
         });
