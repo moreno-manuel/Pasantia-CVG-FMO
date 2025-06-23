@@ -17,6 +17,7 @@ use App\Http\Middleware\UsersAccesMiddleware;
 use Illuminate\Support\Facades\Route;
 
 
+
 Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -51,17 +52,16 @@ Route::controller(EquipmentDisuseController::class) //equipos eliminados
         Route::delete('{id}', 'destroy')->name('eliminated.destroy');
     });
 
-
-Route::controller(ReportController::class) //reportes
-    ->prefix('report')
+Route::controller(ReportController::class) //para exportar los reportes 
+    ->prefix('reporte')
     ->middleware(ReportlAccesMiddleware::class)
     ->group(function () {
         Route::get('', 'index')->name('report.index');
-        Route::get('export/switch', 'exportSwitch')->name('report.switch');
-        Route::get('export/link', 'exportLink')->name('report.link');
-        Route::get('export/camera-stock', 'exportCameraStock')->name('report.cameraStock');
-        Route::get('export/camera-by-nvr', 'exportCameraByNvr')->name('report.cameraByNvr');
-        Route::get('export/report', 'exporReport')->name('report.report');
+        Route::get('reporte/switch', 'exportSwitch')->name('export.switch');
+        Route::get('reporte/link', 'exportLink')->name('export.link');
+        Route::get('reporte/camera-stock', 'exportCameraStock')->name('export.cameraStock');
+        Route::get('reporte/camera-by-nvr', 'exportCameraByNvr')->name('export.cameraByNvr');
+        Route::get('reporte/report', 'exportReport')->name('export.report');
     });
 
 
