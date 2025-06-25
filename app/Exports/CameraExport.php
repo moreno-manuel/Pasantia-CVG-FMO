@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\networkInfrastructure\Switche;
+use App\Models\monitoringSystem\Camera;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithDrawings;
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -12,20 +12,20 @@ use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Protection;
 
-class SwitchExport implements ShouldAutoSize, WithDrawings, WithEvents
+class CameraExport implements ShouldAutoSize, WithDrawings, WithEvents
 {
     protected $data;
 
     public function __construct()
     {
-        $this->data = Switche::select('serial', 'mark', 'model', 'number_ports', 'location', 'description', 'status')->get();
+        $this->data = Camera::select('mac', 'mark', 'model', 'name', 'ip', 'location', 'description', 'status')->get();
     }
 
     public function registerEvents(): array
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
-                $phpSheet = $event->sheet->getDelegate(); // Hoja nativa
+                $phpSheet = $event->sheet->getDelegate(); // Worksheet nativo
                 $data = $this->data;
 
                 // Altura de filas para logo y título
@@ -33,8 +33,8 @@ class SwitchExport implements ShouldAutoSize, WithDrawings, WithEvents
                 $phpSheet->getRowDimension('2')->setRowHeight(30);
 
                 // Título ocupando filas 1 y 2
-                $phpSheet->mergeCells("A1:G2");
-                $phpSheet->setCellValue('A1', 'Inventario de Switches');
+                $phpSheet->mergeCells("A1:H2");
+                $phpSheet->setCellValue('A1', 'Inventario de Cámaras');
 
                 $phpSheet->getStyle('A1')->getFont()
                     ->setBold(true)
@@ -47,15 +47,15 @@ class SwitchExport implements ShouldAutoSize, WithDrawings, WithEvents
                 // Fecha de exportación en pie de página (derecha, en rojo)
                 $date = now()->format('d/m/Y H:i');
                 $lastRow = $data->count() + 6;
-                $phpSheet->setCellValue("G{$lastRow}", "Fecha de Exportación: {$date}");
-                $phpSheet->getStyle("G{$lastRow}")->getFont()
+                $phpSheet->setCellValue("H{$lastRow}", "Fecha de Exportación: {$date}");
+                $phpSheet->getStyle("H{$lastRow}")->getFont()
                     ->setItalic(true)
                     ->setSize(10)
                     ->setColor(new Color('FF0000')); // Rojo
-                $phpSheet->getStyle("G{$lastRow}")->getAlignment()
+                $phpSheet->getStyle("H{$lastRow}")->getAlignment()
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
-                // Pie de página - Gerencia y Área en columna A, una debajo de otra
+                // Pie de página en columna A
                 $footerRow = $lastRow + 2;
 
                 // Primera línea: Gerencia
@@ -64,7 +64,7 @@ class SwitchExport implements ShouldAutoSize, WithDrawings, WithEvents
                     ->getFont()
                     ->setItalic(true)
                     ->setSize(10)
-                    ->setColor(new Color('FF555555')); // Gris oscuro
+                    ->setColor(new Color('FF555555'));
                 $phpSheet->getStyle("A{$footerRow}")
                     ->getAlignment()
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
@@ -75,17 +75,17 @@ class SwitchExport implements ShouldAutoSize, WithDrawings, WithEvents
                     ->getFont()
                     ->setItalic(true)
                     ->setSize(10)
-                    ->setColor(new Color('FF555555')); // Gris oscuro
+                    ->setColor(new Color('FF555555'));
                 $phpSheet->getStyle("A" . ($footerRow + 1))
                     ->getAlignment()
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
 
-                // Opcional: ajustar altura de filas para que se vean bien
+                // Altura de filas del pie
                 $phpSheet->getRowDimension($footerRow)->setRowHeight(18);
                 $phpSheet->getRowDimension($footerRow + 1)->setRowHeight(18);
 
                 // Encabezados
-                $headers = ['Serial', 'Marca', 'Modelo', 'N° de Puertos', 'Localidad', 'Descripción', 'Status'];
+                $headers = ['Mac', 'Marca', 'Modelo', 'Nombre', 'IP', 'Localidad', 'Descripción', 'Status'];
                 $headerRow = 3;
 
                 foreach ($headers as $colIndex => $header) {
@@ -113,13 +113,14 @@ class SwitchExport implements ShouldAutoSize, WithDrawings, WithEvents
                 $startRow = 4;
                 foreach ($data as $rowIndex => $row) {
                     $rowData = [
-                        $row->serial,
+                        $row->mac,
                         $row->mark,
                         $row->model,
-                        $row->number_ports,
+                        $row->name,
+                        $row->ip,
                         $row->location,
                         $row->description,
-                        $row->status,
+                        $row->status
                     ];
 
                     $rowNumber = $startRow + $rowIndex;
@@ -135,13 +136,13 @@ class SwitchExport implements ShouldAutoSize, WithDrawings, WithEvents
                     }
 
                     // Si el status es "Inactivo", coloreamos toda la fila de rojo
-                    if ($rowData[6] === 'Inactivo') {
-                        $phpSheet->getStyle("A{$rowNumber}:G{$rowNumber}")
+                    if ($rowData[7] === 'Inactivo') {
+                        $phpSheet->getStyle("A{$rowNumber}:H{$rowNumber}")
                             ->getFill()
                             ->setFillType(Fill::FILL_SOLID)
-                            ->getStartColor()->setARGB('FC3838'); // Rojo
+                            ->getStartColor()->setARGB('FFFF0000'); // Rojo
 
-                        $phpSheet->getStyle("A{$rowNumber}:G{$rowNumber}")
+                        $phpSheet->getStyle("A{$rowNumber}:H{$rowNumber}")
                             ->getFont()
                             ->setColor(new Color('FFFFFFFF')); // Texto blanco
                     }
@@ -149,19 +150,19 @@ class SwitchExport implements ShouldAutoSize, WithDrawings, WithEvents
 
                 // Estilo filas de datos
                 $lastDataRow = $startRow + $data->count() - 1;
-                $phpSheet->getStyle("A{$startRow}:G{$lastDataRow}")
+                $phpSheet->getStyle("A{$startRow}:H{$lastDataRow}")
                     ->getFont()
                     ->setBold(true)
                     ->setColor(new Color('FF000000')); // Negro
 
                 // Ajustar ancho automático
-                foreach (range('A', 'G') as $col) {
+                foreach (range('A', 'H') as $col) {
                     $phpSheet->getColumnDimension($col)->setAutoSize(true);
                 }
 
                 // 🔐 Proteger la hoja: permite edición solo en ciertas celdas
                 $phpSheet->getProtection()->setSheet(true);
-                $phpSheet->getStyle("A{$startRow}:G{$lastDataRow}")
+                $phpSheet->getStyle("A{$startRow}:H{$lastDataRow}")
                     ->getProtection()
                     ->setLocked(Protection::PROTECTION_UNPROTECTED);
             },

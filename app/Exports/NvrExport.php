@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\networkInfrastructure\Switche;
+use App\Models\monitoringSystem\Nvr;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithDrawings;
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -12,29 +12,30 @@ use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Protection;
 
-class SwitchExport implements ShouldAutoSize, WithDrawings, WithEvents
+class NvrExport implements ShouldAutoSize, WithDrawings, WithEvents
 {
     protected $data;
 
     public function __construct()
     {
-        $this->data = Switche::select('serial', 'mark', 'model', 'number_ports', 'location', 'description', 'status')->get();
+        // Cargar NVR con su relación slot_nvr y cámaras
+        $this->data = Nvr::with(['slotNvr', 'camera'])->get();
     }
 
     public function registerEvents(): array
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
-                $phpSheet = $event->sheet->getDelegate(); // Hoja nativa
-                $data = $this->data;
+                $phpSheet = $event->sheet->getDelegate(); // Worksheet nativo
+                $data = $this->prepareData();
 
                 // Altura de filas para logo y título
                 $phpSheet->getRowDimension('1')->setRowHeight(30);
                 $phpSheet->getRowDimension('2')->setRowHeight(30);
 
                 // Título ocupando filas 1 y 2
-                $phpSheet->mergeCells("A1:G2");
-                $phpSheet->setCellValue('A1', 'Inventario de Switches');
+                $phpSheet->mergeCells("A1:Q2");
+                $phpSheet->setCellValue('A1', 'Inventario de NVR');
 
                 $phpSheet->getStyle('A1')->getFont()
                     ->setBold(true)
@@ -46,16 +47,16 @@ class SwitchExport implements ShouldAutoSize, WithDrawings, WithEvents
 
                 // Fecha de exportación en pie de página (derecha, en rojo)
                 $date = now()->format('d/m/Y H:i');
-                $lastRow = $data->count() + 6;
-                $phpSheet->setCellValue("G{$lastRow}", "Fecha de Exportación: {$date}");
-                $phpSheet->getStyle("G{$lastRow}")->getFont()
+                $lastRow = count($data) + 6;
+                $phpSheet->setCellValue("Q{$lastRow}", "Fecha de Exportación: {$date}");
+                $phpSheet->getStyle("Q{$lastRow}")->getFont()
                     ->setItalic(true)
                     ->setSize(10)
                     ->setColor(new Color('FF0000')); // Rojo
-                $phpSheet->getStyle("G{$lastRow}")->getAlignment()
+                $phpSheet->getStyle("Q{$lastRow}")->getAlignment()
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
-                // Pie de página - Gerencia y Área en columna A, una debajo de otra
+                // Pie de página en columna A
                 $footerRow = $lastRow + 2;
 
                 // Primera línea: Gerencia
@@ -64,28 +65,43 @@ class SwitchExport implements ShouldAutoSize, WithDrawings, WithEvents
                     ->getFont()
                     ->setItalic(true)
                     ->setSize(10)
-                    ->setColor(new Color('FF555555')); // Gris oscuro
+                    ->setColor(new Color('FF555555'));
                 $phpSheet->getStyle("A{$footerRow}")
                     ->getAlignment()
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-
                 // Segunda línea: Área
                 $phpSheet->setCellValue("A" . ($footerRow + 1), "Área: Seguridad Tecnológica");
                 $phpSheet->getStyle("A" . ($footerRow + 1))
                     ->getFont()
                     ->setItalic(true)
                     ->setSize(10)
-                    ->setColor(new Color('FF555555')); // Gris oscuro
+                    ->setColor(new Color('FF555555'));
                 $phpSheet->getStyle("A" . ($footerRow + 1))
                     ->getAlignment()
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
 
-                // Opcional: ajustar altura de filas para que se vean bien
-                $phpSheet->getRowDimension($footerRow)->setRowHeight(18);
-                $phpSheet->getRowDimension($footerRow + 1)->setRowHeight(18);
+                // Encabezados (con soporte para hasta 4 slots)
+                $headers = [
+                    'Mac',
+                    'Marca',
+                    'Modelo',
+                    'Nombre',
+                    'IP',
+                    'Localidad',
+                    'Descripción',
+                    'Status',
+                    'N° de Puertos',
+                    'N° de Puertos Usados',
+                    'N° de Puertos Disponibles',
+                ];
 
-                // Encabezados
-                $headers = ['Serial', 'Marca', 'Modelo', 'N° de Puertos', 'Localidad', 'Descripción', 'Status'];
+                // Añadir encabezados dinámicos para cada slot (hasta 4)
+                for ($i = 1; $i <= 2; $i++) {
+                    $headers[] = " Vol. {$i} Capacidad/Max.(TB) ";
+                    $headers[] = "Serial HDD (TB)";
+                    $headers[] = "Capacidad HDD (TB)";
+                }
+
                 $headerRow = 3;
 
                 foreach ($headers as $colIndex => $header) {
@@ -111,16 +127,31 @@ class SwitchExport implements ShouldAutoSize, WithDrawings, WithEvents
 
                 // Datos
                 $startRow = 4;
-                foreach ($data as $rowIndex => $row) {
+                foreach ($data as $rowIndex => $item) {
+                    $nvr = $item['nvr'];
+                    $slots = $item['slots'];
+
+                    // Datos de fila
                     $rowData = [
-                        $row->serial,
-                        $row->mark,
-                        $row->model,
-                        $row->number_ports,
-                        $row->location,
-                        $row->description,
-                        $row->status,
+                        $nvr->mac,
+                        $nvr->mark,
+                        $nvr->model,
+                        $nvr->name,
+                        $nvr->ip,
+                        $nvr->location,
+                        $nvr->description,
+                        $nvr->status,
+                        $nvr->ports_number,
+                        $nvr->camera->count(),
+                        $nvr->getAvailablePortsAttribute(),
                     ];
+
+                    // Agregar datos de slots
+                    for ($i = 0; $i < 2; $i++) {
+                        $rowData[] = $slots[$i]['capacity_max'] ?? '';
+                        $rowData[] = $slots[$i]['hdd_serial'] ?? 'Sin HDD';
+                        $rowData[] = $slots[$i]['hdd_capacity'] ?? '';
+                    }
 
                     $rowNumber = $startRow + $rowIndex;
 
@@ -135,35 +166,37 @@ class SwitchExport implements ShouldAutoSize, WithDrawings, WithEvents
                     }
 
                     // Si el status es "Inactivo", coloreamos toda la fila de rojo
-                    if ($rowData[6] === 'Inactivo') {
-                        $phpSheet->getStyle("A{$rowNumber}:G{$rowNumber}")
+                    if ($rowData[7] === 'Inactivo') {
+                        $phpSheet->getStyle("A{$rowNumber}:Q{$rowNumber}")
                             ->getFill()
                             ->setFillType(Fill::FILL_SOLID)
-                            ->getStartColor()->setARGB('FC3838'); // Rojo
+                            ->getStartColor()->setARGB('FFFF0000'); // Rojo
 
-                        $phpSheet->getStyle("A{$rowNumber}:G{$rowNumber}")
+                        $phpSheet->getStyle("A{$rowNumber}:Q{$rowNumber}")
                             ->getFont()
                             ->setColor(new Color('FFFFFFFF')); // Texto blanco
                     }
                 }
 
                 // Estilo filas de datos
-                $lastDataRow = $startRow + $data->count() - 1;
-                $phpSheet->getStyle("A{$startRow}:G{$lastDataRow}")
+                $lastDataRow = $startRow + count($data) - 1;
+                $phpSheet->getStyle("A{$startRow}:S{$lastDataRow}")
                     ->getFont()
                     ->setBold(true)
                     ->setColor(new Color('FF000000')); // Negro
 
                 // Ajustar ancho automático
-                foreach (range('A', 'G') as $col) {
+                foreach (range('A', 'S') as $col) {
                     $phpSheet->getColumnDimension($col)->setAutoSize(true);
                 }
 
                 // 🔐 Proteger la hoja: permite edición solo en ciertas celdas
                 $phpSheet->getProtection()->setSheet(true);
-                $phpSheet->getStyle("A{$startRow}:G{$lastDataRow}")
+                $phpSheet->getStyle("A{$startRow}:S{$lastDataRow}")
                     ->getProtection()
                     ->setLocked(Protection::PROTECTION_UNPROTECTED);
+                $phpSheet->getProtection()->setSelectLockedCells(false);
+                $phpSheet->getProtection()->setSelectUnlockedCells(true);
             },
         ];
     }
@@ -179,5 +212,31 @@ class SwitchExport implements ShouldAutoSize, WithDrawings, WithEvents
         $drawing->setOffsetX(5);
         $drawing->setOffsetY(5);
         return $drawing;
+    }
+
+    /**
+     * Preparar datos plano: un registro por NVR, con sus slots como columnas
+     */
+    private function prepareData()
+    {
+        $result = [];
+
+        foreach ($this->data as $nvr) {
+            $slots = [];
+            foreach ($nvr->slotNvr as $index => $slot) {
+                $slots[$index] = [
+                    'capacity_max' => $slot->capacity_max,
+                    'hdd_serial' => $slot->hdd_serial,
+                    'hdd_capacity' => $slot->hdd_capacity,
+                ];
+            }
+
+            $result[] = [
+                'nvr' => $nvr,
+                'slots' => $slots,
+            ];
+        }
+
+        return $result;
     }
 }

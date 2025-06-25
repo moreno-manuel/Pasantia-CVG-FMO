@@ -24,7 +24,7 @@ class AdminSeeder extends Seeder
 
         // Crear el usuario asociado
         User::create([
-            'userName' => 'ADMIN',
+            'userName' => 'admin',
             'email' => 'manuel@example.com',
             'password' => '0', 
             'rol' => 'admin',

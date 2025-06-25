@@ -60,7 +60,8 @@ Route::controller(ReportController::class) //para exportar los reportes
         Route::get('reporte/switch', 'exportSwitch')->name('export.switch');
         Route::get('reporte/link', 'exportLink')->name('export.link');
         Route::get('reporte/camera-stock', 'exportCameraStock')->name('export.cameraStock');
-        Route::get('reporte/camera-by-nvr', 'exportCameraByNvr')->name('export.cameraByNvr');
+        Route::get('reporte/nvr', 'exportNvr')->name('export.nvr');
+        Route::get('reporte/camera', 'exportCamera')->name('export.camera');
         Route::get('reporte/report', 'exportReport')->name('export.report');
     });
 
