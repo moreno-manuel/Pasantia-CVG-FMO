@@ -7,7 +7,7 @@
         <!-- Encabezado y botón agregar -->
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-white bg-gray-600 rounded-md px-3 py-1">NVRs</h1>
-            
+
             @if (auth()->user()->rol != 'lector')
                 <a href="{{ route('nvr.create') }}"
                     class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-blue-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
@@ -86,6 +86,7 @@
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Modelo</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Nombre</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">N°/Puertos</th>
+                            <th class="px-6 py-3 text-center text-sm font-medium text-white">N°/Puertos Disponibles</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Localidad</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">IP</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Status</th>
@@ -101,6 +102,7 @@
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $nvr['model'] }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $nvr['name'] }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $nvr['ports_number'] }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $nvr->available_ports }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $nvr['location'] }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $nvr['ip'] }}</td>
                                 <td class="px-6 py-4 text-center text-sm">

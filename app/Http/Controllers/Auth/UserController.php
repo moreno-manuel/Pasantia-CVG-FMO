@@ -129,7 +129,6 @@ class UserController extends Controller
 
         if ($request->filled('password'))
             $person->user->update([
-
                 'userName' => $request->input('userName'),
                 'email' => $request->input('email'),
                 'password' => $request->input('password')
@@ -137,6 +136,7 @@ class UserController extends Controller
         else
             $person->user->update([
                 'userName' => $request->input('userName'),
+                'rol' => $request->input('rol'),
                 'email' => $request->input('email')
             ]);
 

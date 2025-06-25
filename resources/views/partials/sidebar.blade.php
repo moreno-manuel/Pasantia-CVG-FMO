@@ -11,10 +11,17 @@
             </svg>
         </div>
 
-        <!-- Nombre de usuario y persona -->
-        <div class="text-sm font-medium text-blue-400">{{ auth()->user()->userName }}</div>
-        <div class="mt-1 text-lg font-semibold text-white">{{ auth()->user()->person->name }}
-            {{ auth()->user()->person->last_name }}</div>
+        @php
+            $user = auth()->user();
+        @endphp
+
+        @if ($user)
+            <div class="text-sm font-medium text-blue-400">{{ $user->userName }}</div>
+
+            <div class="mt-1 text-lg font-semibold text-white">
+                {{ $user->person->name }} {{ $user->person->last_name }}
+            </div>
+        @endif
     </div>
 
     <!-- Menú de navegación -->
@@ -96,7 +103,8 @@
                                         d="M19.657 14.172a4 4 0 00-5.656 0l-4 4a4 4 0 005.656 5.656l4-4a4 4 0 000-5.656z" />
                                 </svg>
                                 <span>Enlace</span>
-                            </a></li>
+                            </a>
+                        </li>
                     </ul>
                 </details>
             </li>
@@ -129,21 +137,22 @@
             </li>
 
             <!-- reportes que se pueden generar -->
-            @if (auth()->user()->rol != 'lector')
-                <li>
-                    <a href="{{ route('report.index') }}"
-                        class="flex items-center space-x-3 px-6 py-3 hover:bg-gray-700 rounded group">
-                        <svg xmlns="http://www.w3.org/2000/svg"
-                            class="h-5 w-5 text-gray-300 group-hover:text-blue-400" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-                        </svg>
-                        <span>Reporte</span>
-                    </a>
-                </li>
+            @if ($user)
+                @if (auth()->user()->rol != 'lector')
+                    <li>
+                        <a href="{{ route('report.index') }}"
+                            class="flex items-center space-x-3 px-6 py-3 hover:bg-gray-700 rounded group">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="h-5 w-5 text-gray-300 group-hover:text-blue-400" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                            </svg>
+                            <span>Reporte</span>
+                        </a>
+                    </li>
+                @endif
             @endif
-
 
             <!-- historial de equipos eliminados -->
             <li>
@@ -181,27 +190,32 @@
                         </svg>
                     </summary>
                     <ul class="mt-1 ml-4 space-y-1">
-                        <li><a href="{{ route('perfil.edit', ['user' => auth()->user()->userName]) }}"
-                                class="flex items-center space-x-2 px-4 py-2 hover:bg-gray-700 rounded">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                </svg>
-                                <span>Perfil</span>
-                            </a>
-                        </li>
-                        @if (auth()->user()->rol === 'admin')
-                            <li><a href="{{ route('users.index') }}"
+                        @if ($user)
+                            <li><a href="{{ route('perfil.edit', ['user' => auth()->user()->userName]) }}"
                                     class="flex items-center space-x-2 px-4 py-2 hover:bg-gray-700 rounded">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400"
                                         fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                     </svg>
-                                    <span>Usuarios</span>
+                                    <span>Perfil</span>
                                 </a>
                             </li>
+                        @endif
+
+                        @if ($user)
+                            @if (auth()->user()->rol === 'admin')
+                                <li><a href="{{ route('users.index') }}"
+                                        class="flex items-center space-x-2 px-4 py-2 hover:bg-gray-700 rounded">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                                        </svg>
+                                        <span>Usuarios</span>
+                                    </a>
+                                </li>
+                            @endif
                         @endif
                     </ul>
                 </details>

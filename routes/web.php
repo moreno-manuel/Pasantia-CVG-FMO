@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\PerfilController;
 use App\Http\Controllers\Auth\QuestionsSecurityController;
+use App\Http\Controllers\Auth\RecoveryUserController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\EquipmentDisuse\EquipmentDisuseController;
 use App\Http\Controllers\MonitoringSystem\CameraController;
@@ -21,6 +22,19 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::controller(RecoveryUserController::class)
+    ->prefix('recovery')
+    ->group(function () {
+        Route::get('searchUser', 'showStep1')->name('recovery.showStep1');
+        Route::post('searchUserStore', 'storeStep1')->name('recovery.storeStep1');
+        Route::get('questions', 'showStep2')->name('recovery.showStep2');
+        Route::post('questionsStore', 'storeStep2')->name('recovery.storeStep2');
+        Route::get('password', 'showStep3')->name('recovery.showStep3');
+        Route::post('passwordStore', 'storeStep3')->name('recovery.storeStep3');
+    });
+
+
 
 Route::get('/home', function () {
     return view('front.home');
@@ -57,12 +71,12 @@ Route::controller(ReportController::class) //para exportar los reportes
     ->middleware(ReportlAccesMiddleware::class)
     ->group(function () {
         Route::get('', 'index')->name('report.index');
-        Route::get('reporte/switch', 'exportSwitch')->name('export.switch');
-        Route::get('reporte/link', 'exportLink')->name('export.link');
-        Route::get('reporte/camera-stock', 'exportCameraStock')->name('export.cameraStock');
-        Route::get('reporte/nvr', 'exportNvr')->name('export.nvr');
-        Route::get('reporte/camera', 'exportCamera')->name('export.camera');
-        Route::get('reporte/report', 'exportReport')->name('export.report');
+        Route::get('switch', 'exportSwitch')->name('export.switch');
+        Route::get('link', 'exportLink')->name('export.link');
+        Route::get('camera-stock', 'exportCameraStock')->name('export.cameraStock');
+        Route::get('nvr', 'exportNvr')->name('export.nvr');
+        Route::get('camera', 'exportCamera')->name('export.camera');
+        Route::get('report', 'exportReport')->name('export.report');
     });
 
 

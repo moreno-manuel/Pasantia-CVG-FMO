@@ -195,8 +195,6 @@ class NvrExport implements ShouldAutoSize, WithDrawings, WithEvents
                 $phpSheet->getStyle("A{$startRow}:S{$lastDataRow}")
                     ->getProtection()
                     ->setLocked(Protection::PROTECTION_UNPROTECTED);
-                $phpSheet->getProtection()->setSelectLockedCells(false);
-                $phpSheet->getProtection()->setSelectUnlockedCells(true);
             },
         ];
     }
