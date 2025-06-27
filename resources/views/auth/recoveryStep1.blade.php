@@ -1,34 +1,81 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="flex justify-center items-center min-h-screen">
-        <div class="w-full max-w-md bg-white p-8 rounded shadow">
-            <h2 class="text-2xl font-bold mb-6 text-center">Recuperar Cuenta</h2>
+    <!-- Contenido Principal-->
+    <main class="flex-grow flex items-center justify-center p-4">
 
-            <form method="POST" action="{{ route('recovery.storeStep1') }}">
+        <!-- Contenedor del Formulario -->
+        <div class="w-full max-w-sm bg-white rounded-lg shadow p-12 space-y-10 relative">
+
+            <!-- Botón de redirección al Login -->
+            <a href="{{ route('login') }}"
+                class="absolute top-4 right-4 text-gray-600 hover:text-blue-600 transition-colors duration-300"
+                title="Volver al inicio de sesión">
+                <i class="fas fa-arrow-left text-xl"></i>
+            </a>
+
+            <!-- Título -->
+            <h2 class="text-xl font-semibold text-center text-gray-800 border-b pb-2 mt-[-0.5rem]">
+                Recuperar Cuenta
+            </h2>
+
+            <!-- Formulario -->
+            <form method="POST" action="{{ route('recovery.storeStep1') }}" class="space-y-7">
                 @csrf
-                <div class="mb-6">
-                    <label for="userName" class="block text-gray-700 mb-2">Nombre de Usuario</label>
-                    <input type="text" name="userName" id="userName" required
-                        class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400 @error('userName') border-red-500 @enderror">
-                    @error('userName')
-                        <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span>
-                    @enderror
+
+                <!-- Campo Usuario -->
+                <div class="relative mb-6">
+                    <!-- Contenedor para ícono e input -->
+                    <div class="relative flex items-center">
+                        <!-- Icono -->
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                            <i class="fas fa-user text-gray-400"></i>
+                        </div>
+
+                        <!-- Campo de entrada  -->
+                        <input id="userName" type="text"
+                            class="w-full pl-10 pr-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 @error('userName') border-red-500 @enderror"
+                            placeholder="Usuario" name="userName" required>
+                    </div>
+
+                    <!-- Contenedor para mensaje de error -->
+                    <div class="mt-1 h-5">
+                        @error('userName')
+                            <span class="text-red-500 text-xs block">{{ $message }}</span>
+                        @enderror
+                    </div>
                 </div>
 
-                <div class="mb-4">
-                    <label for="license" class="block text-gray-700 mb-2">Ficha</label>
-                    <input type="text" name="license" id="license" required
-                        class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400 @error('license') border-red-500 @enderror"
-                        placeholder="Ingrese su N° de Ficha">
-                    @error('license')
-                        <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span>
-                    @enderror
+                <!-- Campo Ficha -->
+                <div class="relative mb-6">
+                    <!-- Contenedor para ícono e input -->
+                    <div class="relative flex items-center">
+                        <!-- Icono -->
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                            <i class="fas fa-id-badge text-gray-400"></i>
+                        </div>
+
+                        <!-- Campo de entrada-->
+                        <input id="license" type="text"
+                            class="w-full pl-10 pr-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 @error('license') border-red-500 @enderror"
+                            placeholder="N° de Ficha" name="license" required>
+                    </div>
+
+                    <!-- Contenedor fijo para mensaje de error -->
+                    <div class="mt-1 h-5">
+                        @error('license')
+                            <span class="text-red-500 text-xs block">{{ $message }}</span>
+                        @enderror
+                    </div>
                 </div>
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded">
-                    Continuar
+
+                <!-- Botón de Acción  -->
+                <button type="submit"
+                    class="w-full bg-gray-800 hover:bg-blue-600 text-white text-sm font-medium py-2 px-4 rounded 
+                    transition-colors duration-300 ease-in-out flex items-center justify-center gap-2">
+                    <i class="fas fa-arrow-right"></i> Continuar
                 </button>
             </form>
         </div>
-    </div>
+    </main>
 @endsection

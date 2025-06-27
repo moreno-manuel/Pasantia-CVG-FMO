@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
 /* controlador para el crud
-de personas (usuarios) */
+de personas / usuarios */
 
 class UserController extends Controller
 {
@@ -31,28 +31,33 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|min:3|alpha',
-            'last_name' => 'required|min:3|alpha',
-            'sex' => 'required',
-            'license' => 'required|alpha_num|unique:persons,license|min:3',
-            'userName' => [
-                'required',
-                'unique:users,userName',
-                'min:6',
-                'max:12',
-                'alpha_num', // Letras, números y puntos (al menos una letra)
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'name' => 'required|min:3|alpha',
+                'last_name' => 'required|min:3|alpha',
+                'sex' => 'required',
+                'license' => 'required|alpha_num|unique:persons,license|min:3',
+                'userName' => [
+                    'required',
+                    'unique:users,userName',
+                    'min:6',
+                    'max:12',
+                    'alpha_num', // Letras, números y puntos (al menos una letra)
+                ],
+                'rol' => 'required',
+                'email' => 'required|string|email|max:255|unique:users,email',
+                'password' => 'required|confirmed|min:8|regex:/^(?=.*[A-Za-z])(?=.*\d).+$/',
+                'password_confirmation' => 'required_with:password'
             ],
-            'rol' => 'required',
-            'email' => 'required|string|email|max:255|unique:users,email',
-            'password' => 'required|confirmed|min:8|regex:/^(?=.*[A-Za-z])(?=.*\d).+$/',
-            'password_confirmation' => 'required_with:password'
-        ], [], [
-            'userName' => 'Nombre de usuario',
-            'license' => 'Ficha',
-            'name' => 'Nombre',
-            'last_name' => 'Apellido'
-        ]);
+            ['regex' => 'La :attribute debe contener al menos una letra y un número'],
+            [
+                'userName' => 'Nombre de usuario',
+                'license' => 'Ficha',
+                'name' => 'Nombre',
+                'last_name' => 'Apellido'
+            ]
+        );
 
         if ($validator->fails())
             return redirect()->back()->withInput()->withErrors($validator);
@@ -88,34 +93,39 @@ class UserController extends Controller
     {
         $person = Person::findorFail($person);
 
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|min:3|alpha',
-            'last_name' => 'required|min:3|alpha',
-            'sex' => 'required',
-            'userName' =>
+        $validator = Validator::make(
+            $request->all(),
             [
-                'required',
-                'min:6',
-                'max:12',
-                'alpha_num', // Letras, números y puntos (al menos una letra)
-                Rule::unique('users')->ignore($person->user->userName, 'userName')
+                'name' => 'required|min:3|alpha',
+                'last_name' => 'required|min:3|alpha',
+                'sex' => 'required',
+                'userName' =>
+                [
+                    'required',
+                    'min:6',
+                    'max:12',
+                    'alpha_num', // Letras, números y puntos (al menos una letra)
+                    Rule::unique('users')->ignore($person->user->userName, 'userName')
+                ],
+                'rol' => 'required',
+                'email' =>
+                [
+                    'required',
+                    'string',
+                    'email',
+                    'max:255',
+                    Rule::unique('users')->ignore($person->user->email, 'email')
+                ],
+                'password' => 'nullable|confirmed|min:8|regex:/^(?=.*[A-Za-z])(?=.*\d).+$/',
+                'password_confirmation' => 'required_with:password'
             ],
-            'rol' => 'required',
-            'email' =>
+            ['regex' => 'La :attribute debe contener al menos una letra y un número'],
             [
-                'required',
-                'string',
-                'email',
-                'max:255',
-                Rule::unique('users')->ignore($person->user->email, 'email')
-            ],
-            'password' => 'nullable|confirmed|min:8|regex:/^(?=.*[A-Za-z])(?=.*\d).+$/',
-            'password_confirmation' => 'required_with:password'
-        ], [], [
-            'userName' => 'Nombre de usuario',
-            'name' => 'Nombre',
-            'last_name' => 'Apellido'
-        ]);
+                'userName' => 'Nombre de usuario',
+                'name' => 'Nombre',
+                'last_name' => 'Apellido'
+            ]
+        );
 
         if ($validator->fails())
             return redirect()->back()->withInput()->withErrors($validator);

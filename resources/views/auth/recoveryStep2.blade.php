@@ -1,34 +1,76 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="flex justify-center items-center min-h-screen">
-        <div class="w-full max-w-md bg-white p-8 rounded shadow">
-            <h2 class="text-2xl font-bold mb-6 text-center">Preguntas de Seguridad</h2>
+    <!-- Contenido Principal Centrado -->
+    <main class="flex-grow flex items-center justify-center p-4">
 
+        <!-- Contenedor del Formulario -->
+        <div class="w-full max-w-md bg-white rounded-lg shadow p-12 space-y-10 relative">
 
+            <!-- Botón de redirección al Login -->
+            <a href="{{ route('login') }}"
+                class="absolute top-4 right-4 text-gray-600 hover:text-blue-600 transition-colors duration-300"
+                title="Volver al inicio de sesión">
+                <i class="fas fa-arrow-left text-xl"></i>
+            </a>
+
+            <!-- Título -->
+            <h2 class="text-xl font-semibold text-center text-gray-800 border-b pb-2 mt-[-0.5rem]">
+                Preguntas de Seguridad
+            </h2>
+
+            <!-- Formulario -->
             @if ($user->questionsRecovery != '')
-                <form method="POST" action="{{ route('recovery.storeStep2') }}">
+                <form method="POST" action="{{ route('recovery.storeStep2') }}" class="space-y-7">
                     @csrf
 
-                    @foreach ($user->questionsRecovery as $question)
-                        <div class="mb-4">
-                            <label class="block text-gray-700 mb-2">{{ $question->question }}</label>
-                            <input type="text" name="answer_{{ $loop }}" required
-                                class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
-                        </div>
-                    @endforeach
+                    <!-- Preguntas de seguridad -->
 
-                    @if (session('error'))
-                        <div class="bg-red-100 text-red-700 p-3 rounded mb-4">{{ session('error') }}</div>
-                    @endif
+                    <div class="relative">
+                        <label class="block text-black mb-2 text-sm font-medium">
+                            {{ $user->questionsRecovery->question_1 }}
+                        </label>
+                        <input type="text" name="answer_1" required
+                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 @error('answer_1') border-red-500 @enderror">
+                        @error('answer_1')
+                            <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span>
+                        @enderror
+                    </div>
 
-                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded">
-                        Verificar
+                    <div class="relative">
+                        <label class="block text-black mb-2 text-sm font-medium">
+                            {{ $user->questionsRecovery->question_2 }}
+                        </label>
+                        <input type="text" name="answer_2" required
+                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 @error('answer_2') border-red-500 @enderror">
+                        @error('answer_2')
+                            <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="relative">
+                        <label class="block text-black mb-2 text-sm font-medium">
+                            {{ $user->questionsRecovery->question_3 }}
+                        </label>
+                        <input type="text" name="answer_3" required
+                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 @error('answer_3') border-red-500 @enderror">
+                        @error('answer_3')
+                            <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <!-- Botón de acción -->
+                    <button type="submit"
+                        class="w-full bg-gray-800 hover:bg-blue-600 text-white text-sm font-medium py-2 px-4 rounded transition-colors flex items-center justify-center gap-2">
+                        <i class="fas fa-check"></i> Verificar
                     </button>
+
                 </form>
             @else
-                <h2 class="text-2xl font-bold mb-6 text-center">Pruebas</h2>
+                <div class="text-center text-gray-600 text-sm">
+                    No hay preguntas de seguridad configuradas para este Usuario.
+                </div>
             @endif
         </div>
-    </div>
+    </main>
 @endsection

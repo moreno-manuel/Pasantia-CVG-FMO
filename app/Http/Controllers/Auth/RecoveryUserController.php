@@ -8,6 +8,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
+/* controlador para 
+recuperacion de usuario */
 
 class RecoveryUserController extends Controller
 {
@@ -60,36 +62,46 @@ class RecoveryUserController extends Controller
         $userId = session('recovery_user_id');
         if (!$userId) return redirect()->route('recovery.step1');
 
-        $user = User::findOrFail($userId);
-        $questions = $user->securityQuestions;
+        $request->validate([
+            "answer_1" => 'required|string',
+            "answer_2" => 'required|string',
+            "answer_3" => 'required|string'
+        ]);
 
-        foreach ($questions as $index => $question) {
-            $answerInput = $request->input("answer_{$question->id}");
-            if ($answerInput !== $question->answer) {
-                return back()->withErrors(['error' => 'Respuesta(s) incorrecta(s)']);
+        $user = User::findOrFail($userId);
+        $questions = $user->questionsRecovery;
+
+        $error = []; // para mesaje de error
+        for ($i = 1; $i < 4; $i++) {
+            $answerInput = $request->input("answer_{$i}");
+            if ($answerInput != $questions["answer_{$i}"]) {
+                $error["answer_{$i}"] = "Respuesta incorrecta";
             }
         }
 
-        return redirect()->route('recovery.step3');
+        if ($error)
+            return back()->withErrors($error);
+
+        return redirect()->route('recovery.showStep3');
     }
 
     // Paso 3: Nueva contraseña
     public function showStep3()
     {
-        return view('recovery.step3');
+        return view('auth.recoveryStep3');
     }
 
     public function storeStep3(Request $request)
     {
         $request->validate([
-            'password' => 'required|confirmed|min:8',
-        ]);
+            'password' => '|confirmed|min:8|regex:/^(?=.*[A-Za-z])(?=.*\d).+$/',
+        ], ['regex' => 'La :attribute debe contener al menos una letra y un número']);
 
         $userId = session('recovery_user_id');
         $user = User::findOrFail($userId);
-        $user->update(['password' => Hash::make($request->password)]);
+        $user->update(['password' => $request->password]);
 
         session()->forget('recovery_user_id');
-        return redirect()->route('login')->with('status', 'Contraseña actualizada exitosamente');
+        return redirect()->route('login')->with('success', 'Contraseña actualizada exitosamente');
     }
 }

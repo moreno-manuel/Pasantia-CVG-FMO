@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
+/* controlador para crear 
+y editar las preguntas de seguridad 
+de un usuario */
 class QuestionsSecurityController extends Controller
 {
     //

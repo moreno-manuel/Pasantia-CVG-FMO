@@ -25,20 +25,25 @@ class PerfilController extends Controller
 
     public function update(Request $request, $user)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|min:3|alpha',
-            'last_name' => 'required|min:3|alpha',
-            'sex' =>  'required',
-            'email' => [
-                'required',
-                'string',
-                'email',
-                'max:255',
-                Rule::unique('users')->ignore($user, 'userName'),
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'name' => 'required|min:3|alpha',
+                'last_name' => 'required|min:3|alpha',
+                'sex' =>  'required',
+                'email' => [
+                    'required',
+                    'string',
+                    'email',
+                    'max:255',
+                    Rule::unique('users')->ignore($user, 'userName'),
+                ],
+                'password' => 'nullable|confirmed|min:8|regex:/^(?=.*[A-Za-z])(?=.*\d).+$/',
+                'password_confirmation' => 'required_with:password'
             ],
-            'password' => 'nullable|confirmed|min:8|regex:/^(?=.*[A-Za-z])(?=.*\d).+$/',
-            'password_confirmation' => 'required_with:password'
-        ], [], ['name' => 'Nombre', 'last_name' => 'Apellido']);
+            ['regex' => 'La :attribute debe contener al menos una letra y un número'],
+            ['name' => 'Nombre', 'last_name' => 'Apellido']
+        );
 
         if ($validator->fails())
             return redirect()->back()->withInput()->withErrors($validator);

@@ -3,25 +3,18 @@
 
     <!-- resources/views/front/condition/index.blade.php -->
 
-    <div class="container mx-auto px-4 py-6">
+    <div class="container mx-auto px-1 py-6">
 
-        <!-- Encabezado y botón agregar -->
+        <!-- Encabezado -->
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-white bg-gray-600 rounded-md px-3 py-1">Condicion de Atención</h1>
-
-            @if (auth()->user()->rol != 'lector')
-                <a href="{{ route('atencion.create') }}"
-                    class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-blue-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                    <!-- Icono de agregar -->
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
-                    Agregar Nueva Condición
-                </a>
-            @endif
-
         </div>
+
+        {{-- logo --}}
+        <div class="absolute top-4 right-4 z-10 pointer-events-none">
+            <img src="{{ asset('images/logo_view.png') }}" alt="Logo" style="filter: opacity(60%)">
+        </div>
+
 
         <!-- Filtros para búsqueda -->
         <form method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6" onsubmit="return validateFilters()">
@@ -69,7 +62,21 @@
             </div>
         </form>
 
-        <br>
+        {{-- botonn agregar nueva condicion --}}
+        @if (auth()->user()->rol != 'lector')
+            <div class="flex justify-end items-center mb-6">
+
+                <a href="{{ route('atencion.create') }}"
+                    class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-blue-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    <!-- Icono de agregar -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    Agregar Nueva Condición
+                </a>
+            </div>
+        @endif
 
         {{-- valida para mostrar tabla o mensaje --}}
         @if ($conditions->isNotEmpty())

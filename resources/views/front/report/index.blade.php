@@ -8,6 +8,11 @@
             <h1 class="text-2xl font-bold text-white bg-gray-600 rounded-md px-3 py-1">Reportes</h1>
         </div>
 
+        {{-- logo --}}
+        <div class="absolute top-4 right-4 z-10 pointer-events-none">
+            <img src="{{ asset('images/logo_view.png') }}" alt="Logo" style="filter: opacity(60%)">
+        </div>
+
         <!-- Tabla de reportes -->
         <div class="overflow-hidden rounded-lg shadow border border-gray-700 bg-gray-800 w-full max-w-2xl">
             <table class="min-w-full divide-y divide-gray-700">

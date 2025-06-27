@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\RecoveryUserController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\EquipmentDisuse\EquipmentDisuseController;
 use App\Http\Controllers\MonitoringSystem\CameraController;
+use App\Http\Controllers\MonitoringSystem\CheckStatusController;
 use App\Http\Controllers\MonitoringSystem\ConditionAController;
 use App\Http\Controllers\MonitoringSystem\NvrController;
 use App\Http\Controllers\NetworkInfrastructure\CameraInventoriesController;
@@ -36,17 +37,23 @@ Route::controller(RecoveryUserController::class)
 
 
 
-Route::get('/home', function () {
+/* Route::get('/home', function () {
     return view('front.home');
 })->middleware('auth')->name('home');
-
-
+ */
+Route::controller(CheckStatusController::class) //monitoreo de camaras y nvr
+    ->prefix('/home')
+    ->middleware('auth')
+    ->group(function () {
+        Route::get('', 'home')->name('home');
+        Route::get('check', 'checkStatus')->name('test.check');
+    });
 Route::resource('switch', SwitchController::class)->middleware('auth');
 Route::resource('enlace', LinkController::class)->middleware('auth');
 Route::resource('nvr', NvrController::class)->middleware('auth');
 Route::resource('camara', CameraController::class)->middleware('auth');
 Route::controller(CameraInventoriesController::class)
-    ->prefix('inventario/camara')
+    ->prefix('camara-stock')
     ->middleware('auth')
     ->group(function () {
         Route::get('', 'index')->name('inventories.index');
@@ -58,7 +65,7 @@ Route::resource('atencion', ConditionAController::class)->middleware('auth');
 
 
 Route::controller(EquipmentDisuseController::class) //equipos eliminados
-    ->prefix('historial/eliminados')
+    ->prefix('historial-eliminados')
     ->middleware('auth')
     ->group(function () {
         Route::get('', 'index')->name('eliminated.index');
@@ -89,7 +96,7 @@ Route::controller(PerfilController::class) //perfil del usuario logueado
     });
 
 Route::controller(QuestionsSecurityController::class) // preguntas de seguridad para el usuario logueado
-    ->prefix('security')
+    ->prefix('preguntas-seguridad')
     ->middleware('auth')
     ->group(function () {
         Route::get('', 'showForm')->name('security.showForm');

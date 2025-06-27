@@ -36,7 +36,7 @@ class CameraInventoriesController extends Controller
     }
 
     public function create() //muestra el formulario 
-    {
+    { 
         $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['marks']; // json con las marcas agregadas
         return view('front.camera.camera_inventories.create', compact('marks'));
     }
@@ -57,7 +57,7 @@ class CameraInventoriesController extends Controller
 
             ],
             ['required_if' => 'Debe agregar el nombre de la marca'],
-            ['location' => 'Localidad', 'model' => 'Modelo']
+            ['location' => 'Localidad', 'model' => 'Modelo', 'delivery_note' => 'Nota de entrega', 'destination' => 'Destino de instalación']
         );
 
         if ($validator->fails()) {
@@ -67,7 +67,7 @@ class CameraInventoriesController extends Controller
         $request = marksUpdate($request, 'marks');
 
         CameraInventory::create($request->all())->save();
-        return redirect()->route('inventories.index')->with('succes', 'Cámara agregada exitosamente');
+        return redirect()->route('inventories.index')->with('success', 'Cámara agregada exitosamente');
     }
 
     public function destroy($mac, Request $request) //elimina un registro

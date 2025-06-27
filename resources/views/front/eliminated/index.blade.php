@@ -2,11 +2,16 @@
 @section('content')
     <!-- resources/views/front/eliminated/index.blade.php -->
 
-    <div class="container mx-auto px-4 py-6">
-        <!-- Encabezado  -->
+    <div class="container mx-auto px-1 py-6">
 
+        <!-- Encabezado  -->
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-white bg-gray-600 rounded-md px-3 py-1">Equipos Eliminados</h1>
+        </div>
+
+        {{-- logo --}}
+        <div class="absolute top-4 right-4 z-10 pointer-events-none">
+            <img src="{{ asset('images/logo_view.png') }}" alt="Logo" style="filter: opacity(60%)">
         </div>
 
         <!-- Filtros para búsqueda -->

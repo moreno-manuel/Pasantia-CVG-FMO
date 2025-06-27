@@ -81,7 +81,7 @@
                     <div>
                         <label for="name" class="block text-sm font-semibold text-white">Nombre de Usuario</label>
                         <input type="text" name="name" value="{{ $user->userName }}"
-                            class="mt-1 block w-full rounded-md bg-gray-900 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            class="mt-1 block w-full rounded-md bg-gray-900 border border-gray-600 text-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             disabled readonly>
                     </div>
 
