@@ -18,8 +18,8 @@
 
         {{-- Tabla de cámaras inactivas --}}
         @if ($inactiveCameras->isEmpty())
-            <div class="text-center py-10">
-                <p class="text-xl text-gray-400 italic">No hay cámaras inactivas</p>
+            <div class="text-center mt-6 bg-gray-800 border border-black rounded-md p-4 text-white">
+                <p>No hay Cámaras fuera de línea</p>
             </div>
         @else
             <div class="overflow-x-auto rounded-lg shadow border border-gray-700 bg-gray-800">
@@ -65,7 +65,7 @@
                         tableBody.innerHTML = ''; // Limpiar tabla
 
                         // Filtrar solo cámaras inactivas
-                        const inactiveCameras = data.filter(camera => camera.status === 'Inactivo');
+                        const inactiveCameras = data.filter(camera => camera.status === 'Inactivo' || camera.status === 'Desconocido');
 
                         if (inactiveCameras.length === 0) {
                             tableBody.innerHTML = `

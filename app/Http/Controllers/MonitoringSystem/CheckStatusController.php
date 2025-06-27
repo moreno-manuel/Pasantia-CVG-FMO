@@ -18,6 +18,7 @@ class CheckStatusController extends Controller
             return $camera->status == 'Inactivo'; // true si está inactivo
         });
 
+
         return view('front.home.checkStatus', compact('inactiveCameras'));
     }
 

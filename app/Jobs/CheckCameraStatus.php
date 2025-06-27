@@ -9,6 +9,7 @@ use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class CheckCameraStatus implements ShouldQueue
 {
@@ -23,15 +24,26 @@ class CheckCameraStatus implements ShouldQueue
     }
 
     /**
-     * Execute the job.
+     * Execute the job.j
      */
     public function handle(): void
     {
-        $cameras = Camera::all(['mac', 'ip']);
-        foreach ($cameras as $camera) {
-            $cmd = "ping -n 1 -w 1000 " . escapeshellarg($camera->ip) . " > nul && echo 1 || echo 0";
-            $status = shell_exec($cmd) == 1 ? 'Activo' : 'Inactivo';
-            Cache::put('camera_status_' . $camera->mac, $status, 10);
+        try {
+            $cameras = Camera::all(['mac', 'ip']);
+
+            foreach ($cameras as $camera) {
+                $cmd = "ping -n 1 -w 500 " . escapeshellarg($camera->ip) . " > nul && echo 1 || echo 0";
+                $output = shell_exec($cmd);
+
+                $status = trim($output) === '1' ? 'Activo' : 'Inactivo';
+
+                Cache::put('camera_status_' . $camera->mac, $status, 60);
+
+                Log::debug("Caché actualizada para MAC {$camera->mac}: $status");
+            }
+        } catch (\Exception $e) {
+            Log::error("Error en CheckCameraStatus: " . $e->getMessage());
+            throw $e; // Para que Laravel reintente si es necesario
         }
     }
 }
