@@ -118,18 +118,6 @@
                         @enderror
                     </div>
 
-                    <!-- Campo Status -->
-                    <div>
-                        <label for="status" class="block text-sm font-semibold text-white">Status</label>
-                        <select name="status" id="status"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            required>
-                            <option value="">Seleccione..</option>
-                            <option value="Activo" {{ old('status') == 'Activo' ? 'selected' : '' }}>Activo</option>
-                            <option value="Inactivo" {{ old('status') == 'Inactivo' ? 'selected' : '' }}>Inactivo</option>
-                        </select>
-                    </div>
-
                     <!-- Campo Descripción -->
                     <div class="md:col-span-2">
                         <label for="description" class="block text-sm font-semibold text-white">Descripción</label>

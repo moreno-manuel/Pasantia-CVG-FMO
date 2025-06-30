@@ -114,8 +114,10 @@
                                 <td class="px-6 py-4 text-center text-sm">
                                     <span
                                         class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                    {{ $nvr['status'] === 'Activo' ? 'bg-green-600 text-green-100' : 'bg-red-600 text-red-100' }}">
-                                        {{ $nvr['status'] }}
+                                            @if ($nvr->status == 'online') bg-green-600 text-green-100
+                                            @elseif($nvr->status == 'offline') bg-red-600 text-red-100
+                                            @else bg-yellow-600 text-yellow-100 @endif">
+                                        {{ $nvr->status }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 text-sm align-middle">
@@ -132,20 +134,21 @@
                                                 class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
                                                 Editar
                                             </a>
-                                            @if ($nvr->camera()->count() > 0)
+                                            @if ($nvr->camera()->count() > 0 && auth()->user()->rol == 'admin')
                                                 {{-- si el nvr tiene cámaras conectadas no se puede eliminar --}}
-                                                <!-- Botón Eliminar -->
                                                 <button type="button" onclick="submit()"
                                                     class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                                                     Eliminar
                                                 </button>
                                             @else
-                                                <!-- Botón Eliminar -->
-                                                <button type="button"
-                                                    onclick="openDeleteModal('{{ route('nvr.destroy', $nvr) }}')"
-                                                    class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                                    Eliminar
-                                                </button>
+                                                @if (auth()->user()->rol == 'admin')
+                                                    <!-- Botón Eliminar -->
+                                                    <button type="button"
+                                                        onclick="openDeleteModal('{{ route('nvr.destroy', $nvr) }}')"
+                                                        class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                                        Eliminar
+                                                    </button>
+                                                @endif
                                             @endif
                                         @endif
                                     </div>

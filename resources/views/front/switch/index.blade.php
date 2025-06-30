@@ -99,11 +99,10 @@
                     <thead class="bg-gray-700 divide-x divide-blue-400">
                         <tr class="divide-x divide-blue-400">
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Serial</th>
-                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Mark</th>
+                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Marca</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Model</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">N°/Puertos</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Localidad</th>
-                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Status</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Acciones</th>
                         </tr>
                     </thead>
@@ -116,13 +115,6 @@
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $switch['model'] }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $switch['number_ports'] }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $switch['location'] }}</td>
-                                <td class="px-6 py-4 text-center text-sm">
-                                    <span
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                    {{ $switch['status'] === 'Activo' ? 'bg-green-600 text-green-100' : 'bg-red-600 text-red-100' }}">
-                                        {{ $switch['status'] }}
-                                    </span>
-                                </td>
 
                                 {{-- Acciones --}}
                                 <td class="px-6 py-4 text-sm align-middle">
@@ -137,12 +129,14 @@
                                                 class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
                                                 Editar
                                             </a>
-                                            <!-- Botón Eliminar -->
-                                            <button type="button"
-                                                onclick="openDeleteModal('{{ route('switch.destroy', $switch) }}')"
-                                                class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                                Eliminar
-                                            </button>
+                                            @if (auth()->user()->rol == 'admin')
+                                                <!-- Botón Eliminar -->
+                                                <button type="button"
+                                                    onclick="openDeleteModal('{{ route('switch.destroy', $switch) }}')"
+                                                    class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                                    Eliminar
+                                                </button>
+                                            @endif
                                         @endif
                                     </div>
                                 </td>

@@ -56,15 +56,14 @@ class CameraController extends Controller
             $validator = Validator::make(
                 $request->all(),
                 [
-                    'mac' => 'required|unique:cameras,mac|alpha_num|size:12',
+                    'mac' => 'required|unique:cameras,mac|alpha_num|min:10|max:12',
                     'mark' => 'required',
                     'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
                     'nvr_id' => 'required',
-                    'model' => 'required|alpha_num|min:3',
-                    'name' => 'required|unique:cameras,name|regex:/^[a-zA-Z0-9\/\- ]+$/|min:5',
-                    'location' => 'required|regex:/^[a-zA-Z0-9\/\- ]+$/|min:5',
+                    'model' => 'required|alpha_dash|min:3',
+                    'name' => 'required|unique:cameras,name|regex:/^[a-zA-Z0-9\/\-. ]+$/|min:5',
+                    'location' => 'required|regex:/^[a-zA-Z0-9\/\-. ]+$/|min:5',
                     'ip' => 'required|ip|unique:cameras,ip',
-                    'status' => 'required',
                     'description' => 'nullable'
                 ],
                 ['required_if' => 'Debe agregar el nombre de la marca'],
@@ -124,16 +123,15 @@ class CameraController extends Controller
                     'mark' => 'required',
                     'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
                     'nvr_id' => 'required',
-                    'model' => 'required|alpha_num|min:3',
+                    'model' => 'required|alpha_dash|min:3',
                     'name' => [
                         'required',
-                        'regex:/^[a-zA-Z0-9\/\- ]+$/',
+                        'regex:/^[a-zA-Z0-9\/\-. ]+$/',
                         'min:5',
                         Rule::unique('cameras')->ignore($camera->mac, 'mac') //ignora el nombre registro que va actualizar 
                     ],
-                    'location' => 'required|regex:/^[a-zA-Z0-9\/\- ]+$/|min:5',
+                    'location' => 'required|regex:/^[a-zA-Z0-9\/\-. ]+$/|min:5',
                     'ip' => 'required|ip|unique:cameras,ip',
-                    'status' => 'required',
                     'description' => 'nullable'
                 ],
                 ['required_if' => 'Debe agregar el nombre de la marca'],

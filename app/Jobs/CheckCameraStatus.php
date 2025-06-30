@@ -35,7 +35,7 @@ class CheckCameraStatus implements ShouldQueue
                 $cmd = "ping -n 1 -w 500 " . escapeshellarg($camera->ip) . " > nul && echo 1 || echo 0";
                 $output = shell_exec($cmd);
 
-                $status = trim($output) === '1' ? 'Activo' : 'Inactivo';
+                $status = trim($output) === '1' ? 'online' : 'offline';
 
                 Cache::put('camera_status_' . $camera->mac, $status, 60);
 

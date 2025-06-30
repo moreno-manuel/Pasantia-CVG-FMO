@@ -37,10 +37,6 @@ Route::controller(RecoveryUserController::class)
 
 
 
-/* Route::get('/home', function () {
-    return view('front.home');
-})->middleware('auth')->name('home');
- */
 Route::controller(CheckStatusController::class) //monitoreo de camaras y nvr
     ->prefix('/home')
     ->middleware('auth')
@@ -83,6 +79,7 @@ Route::controller(ReportController::class) //para exportar los reportes
         Route::get('camera-stock', 'exportCameraStock')->name('export.cameraStock');
         Route::get('nvr', 'exportNvr')->name('export.nvr');
         Route::get('camera', 'exportCamera')->name('export.camera');
+        Route::get('disuse', 'exportEquipmentDisuse')->name('export.EquipmentDisuse');
         Route::get('report', 'exportReport')->name('export.report');
     });
 

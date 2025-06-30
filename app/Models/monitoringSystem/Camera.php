@@ -83,4 +83,15 @@ class Camera extends Model
     {
         return long2ip($value);
     }
+
+    //valor por defecto para status
+    protected static function booted()
+    {
+        static::creating(function ($camera) {
+            // Si no tiene status, asignar por defecto
+            if (empty($camera->status)) {
+                $camera->status = 'online';
+            }
+        });
+    }
 }

@@ -43,13 +43,12 @@ class SwitchController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'serial' => 'required|unique:switches|alpha_num|size:10',
+                'serial' => 'required|unique:switches|alpha_num|min:9|max:10',
                 'mark' => 'required',
                 'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
-                'location' => 'required|regex:/^[a-zA-Z0-9\/\- ]+$/|min:5',
-                'model' => 'required|alpha_num|min:3',
+                'location' => 'required|regex:/^[a-zA-Z0-9\/\-. ]+$/|min:5',
+                'model' => 'required|alpha_dash|min:3',
                 'number_ports' => 'required',
-                'status' => 'required',
                 'description' => 'nullable'
             ],
             ['required_if' => 'Debe agregar el nombre de la marca'],
@@ -82,9 +81,8 @@ class SwitchController extends Controller
                 'mark' => 'required',
                 'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
                 'number_ports' => 'required',
-                'location' => 'required|regex:/^[a-zA-Z0-9\/\- ]+$/|min:5',
-                'model' => 'required|alpha_num|min:3',
-                'status' => 'required',
+                'location' => 'required|regex:/^[a-zA-Z0-9\/\-. ]+$/|min:5',
+                'model' => 'required|alpha_dash|min:3',
                 'description' => 'nullable'
             ],
             ['required_if' => 'Debe agregar el nombre de la marca'],

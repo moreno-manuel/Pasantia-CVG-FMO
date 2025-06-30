@@ -70,20 +70,8 @@
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $link['location'] }}</dd>
                     </div>
 
-                    <!-- Campo Status -->
-                    <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-300">Status</dt>
-                        <dd class="mt-1 text-sm sm:mt-0 sm:col-span-2">
-                            <span
-                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                            {{ $link['status'] === 'Activo' ? 'bg-green-600 text-green-100' : 'bg-red-600 text-red-100' }}">
-                                {{ $link['status'] }}
-                            </span>
-                        </dd>
-                    </div>
-
                     <!-- Campo Descripción -->
-                    <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">Descripción</dt>
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
                             {{ $link['description'] ?? 'Sin descripción' }}
@@ -100,12 +88,13 @@
                     class="inline-flex items-center px-3 py-1.5 bg-yellow-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-yellow-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
                     Editar
                 </a>
-
-                <!-- Botón Eliminar -->
-                <button type="button" onclick="openDeleteModal('{{ route('enlace.destroy', $link['mac']) }}')"
-                    class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-red-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                    Eliminar
-                </button>
+                @if (auth()->user()->rol == 'admin')
+                    <!-- Botón Eliminar -->
+                    <button type="button" onclick="openDeleteModal('{{ route('enlace.destroy', $link['mac']) }}')"
+                        class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-red-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                        Eliminar
+                    </button>
+                @endif
             </div>
         @endif
     </div>

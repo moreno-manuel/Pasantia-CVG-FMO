@@ -53,16 +53,15 @@ class NvrController extends Controller
 
             $validated = $request->validate(
                 [  // Validación principal del NVR
-                    'mac' => 'required|unique:nvrs,mac|alpha_num|size:12',
+                    'mac' => 'required|unique:nvrs,mac|alpha_num|min:10|max:12',
                     'mark' => 'required',
                     'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
-                    'model' => 'required|alpha_num|min:3',
-                    'name' => 'required|unique:nvrs,name|regex:/^[a-zA-Z0-9\/\- ]+$/|min:5',
+                    'model' => 'required|alpha_dash|min:3',
+                    'name' => 'required|unique:nvrs,name|regex:/^[a-zA-Z0-9\/\-. ]+$/|min:5',
                     'ip' => 'required|ip|unique:nvrs,ip',
                     'ports_number' => 'required',
                     'slot_number' => 'required',
-                    'location' => 'required|regex:/^[a-zA-Z0-9\/\- ]+$/|min:5',
-                    'status' => 'required',
+                    'location' => 'required|regex:/^[a-zA-Z0-9\/\-. ]+$/|min:5',
                     'description' => 'nullable'
                 ],
                 ['required_if' => 'Debe agregar el nombre de la marca'],
@@ -119,11 +118,10 @@ class NvrController extends Controller
                 [       // Validación principal del NVR
                     'mark' => 'required',
                     'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
-                    'model' => 'required|alpha_num|min:3',
+                    'model' => 'required|alpha_dash|min:3',
                     'ip' => 'required|ip|unique:nvrs',
                     'ports_number' => 'required',
                     'location' => 'required|regex:/^[a-zA-Z0-9\/\- ]+$/|min:5',
-                    'status' => 'required',
                     'description' => 'nullable'
                 ],
                 ['required_if' => 'Debe agregar el nombre de la marca'],

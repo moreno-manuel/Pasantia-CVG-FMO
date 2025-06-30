@@ -48,11 +48,10 @@ class LinkController extends Controller
                     'mac' => 'required|unique:links,mac|alpha_num|size:12',
                     'mark' => 'required',
                     'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
-                    'model' => 'required|alpha_num|min:3',
-                    'name' => 'required|unique:links,name|regex:/^[a-zA-Z0-9\/\- ]+$/|min:5',
+                    'model' => 'required|alpha_dash|min:3',
+                    'name' => 'required|unique:links,name|regex:/^[a-zA-Z0-9\/\-. ]+$/|min:5',
                     'ssid' => 'required|alpha_num|min:5',
-                    'location' => 'required|regex:/^[a-zA-Z0-9\/\- ]+$/|min:5',
-                    'status' => 'required',
+                    'location' => 'required|regex:/^[a-zA-Z0-9\/\-. ]+$/|min:5',
                     'ip' => 'required|ip|unique:links,ip',
                     'description' => 'nullable'
                 ],
@@ -97,18 +96,17 @@ class LinkController extends Controller
             $validator = Validator::make(
                 $request->all(),
                 [ //para capturar si hay dato incorrecto
-                    'model' => 'required|alpha_num|min:3',
+                    'model' => 'required|alpha_dash|min:3',
                     'name' => [
                         'required',
-                        'regex:/^[a-zA-Z0-9\/\- ]+$/',
+                        'regex:/^[a-zA-Z0-9\/\-. ]+$/',
                         'min:5',
                         Rule::unique('links')->ignore($link->mac, 'mac') //ignora el registro que va actualizar 
                     ],
                     'mark' => 'required',
                     'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
                     'ssid' => 'required|alpha_num|min:5',
-                    'location' => 'required|regex:/^[a-zA-Z0-9\/\- ]+$/|min:5',
-                    'status' => 'required',
+                    'location' => 'required|regex:/^[a-zA-Z0-9\/\-. ]+$/|min:5',
                     'ip' => 'required|ip|unique:links,ip',
                     'description' => 'nullable'
                 ],

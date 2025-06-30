@@ -93,4 +93,15 @@ class Nvr extends Model
     {
         return $this->ports_number - $this->camera->count();
     }
+
+    //valor por defecto para status
+    protected static function booted()
+    {
+        static::creating(function ($nvr) {
+            // Si no tiene status, asignar por defecto
+            if (empty($nvr->status)) {
+                $nvr->status = 'online';
+            }
+        });
+    }
 }

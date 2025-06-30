@@ -191,7 +191,7 @@
             </div>
         </div>
 
-        @if (auth()->user()->rol != 'lector')
+        @if (auth()->user()->rol == 'admin')
             <!-- Acciones -->
             <div class="mt-6 flex justify-end space-x-3">
                 <form action="{{ route('eliminated.destroy', $equipment['id']) }}" method="POST"

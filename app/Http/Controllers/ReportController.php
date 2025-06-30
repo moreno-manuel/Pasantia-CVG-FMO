@@ -19,6 +19,7 @@ class ReportController extends Controller
             ['name' => 'Inventario Cámaras en stock', 'url' => 'export.cameraStock'],
             ['name' => 'Inventario Switches', 'url' => 'export.switch'],
             ['name' => 'Inventario Enlaces', 'url' => 'export.link'],
+            ['name' => 'Equipos Eliminados', 'url' => 'export.EquipmentDisuse'],
             ['name' => 'Informe Final', 'url' => 'export.report'],
         ];
 
@@ -48,6 +49,11 @@ class ReportController extends Controller
     public function exportLink()
     {
         return Excel::download(new LinkExport(), 'Inventario_Enlaces.xlsx');
+    }
+
+    public function exportEquipmentDisuse()
+    {
+        // Implementación para exportar enlaces eliminados
     }
 
     public function exportReport() {}

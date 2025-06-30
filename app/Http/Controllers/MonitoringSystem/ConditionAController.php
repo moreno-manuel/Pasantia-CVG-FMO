@@ -81,7 +81,7 @@ class ConditionAController extends Controller
         ]);
 
         if ($status == 'Por atender')
-            $condition->camera->update(['status' => 'Inactivo']);   //atualiza el estado de la cámara
+            $condition->camera->update(['status' => 'offline']);   //atualiza el estado de la cámara
 
         return redirect()->route('atencion.index')->with('success', 'Condición de Atención agregada exitosamente.');
     }
@@ -131,7 +131,7 @@ class ConditionAController extends Controller
 
         //atualiza el estado de la cámara
         if ($status == 'Atendido')
-            $condition->camera->update(['status' => 'Activo']);
+            $condition->camera->update(['status' => 'online']);
 
         return redirect()->route('atencion.index')->with('success', 'Condición de Atención actualizada exitosamente.');
     }
@@ -152,7 +152,7 @@ class ConditionAController extends Controller
         $conditionLast = ConditionAttention::where('camera_id', $condition->camera_id)->latest()->first(); //busqueda explicita,last condición
         if ($conditionLast) {
             if ($condition->is($conditionLast)) { //si la que se elimina es la ultima condición 
-                $condition->camera->update(['status' => 'Activo']); // cámara regresa a su status original
+                $condition->camera->update(['status' => 'online']); // cámara regresa a su status original
             }
         }
 

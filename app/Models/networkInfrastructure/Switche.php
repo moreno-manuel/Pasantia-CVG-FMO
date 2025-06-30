@@ -19,7 +19,6 @@ class Switche extends Model
         'model',
         'location',
         'number_ports',
-        'status',
         'description'
     ];
 

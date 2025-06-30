@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('location');
             $table->string('number_ports');
             $table->string('description')->nullable();
-            $table->string('status');
             $table->timestamps();
         });
 
@@ -30,7 +29,6 @@ return new class extends Migration
             $table->string('ssid');
             $table->string('location');
             $table->unsignedBigInteger('ip')->unique()->require();
-            $table->string('status');
             $table->string('description')->nullable();
             $table->timestamps();
         });

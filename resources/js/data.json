@@ -1,7 +1,10 @@
 {
     "marks": [
+        "AXIS",
         "DAHUA",
-        "HIKVISION"
+        "GENERICA",
+        "HIKVISION",
+        "VIVOTEK"
     ],
     "conditions": [
         "CAMION CESTA",
@@ -14,7 +17,6 @@
         "TP-LINK"
     ],
     "link_marks": [
-        "NUEVA",
         "UBIQUITI"
     ],
     "rol": [

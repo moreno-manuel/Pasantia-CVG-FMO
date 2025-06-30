@@ -112,7 +112,7 @@
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $camera['delivery_note'] }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-white">
                                     {{ $camera['description'] ?? 'Sin descripción' }}</td>
-                                @if (auth()->user()->rol != 'lector')
+                                @if (auth()->user()->rol == 'admin')
                                     {{-- Acciones --}}
                                     <td class="px-6 py-4 text-sm align-middle">
                                         <div class="flex justify-center space-x-2">

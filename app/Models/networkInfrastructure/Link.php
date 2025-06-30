@@ -20,7 +20,6 @@ class Link extends Model
         'ssid',
         'location',
         'ip',
-        'status',
         'description'
 
     ];
