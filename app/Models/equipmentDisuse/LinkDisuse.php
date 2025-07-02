@@ -15,7 +15,6 @@ class LinkDisuse extends Model
         'id',
         'name',
         'ssid',
-        'mark',
         'ip'
     ];
 

@@ -4,7 +4,7 @@
 
     <!-- resources/views/front/camera/index.blade.php -->
 
-    <div class="container mx-auto px-4 py-6">
+    <div class="container mx-auto px-1 py-6">
 
         <!-- Encabezado -->
         <div class="flex justify-between items-center mb-6">
@@ -33,8 +33,8 @@
                 <select name="status"
                     class="w-full rounded-md bg-white border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                     <option value="">Todos</option>
-                    <option value="Activo" {{ ($filters['status'] ?? '') == 'Activo' ? 'selected' : '' }}>Activo</option>
-                    <option value="Inactivo" {{ ($filters['status'] ?? '') == 'Inactivo' ? 'selected' : '' }}>Inactivo
+                    <option value="online" {{ ($filters['status'] ?? '') == 'online' ? 'selected' : '' }}>Online</option>
+                    <option value="offline" {{ ($filters['status'] ?? '') == 'offline' ? 'selected' : '' }}>Offline
                     </option>
                 </select>
             </div>

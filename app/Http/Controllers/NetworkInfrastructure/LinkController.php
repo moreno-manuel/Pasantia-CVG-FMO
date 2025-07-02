@@ -22,8 +22,7 @@ class LinkController extends Controller
     public function index(Request $request) //muestra los registros en la tabla principal link
     {
         // Valida si hay algún filtro activo
-        $hasFilters = $request->filled('status') ||
-            $request->filled('location');
+        $hasFilters = $request->filled('location');
 
         if (!$hasFilters) { //si no se aplica un filtro
             $links = Link::orderBy('created_at', 'desc')->paginate(10);

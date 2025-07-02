@@ -17,7 +17,6 @@ class NvrDisuse extends Model
         'name',
         'ip',
         'ports_number',
-        'mark',
         'slot_number',
     ];
     //Relaciones

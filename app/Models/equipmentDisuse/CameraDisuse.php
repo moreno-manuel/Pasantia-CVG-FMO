@@ -14,7 +14,6 @@ class CameraDisuse extends Model
     protected $fillable = [
         'id',
         'name',
-        'mark',
         'nvr',
         'ip'
     ];

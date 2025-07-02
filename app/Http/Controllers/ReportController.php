@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Exports\CameraExport;
 use App\Exports\CameraStockExport;
+use App\Exports\EquipmentDisuse\ReportEquipmentDisuse;
 use App\Exports\LinkExport;
 use App\Exports\NvrExport;
+use App\Exports\ReportFinalExport\ReportFinalExport;
 use App\Exports\SwitchExport;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -31,6 +33,7 @@ class ReportController extends Controller
     {
         return Excel::download(new CameraExport(), 'Inventario_Camara.xlsx');
     }
+    
     public function exportNvr()
     {
         return Excel::download(new NvrExport(), 'Inventario_Nvr.xlsx');
@@ -53,8 +56,11 @@ class ReportController extends Controller
 
     public function exportEquipmentDisuse()
     {
-        // Implementación para exportar enlaces eliminados
+        return Excel::download(new ReportEquipmentDisuse(), 'Equipos_Eliminados.xlsx');
     }
 
-    public function exportReport() {}
+    public function exportReport()
+    {
+        return Excel::download(new ReportFinalExport(), 'Informe_Final.xlsx');
+    }
 }

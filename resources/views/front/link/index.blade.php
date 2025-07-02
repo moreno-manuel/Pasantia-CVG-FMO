@@ -26,18 +26,6 @@
                     placeholder="Buscar por localidad">
             </div>
 
-            <!-- Status -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                <select name="status"
-                    class="w-full rounded-md bg-white border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
-                    <option value="">Todos</option>
-                    <option value="Activo" {{ ($filters['status'] ?? '') == 'Activo' ? 'selected' : '' }}>Activo</option>
-                    <option value="Inactivo" {{ ($filters['status'] ?? '') == 'Inactivo' ? 'selected' : '' }}>Inactivo
-                    </option>
-                </select>
-            </div>
-
             <!-- Botones: Filtrar + Limpiar -->
             <div class="flex items-end space-x-2">
                 <!-- Botón Filtrar -->
@@ -139,7 +127,6 @@
             {{-- paginacion --}}
             {{ $links->appends([
                     'location' => $filters['location'] ?? '',
-                    'status' => $filters['status'] ?? '',
                 ])->links() }}
         @else
             <div class="text-center mt-6 bg-gray-800 border border-black rounded-md p-4 text-white">
@@ -212,12 +199,11 @@
             function validateFilters() {
                 // Obtén los valores de los campos de filtro
                 const location = document.querySelector("input[name='location']")?.value.trim();
-                const status = document.querySelector("select[name='status']")?.value.trim();
 
                 // Verifica si estávacíos
-                if (!location && !status) {
+                if (!location) {
                     // Cancelar envío del formulario
-                    alert('Por favor, ingresa al menos un valor para filtrar.');
+                    alert('Por favor, ingresa un valor para filtrar.');
                     return false;
                 }
                 // Si hay un valor

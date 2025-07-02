@@ -136,7 +136,7 @@ class CameraExport implements ShouldAutoSize, WithDrawings, WithEvents
                     }
 
                     // Si el status es "Inactivo", coloreamos toda la fila de rojo
-                    if ($rowData[7] === 'Inactivo') {
+                    if ($rowData[7] === 'offline') {
                         $phpSheet->getStyle("A{$rowNumber}:H{$rowNumber}")
                             ->getFill()
                             ->setFillType(Fill::FILL_SOLID)

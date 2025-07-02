@@ -27,8 +27,7 @@ function filter(Request $request, string $table)
                 // Obtén el valor del filtro
                 $serial = $request->input('serial');
                 $location = $request->input('location');
-                $status = $request->input('status');
-
+    
                 // Construye la consulta base
                 $query = Switche::query();
 
@@ -39,10 +38,6 @@ function filter(Request $request, string $table)
 
                 if ($location) {
                     $query->where('location', 'like',  $location . '%');
-                }
-
-                if ($status) {
-                    $query->where('status', 'like',  $status . '%');
                 }
 
                 // Ejecuta la consulta y aplica paginación
@@ -58,20 +53,13 @@ function filter(Request $request, string $table)
         case 'links': {
                 // Obtén los valores de los filtros
                 $location = $request->input('location');
-                $status = $request->input('status');
-
-
+        
                 // Construye la consulta base
                 $query = Link::query();
 
                 // Aplica filtros condicionalmente
                 if ($location) {
                     $query->where('location', 'like',  $location . '%');
-                }
-
-                // Aplica filtros condicionalmente
-                if ($status) {
-                    $query->where('status', 'like',  $status . '%');
                 }
 
 
@@ -212,7 +200,7 @@ function filter(Request $request, string $table)
                 break;
             }
         default:
-            return 'error en controlador';
+            return 'error en controlador o vista';
     }
 }
 

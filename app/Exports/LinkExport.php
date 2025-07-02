@@ -18,7 +18,7 @@ class LinkExport implements ShouldAutoSize, WithDrawings, WithEvents
 
     public function __construct()
     {
-        $this->data = Link::select('mac', 'mark', 'model', 'name', 'ssid', 'ip', 'location', 'description', 'status')->get();
+        $this->data = Link::select('mac', 'mark', 'model', 'name', 'ssid', 'ip', 'location', 'description')->get();
     }
 
     public function registerEvents(): array
@@ -33,7 +33,7 @@ class LinkExport implements ShouldAutoSize, WithDrawings, WithEvents
                 $phpSheet->getRowDimension('2')->setRowHeight(30);
 
                 // Título ocupando filas 1 y 2
-                $phpSheet->mergeCells("A1:I2");
+                $phpSheet->mergeCells("A1:H2");
                 $phpSheet->setCellValue('A1', 'Inventario de Enlaces');
 
                 $phpSheet->getStyle('A1')->getFont()
@@ -47,12 +47,12 @@ class LinkExport implements ShouldAutoSize, WithDrawings, WithEvents
                 // Fecha de exportación en pie de página (derecha, en rojo)
                 $date = now()->format('d/m/Y H:i');
                 $lastRow = $data->count() + 6;
-                $phpSheet->setCellValue("I{$lastRow}", "Fecha de Exportación: {$date}");
-                $phpSheet->getStyle("I{$lastRow}")->getFont()
+                $phpSheet->setCellValue("H{$lastRow}", "Fecha de Exportación: {$date}");
+                $phpSheet->getStyle("H{$lastRow}")->getFont()
                     ->setItalic(true)
                     ->setSize(10)
                     ->setColor(new Color('FF0000')); // Rojo
-                $phpSheet->getStyle("I{$lastRow}")->getAlignment()
+                $phpSheet->getStyle("H{$lastRow}")->getAlignment()
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
                 // Pie de página - Gerencia y Área en columna A, una debajo de otra
@@ -85,7 +85,7 @@ class LinkExport implements ShouldAutoSize, WithDrawings, WithEvents
                 $phpSheet->getRowDimension($footerRow + 1)->setRowHeight(18);
 
                 // Encabezados
-                $headers = ['Mac', 'Marca', 'Modelo', 'Nombre', 'Ssid', 'IP', 'Localidad', 'Descripción', 'Status'];
+                $headers = ['Mac', 'Marca', 'Modelo', 'Nombre', 'Ssid', 'IP', 'Localidad', 'Descripción'];
                 $headerRow = 3;
 
                 foreach ($headers as $colIndex => $header) {
@@ -121,7 +121,6 @@ class LinkExport implements ShouldAutoSize, WithDrawings, WithEvents
                         $row->ip,
                         $row->location,
                         $row->description,
-                        $row->status,
                     ];
 
                     $rowNumber = $startRow + $rowIndex;
@@ -135,19 +134,6 @@ class LinkExport implements ShouldAutoSize, WithDrawings, WithEvents
                             ->getAlignment()
                             ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
                             ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
-                    }
-
-                    // Si el status es "Inactivo", coloreamos toda la fila de rojo
-                    if ($rowData[8] === 'Inactivo') {
-                        $phpSheet->getStyle("A{$rowNumber}:I{$rowNumber}")
-                            ->getFill()
-                            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
-                            ->getStartColor()->setARGB('FC3838'); // Rojo
-
-                        // Opcional: texto blanco si la fila está en rojo
-                        $phpSheet->getStyle("A{$rowNumber}:I{$rowNumber}")
-                            ->getFont()
-                            ->setColor(new Color('FFFFFFFF')); // Blanco
                     }
                 }
 

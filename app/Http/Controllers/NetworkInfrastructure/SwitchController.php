@@ -20,8 +20,7 @@ class SwitchController extends Controller
     {
 
         $hasFilters = $request->filled('serial') || // Valida si hay algún filtro activo
-            $request->filled('location') ||
-            $request->filled('status');
+            $request->filled('location');
 
         if (!$hasFilters) { //si no se aplica un filtro
             $switches = Switche::orderBy('created_at', 'desc')->paginate(10);

@@ -31,8 +31,8 @@
                 <select name="status"
                     class="w-full rounded-md bg-white border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                     <option value="">Todos</option>
-                    <option value="Activo" {{ ($filters['status'] ?? '') == 'Activo' ? 'selected' : '' }}>Activo</option>
-                    <option value="Inactivo" {{ ($filters['status'] ?? '') == 'Inactivo' ? 'selected' : '' }}>Inactivo
+                    <option value="online" {{ ($filters['status'] ?? '') == 'online' ? 'selected' : '' }}>Online</option>
+                    <option value="offline" {{ ($filters['status'] ?? '') == 'offline' ? 'selected' : '' }}>Offline
                     </option>
                 </select>
             </div>
