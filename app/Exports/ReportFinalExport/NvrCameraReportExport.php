@@ -36,13 +36,46 @@ class NvrCameraReportExport extends BaseReportExport
             foreach ($nvrList as $nvr) {
                 $cameras = $nvr->camera;
 
-                $inoperative = $cameras->filter(fn($c) => $c->status === 'offline')->count();
-                $operative = $cameras->filter(fn($c) => $c->status === 'online')->count();
+                // Filtrar cámaras offline y procesar su última condición en un solo paso
+                $inoperativeStats = $cameras
+                    ->filter(fn($c) => $c->status === 'offline')
+                    ->reduce(
+                        function ($carry, $camera) {
+                            // Obtener la última condición de atención
+                            $lastCondition = $camera->conditionAttention()
+                                ->latest('created_at')
+                                ->first();
 
-                $truck = $cameras->filter(fn($c) => optional($c->conditionAttention)->name === 'CAMION CESTA')->count();
-                $onProcess = $cameras->filter(fn($c) => optional($c->conditionAttention)->name === 'EN PROCESO DE ATENCION')->count();
-                $inventory = $cameras->filter(fn($c) => optional($c->conditionAttention)->name === 'POR INVENTARIO')->count();
-                $others = $cameras->filter(fn($c) => !optional($c->conditionAttention)->name || !in_array(optional($c->conditionAttention)->name, ['CAMION CESTA', 'EN PROCESO DE ATENCION', 'POR INVENTARIO']))->count();
+                            $name = optional($lastCondition)->name;
+
+                            // Clasificar según el nombre
+                            if ($name === 'CAMION CESTA') {
+                                $carry['truck']++;
+                            } elseif ($name === 'EN PROCESO DE ATENCION') {
+                                $carry['onProcess']++;
+                            } elseif ($name === 'POR INVENTARIO') {
+                                $carry['inventory']++;
+                            } elseif ($name === 'OTRO') {
+                                $carry['others']++;
+                            }
+
+                            $carry['inoperative']++;
+
+                            return $carry;
+                        },
+                        ['truck' => 0, 'onProcess' => 0, 'inventory' => 0, 'others' => 0, 'inoperative' => 0]
+                    );
+
+                // Asignar resultados a variables
+                $truck = $inoperativeStats['truck'];
+                $onProcess = $inoperativeStats['onProcess'];
+                $inventory = $inoperativeStats['inventory'];
+                $others = $inoperativeStats['others'];
+                //camaras inoperativas
+                $inoperative = $inoperativeStats['inoperative'];
+
+                // Contar cámaras online
+                $operative = $cameras->filter(fn($c) => $c->status === 'online')->count();
 
                 $items[] = [
                     'nvr' => $nvr,
@@ -121,10 +154,10 @@ class NvrCameraReportExport extends BaseReportExport
             $rowData = $this->map($item);
             foreach ($rowData as $colIndex => $value) {
                 $colLetter = Coordinate::stringFromColumnIndex($colIndex + 1);
-                $phpSheet->setCellValue("{$colLetter}{$currentRow}", $value);
+                $phpSheet->setCellValue("{$colLetter}{$currentRow}", $value === 0 ? "" : $value);
             }
 
-            $phpSheet->getStyle("A{$currentRow}:H{$currentRow}")
+            $phpSheet->getStyle("B{$currentRow}:H{$currentRow}")
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
                 ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
@@ -137,13 +170,23 @@ class NvrCameraReportExport extends BaseReportExport
         $rowData = $this->mapTotal($groupData['totals']);
         foreach ($rowData as $colIndex => $value) {
             $colLetter = Coordinate::stringFromColumnIndex($colIndex + 1);
-            $phpSheet->setCellValue("{$colLetter}{$totalRow}", $value);
+            $phpSheet->setCellValue("{$colLetter}{$totalRow}", $value == 0 ? '' : $value);
+
+            $phpSheet->getStyle("{$colLetter}{$totalRow}")
+                ->getFont()
+                ->setBold(true)
+                ->setSize(12); // texto en negrita
         }
+
 
         $phpSheet->getStyle("A{$totalRow}:H{$totalRow}")
             ->getFill()
-            ->setFillname(Fill::FILL_SOLID)
-            ->getStartColor()->setARGB('FFFFCC'); // Amarillo claro
+            ->setFillType(Fill::FILL_SOLID)
+            ->getStartColor()->setARGB('FFE600'); // Amarillo claro
+
+        $phpSheet->getStyle("B{$totalRow}:H{$totalRow}")
+            ->getAlignment()
+            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
         $currentRow++;
     }

@@ -71,9 +71,23 @@ abstract class BaseReportExport implements WithEvents, WithDrawings, WithHeading
                 $currentRow = $startRow;
 
                 foreach ($data as $groupKey => $groupData) {
-                    // Ejecutar método mapGroup() en la clase hija
+                    // Validar que $groupData sea un arreglo asociativo
+                    if (!is_array($groupData) || empty($groupData)) {
+                        continue;
+                    }
+
+                    // Llamar a mapGroup() solo si $groupData es válido
                     $this->mapGroup($phpSheet, $groupKey, $groupData, $currentRow);
-                    $currentRow += count($groupData['items']) + 2; // Saltar al siguiente grupo
+
+                    // Solo incrementar $currentRow si hay cámaras
+                    $totalItems = array_sum(array_map(
+                        fn($loc) => (is_array($loc) && isset($loc['items']) && is_array($loc['items']))
+                            ? count($loc['items'])
+                            : 0,
+                        $groupData
+                    ));
+
+                    $currentRow += $totalItems + 2; // Saltar según el número real de cámaras
                 }
 
                 // Totales generales
@@ -83,13 +97,22 @@ abstract class BaseReportExport implements WithEvents, WithDrawings, WithHeading
                 $rowData = $this->mapGeneralTotals($generalTotals);
                 foreach ($rowData as $colIndex => $value) {
                     $colLetter = Coordinate::stringFromColumnIndex($colIndex + 1);
-                    $phpSheet->setCellValue("{$colLetter}{$currentRow}", $value);
+                    $phpSheet->setCellValue("{$colLetter}{$currentRow}", $value === 0 ? "" : $value);
+
+                    $phpSheet->getStyle("{$colLetter}{$currentRow}")
+                        ->getFont()
+                        ->setBold(true)
+                        ->setSize(12); // texto en negrita
                 }
 
                 $phpSheet->getStyle("A{$currentRow}:H{$currentRow}")
                     ->getFill()
                     ->setFillType(Fill::FILL_SOLID)
-                    ->getStartColor()->setARGB('FFFFCC'); // Amarillo claro
+                    ->getStartColor()->setARGB('FFE600'); // Amarillo claro
+
+                $phpSheet->getStyle("B{$currentRow}:H{$currentRow}")
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
                 // Pie de página
                 $footerRow = $currentRow + 2;
@@ -110,7 +133,7 @@ abstract class BaseReportExport implements WithEvents, WithDrawings, WithHeading
 
                 $phpSheet->getStyle("A{$footerRow}:$lastColumn{$footerRow}")
                     ->getAlignment()
-                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
 
                 $phpSheet->getRowDimension($footerRow)->setRowHeight(18);
                 $phpSheet->getRowDimension($footerRow + 1)->setRowHeight(18);
@@ -127,7 +150,7 @@ abstract class BaseReportExport implements WithEvents, WithDrawings, WithHeading
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
                 // Ancho automático
-                foreach (range('A', 'H') as $col) {
+                foreach (range('A', 'I') as $col) {
                     $phpSheet->getColumnDimension($col)->setAutoSize(true);
                 }
 

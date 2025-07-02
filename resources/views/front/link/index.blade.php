@@ -3,7 +3,7 @@
     <!-- resources/views/front/link/index.blade.php -->
 
 
-    <div class="container mx-auto px-1 py-6">
+    <div class="container mx-auto px-4 py-6">
 
         <!-- Encabezado y botón agregar -->
         <div class="flex justify-between items-center mb-6">

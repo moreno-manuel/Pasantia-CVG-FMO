@@ -19,7 +19,7 @@ class CameraConditionExport extends BaseReportExport
 
     protected function loadData()
     {
-        $cameras = Camera::with(['nvr', 'conditionAttention'])->get();
+        $cameras = Camera::with(['nvr', 'conditionAttention'])->where('status', 'offline')->get();
 
         // Agrupar por attention_type y luego por location
         $groupedByCondition = [];
@@ -37,7 +37,7 @@ class CameraConditionExport extends BaseReportExport
                     'items' => [],
                     'totals' => [
                         'inoperative' => 0,
-                        'operative' => 0,
+                        'total' => 0
                     ],
                 ];
             }
@@ -45,13 +45,21 @@ class CameraConditionExport extends BaseReportExport
             $groupedByCondition[$condition][$location]['items'][] = $camera;
 
             // Actualizar totales
-            if ($camera->status === 'Inactivo') {
-                $groupedByCondition[$condition][$location]['totals']['inoperative'] += 1;
-            } else {
-                $groupedByCondition[$condition][$location]['totals']['operative'] += 1;
-            }
+            $groupedByCondition[$condition][$location]['totals']['inoperative'] += 1;
 
             $groupedByCondition[$condition][$location]['totals']['total'] += 1;
+        }
+
+        //  Ordenar cámaras en cada grupo por nombre del NVR
+        foreach ($groupedByCondition as &$conditionGroups) {
+            foreach ($conditionGroups as &$locationGroup) {
+                usort($locationGroup['items'], function ($a, $b) {
+                    // Obtener nombres de NVR, o cadena vacía si no existe
+                    $nameA = optional($a->nvr)->name ?? '';
+                    $nameB = optional($b->nvr)->name ?? '';
+                    return strcmp($nameA, $nameB); // Orden alfabético ascendente
+                });
+            }
         }
 
         return $groupedByCondition;
@@ -76,28 +84,36 @@ class CameraConditionExport extends BaseReportExport
     {
         return [
             'Tipo de condición',
+            'Fecha de Inicio',
+            'Descripción',
             'Mac',
             'Nombre',
             'Marca',
             'Modelo',
-            'Ip',
-            'localidad',
+            'IP',
+            'Nvr/Conexión',
         ];
     }
 
     public function mapGroup($phpSheet, $condition, array $groupData, int &$currentRow)
     {
-        // Título de condición
-        $phpSheet->setCellValue("A{$currentRow}", strtoupper($condition));
-        $phpSheet->getStyle("A{$currentRow}")
-            ->getFont()
-            ->setBold(true)
-            ->setSize(12);
-        $phpSheet->getRowDimension($currentRow)->setRowHeight(25);
-        $currentRow++;
+        // Validación inicial
+        if (!is_array($groupData) || empty($groupData)) {
+            return; // Salir si $groupData no es válido
+        }
 
-        // Por cada ubicación dentro de esta condición
         foreach ($groupData as $location => $locationData) {
+            // Validar que $locationData sea un arreglo y tenga 'items'
+            if (!is_array($locationData) || !isset($locationData['items'])) {
+                continue; // Saltar ubicaciones inválidas
+            }
+
+            // Inicializar 'items' y 'totals' si no existen
+            $items = is_array($locationData['items']) ? $locationData['items'] : [];
+            $totals = isset($locationData['totals']) && is_array($locationData['totals'])
+                ? $locationData['totals']
+                : [];
+
             // Título de ubicación
             $phpSheet->setCellValue("A{$currentRow}", "Ubicación: {$location}");
             $phpSheet->getStyle("A{$currentRow}")
@@ -106,15 +122,15 @@ class CameraConditionExport extends BaseReportExport
                 ->setSize(11);
             $currentRow++;
 
-            // Cámaras
-            foreach ($locationData['items'] as $camera) {
+            // Procesar cámaras
+            foreach ($items as $camera) {
                 $rowData = $this->map($camera);
                 foreach ($rowData as $colIndex => $value) {
                     $colLetter = Coordinate::stringFromColumnIndex($colIndex + 1);
                     $phpSheet->setCellValue("{$colLetter}{$currentRow}", $value);
                 }
 
-                $phpSheet->getStyle("A{$currentRow}:H{$currentRow}")
+                $phpSheet->getStyle("B{$currentRow}:I{$currentRow}")
                     ->getAlignment()
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
                     ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
@@ -122,19 +138,29 @@ class CameraConditionExport extends BaseReportExport
                 $currentRow++;
             }
 
-            // Fila amarilla con totales por ubicación
+            // Fila amarilla con totales
             $totalRow = $currentRow;
             $phpSheet->setCellValue("A{$totalRow}", "TOTAL - {$location}");
-            $rowData = $this->mapTotal($locationData['totals']);
+            $rowData = $this->mapTotal($totals);
             foreach ($rowData as $colIndex => $value) {
                 $colLetter = Coordinate::stringFromColumnIndex($colIndex + 1);
                 $phpSheet->setCellValue("{$colLetter}{$totalRow}", $value);
+
+
+                $phpSheet->getStyle("{$colLetter}{$totalRow}")
+                    ->getFont()
+                    ->setBold(true)
+                    ->setSize(12); // texto en negrita
             }
 
             $phpSheet->getStyle("A{$totalRow}:H{$totalRow}")
                 ->getFill()
                 ->setFillType(Fill::FILL_SOLID)
-                ->getStartColor()->setARGB('FFFFCC'); // Amarillo claro
+                ->getStartColor()->setARGB('FFE600'); // Amarillo claro
+
+            $phpSheet->getStyle("B{$totalRow}:H{$totalRow}")
+                ->getAlignment()
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
             $currentRow += 2;
         }
@@ -142,27 +168,34 @@ class CameraConditionExport extends BaseReportExport
 
     public function map($camera): array
     {
+        // Obtener la última condición de atención
+        $lastCondition = $camera->conditionAttention()
+            ->latest('created_at')
+            ->first();
+
         return [
-            $camera->attentionDetail->type ?? '',
+            optional($lastCondition)->name ?? '',
+            optional($lastCondition)->created_at ? $lastCondition->created_at->format('d/m/Y') : '', // Fecha formateada
+            optional($lastCondition)->description ?? '',
             $camera->mac,
             $camera->name,
             $camera->mark,
             $camera->model,
             $camera->ip,
-            $camera->location,
+            $camera->nvr->name,
         ];
     }
 
     public function mapTotal(array $totals): array
     {
         return [
+            'TOTAL', // vacío
             '', // vacío
             '', // vacío
             '', // vacío
             '', // vacío
             '', // vacío
             '', // vacío
-            $totals['operative'],
             $totals['inoperative'],
         ];
     }
@@ -175,14 +208,12 @@ class CameraConditionExport extends BaseReportExport
         foreach ($data as $condition => $locations) {
             foreach ($locations as $location => $item) {
                 $totalInoperative += $item['totals']['inoperative'];
-                $totalOperative += $item['totals']['operative'];
             }
         }
 
         return [
             'total' => $totalInoperative + $totalOperative,
             'inoperative' => $totalInoperative,
-            'operative' => $totalOperative,
         ];
     }
 
@@ -195,7 +226,7 @@ class CameraConditionExport extends BaseReportExport
             '', // vacío
             '', // vacío
             '', // vacío
-            $totals['operative'],
+            '', // vacío
             $totals['inoperative'],
         ];
     }

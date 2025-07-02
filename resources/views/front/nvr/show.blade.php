@@ -211,7 +211,9 @@
                                     <td class="px-6 py-4 text-center text-sm">
                                         <span
                                             class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                            {{ $camera->status === 'Activo' ? 'bg-green-600 text-green-100' : 'bg-red-600 text-red-100' }}">
+                                                    @if ($camera->status == 'online') bg-green-600 text-green-100
+                                                    @elseif($camera->status == 'offline') bg-red-600 text-red-100
+                                                    @else bg-yellow-600 text-yellow-100 @endif">
                                             {{ $camera->status }}
                                         </span>
                                     </td>
