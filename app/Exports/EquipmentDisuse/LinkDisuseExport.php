@@ -10,7 +10,7 @@ class LinkDisuseExport extends EquipmentDisuseExport
 {
     public function collection()
     {
-        return EquipmentDisuse::where('equipment', 'Enlace')->with('linkDisuse')->get();
+        return EquipmentDisuse::where('equipment', 'Enlace')->with('linkDisuse')->get()->sortBy('location');
     }
 
     public function getSheetName(): string

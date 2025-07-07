@@ -25,7 +25,9 @@ class LinkController extends Controller
         $hasFilters = $request->filled('location');
 
         if (!$hasFilters) { //si no se aplica un filtro
-            $links = Link::orderBy('created_at', 'desc')->paginate(10);
+            $links = Link::select('name','ip','ssid','location','model','mark','mac')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
             return view('front.link.index', compact('links'));
         }
 

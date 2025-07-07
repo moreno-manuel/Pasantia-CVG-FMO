@@ -27,7 +27,7 @@ function filter(Request $request, string $table)
                 // Obtén el valor del filtro
                 $serial = $request->input('serial');
                 $location = $request->input('location');
-    
+
                 // Construye la consulta base
                 $query = Switche::query();
 
@@ -41,7 +41,9 @@ function filter(Request $request, string $table)
                 }
 
                 // Ejecuta la consulta y aplica paginación
-                $switches = $query->orderBy('created_at', 'desc')->paginate(10);
+                $switches = $query->select('serial', 'mark', 'model', 'number_ports', 'location')
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(10);
 
                 // Mantiene los valores de los filtros en la vista
                 return view('front.switch.index', compact('switches'))
@@ -53,7 +55,7 @@ function filter(Request $request, string $table)
         case 'links': {
                 // Obtén los valores de los filtros
                 $location = $request->input('location');
-        
+
                 // Construye la consulta base
                 $query = Link::query();
 
@@ -64,7 +66,9 @@ function filter(Request $request, string $table)
 
 
                 // Ejecuta la consulta y aplica paginación
-                $links = $query->orderBy('created_at', 'desc')->paginate(10);
+                $links = $query->select('name', 'ip', 'ssid', 'location', 'model', 'mark', 'mac')
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(10);
 
                 // Mantiene los valores de los filtros en la vista
                 return view('front.link.index', compact('links'))
@@ -93,7 +97,9 @@ function filter(Request $request, string $table)
 
 
                 // Ejecuta la consulta y aplica paginación
-                $nvrs = $query->orderBy('created_at', 'desc')->paginate(10);
+                $nvrs = $query->select('mac', 'mark', 'model', 'name', 'ip', 'ports_number', 'location', 'status')
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(10);
 
                 // Mantiene los valores de los filtros en la vista
                 return view('front.nvr.index', compact('nvrs'))
@@ -121,7 +127,9 @@ function filter(Request $request, string $table)
 
 
                 // Ejecuta la consulta y aplica paginación
-                $cameras = $query->orderBy('created_at', 'desc')->paginate(10);
+                $cameras = $query->select('name', 'ip', 'location', 'mac', 'status', 'mark', 'model', 'nvr_id')
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(10);
 
                 // Mantiene los valores de los filtros en la vista
                 return view('front.camera.index', compact('cameras'))

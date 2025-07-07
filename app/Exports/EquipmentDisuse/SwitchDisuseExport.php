@@ -10,7 +10,7 @@ class SwitchDisuseExport extends EquipmentDisuseExport
 {
     public function collection()
     {
-        return EquipmentDisuse::where('equipment', 'Switch')->with('switchDisuse')->get();
+        return EquipmentDisuse::where('equipment', 'Switch')->with('switchDisuse')->get()->sortBy('mark');
     }
 
     public function getSheetName(): string

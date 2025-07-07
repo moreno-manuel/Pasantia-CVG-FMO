@@ -18,7 +18,9 @@ class LinkExport implements ShouldAutoSize, WithDrawings, WithEvents
 
     public function __construct()
     {
-        $this->data = Link::select('mac', 'mark', 'model', 'name', 'ssid', 'ip', 'location', 'description')->get();
+        $this->data = Link::select('mac', 'mark', 'model', 'name', 'ssid', 'ip', 'location', 'description')
+        ->get()
+        ->sortBy('location');
     }
 
     public function registerEvents(): array

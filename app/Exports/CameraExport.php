@@ -18,81 +18,46 @@ class CameraExport implements ShouldAutoSize, WithDrawings, WithEvents
 
     public function __construct()
     {
-        $this->data = Camera::select('mac', 'mark', 'model', 'name', 'ip', 'location', 'description', 'status')->get();
+        $this->data = Camera::with('nvr')
+            ->select('mac', 'mark', 'model', 'name', 'ip', 'location', 'description', 'status', 'nvr_id')
+            ->get()
+            ->groupBy(function ($camera) {
+                return $camera->nvr ? $camera->nvr->name : 'Sin NVR Asignado';
+            })
+            ->map(function ($cameras) {
+                // Ordenar las cámaras por nombre dentro de cada grupo
+                return $cameras->sortBy('name');
+            })
+            ->sortKeys();
     }
 
     public function registerEvents(): array
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
-                $phpSheet = $event->sheet->getDelegate(); // Worksheet nativo
-                $data = $this->data;
+                $phpSheet = $event->sheet->getDelegate();
+                $groupedData = $this->data; // Colección agrupada por NVR
 
                 // Altura de filas para logo y título
                 $phpSheet->getRowDimension('1')->setRowHeight(30);
                 $phpSheet->getRowDimension('2')->setRowHeight(30);
 
-                // Título ocupando filas 1 y 2
+                // Título
                 $phpSheet->mergeCells("A1:H2");
                 $phpSheet->setCellValue('A1', 'Inventario de Cámaras');
-
-                $phpSheet->getStyle('A1')->getFont()
-                    ->setBold(true)
-                    ->setSize(18);
-
+                $phpSheet->getStyle('A1')->getFont()->setBold(true)->setSize(18);
                 $phpSheet->getStyle('A1')->getAlignment()
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
                     ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
 
-                // Fecha de exportación en pie de página (derecha, en rojo)
-                $date = now()->format('d/m/Y H:i');
-                $lastRow = $data->count() + 6;
-                $phpSheet->setCellValue("H{$lastRow}", "Fecha de Exportación: {$date}");
-                $phpSheet->getStyle("H{$lastRow}")->getFont()
-                    ->setItalic(true)
-                    ->setSize(10)
-                    ->setColor(new Color('FF0000')); // Rojo
-                $phpSheet->getStyle("H{$lastRow}")->getAlignment()
-                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
-
-                // Pie de página en columna A
-                $footerRow = $lastRow + 2;
-
-                // Primera línea: Gerencia
-                $phpSheet->setCellValue("A{$footerRow}", "Gerencia: Telemática");
-                $phpSheet->getStyle("A{$footerRow}")
-                    ->getFont()
-                    ->setItalic(true)
-                    ->setSize(10)
-                    ->setColor(new Color('FF555555'));
-                $phpSheet->getStyle("A{$footerRow}")
-                    ->getAlignment()
-                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-
-                // Segunda línea: Área
-                $phpSheet->setCellValue("A" . ($footerRow + 1), "Área: Seguridad Tecnológica");
-                $phpSheet->getStyle("A" . ($footerRow + 1))
-                    ->getFont()
-                    ->setItalic(true)
-                    ->setSize(10)
-                    ->setColor(new Color('FF555555'));
-                $phpSheet->getStyle("A" . ($footerRow + 1))
-                    ->getAlignment()
-                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-
-                // Altura de filas del pie
-                $phpSheet->getRowDimension($footerRow)->setRowHeight(18);
-                $phpSheet->getRowDimension($footerRow + 1)->setRowHeight(18);
-
                 // Encabezados
-                $headers = ['Mac', 'Marca', 'Modelo', 'Nombre', 'IP', 'Localidad', 'Descripción', 'Status'];
-                $headerRow = 3;
+                $headers = ['Mac', 'Marca', 'Modelo', 'Nombre', 'Localidad', 'IP', 'Descripción', 'Status'];
+                $headerRow = 4;
 
                 foreach ($headers as $colIndex => $header) {
                     $colLetter = Coordinate::stringFromColumnIndex($colIndex + 1);
                     $phpSheet->setCellValue($colLetter . $headerRow, $header);
 
-                    // Estilo encabezado
                     $phpSheet->getStyle($colLetter . $headerRow)
                         ->getFont()
                         ->setBold(true)
@@ -106,63 +71,113 @@ class CameraExport implements ShouldAutoSize, WithDrawings, WithEvents
                     $phpSheet->getStyle($colLetter . $headerRow)
                         ->getFill()
                         ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
-                        ->getStartColor()->setARGB('FF555555'); // Gray 700
+                        ->getStartColor()->setARGB('FF555555'); // Gris oscuro
                 }
 
-                // Datos
-                $startRow = 4;
-                foreach ($data as $rowIndex => $row) {
-                    $rowData = [
-                        $row->mac,
-                        $row->mark,
-                        $row->model,
-                        $row->name,
-                        $row->ip,
-                        $row->location,
-                        $row->description,
-                        $row->status
-                    ];
+                // Iniciar impresión de datos desde fila 5
+                $currentRow = $headerRow + 1;
 
-                    $rowNumber = $startRow + $rowIndex;
+                // Recorrer cada grupo de NVR
+                foreach ($groupedData as $nvrName => $cameras) {
+                    // Imprimir nombre del NVR como subtítulo
+                    $phpSheet->mergeCells("A{$currentRow}:H{$currentRow}");
+                    $phpSheet->setCellValue("A{$currentRow}", "{$nvrName}");
 
-                    foreach ($rowData as $colIndex => $value) {
-                        $colLetter = Coordinate::stringFromColumnIndex($colIndex + 1);
-                        $phpSheet->setCellValue($colLetter . $rowNumber, $value);
+                    $phpSheet->getStyle("A{$currentRow}")
+                        ->getFont()
+                        ->setBold(true)
+                        ->setSize(14);
 
-                        $phpSheet->getStyle($colLetter . $rowNumber)
-                            ->getAlignment()
-                            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
-                            ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+                    $phpSheet->getStyle("A{$currentRow}")
+                        ->getAlignment()
+                        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT)
+                        ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+
+                    $currentRow++;
+
+                    // Imprimir cámaras de este NVR
+                    foreach ($cameras as $camera) {
+                        $rowData = [
+                            $camera->mac,
+                            $camera->mark,
+                            $camera->model,
+                            $camera->name,
+                            $camera->location,
+                            $camera->ip,
+                            $camera->description,
+                            $camera->status
+                        ];
+
+                        foreach ($rowData as $colIndex => $value) {
+                            $colLetter = Coordinate::stringFromColumnIndex($colIndex + 1);
+                            $phpSheet->setCellValue($colLetter . $currentRow, $value);
+
+                            $phpSheet->getStyle($colLetter . $currentRow)
+                                ->getAlignment()
+                                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
+                                ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+                        }
+
+                        // Si el status es offline, colorear fila roja
+                        if ($camera->status === 'offline') {
+                            $phpSheet->getStyle("A{$currentRow}:H{$currentRow}")
+                                ->getFill()
+                                ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                                ->getStartColor()->setARGB('FFFF0000'); // Rojo
+
+                            $phpSheet->getStyle("A{$currentRow}:H{$currentRow}")
+                                ->getFont()
+                                ->setColor(new Color('FFFFFFFF')); // Texto blanco
+                        }
+
+                        $currentRow++;
                     }
 
-                    // Si el status es "Inactivo", coloreamos toda la fila de rojo
-                    if ($rowData[7] === 'offline') {
-                        $phpSheet->getStyle("A{$rowNumber}:H{$rowNumber}")
-                            ->getFill()
-                            ->setFillType(Fill::FILL_SOLID)
-                            ->getStartColor()->setARGB('FFFF0000'); // Rojo
-
-                        $phpSheet->getStyle("A{$rowNumber}:H{$rowNumber}")
-                            ->getFont()
-                            ->setColor(new Color('FFFFFFFF')); // Texto blanco
-                    }
+                    // Espacio entre grupos
+                    $currentRow++;
                 }
 
-                // Estilo filas de datos
-                $lastDataRow = $startRow + $data->count() - 1;
-                $phpSheet->getStyle("A{$startRow}:H{$lastDataRow}")
+                // Pie de página - Fecha
+                $date = now()->format('d/m/Y H:i');
+                $phpSheet->setCellValue("H{$currentRow}", "Fecha de Exportación: {$date}");
+                $phpSheet->getStyle("H{$currentRow}")
                     ->getFont()
-                    ->setBold(true)
-                    ->setColor(new Color('FF000000')); // Negro
+                    ->setItalic(true)
+                    ->setSize(10)
+                    ->setColor(new Color('FF0000')); // Rojo
+
+                $phpSheet->getStyle("H{$currentRow}")
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+                // Pie - Gerencia y Área
+                $footerRow = $currentRow + 1;
+                $phpSheet->setCellValue("A{$footerRow}", "Gerencia: Telemática");
+                $phpSheet->getStyle("A{$footerRow}")
+                    ->getFont()
+                    ->setItalic(true)
+                    ->setSize(10)
+                    ->setColor(new Color('FF555555'));
+
+                $phpSheet->setCellValue("A" . ($footerRow + 1), "Área: Seguridad Tecnológica");
+                $phpSheet->getStyle("A" . ($footerRow + 1))
+                    ->getFont()
+                    ->setItalic(true)
+                    ->setSize(10)
+                    ->setColor(new Color('FF555555'));
+
+                // Alturas
+                $phpSheet->getRowDimension($footerRow)->setRowHeight(18);
+                $phpSheet->getRowDimension($footerRow + 1)->setRowHeight(18);
 
                 // Ajustar ancho automático
                 foreach (range('A', 'H') as $col) {
                     $phpSheet->getColumnDimension($col)->setAutoSize(true);
                 }
 
-                // 🔐 Proteger la hoja: permite edición solo en ciertas celdas
+                // 🔐 Proteger hoja
                 $phpSheet->getProtection()->setSheet(true);
-                $phpSheet->getStyle("A{$startRow}:H{$lastDataRow}")
+                $phpSheet->getStyle("A5:H" . ($currentRow))
                     ->getProtection()
                     ->setLocked(Protection::PROTECTION_UNPROTECTED);
             },

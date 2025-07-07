@@ -41,7 +41,7 @@
                 </button>
 
                 <!-- Botón Limpiar -->
-                <a href="{{ route('inventories.index') }}"
+                <a href="{{ route('enlace.index') }}"
                     class="inline-flex items-center px-2 py-1 bg-gray-500 text-white text-xs font-semibold uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-gray-600 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
                     <!-- Icono de limpiar -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"

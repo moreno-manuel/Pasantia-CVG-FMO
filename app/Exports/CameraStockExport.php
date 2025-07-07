@@ -9,7 +9,6 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Style\Color;
-use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Protection;
 
 class CameraStockExport implements ShouldAutoSize, WithDrawings, WithEvents
@@ -18,7 +17,9 @@ class CameraStockExport implements ShouldAutoSize, WithDrawings, WithEvents
 
     public function __construct()
     {
-        $this->data = CameraInventory::select('mac', 'mark', 'model', 'delivery_note', 'destination', 'description')->get();
+        $this->data = CameraInventory::select('mac', 'mark', 'model', 'delivery_note', 'destination', 'description')
+        ->get()
+        ->sortBy('mark');
     }
 
     public function registerEvents(): array

@@ -86,12 +86,11 @@ class CameraConditionExport extends BaseReportExport
             'Tipo de condición',
             'Fecha de Inicio',
             'Descripción',
-            'Mac',
+            'Nvr/Conexión',
             'Nombre',
             'Marca',
             'Modelo',
             'IP',
-            'Nvr/Conexión',
         ];
     }
 
@@ -177,12 +176,11 @@ class CameraConditionExport extends BaseReportExport
             optional($lastCondition)->name ?? '',
             optional($lastCondition)->created_at ? $lastCondition->created_at->format('d/m/Y') : '', // Fecha formateada
             optional($lastCondition)->description ?? '',
-            $camera->mac,
+            $camera->nvr->name,
             $camera->name,
             $camera->mark,
             $camera->model,
             $camera->ip,
-            $camera->nvr->name,
         ];
     }
 
