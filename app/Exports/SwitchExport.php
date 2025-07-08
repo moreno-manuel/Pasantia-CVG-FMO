@@ -18,7 +18,9 @@ class SwitchExport implements ShouldAutoSize, WithDrawings, WithEvents
 
     public function __construct()
     {
-        $this->data = Switche::select('serial', 'mark', 'model', 'number_ports', 'location', 'description')->get();
+        $this->data = Switche::select('serial', 'mark', 'model', 'number_ports', 'location', 'description')
+        ->get()
+        ->sortBy('location');
     }
 
     public function registerEvents(): array

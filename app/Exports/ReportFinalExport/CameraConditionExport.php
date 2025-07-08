@@ -188,12 +188,13 @@ class CameraConditionExport extends BaseReportExport
         return [
             optional($lastCondition)->name ?? '',
             optional($lastCondition)->created_at ? $lastCondition->created_at->format('d/m/Y') : '', // Fecha formateada
-            $description,
-            $camera->nvr->name,
+            optional($lastCondition)->description ?? '',
+            $camera->mac,
             $camera->name,
             $camera->mark,
             $camera->model,
             $camera->ip,
+            $camera->nvr->name,
         ];
     }
 

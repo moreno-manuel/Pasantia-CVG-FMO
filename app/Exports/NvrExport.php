@@ -19,7 +19,10 @@ class NvrExport implements ShouldAutoSize, WithDrawings, WithEvents
     public function __construct()
     {
         // Cargar NVR con su relación slot_nvr y cámaras
-        $this->data = Nvr::with(['slotNvr', 'camera'])->get();
+        $this->data = Nvr::with(['slotNvr', 'camera'])
+            ->select('name', 'ip', 'location', 'mac', 'mark', 'model', 'description', 'status', 'ports_number')
+            ->get()
+            ->sortBy('location');
     }
 
     public function registerEvents(): array
@@ -89,10 +92,10 @@ class NvrExport implements ShouldAutoSize, WithDrawings, WithEvents
                     'IP',
                     'Localidad',
                     'Descripción',
-                    'Status',
                     'N° de Puertos',
                     'N° de Puertos Usados',
                     'N° de Puertos Disponibles',
+                    'Status',
                 ];
 
                 // Añadir encabezados dinámicos para cada slot (hasta 4)
@@ -140,10 +143,10 @@ class NvrExport implements ShouldAutoSize, WithDrawings, WithEvents
                         $nvr->ip,
                         $nvr->location,
                         $nvr->description,
-                        $nvr->status,
                         $nvr->ports_number,
                         $nvr->camera->count(),
                         $nvr->getAvailablePortsAttribute(),
+                        $nvr->status,
                     ];
 
                     // Agregar datos de slots

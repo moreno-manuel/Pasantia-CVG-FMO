@@ -10,7 +10,7 @@ class NvrDisuseExport extends EquipmentDisuseExport
 {
     public function collection()
     {
-        return EquipmentDisuse::where('equipment', 'Nvr')->with('nvrDisuse')->get();
+        return EquipmentDisuse::where('equipment', 'Nvr')->with('nvrDisuse')->get()->sortBy('location');
     }
 
     public function getSheetName(): string

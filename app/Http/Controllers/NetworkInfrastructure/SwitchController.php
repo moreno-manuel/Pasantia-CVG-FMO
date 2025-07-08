@@ -23,7 +23,9 @@ class SwitchController extends Controller
             $request->filled('location');
 
         if (!$hasFilters) { //si no se aplica un filtro
-            $switches = Switche::orderBy('created_at', 'desc')->paginate(10);
+            $switches = Switche::select('serial','mark','model','number_ports','location')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
             return view('front.switch.index', compact('switches'));
         }
 

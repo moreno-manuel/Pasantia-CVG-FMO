@@ -30,7 +30,10 @@ class CameraController extends Controller
             $request->filled('status');
 
         if (!$hasFilters) { //si no se aplica un filtro
-            $cameras = Camera::orderBy('created_at', 'desc')->paginate(10);
+            $cameras = Camera::with('nvr')
+            ->select('name','ip','location','mac','status','mark','model','nvr_id')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
             return view('front.camera.index', compact('cameras'));
         }
 
