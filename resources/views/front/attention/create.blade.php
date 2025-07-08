@@ -37,6 +37,18 @@
                         </select>
                     </div>
 
+                    <!-- Campo para marca personalizada -->
+                    <div id="other-brand-field" class="hidden">
+                        <label for="other_brand" class="block text-sm font-semibold text-white">Nombre</label>
+                        <input type="text" name="other_condition" id="other_condition" value="{{ old('other_condition') }}"
+                            minlength="5" 
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('other_condition') border-red-500 @enderror"
+                            placeholder="Especifica el nombre de la condición">
+                        @error('other_condition')
+                            <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
+                        @enderror
+                    </div>
+
                     <!-- Campo camara ID -->
                     <div>
                         <label for="camera_id" class="block text-sm font-semibold text-white">Cámara</label>
@@ -97,4 +109,27 @@
             </form>
         </div>
     </div>
+
+    {{-- para el campo marca  --}}
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const select = document.getElementById('name');
+                const otherField = document.getElementById('other-brand-field');
+
+                select.addEventListener('change', function() {
+                    if (select.value === 'OTROS') {
+                        otherField.classList.remove('hidden');
+                    } else {
+                        otherField.classList.add('hidden');
+                    }
+                });
+
+                // Mostrar campo si ya se había seleccionado "Other" (ej: tras error de validación)
+                if (select.value === 'OTROS') {
+                    otherField.classList.remove('hidden');
+                }
+            });
+        </script>
+    @endpush
 @endsection

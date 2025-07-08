@@ -19,8 +19,8 @@ class SwitchExport implements ShouldAutoSize, WithDrawings, WithEvents
     public function __construct()
     {
         $this->data = Switche::select('serial', 'mark', 'model', 'number_ports', 'location', 'description')
-        ->get()
-        ->sortBy('location');
+            ->get()
+            ->sortBy('location');
     }
 
     public function registerEvents(): array
@@ -46,45 +46,6 @@ class SwitchExport implements ShouldAutoSize, WithDrawings, WithEvents
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
                     ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
 
-                // Fecha de exportación en pie de página (derecha, en rojo)
-                $date = now()->format('d/m/Y H:i');
-                $lastRow = $data->count() + 6;
-                $phpSheet->setCellValue("F{$lastRow}", "Fecha de Exportación: {$date}");
-                $phpSheet->getStyle("F{$lastRow}")->getFont()
-                    ->setItalic(true)
-                    ->setSize(10)
-                    ->setColor(new Color('FF0000')); // Rojo
-                $phpSheet->getStyle("F{$lastRow}")->getAlignment()
-                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
-
-                // Pie de página - Gerencia y Área en columna A, una debajo de otra
-                $footerRow = $lastRow + 2;
-
-                // Primera línea: Gerencia
-                $phpSheet->setCellValue("A{$footerRow}", "Gerencia: Telemática");
-                $phpSheet->getStyle("A{$footerRow}")
-                    ->getFont()
-                    ->setItalic(true)
-                    ->setSize(10)
-                    ->setColor(new Color('FF555555')); // Gris oscuro
-                $phpSheet->getStyle("A{$footerRow}")
-                    ->getAlignment()
-                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-
-                // Segunda línea: Área
-                $phpSheet->setCellValue("A" . ($footerRow + 1), "Área: Seguridad Tecnológica");
-                $phpSheet->getStyle("A" . ($footerRow + 1))
-                    ->getFont()
-                    ->setItalic(true)
-                    ->setSize(10)
-                    ->setColor(new Color('FF555555')); // Gris oscuro
-                $phpSheet->getStyle("A" . ($footerRow + 1))
-                    ->getAlignment()
-                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-
-                // Opcional: ajustar altura de filas para que se vean bien
-                $phpSheet->getRowDimension($footerRow)->setRowHeight(18);
-                $phpSheet->getRowDimension($footerRow + 1)->setRowHeight(18);
 
                 // Encabezados
                 $headers = ['Serial', 'Marca', 'Modelo', 'N° de Puertos', 'Localidad', 'Descripción'];
@@ -142,6 +103,46 @@ class SwitchExport implements ShouldAutoSize, WithDrawings, WithEvents
                     ->getFont()
                     ->setBold(true)
                     ->setColor(new Color('FF000000')); // Negro
+
+                // Pie de página - Gerencia y Área en columna A, una debajo de otra
+                $lastRow = $data->count() + 6;
+                $footerRow = $lastRow + 2;
+
+                // Primera línea: Gerencia
+                $phpSheet->setCellValue("A{$footerRow}", "Gerencia: Telemática");
+                $phpSheet->getStyle("A{$footerRow}")
+                    ->getFont()
+                    ->setItalic(true)
+                    ->setSize(10)
+                    ->setColor(new Color('FF555555')); // Gris oscuro
+                $phpSheet->getStyle("A{$footerRow}")
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+
+                // Segunda línea: Área
+                $phpSheet->setCellValue("A" . ($footerRow + 1), "Área: Seguridad Tecnológica");
+                $phpSheet->getStyle("A" . ($footerRow + 1))
+                    ->getFont()
+                    ->setItalic(true)
+                    ->setSize(10)
+                    ->setColor(new Color('FF555555')); // Gris oscuro
+                $phpSheet->getStyle("A" . ($footerRow + 1))
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+
+                // Opcional: ajustar altura de filas para que se vean bien
+                $phpSheet->getRowDimension($footerRow)->setRowHeight(18);
+                $phpSheet->getRowDimension($footerRow + 1)->setRowHeight(18);
+
+                // Fecha de exportación en pie de página (derecha, en rojo)
+                $date = now()->format('d/m/Y H:i');
+                $phpSheet->setCellValue("F{$lastRow}", "Fecha de Exportación: {$date}");
+                $phpSheet->getStyle("F{$lastRow}")->getFont()
+                    ->setItalic(true)
+                    ->setSize(10)
+                    ->setColor(new Color('FF0000')); // Rojo
+                $phpSheet->getStyle("F{$lastRow}")->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
                 // Ajustar ancho automático
                 foreach (range('A', 'G') as $col) {

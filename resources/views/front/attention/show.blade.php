@@ -34,27 +34,34 @@
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $condition->camera->name }}</dd>
                     </div>
 
-                    <!-- Campo Marca -->
+                    <!-- Campo nombre condicion -->
                     <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">Tipo de Condición de Atención</dt>
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $condition['name'] }}</dd>
                     </div>
 
-                    <!-- Campo Modelo -->
+                    <!-- Campo fecha ini -->
                     <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">Feha de Inicio</dt>
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $condition['date_ini'] }}</dd>
                     </div>
 
-                    <!-- Campo Modelo -->
+                    <!-- Campo fecha fin -->
                     <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">Feha de Realización</dt>
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
                             {{ $condition['date_end'] ?? 'Sin Fecha de Realización' }}</dd>
                     </div>
 
-                    <!-- Campo Status -->
+                    <!-- campo descrpcion-->
                     <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-300">Descripción</dt>
+                        <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
+                            {{ $condition['description'] ?? 'Sin Fecha de Realización' }}</dd>
+                    </div>
+
+                    <!-- Campo Status -->
+                    <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">Status</dt>
                         <dd class="mt-1 text-sm sm:mt-0 sm:col-span-2">
                             <span

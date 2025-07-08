@@ -89,7 +89,7 @@
                         </td>
                     </tr>
                 @else
-                    <tbody class="divide-y divide-gray-200" id="camera-status-table">
+                    <tbody class="divide-y divide-gray-200" id="nvr-status-table">
                         @foreach ($inactiveNvr as $nvr)
                             <tr class="hover:bg-gray-900 transition-colors duration-150">
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $nvr['mac'] }}</td>
@@ -112,56 +112,91 @@
         </div>
     </div>
 
-    {{-- script para actualizacion sin recagar pagina --}}
     @push('scripts')
         <script>
-            function updateCameraStatus() {
+            function updateDeviceStatus() {
                 fetch("{{ route('test.check') }}")
                     .then(response => response.json())
                     .then(data => {
-                        const tableBody = document.getElementById('camera-status-table');
-                        tableBody.innerHTML = ''; // Limpiar tabla
+                        // Actualiza cámaras
+                        updateTable('camera-status-table', data.cameras, 'camera');
 
-                        // Filtrar solo cámaras inactivas
-                        const inactiveCameras = data.filter(camera => camera.status === 'offline' || camera.status ===
-                            'conecting...');
-
-                        if (inactiveCameras.length === 0) {
-                            tableBody.innerHTML = `
-                        <tr>
-                            <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-400 italic">
-                                No hay cámaras inactivas
-                            </td>
-                        </tr>
-                    `;
-                            return;
-                        }
-
-                        // Agregar cámaras inactivas a la tabla
-                        inactiveCameras.forEach(camera => {
-                            const row = document.createElement('tr');
-                            row.className = 'hover:bg-gray-900 transition-colors duration-150';
-
-                            row.innerHTML = `
-                        <td class="px-6 py-4 text-center text-sm text-white">${camera.mac}</td>
-                        <td class="px-6 py-4 text-center text-sm text-white">${camera.nvr}</td>
-                        <td class="px-6 py-4 text-center text-sm text-white">${camera.name}</td>
-                        <td class="px-6 py-4 text-center text-sm text-white">${camera.location}</td>
-                        <td class="px-6 py-4 text-center text-sm text-white">${camera.ip}</td>
-                        <td class="px-6 py-4 text-center text-sm">
-                            <span id="status-${camera.mac}" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-600 text-red-100">
-                                ${camera.status}
-                            </span>
-                        </td>
-                    `;
-
-                            tableBody.appendChild(row);
-                        });
+                        // Actualiza NVRs
+                        updateTable('nvr-status-table', data.nvrs, 'nvr');
                     })
-                    .catch(error => console.error('Error al actualizar estados:', error));
+                    .catch(error => {
+                        console.error('Error al actualizar estados:', error);
+                        showError('camera-status-table', 'Error en cámaras');
+                        showError('nvr-status-table', 'Error en NVRs');
+                    });
             }
 
-            setInterval(updateCameraStatus, 15000); // Actualiza cada 10 segundos
+            function updateTable(tableId, devices, type) {
+                const tableBody = document.getElementById(tableId);
+                tableBody.innerHTML = '';
+
+                if (devices.length === 0) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-400 italic">
+                    No hay dispositivos inactivos
+                </td>
+            `;
+                    tableBody.appendChild(row);
+                    return;
+                }
+
+                devices.forEach(device => {
+                    const row = document.createElement('tr');
+                    row.className = 'hover:bg-gray-900 transition-colors duration-150';
+
+                    if (type === 'camera') {
+                        row.innerHTML = `
+                    <td class="px-6 py-4 text-center text-sm text-white">${device.mac}</td>
+                    <td class="px-6 py-4 text-center text-sm text-white">${device.nvr || '-'}</td>
+                    <td class="px-6 py-4 text-center text-sm text-white">${device.name}</td>
+                    <td class="px-6 py-4 text-center text-sm text-white">${device.location}</td>
+                    <td class="px-6 py-4 text-center text-sm text-white">${device.ip}</td>
+                    <td class="px-6 py-4 text-center text-sm">
+                        <span id="status-${device.mac}" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+                            ${device.status === 'offline' ? 'bg-red-600 text-red-100' : 'bg-yellow-600 text-yellow-100'}">
+                            ${device.status}
+                        </span>
+                    </td>
+                `;
+                    } else {
+                        row.innerHTML = `
+                    <td class="px-6 py-4 text-center text-sm text-white">${device.mac}</td>
+                    <td class="px-6 py-4 text-center text-sm text-white">${device.name}</td>
+                    <td class="px-6 py-4 text-center text-sm text-white">${device.location}</td>
+                    <td class="px-6 py-4 text-center text-sm text-white">${device.ip}</td>
+                    <td class="px-6 py-4 text-center text-sm">
+                        <span id="nvr-status-${device.mac}" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+                            ${device.status === 'offline' ? 'bg-red-600 text-red-100' : 'bg-yellow-600 text-yellow-100'}">
+                            ${device.status}
+                        </span>
+                    </td>
+                `;
+                    }
+
+                    tableBody.appendChild(row);
+                });
+            }
+
+            function showError(tableId, message) {
+                const tableBody = document.getElementById(tableId);
+                tableBody.innerHTML = `
+            <tr>
+                <td colspan="6" class="px-6 py-4 text-center text-sm text-red-500">
+                    ${message}
+                </td>
+            </tr>
+        `;
+            }
+
+            // Inicia la actualización
+            updateDeviceStatus();
+            setInterval(updateDeviceStatus, 15000); // Cada 15 segundos
         </script>
     @endpush
 @endsection

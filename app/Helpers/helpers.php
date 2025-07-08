@@ -144,8 +144,13 @@ function filter(Request $request, string $table)
                 $query = ConditionAttention::query();
 
                 // Aplica filtros y las que no se ham atendido
-                $query->where('name', $name)
-                    ->where('status', 'Por atender');
+                if ($name === 'OTROS')
+                    $query->where('name', '<>', $name)
+                        ->where('status', 'Por atender');
+                else
+                    $query->where('name', $name)
+                        ->where('status', 'Por atender');
+
 
                 // Ejecuta la consulta y aplica paginación
                 $conditions = $query->orderBy('created_at', 'desc')->paginate(10);
@@ -334,7 +339,7 @@ function conditionValidate(Request $request, $condition)
     $date_max = Carbon::parse($request->input('date_ini'))->isFuture();
 
     //si ya existe una atencion generada
-    if ((($condition->name == $request->input('name')) > 0) && (($condition->date_ini == $request->input('date_ini')) > 0)) {
+    if ((($condition->name == strtoupper($request->input('name'))) > 0) && (($condition->date_ini == $request->input('date_ini')) > 0)) {
         return ['camera_id' => 'Ya existe una condición de atención con el mismo tipo y fecha para la cámara seleccionada'];
 
         //si no se ha culminado la ultima atención

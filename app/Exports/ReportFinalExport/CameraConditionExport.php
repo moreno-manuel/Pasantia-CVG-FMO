@@ -173,6 +173,18 @@ class CameraConditionExport extends BaseReportExport
             ->latest('created_at')
             ->first();
 
+
+        $names = json_decode(file_get_contents(resource_path('js/data.json')), true)['conditions']; //tipo de condicion
+
+        $namecondition = optional($lastCondition)->name == '' ? 'No se ha generado una condición' : 'OTRO / ' . $lastCondition->name; //concatena la palabra otro en caso de que sea otro tipo de condicion
+
+        foreach ($names as $name) { // en caso de que no sea otro se guarda el nombre 
+            if ($name == optional($lastCondition)->name) {
+                $namecondition = optional($lastCondition)->name;
+                break;
+            }
+        }
+
         //obtener el texto de la ultima  descrpcion generada  en control de condición
         $textControl = null;
         if ($lastCondition) {
@@ -181,20 +193,18 @@ class CameraConditionExport extends BaseReportExport
                 ->latest('created_at')
                 ->first();
         }
-
         $description = optional($textControl)->text == null ? optional($lastCondition)->description :
-            optional($textControl)->text;
+            optional($textControl)->text; // verifica que no sea null
 
         return [
-            optional($lastCondition)->name ?? '',
+            $namecondition,
             optional($lastCondition)->created_at ? $lastCondition->created_at->format('d/m/Y') : '', // Fecha formateada
-            optional($lastCondition)->description ?? '',
-            $camera->mac,
+            $description ?? '',
+            $camera->nvr->name,
             $camera->name,
             $camera->mark,
             $camera->model,
             $camera->ip,
-            $camera->nvr->name,
         ];
     }
 

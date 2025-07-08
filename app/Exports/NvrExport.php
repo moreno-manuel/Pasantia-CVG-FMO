@@ -48,40 +48,6 @@ class NvrExport implements ShouldAutoSize, WithDrawings, WithEvents
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
                     ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
 
-                // Fecha de exportación en pie de página (derecha, en rojo)
-                $date = now()->format('d/m/Y H:i');
-                $lastRow = count($data) + 6;
-                $phpSheet->setCellValue("Q{$lastRow}", "Fecha de Exportación: {$date}");
-                $phpSheet->getStyle("Q{$lastRow}")->getFont()
-                    ->setItalic(true)
-                    ->setSize(10)
-                    ->setColor(new Color('FF0000')); // Rojo
-                $phpSheet->getStyle("Q{$lastRow}")->getAlignment()
-                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
-
-                // Pie de página en columna A
-                $footerRow = $lastRow + 2;
-
-                // Primera línea: Gerencia
-                $phpSheet->setCellValue("A{$footerRow}", "Gerencia: Telemática");
-                $phpSheet->getStyle("A{$footerRow}")
-                    ->getFont()
-                    ->setItalic(true)
-                    ->setSize(10)
-                    ->setColor(new Color('FF555555'));
-                $phpSheet->getStyle("A{$footerRow}")
-                    ->getAlignment()
-                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-                // Segunda línea: Área
-                $phpSheet->setCellValue("A" . ($footerRow + 1), "Área: Seguridad Tecnológica");
-                $phpSheet->getStyle("A" . ($footerRow + 1))
-                    ->getFont()
-                    ->setItalic(true)
-                    ->setSize(10)
-                    ->setColor(new Color('FF555555'));
-                $phpSheet->getStyle("A" . ($footerRow + 1))
-                    ->getAlignment()
-                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
 
                 // Encabezados (con soporte para hasta 4 slots)
                 $headers = [
@@ -169,7 +135,7 @@ class NvrExport implements ShouldAutoSize, WithDrawings, WithEvents
                     }
 
                     // Si el status es "Inactivo", coloreamos toda la fila de rojo
-                    if ($rowData[7] === 'Inactivo') {
+                    if ($nvr->status === 'offline') {
                         $phpSheet->getStyle("A{$rowNumber}:Q{$rowNumber}")
                             ->getFill()
                             ->setFillType(Fill::FILL_SOLID)
@@ -181,21 +147,56 @@ class NvrExport implements ShouldAutoSize, WithDrawings, WithEvents
                     }
                 }
 
-                // Estilo filas de datos
-                $lastDataRow = $startRow + count($data) - 1;
-                $phpSheet->getStyle("A{$startRow}:S{$lastDataRow}")
+
+
+
+                // Pie de página en columna A
+                $lastRow = count($data) + 6;
+                $footerRow = $lastRow + 2;
+
+                // Primera línea: Gerencia
+                $phpSheet->setCellValue("A{$footerRow}", "Gerencia: Telemática");
+                $phpSheet->getStyle("A{$footerRow}")
                     ->getFont()
-                    ->setBold(true)
-                    ->setColor(new Color('FF000000')); // Negro
+                    ->setItalic(true)
+                    ->setSize(10)
+                    ->setColor(new Color('FF555555'));
+                $phpSheet->getStyle("A{$footerRow}")
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+                // Segunda línea: Área
+                $phpSheet->setCellValue("A" . ($footerRow + 1), "Área: Seguridad Tecnológica");
+                $phpSheet->getStyle("A" . ($footerRow + 1))
+                    ->getFont()
+                    ->setItalic(true)
+                    ->setSize(10)
+                    ->setColor(new Color('FF555555'));
+                $phpSheet->getStyle("A" . ($footerRow + 1))
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+
+                // Fecha de exportación en pie de página (derecha, en rojo)
+                $date = now()->format('d/m/Y H:i');
+                $phpSheet->setCellValue("Q{$lastRow}", "Fecha de Exportación: {$date}");
+                $phpSheet->getStyle("Q{$lastRow}")->getFont()
+                    ->setItalic(true)
+                    ->setSize(10)
+                    ->setColor(new Color('FF0000')); // Rojo
+                $phpSheet->getStyle("Q{$lastRow}")->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
 
                 // Ajustar ancho automático
-                foreach (range('A', 'S') as $col) {
+                foreach (range('A', 'Q') as $col) {
                     $phpSheet->getColumnDimension($col)->setAutoSize(true);
                 }
 
                 // 🔐 Proteger la hoja: permite edición solo en ciertas celdas
+                // Estilo filas de datos
+                $lastDataRow = $startRow + count($data) - 1;
+
                 $phpSheet->getProtection()->setSheet(true);
-                $phpSheet->getStyle("A{$startRow}:S{$lastDataRow}")
+                $phpSheet->getStyle("A{$startRow}:Q{$lastDataRow}")
                     ->getProtection()
                     ->setLocked(Protection::PROTECTION_UNPROTECTED);
             },

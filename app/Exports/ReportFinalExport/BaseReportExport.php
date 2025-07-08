@@ -115,7 +115,7 @@ abstract class BaseReportExport implements WithEvents, WithDrawings, WithHeading
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
                 // Pie de página
-                $footerRow = $currentRow + 2;
+                $footerRow = $currentRow + 5;
                 $phpSheet->setCellValue("A{$footerRow}", "Gerencia: Telemática");
                 $phpSheet->setCellValue("A" . ($footerRow + 1), "Área: Seguridad Tecnológica");
 
@@ -140,12 +140,12 @@ abstract class BaseReportExport implements WithEvents, WithDrawings, WithHeading
 
                 // Fecha de exportación
                 $date = now()->format('d/m/Y H:i');
-                $phpSheet->setCellValue("H{$footerRow}", "Fecha: {$date}");
-                $phpSheet->getStyle("H{$footerRow}")->getFont()
+                $phpSheet->setCellValue("H" . ($footerRow - 2), "Fecha: {$date}");
+                $phpSheet->getStyle("H" . ($footerRow - 2))->getFont()
                     ->setItalic(true)
                     ->setSize(10)
                     ->setColor(new Color('FF0000')); // Rojo
-                $phpSheet->getStyle("H{$footerRow}")
+                $phpSheet->getStyle("H" . ($footerRow - 2))
                     ->getAlignment()
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 

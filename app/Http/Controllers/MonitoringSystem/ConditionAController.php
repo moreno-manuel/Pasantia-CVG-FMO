@@ -38,7 +38,7 @@ class ConditionAController extends Controller
         $cameras = Camera::where('status', 'offline')->select('name', 'mac')->get();
 
         if (!$cameras)
-            return redirect()->back()->with('warning', 'No hay Cámaras fuera de servicios');
+            return redirect()->back()->with('warning', 'No hay Cámaras fuera de servicio');
 
         $names = json_decode(file_get_contents(resource_path('js/data.json')), true)['conditions']; // json con los tipos de condicion
         return view('front.attention.create', compact('cameras', 'names'));
@@ -48,15 +48,18 @@ class ConditionAController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
+            'other_condition' => 'nullable|regex:/^[a-zA-Z\s]+$/u|min:5|required_if:name,OTROS',
             'camera_id' => 'required',
             'date_ini' => 'required|date',
             'date_end' => 'nullable|date|after_or_equal:date_ini',
             'description' => 'required'
         ], [
-            'after_or_equal' => 'La :attribute debe ser posterior o igual a :date'
+            'after_or_equal' => 'La :attribute debe ser posterior o igual a :date',
+            'required_if' => 'Formato de :attribute inválido'
         ], [
             'date_ini' => 'Fecha de Inicio',
-            'date_end' => 'Fecha de Realización'
+            'date_end' => 'Fecha de Realización',
+            'other_condition' => 'Nombre'
         ]);
 
 
@@ -64,8 +67,12 @@ class ConditionAController extends Controller
             return redirect()->back()->withInput()->withErrors($validator);
         }
 
-        $condition = ConditionAttention::where('camera_id', $request->input('camera_id'))->latest()->first(); //busqueda explicita,last condición
+        $condition = ConditionAttention::where('camera_id', $request->input('camera_id'))
+            ->latest()
+            ->first(); //busqueda explicita,last condición
         if ($condition) {
+            if ($request->filled('other_condition'))
+                $request['name'] = strtoupper($request->input('other_condition'));
             $validate = conditionValidate($request, $condition); //reglas de validación 
             if ($validate != 'success')
                 return redirect()->back()->withInput()->withErrors($validate); //retorna el tipo de error 
@@ -82,9 +89,6 @@ class ConditionAController extends Controller
             'status' => $status
 
         ]);
-
-        if ($status == 'Por atender')
-            $condition->camera->update(['status' => 'offline']);   //atualiza el estado de la cámara
 
         return redirect()->route('atencion.index')->with('success', 'Condición de Atención agregada exitosamente.');
     }
@@ -132,10 +136,6 @@ class ConditionAController extends Controller
 
         ]);
 
-        //atualiza el estado de la cámara
-        if ($status == 'Atendido')
-            $condition->camera->update(['status' => 'online']);
-
         return redirect()->route('atencion.index')->with('success', 'Condición de Atención actualizada exitosamente.');
     }
 
@@ -151,13 +151,6 @@ class ConditionAController extends Controller
     public function destroy($id) //Elimina un regitro 
     {
         $condition = ConditionAttention::findOrFail($id);
-
-        $conditionLast = ConditionAttention::where('camera_id', $condition->camera_id)->latest()->first(); //busqueda explicita,last condición
-        if ($conditionLast) {
-            if ($condition->is($conditionLast)) { //si la que se elimina es la ultima condición 
-                $condition->camera->update(['status' => 'online']); // cámara regresa a su status original
-            }
-        }
 
         $condition->delete();
         return redirect()->route('atencion.index')->with('success', 'Condición de atención eliminada exitosamente.');

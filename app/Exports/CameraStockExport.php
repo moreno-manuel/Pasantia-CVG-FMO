@@ -18,8 +18,8 @@ class CameraStockExport implements ShouldAutoSize, WithDrawings, WithEvents
     public function __construct()
     {
         $this->data = CameraInventory::select('mac', 'mark', 'model', 'delivery_note', 'destination', 'description')
-        ->get()
-        ->sortBy('mark');
+            ->get()
+            ->sortBy('mark');
     }
 
     public function registerEvents(): array
@@ -44,46 +44,6 @@ class CameraStockExport implements ShouldAutoSize, WithDrawings, WithEvents
                 $phpSheet->getStyle('A1')->getAlignment()
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
                     ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
-
-                // Fecha de exportación en pie de página (derecha, en rojo)
-                $date = now()->format('d/m/Y H:i');
-                $lastRow = $data->count() + 6;
-                $phpSheet->setCellValue("F{$lastRow}", "Fecha de Exportación: {$date}");
-                $phpSheet->getStyle("F{$lastRow}")->getFont()
-                    ->setItalic(true)
-                    ->setSize(10)
-                    ->setColor(new Color('FF0000')); // Rojo
-                $phpSheet->getStyle("F{$lastRow}")->getAlignment()
-                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
-
-                // Pie de página - Gerencia y Área en columna A, una debajo de otra
-                $footerRow = $lastRow + 2;
-
-                // Primera línea: Gerencia
-                $phpSheet->setCellValue("A{$footerRow}", "Gerencia: Telemática");
-                $phpSheet->getStyle("A{$footerRow}")
-                    ->getFont()
-                    ->setItalic(true)
-                    ->setSize(10)
-                    ->setColor(new Color('FF555555')); // Gris oscuro
-                $phpSheet->getStyle("A{$footerRow}")
-                    ->getAlignment()
-                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-
-                // Segunda línea: Área
-                $phpSheet->setCellValue("A" . ($footerRow + 1), "Área: Seguridad Tecnológica");
-                $phpSheet->getStyle("A" . ($footerRow + 1))
-                    ->getFont()
-                    ->setItalic(true)
-                    ->setSize(10)
-                    ->setColor(new Color('FF555555')); // Gris oscuro
-                $phpSheet->getStyle("A" . ($footerRow + 1))
-                    ->getAlignment()
-                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-
-                // Opcional: ajustar altura de filas para que se vean bien
-                $phpSheet->getRowDimension($footerRow)->setRowHeight(18);
-                $phpSheet->getRowDimension($footerRow + 1)->setRowHeight(18);
 
                 // Encabezados
                 $headers = ['Mac', 'Marca', 'Modelo', 'Nota de Entrega', 'Destino/Instalación', 'Descripción'];
@@ -141,6 +101,46 @@ class CameraStockExport implements ShouldAutoSize, WithDrawings, WithEvents
                     ->getFont()
                     ->setBold(true)
                     ->setColor(new Color('FF000000')); // Negro
+
+                // Pie de página - Gerencia y Área en columna A, una debajo de otra
+                $lastRow = $data->count() + 6;
+                $footerRow = $lastRow + 2;
+
+                // Primera línea: Gerencia
+                $phpSheet->setCellValue("A{$footerRow}", "Gerencia: Telemática");
+                $phpSheet->getStyle("A{$footerRow}")
+                    ->getFont()
+                    ->setItalic(true)
+                    ->setSize(10)
+                    ->setColor(new Color('FF555555')); // Gris oscuro
+                $phpSheet->getStyle("A{$footerRow}")
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+
+                // Segunda línea: Área
+                $phpSheet->setCellValue("A" . ($footerRow + 1), "Área: Seguridad Tecnológica");
+                $phpSheet->getStyle("A" . ($footerRow + 1))
+                    ->getFont()
+                    ->setItalic(true)
+                    ->setSize(10)
+                    ->setColor(new Color('FF555555')); // Gris oscuro
+                $phpSheet->getStyle("A" . ($footerRow + 1))
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+
+                //  ajustar altura de filas para que se vean bien
+                $phpSheet->getRowDimension($footerRow)->setRowHeight(18);
+                $phpSheet->getRowDimension($footerRow + 1)->setRowHeight(18);
+
+                // Fecha de exportación en pie de página (derecha, en rojo)
+                $date = now()->format('d/m/Y H:i');
+                $phpSheet->setCellValue("F{$lastRow}", "Fecha de Exportación: {$date}");
+                $phpSheet->getStyle("F{$lastRow}")->getFont()
+                    ->setItalic(true)
+                    ->setSize(10)
+                    ->setColor(new Color('FF0000')); // Rojo
+                $phpSheet->getStyle("F{$lastRow}")->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
                 // Ajustar ancho automático
                 foreach (range('A', 'F') as $col) {

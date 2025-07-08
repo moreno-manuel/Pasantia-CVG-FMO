@@ -9,7 +9,7 @@
     "conditions": [
         "CAMION CESTA",
         "EN PROCESO DE ATENCION",
-        "POR INVENTARIO",
+        "PARA REMPLAZAR",
         "OTROS"
     ],
     "switch_marks": [

@@ -28,7 +28,7 @@ class NvrCameraReportExport extends BaseReportExport
             $totalOperative = 0;
             $totalTruck = 0;
             $totalOnProcess = 0;
-            $totalInventory = 0;
+            $totalreplace = 0;
             $totalOthers = 0;
 
             $items = [];
@@ -45,7 +45,6 @@ class NvrCameraReportExport extends BaseReportExport
                             $lastCondition = $camera->conditionAttention()
                                 ->latest('created_at')
                                 ->first();
-
                             $name = optional($lastCondition)->name;
 
                             // Clasificar según el nombre
@@ -53,9 +52,9 @@ class NvrCameraReportExport extends BaseReportExport
                                 $carry['truck']++;
                             } elseif ($name === 'EN PROCESO DE ATENCION') {
                                 $carry['onProcess']++;
-                            } elseif ($name === 'POR INVENTARIO') {
-                                $carry['inventory']++;
-                            } elseif ($name === 'OTRO') {
+                            } elseif ($name === 'PARA REMPLAZAR') {
+                                $carry['replace']++;
+                            } elseif($name != null) {
                                 $carry['others']++;
                             }
 
@@ -63,13 +62,13 @@ class NvrCameraReportExport extends BaseReportExport
 
                             return $carry;
                         },
-                        ['truck' => 0, 'onProcess' => 0, 'inventory' => 0, 'others' => 0, 'inoperative' => 0]
+                        ['truck' => 0, 'onProcess' => 0, 'replace' => 0, 'others' => 0, 'inoperative' => 0]
                     );
 
                 // Asignar resultados a variables
                 $truck = $inoperativeStats['truck'];
                 $onProcess = $inoperativeStats['onProcess'];
-                $inventory = $inoperativeStats['inventory'];
+                $replace = $inoperativeStats['replace'];
                 $others = $inoperativeStats['others'];
                 //camaras inoperativas
                 $inoperative = $inoperativeStats['inoperative'];
@@ -84,7 +83,7 @@ class NvrCameraReportExport extends BaseReportExport
                     'operative' => $operative,
                     'truck' => $truck,
                     'on_process' => $onProcess,
-                    'inventory' => $inventory,
+                    'replace' => $replace,
                     'others' => $others,
                 ];
 
@@ -93,7 +92,7 @@ class NvrCameraReportExport extends BaseReportExport
                 $totalOperative += $operative;
                 $totalTruck += $truck;
                 $totalOnProcess += $onProcess;
-                $totalInventory += $inventory;
+                $totalreplace += $replace;
                 $totalOthers += $others;
             }
 
@@ -105,7 +104,7 @@ class NvrCameraReportExport extends BaseReportExport
                     'operative' => $totalOperative,
                     'truck' => $totalTruck,
                     'on_process' => $totalOnProcess,
-                    'inventory' => $totalInventory,
+                    'replace' => $totalreplace,
                     'others' => $totalOthers,
                 ],
             ];
@@ -133,7 +132,7 @@ class NvrCameraReportExport extends BaseReportExport
             'Operativas',
             'CAMIÓN CESTA',
             'EN PROCESO DE ATENCIÓN',
-            'POR INVENTARIO',
+            'PARA REMPLAZAR',
             'OTROS'
         ];
     }
@@ -200,7 +199,7 @@ class NvrCameraReportExport extends BaseReportExport
             $item['operative'],
             $item['truck'],
             $item['on_process'],
-            $item['inventory'],
+            $item['replace'],
             $item['others'],
         ];
     }
@@ -214,7 +213,7 @@ class NvrCameraReportExport extends BaseReportExport
             $totals['operative'],
             $totals['truck'],
             $totals['on_process'],
-            $totals['inventory'],
+            $totals['replace'],
             $totals['others'],
         ];
     }
@@ -225,7 +224,7 @@ class NvrCameraReportExport extends BaseReportExport
         $totalOperative = 0;
         $totalTruck = 0;
         $totalOnProcess = 0;
-        $totalInventory = 0;
+        $totalreplace = 0;
         $totalOthers = 0;
 
         foreach ($data as $locationData) {
@@ -233,7 +232,7 @@ class NvrCameraReportExport extends BaseReportExport
             $totalOperative += $locationData['totals']['operative'];
             $totalTruck += $locationData['totals']['truck'];
             $totalOnProcess += $locationData['totals']['on_process'];
-            $totalInventory += $locationData['totals']['inventory'];
+            $totalreplace += $locationData['totals']['replace'];
             $totalOthers += $locationData['totals']['others'];
         }
 
@@ -243,7 +242,7 @@ class NvrCameraReportExport extends BaseReportExport
             'operative' => $totalOperative,
             'truck' => $totalTruck,
             'on_process' => $totalOnProcess,
-            'inventory' => $totalInventory,
+            'replace' => $totalreplace,
             'others' => $totalOthers,
         ];
     }
@@ -257,7 +256,7 @@ class NvrCameraReportExport extends BaseReportExport
             $totals['operative'],
             $totals['truck'],
             $totals['on_process'],
-            $totals['inventory'],
+            $totals['replace'],
             $totals['others'],
         ];
     }

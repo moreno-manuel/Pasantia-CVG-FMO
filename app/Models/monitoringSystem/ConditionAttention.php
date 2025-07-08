@@ -22,6 +22,8 @@ class ConditionAttention extends Model
         'date_end' => 'date'
     ];
 
+
+    //relaciones
     public function camera()
     {
         return $this->belongsTo(Camera::class, 'camera_id', 'mac');

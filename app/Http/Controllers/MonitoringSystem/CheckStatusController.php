@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\MonitoringSystem;
 
 use App\Http\Controllers\Controller;
-use App\Jobs\CheckCameraStatus;
+use App\Jobs\CheckDeviceStatusJob;
 use App\Models\monitoringSystem\Camera;
 use App\Models\monitoringSystem\Nvr;
 use Illuminate\Support\Facades\Cache;
@@ -14,22 +14,15 @@ class CheckStatusController extends Controller
 
     public function home()
     {
-        $cameras = Camera::select(['mac', 'nvr_id', 'name', 'location', 'ip', 'status'])
-            ->orderBy('created_at', 'desc')
+        $inactiveCameras = Camera::select(['mac', 'nvr_id', 'name', 'location', 'ip', 'status'])
+            ->where('status', '!=', 'online')
+            ->orderBy('location')
             ->paginate(10);
 
-        $inactiveCameras = $cameras->filter(function ($camera) {
-            return $camera->status != 'online'; // true si está inactivo
-        });
-
-        $nvr = Nvr::select(['mac', 'name', 'location', 'ip', 'status'])
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);;
-
-        $inactiveNvr = $nvr->filter(function ($nvr) {
-            return $nvr->status != 'online'; // true si está inactivo
-        });
-
+        $inactiveNvr = Nvr::select(['mac', 'name', 'location', 'ip', 'status'])
+            ->where('status', '!=', 'online')
+            ->orderBy('location')
+            ->paginate(10);
 
         return view('front.home.checkStatus', compact('inactiveCameras', 'inactiveNvr'));
     }
@@ -37,34 +30,49 @@ class CheckStatusController extends Controller
     public function checkStatus()
     {
         //para encolar
-        CheckCameraStatus::dispatch();
+        CheckDeviceStatusJob::dispatch();
 
-        $cameras = Camera::select(['mac', 'name', 'nvr_id', 'location', 'status', 'ip'])->get();
-        $statuses = [];
 
+        $data = [
+            'cameras' => [],
+            'nvrs' => []
+        ];
+
+        //procesa camaras 
+        $cameras = Camera::all(['mac', 'name', 'nvr_id', 'location', 'status', 'ip']);
         foreach ($cameras as $camera) {
-            /*    $cacheKey = 'camera_status_' . $camera->mac;
-
-            // Usar caché para no hacer ping cada vez
-            $statusNew = Cache::remember($cacheKey, 10, function () use ($camera) {
-                $cmd = "ping -n 1 -w 1000 " . escapeshellarg($camera->ip) . " > nul && echo 1 || echo 0";
-                return shell_exec($cmd) == 1 ? 'Activo' : 'Inactivo';
-            });  */
-
             $camera->update([
                 'status' =>  Cache::get('camera_status_' . $camera->mac, 'conecting...')
             ]);
-
-            $statuses[] = [
-                'mac' => $camera->mac,
-                'name' => $camera->name,
-                'location' => $camera->location,
-                'nvr' => $camera->nvr->name,
-                'ip' => $camera->ip,
-                'status' => $camera->status,
-            ];
+            if ($camera->status != 'online')
+                $data['cameras'][] = [
+                    'mac' => $camera->mac,
+                    'nvr' => $camera->nvr?->name,
+                    'name' => $camera->name,
+                    'location' => $camera->location,
+                    'ip' => $camera->ip,
+                    'status' => $camera->status
+                ];
         }
 
-        return response()->json($statuses);
+
+        // Procesa NVRs
+        $nvrs = Nvr::all(['mac', 'ip', 'name', 'location', 'status']);
+        foreach ($nvrs as $nvr) {
+            $nvr->update([
+                'status' => Cache::get('nvr_status_' . $nvr->mac, 'conecting...')
+            ]);
+            if ($nvr->status != 'online')
+                $data['nvrs'][] = [
+                    'mac' => $nvr->mac,
+                    'name' => $nvr->name,
+                    'location' => $nvr->location,
+                    'ip' => $nvr->ip,
+                    'status' => $nvr->status
+                ];
+        }
+
+
+        return response()->json($data);
     }
 }
