@@ -35,7 +35,10 @@ class ConditionAController extends Controller
 
     public function create()
     {
-        $cameras = Camera::all();
+        $cameras = Camera::where('status', 'offline')->select('name', 'mac')->get();
+
+        if (!$cameras)
+            return redirect()->back()->with('warning', 'No hay Cámaras fuera de servicios');
 
         $names = json_decode(file_get_contents(resource_path('js/data.json')), true)['conditions']; // json con los tipos de condicion
         return view('front.attention.create', compact('cameras', 'names'));

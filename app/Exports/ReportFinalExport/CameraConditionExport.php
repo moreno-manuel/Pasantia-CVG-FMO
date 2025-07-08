@@ -86,12 +86,11 @@ class CameraConditionExport extends BaseReportExport
             'Tipo de condición',
             'Fecha de Inicio',
             'Descripción',
-            'Mac',
+            'Nvr/Conexión',
             'Nombre',
             'Marca',
             'Modelo',
             'IP',
-            'Nvr/Conexión',
         ];
     }
 
@@ -170,19 +169,31 @@ class CameraConditionExport extends BaseReportExport
     {
         // Obtener la última condición de atención
         $lastCondition = $camera->conditionAttention()
+            ->where('status', 'Por atender')
             ->latest('created_at')
             ->first();
+
+        //obtener el texto de la ultima  descrpcion generada  en control de condición
+        $textControl = null;
+        if ($lastCondition) {
+            $textControl = $lastCondition->controlCondition()
+                ->select('text')
+                ->latest('created_at')
+                ->first();
+        }
+
+        $description = optional($textControl)->text == null ? optional($lastCondition)->description :
+            optional($textControl)->text;
 
         return [
             optional($lastCondition)->name ?? '',
             optional($lastCondition)->created_at ? $lastCondition->created_at->format('d/m/Y') : '', // Fecha formateada
-            optional($lastCondition)->description ?? '',
-            $camera->mac,
+            $description,
+            $camera->nvr->name,
             $camera->name,
             $camera->mark,
             $camera->model,
             $camera->ip,
-            $camera->nvr->name,
         ];
     }
 
