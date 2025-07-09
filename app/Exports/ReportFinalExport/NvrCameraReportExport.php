@@ -4,10 +4,11 @@ namespace App\Exports\ReportFinalExport;
 
 use App\Exports\ReportFinalExport\BaseReportExport;
 use App\Models\monitoringSystem\Nvr;
+use Maatwebsite\Excel\Concerns\WithTitle;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 
-class NvrCameraReportExport extends BaseReportExport
+class NvrCameraReportExport extends BaseReportExport implements WithTitle
 {
     protected $locations;
 
@@ -120,7 +121,7 @@ class NvrCameraReportExport extends BaseReportExport
 
     public function getTitle(): string
     {
-        return 'Cámaras por localidad';
+        return 'Relación Nvr - Cámaras';
     }
 
     public function headings(): array
@@ -259,5 +260,10 @@ class NvrCameraReportExport extends BaseReportExport
             $totals['replace'],
             $totals['others'],
         ];
+    }
+
+    public function title(): string
+    {
+        return 'nvr - cámaras';
     }
 }

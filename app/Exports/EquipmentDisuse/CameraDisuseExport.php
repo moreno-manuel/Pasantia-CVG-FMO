@@ -4,9 +4,9 @@ namespace App\Exports\EquipmentDisuse;
 
 
 use App\Models\EquipmentDisuse\EquipmentDisuse;
+use Maatwebsite\Excel\Concerns\WithTitle;
 
-
-class CameraDisuseExport extends EquipmentDisuseExport
+class CameraDisuseExport extends EquipmentDisuseExport implements WithTitle
 {
     public function collection()
     {
@@ -43,5 +43,10 @@ class CameraDisuseExport extends EquipmentDisuseExport
             $device->description,
             $device->created_at->format('d/m/Y')
         ];
+    }
+
+    public function title(): string
+    {
+        return 'Cámaras'; 
     }
 }

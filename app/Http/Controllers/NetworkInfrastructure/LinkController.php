@@ -51,7 +51,7 @@ class LinkController extends Controller
                     'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
                     'model' => 'required|alpha_dash|min:3',
                     'name' => 'required|unique:links,name|regex:/^[a-zA-Z0-9\/\-. ]+$/|min:5',
-                    'ssid' => 'required|alpha_num|min:5',
+                    'ssid' => 'required|alpha_num|min:3',
                     'location' => 'required|regex:/^[a-zA-Z0-9\/\-. ]+$/|min:5',
                     'ip' => 'required|ip|unique:links,ip',
                     'description' => 'nullable'
@@ -106,7 +106,7 @@ class LinkController extends Controller
                     ],
                     'mark' => 'required',
                     'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
-                    'ssid' => 'required|alpha_num|min:5',
+                    'ssid' => 'required|alpha_num|min:3',
                     'location' => 'required|regex:/^[a-zA-Z0-9\/\-. ]+$/|min:5',
                     'ip' => 'required|ip|unique:links,ip',
                     'description' => 'nullable'

@@ -37,7 +37,7 @@ class ConditionAController extends Controller
     {
         $cameras = Camera::where('status', 'offline')->select('name', 'mac')->get();
 
-        if (!$cameras)
+        if ($cameras->isEmpty())
             return redirect()->back()->with('warning', 'No hay Cámaras fuera de servicio');
 
         $names = json_decode(file_get_contents(resource_path('js/data.json')), true)['conditions']; // json con los tipos de condicion
@@ -70,15 +70,15 @@ class ConditionAController extends Controller
         $condition = ConditionAttention::where('camera_id', $request->input('camera_id'))
             ->latest()
             ->first(); //busqueda explicita,last condición
+
+        if ($request->filled('other_condition')) //nombre no prdefinido
+            $request['name'] = strtoupper($request->input('other_condition'));
+
         if ($condition) {
-            if ($request->filled('other_condition'))
-                $request['name'] = strtoupper($request->input('other_condition'));
             $validate = conditionValidate($request, $condition); //reglas de validación 
             if ($validate != 'success')
-                return redirect()->back()->withInput()->withErrors($validate); //retorna el tipo de error 
+                return redirect()->back()->withInput()->withErrors($validate);
         }
-
-        $status = $request->filled('date_end') ? 'Atendido' : 'Por atender'; // Determinar el status de la condicion
 
         $condition = ConditionAttention::create([
             'name' => $request->input('name'),
@@ -86,7 +86,8 @@ class ConditionAController extends Controller
             'date_ini' => $request->input('date_ini'),
             'date_end' => $request->input('date_end'),
             'description' => $request->input('description'),
-            'status' => $status
+            'status' => $request->filled('date_end') ? 'Atendido' : 'Por atender' // Determinar el status de la condicion
+
 
         ]);
 
@@ -129,10 +130,9 @@ class ConditionAController extends Controller
             ]);
         }
 
-        $status = $request->filled('date_end') ? 'Atendido' : 'Por atender';
         $condition->update([
             'date_end' => $request->input('date_end'),
-            'status' => $status,
+            'status' => $request->filled('date_end') ? 'Atendido' : 'Por atender'
 
         ]);
 

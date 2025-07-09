@@ -6,7 +6,7 @@
 
         <!-- Encabezado-->
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold text-white bg-gray-600 rounded-md px-3 py-1">NVRs</h1>
+            <h1 class="text-2xl font-bold text-white bg-gray-600 rounded-md px-3 py-1">Nvr</h1>
         </div>
 
         {{-- logo --}}

@@ -87,7 +87,7 @@
                     <!-- Campo SSID -->
                     <div>
                         <label for="ssid" class="block text-sm font-semibold text-white">SSID</label>
-                        <input type="text" name="ssid" value="{{ old('ssid') }}" minlength="5"
+                        <input type="text" name="ssid" value="{{ old('ssid') }}" minlength="3"
                             class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('ssid') border-red-500 @enderror"
                             placeholder="Nombre de red Wi-Fi" required>
                         @error('ssid')

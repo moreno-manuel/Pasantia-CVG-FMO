@@ -42,41 +42,6 @@ abstract class EquipmentDisuseExport implements WithEvents, WithDrawings, WithHe
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
                     ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
 
-                // Fecha de exportación
-                $date = now()->format('d/m/Y H:i');
-                $lastRow = count($data) + 6;
-                $phpSheet->setCellValue("{$lastColumn}{$lastRow}", "Fecha: {$date}");
-                $phpSheet->getStyle("{$lastColumn}{$lastRow}")->getFont()
-                    ->setItalic(true)
-                    ->setSize(10)
-                    ->setColor(new Color('FF0000')); // Rojo
-                $phpSheet->getStyle("{$lastColumn}{$lastRow}")
-                    ->getAlignment()
-                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
-
-                // Pie de página
-                $footerRow = $lastRow + 2;
-                $phpSheet->setCellValue("A{$footerRow}", "Gerencia: Telemática");
-                $phpSheet->setCellValue("A" . ($footerRow + 1), "Área: Seguridad Tecnológica");
-
-                $phpSheet->getStyle("A{$footerRow}")
-                    ->getFont()
-                    ->setItalic(true)
-                    ->setSize(10)
-                    ->setColor(new Color('FF555555'));
-                $phpSheet->getStyle("A" . ($footerRow + 1))
-                    ->getFont()
-                    ->setItalic(true)
-                    ->setSize(10)
-                    ->setColor(new Color('FF555555'));
-
-                $phpSheet->getStyle("A{$footerRow}:$lastColumn{$footerRow}")
-                    ->getAlignment()
-                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-
-                $phpSheet->getRowDimension($footerRow)->setRowHeight(18);
-                $phpSheet->getRowDimension($footerRow + 1)->setRowHeight(18);
-
                 // Encabezados dinámicos
                 $headers = $this->headings();
                 foreach ($headers as $colIndex => $header) {
@@ -117,6 +82,41 @@ abstract class EquipmentDisuseExport implements WithEvents, WithDrawings, WithHe
                             ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
                     }
                 }
+
+                // Pie de página
+                $lastRow = count($data) + 6;
+                $footerRow = $lastRow + 2;
+                $phpSheet->setCellValue("A{$footerRow}", "Gerencia: Telemática");
+                $phpSheet->setCellValue("A" . ($footerRow + 1), "Área: Seguridad Tecnológica");
+
+                $phpSheet->getStyle("A{$footerRow}")
+                    ->getFont()
+                    ->setItalic(true)
+                    ->setSize(10)
+                    ->setColor(new Color('FF555555'));
+                $phpSheet->getStyle("A" . ($footerRow + 1))
+                    ->getFont()
+                    ->setItalic(true)
+                    ->setSize(10)
+                    ->setColor(new Color('FF555555'));
+
+                $phpSheet->getStyle("A{$footerRow}:$lastColumn{$footerRow}")
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+
+                $phpSheet->getRowDimension($footerRow)->setRowHeight(18);
+                $phpSheet->getRowDimension($footerRow + 1)->setRowHeight(18);
+
+                // Fecha de exportación
+                $date = now()->format('d/m/Y H:i');
+                $phpSheet->setCellValue("{$lastColumn}{$lastRow}", "Fecha: {$date}");
+                $phpSheet->getStyle("{$lastColumn}{$lastRow}")->getFont()
+                    ->setItalic(true)
+                    ->setSize(10)
+                    ->setColor(new Color('FF0000')); // Rojo
+                $phpSheet->getStyle("{$lastColumn}{$lastRow}")
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
                 // Ancho automático
                 foreach (range('A', $lastColumn) as $col) {

@@ -4,10 +4,11 @@ namespace App\Exports\ReportFinalExport;
 
 use App\Exports\ReportFinalExport\BaseReportExport;
 use App\Models\monitoringSystem\Camera;
+use Maatwebsite\Excel\Concerns\WithTitle;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 
-class CameraConditionExport extends BaseReportExport
+class CameraConditionExport extends BaseReportExport implements WithTitle
 {
     protected $data;
 
@@ -176,7 +177,7 @@ class CameraConditionExport extends BaseReportExport
 
         $names = json_decode(file_get_contents(resource_path('js/data.json')), true)['conditions']; //tipo de condicion
 
-        $namecondition = optional($lastCondition)->name == '' ? 'No se ha generado una condición' : 'OTRO / ' . $lastCondition->name; //concatena la palabra otro en caso de que sea otro tipo de condicion
+        $namecondition = optional($lastCondition)->name == '' ? 'No se ha generado una condición' : 'OTROS / ' . $lastCondition->name; //concatena la palabra otro en caso de que sea otro tipo de condicion
 
         foreach ($names as $name) { // en caso de que no sea otro se guarda el nombre 
             if ($name == optional($lastCondition)->name) {
@@ -251,5 +252,10 @@ class CameraConditionExport extends BaseReportExport
             '', // vacío
             $totals['inoperative'],
         ];
+    }
+
+    public function title(): string
+    {
+        return 'cámaras por tipo de condición';
     }
 }
