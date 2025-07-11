@@ -60,7 +60,7 @@ class CheckStatusController extends Controller
         $nvrs = Nvr::all(['id', 'mac', 'ip', 'name', 'location', 'status']);
         foreach ($nvrs as $nvr) {
             $nvr->update([
-                'status' => Cache::get('nvr_status_' . $nvr->id, 'conecting...')
+                'status' => Cache::get('nvr_status_' . $nvr->mac, 'conecting...')
             ]);
             if ($nvr->status != 'online')
                 $data['nvrs'][] = [

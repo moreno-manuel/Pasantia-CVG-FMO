@@ -169,7 +169,7 @@
     @endpush
 
 
-    {{-- funcion para obtener la descripcion de eliminacion--}}
+    {{-- funcion para obtener la descripcion de eliminacion --}}
     @push('scripts')
         <script>
             let deleteUrl = '';

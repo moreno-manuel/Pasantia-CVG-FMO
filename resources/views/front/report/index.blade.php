@@ -33,7 +33,7 @@
                                     {{ $report['name'] ?? 'Reporte sin nombre' }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <a href="{{ route($report['url']) }}" target="_blank"
+                                    <a href="{{ route($report['url']) }}"  target="_blank"
                                         class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-blue-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                         Descargar
                                     </a>
@@ -58,7 +58,7 @@
                         </h2>
                     </div>
                     <div class="p-6">
-                        <form action="{{ route('export.log') }}" method="GET" class="space-y-4">
+                        <form action="{{ route('export.log') }}" method="GET" class="space-y-4" target="_blank">
                             <div class="grid grid-cols-1 gap-4">
                                 <div>
                                     <label for="start_date" class="block text-sm font-medium text-gray-300">Fecha

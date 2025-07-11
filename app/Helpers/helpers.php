@@ -97,7 +97,7 @@ function filter(Request $request, string $table)
 
 
                 // Ejecuta la consulta y aplica paginación
-                $nvrs = $query->select('mac', 'mark', 'model', 'name', 'ip', 'ports_number', 'location', 'status')
+                $nvrs = $query->select('id', 'mac', 'mark', 'model', 'name', 'ip', 'ports_number', 'location', 'status')
                     ->orderBy('created_at', 'desc')
                     ->paginate(10);
 
@@ -127,7 +127,7 @@ function filter(Request $request, string $table)
 
 
                 // Ejecuta la consulta y aplica paginación
-                $cameras = $query->select('name', 'ip', 'location', 'mac', 'status', 'mark', 'model', 'nvr_id')
+                $cameras = $query->select('id', 'name', 'ip', 'location', 'mac', 'status', 'mark', 'model', 'nvr_id')
                     ->orderBy('created_at', 'desc')
                     ->paginate(10);
 
@@ -339,30 +339,30 @@ function conditionValidate(Request $request, $condition)
 
     //si ya existe una atencion generada
     if ((($condition->name == $request->input('name')) > 0) && (($condition->date_ini == $request->input('date_ini')) > 0)) {
-        if ($request->filled('other_condition')) 
+        if ($request->filled('other_condition'))
             $request['name'] = 'OTROS';
 
         return ['camera_id' => 'Ya existe una condición de atención con el mismo tipo y fecha para la cámara seleccionada'];
 
         //si no se ha culminado la ultima atención
     } else if (!$condition->date_end) {
-        if ($request->filled('other_condition')) 
+        if ($request->filled('other_condition'))
             $request['name'] = 'OTROS';
 
         return ['camera_id' => 'Existe una condición de atención sin finalizar para la cámara seleccionada'];
 
         //si la fecha final de la ultima atencion supera a la fecha inicial de la nueva atencion
     } else if ($condition->date_end > $request->input('date_ini')) {
-        if ($request->filled('other_condition')) 
+        if ($request->filled('other_condition'))
             $request['name'] = 'OTROS';
 
         return ['camera_id' => 'La nueva condición de atención para la cámara seleccionada debe tener una fecha mayor o igual a la anterior (' . $condition->date_end . ")"];
 
         //si se ingresa fechas futuras
     } else if ($date_max) {
-        if ($request->filled('other_condition')) 
+        if ($request->filled('other_condition'))
             $request['name'] = 'OTROS';
-        
+
         return ['date_ini' => 'La fecha ingresada supera la fecha actual (' . Carbon::now()->format('d/m/Y') . ')'];
     }
 

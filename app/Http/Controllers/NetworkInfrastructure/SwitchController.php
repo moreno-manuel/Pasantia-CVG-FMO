@@ -23,7 +23,7 @@ class SwitchController extends Controller
     {
 
         $hasFilters = $request->filled('serial') ||
-            $request->filled('location'); 
+            $request->filled('location');
 
         if (!$hasFilters) { //si no se aplica un filtro
             $switches = Switche::select('serial', 'mark', 'model', 'number_ports', 'location')
@@ -64,7 +64,7 @@ class SwitchController extends Controller
             return redirect()->back()->withInput()->withErrors($validator);
         }
 
-        $request = marksUpdate($request, 'switch_marks'); // wn caso de que haya una marca nueva
+        $request = marksUpdate($request, 'switch_marks'); // en caso de que haya una marca nueva
 
         Switche::create($request->all())->save();
         return redirect()->route('switch.index')->with('success', 'Switch creado exitosamente.');
@@ -104,6 +104,8 @@ class SwitchController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator);
         }
+
+        $request = marksUpdate($request, 'switch_marks'); // en caso de que haya una marca nueva
 
         $switch->update($request->all());
         return redirect()->route('switch.index')->with('success', 'Switch actualizado exitosamente.');

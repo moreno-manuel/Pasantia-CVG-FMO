@@ -170,63 +170,6 @@
 
     </div>
 
-    {{-- funcion para los filtros --}}
-    @push('scripts')
-        <script>
-            function validateFilters() {
-                // Obtén los valores de los campos de filtro
-                const location = document.querySelector("input[name='location']")?.value.trim();
-                const status = document.querySelector("select[name='status']")?.value.trim();
-
-                // Verifica si estávacíos
-                if (!location && !status) {
-                    // Cancelar envío del formulario
-                    alert('Por favor, ingresa al menos un valor para filtrar.');
-                    return false;
-                }
-                // Si hay un valor
-                return true;
-            }
-        </script>
-    @endpush
-
-
-    {{-- funcion para obtener la descripcion --}}
-    @push('scripts')
-        <script>
-            let deleteUrl = '';
-
-            function openDeleteModal(url) {
-                deleteUrl = url;
-                document.getElementById('deleteModal').classList.remove('hidden');
-                document.getElementById('reason').value = '';
-            }
-
-            function closeDeleteModal() {
-                document.getElementById('deleteModal').classList.add('hidden');
-            }
-
-            function submitDeleteForm() {
-                const reason = document.getElementById('reason').value.trim();
-
-                if (!reason) {
-                    alert("Por favor, describa un motivo para eliminar.");
-                    return;
-                }
-
-                const form = document.getElementById('deleteForm');
-                form.action = deleteUrl;
-                document.getElementById('deletionReasonInput').value = reason;
-                form.submit();
-            }
-
-            function submit() {
-                alert("El Nvr a eliminar tiene cámaras conectadas.");
-                return;
-
-            }
-        </script>
-    @endpush
 
     <!-- Modal para confirmar eliminación con descripción -->
     <div id="deleteModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-50">

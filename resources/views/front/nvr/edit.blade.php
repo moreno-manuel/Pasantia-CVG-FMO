@@ -187,28 +187,4 @@
             </form>
         </div>
     </div>
-
-
-    {{-- para el campo nueva marca --}}
-    @push('scripts')
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const markSelect = document.getElementById('mark');
-                const otherBrandField = document.getElementById('other-brand-field');
-
-                markSelect.addEventListener('change', function() {
-                    if (markSelect.value === 'Otra') {
-                        otherBrandField.classList.remove('hidden');
-                    } else {
-                        otherBrandField.classList.add('hidden');
-                    }
-                });
-
-                // Si ya se había seleccionado "Otra" previamente (ej: al regresar por errores)
-                if (markSelect.value === 'Otra') {
-                    otherBrandField.classList.remove('hidden');
-                }
-            });
-        </script>
-    @endpush
 @endsection

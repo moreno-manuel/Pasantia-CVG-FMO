@@ -286,40 +286,4 @@
         <input type="hidden" name="deletion_description" id="deletionReasonInput">
     </form>
 
-    {{-- funcion para obtener la descripcion --}}
-    @push('scripts')
-        <script>
-            let deleteUrl = '';
-
-            function openDeleteModal(url) {
-                deleteUrl = url;
-                document.getElementById('deleteModal').classList.remove('hidden');
-                document.getElementById('reason').value = '';
-            }
-
-            function closeDeleteModal() {
-                document.getElementById('deleteModal').classList.add('hidden');
-            }
-
-            function submitDeleteForm() {
-                const reason = document.getElementById('reason').value.trim();
-
-                if (!reason) {
-                    alert("Por favor, describa un motivo para eliminar.");
-                    return;
-                }
-
-                const form = document.getElementById('deleteForm');
-                form.action = deleteUrl;
-                document.getElementById('deletionReasonInput').value = reason;
-                form.submit();
-            }
-
-            function submit() {
-                alert("El Nvr a eliminar tiene cámaras conectadas.");
-                return;
-            }
-        </script>
-    @endpush
-
 @endsection

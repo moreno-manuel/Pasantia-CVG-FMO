@@ -69,7 +69,7 @@ Route::controller(EquipmentDisuseController::class) //equipos eliminados
         Route::delete('{id}', 'destroy')->name('eliminated.destroy');
     });
 
-Route::controller(ReportController::class) //para exportar los reportes 
+Route::controller(ReportController::class) //para exportar los reportes y log
     ->prefix('reporte')
     ->middleware(ReportlAccesMiddleware::class)
     ->group(function () {

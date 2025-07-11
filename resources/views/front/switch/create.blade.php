@@ -90,7 +90,7 @@
                             <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
                         @enderror
                     </div>
-  
+
                     <!-- Campo Descripción -->
                     <div class="md:col-span-2">
                         <label for="descripcion" class="block text-sm font-semibold text-white">Descripción</label>
@@ -111,27 +111,4 @@
             </form>
         </div>
     </div>
-
-    {{-- para el campo nueva marca personalizada --}}
-    @push('scripts')
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const select = document.getElementById('mark');
-                const otherField = document.getElementById('other-brand-field');
-
-                select.addEventListener('change', function() {
-                    if (select.value === 'Otra') {
-                        otherField.classList.remove('hidden');
-                    } else {
-                        otherField.classList.add('hidden');
-                    }
-                });
-
-                // Mostrar campo si ya se había seleccionado "Other" (ej: tras error de validación)
-                if (select.value === 'Otra') {
-                    otherField.classList.remove('hidden');
-                }
-            });
-        </script>
-    @endpush
 @endsection
