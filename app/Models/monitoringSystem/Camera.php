@@ -4,13 +4,14 @@ namespace App\Models\monitoringSystem;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class Camera extends Model
 {
+    use LogsActivity;
+
     protected $table = 'cameras';
-    protected $primaryKey = 'mac';
-    public $incrementing  = false;
-    protected $keyType = 'string';
 
     protected $fillable = [
         'mac',
@@ -23,15 +24,16 @@ class Camera extends Model
         'status',
         'description'
     ];
+
     //Relaciones 
     public function conditionAttention()
     {
-        return $this->hasMany(ConditionAttention::class, 'camera_id', 'mac');
+        return $this->hasMany(ConditionAttention::class);
     }
 
     public function nvr()
     {
-        return $this->belongsTo(Nvr::class, 'nvr_id', 'mac');
+        return $this->belongsTo(Nvr::class);
     }
 
     //casteos 
@@ -93,5 +95,24 @@ class Camera extends Model
                 $camera->status = 'online';
             }
         });
+    }
+
+    //para logs
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'mac',
+                'mark',
+                'model',
+                'name',
+                'location',
+                'ip',
+                'description',
+                'nvr.mac',
+                'nvr.name',
+            ])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }

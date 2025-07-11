@@ -18,7 +18,7 @@ condición de atención */
 
 class ConditionAController extends Controller
 {
-    public function index(Request $request) ///muestra todo los registros
+    public function index(Request $request)
     {
         if (!$request->filled('name')) { //si no se aplica un filtro
             $conditions = ConditionAttention::where('status', 'por atender')
@@ -35,16 +35,16 @@ class ConditionAController extends Controller
 
     public function create()
     {
-        $cameras = Camera::where('status', 'offline')->select('name', 'mac')->get();
+        $cameras = Camera::where('status', '!=', 'online')->select('id', 'name', 'mac')->get();
 
-        if ($cameras->isEmpty())
+        if ($cameras->isEmpty()) //verifica que hayas camaras fuera de linea 
             return redirect()->back()->with('warning', 'No hay Cámaras fuera de servicio');
 
         $names = json_decode(file_get_contents(resource_path('js/data.json')), true)['conditions']; // json con los tipos de condicion
         return view('front.attention.create', compact('cameras', 'names'));
     }
 
-    public function store(Request $request) //guarda el registro nuevo
+    public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
@@ -87,22 +87,18 @@ class ConditionAController extends Controller
             'date_end' => $request->input('date_end'),
             'description' => $request->input('description'),
             'status' => $request->filled('date_end') ? 'Atendido' : 'Por atender' // Determinar el status de la condicion
-
-
         ]);
 
         return redirect()->route('atencion.index')->with('success', 'Condición de Atención agregada exitosamente.');
     }
 
-
-    public function edit($id) //vista para editar un registro
+    public function edit($id)
     {
         $condition = ConditionAttention::findOrFail($id);
         return view('front.attention.edit', compact('condition'));
     }
 
-
-    public function update(Request $request,  $id) //actualiza los datos de un registro
+    public function update(Request $request,  $id)
     {
 
         $validator = Validator::make($request->all(), [
@@ -120,9 +116,7 @@ class ConditionAController extends Controller
             return redirect()->back()->withInput()->withErrors($validator);
         }
 
-
         $condition = ConditionAttention::findOrFail($id);
-
         if ($request->filled('description')) { //si se agrega una descripción
             ControlCondition::create([
                 'condition_attention_id' => $condition->id,
@@ -133,25 +127,21 @@ class ConditionAController extends Controller
         $condition->update([
             'date_end' => $request->input('date_end'),
             'status' => $request->filled('date_end') ? 'Atendido' : 'Por atender'
-
         ]);
 
         return redirect()->route('atencion.index')->with('success', 'Condición de Atención actualizada exitosamente.');
     }
 
-
-    public function show($id) //muestra los detalles de un registro
+    public function show($id)
     {
         $condition = ConditionAttention::findOrFail($id);
         $controlConditions = $condition->controlCondition()->orderBy('created_at', 'desc')->paginate(5); //obtiene las descripciones de la condición
         return view('front.attention.show', compact('condition', 'controlConditions'));
     }
 
-
-    public function destroy($id) //Elimina un regitro 
+    public function destroy($id)
     {
         $condition = ConditionAttention::findOrFail($id);
-
         $condition->delete();
         return redirect()->route('atencion.index')->with('success', 'Condición de atención eliminada exitosamente.');
     }

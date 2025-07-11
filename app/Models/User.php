@@ -10,12 +10,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
+    use LogsActivity;
 
     protected $table = 'users';
 
@@ -51,7 +54,7 @@ class User extends Authenticatable
      */
     public function person(): BelongsTo
     {
-        return $this->belongsTo(Person::class, 'person_id', 'license');
+        return $this->belongsTo(Person::class);
     }
 
     public function questionsRecovery()
@@ -95,5 +98,20 @@ class User extends Authenticatable
     public function getRememberTokenName()
     {
         return 'remember_token';
+    }
+
+    //para logs
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'person.license',
+                'person.name',
+                'person.last_name',
+                'person.sex',
+                'userName',
+                'email',
+                'rol'
+            ]);
     }
 }

@@ -21,4 +21,7 @@ class SwitchDisuse extends Model
     {
         return $this->belongsTo(EquipmentDisuse::class);
     }
+
+
+    
 }

@@ -14,12 +14,12 @@ class CheckStatusController extends Controller
 
     public function home()
     {
-        $inactiveCameras = Camera::select(['mac', 'nvr_id', 'name', 'location', 'ip', 'status'])
+        $inactiveCameras = Camera::select(['id','mac', 'nvr_id', 'name', 'location', 'ip', 'status'])
             ->where('status', '!=', 'online')
             ->orderBy('location')
             ->paginate(10);
 
-        $inactiveNvr = Nvr::select(['mac', 'name', 'location', 'ip', 'status'])
+        $inactiveNvr = Nvr::select(['id', 'mac', 'name', 'location', 'ip', 'status'])
             ->where('status', '!=', 'online')
             ->orderBy('location')
             ->paginate(10);
@@ -39,7 +39,7 @@ class CheckStatusController extends Controller
         ];
 
         //procesa camaras 
-        $cameras = Camera::all(['mac', 'name', 'nvr_id', 'location', 'status', 'ip']);
+        $cameras = Camera::all(['id', 'mac', 'name', 'nvr_id', 'location', 'status', 'ip']);
         foreach ($cameras as $camera) {
             $camera->update([
                 'status' =>  Cache::get('camera_status_' . $camera->mac, 'conecting...')
@@ -47,7 +47,7 @@ class CheckStatusController extends Controller
             if ($camera->status != 'online')
                 $data['cameras'][] = [
                     'mac' => $camera->mac,
-                    'nvr' => $camera->nvr?->name,
+                    'nvr' => $camera->nvr->name,
                     'name' => $camera->name,
                     'location' => $camera->location,
                     'ip' => $camera->ip,
@@ -57,10 +57,10 @@ class CheckStatusController extends Controller
 
 
         // Procesa NVRs
-        $nvrs = Nvr::all(['mac', 'ip', 'name', 'location', 'status']);
+        $nvrs = Nvr::all(['id', 'mac', 'ip', 'name', 'location', 'status']);
         foreach ($nvrs as $nvr) {
             $nvr->update([
-                'status' => Cache::get('nvr_status_' . $nvr->mac, 'conecting...')
+                'status' => Cache::get('nvr_status_' . $nvr->id, 'conecting...')
             ]);
             if ($nvr->status != 'online')
                 $data['nvrs'][] = [

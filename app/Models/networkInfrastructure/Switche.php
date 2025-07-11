@@ -5,13 +5,16 @@ namespace App\Models\networkInfrastructure;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class Switche extends Model
 {
+    use LogsActivity;
+
+
     protected $table = 'switches';
-    protected $primaryKey = 'serial';
-    public $incrementing = false;
-    protected $keyType = 'string';
+
 
     protected $fillable = [
         'serial',
@@ -42,5 +45,21 @@ class Switche extends Model
         return Attribute::make(
             set: fn($location) => strtoupper($location),
         );
+    }
+
+    //para logs 
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'serial',
+                'mark',
+                'model',
+                'location',
+                'number_ports',
+                'description'
+            ])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }

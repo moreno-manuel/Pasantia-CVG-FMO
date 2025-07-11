@@ -22,25 +22,25 @@ crud de Camara */
 
 class CameraController extends Controller
 {
-    //
 
-    public function index(Request $request) //muestra tabla con registros de camara
+
+    public function index(Request $request)
     {
-        $hasFilters = $request->filled('location') ||    // Valida si hay algún filtro  de busqueda activo
+        $hasFilters = $request->filled('location') ||
             $request->filled('status');
 
         if (!$hasFilters) { //si no se aplica un filtro
             $cameras = Camera::with('nvr')
-            ->select('name','ip','location','mac','status','mark','model','nvr_id')
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+                ->select('name', 'ip', 'location', 'mac', 'status', 'mark', 'model', 'nvr_id')
+                ->orderBy('created_at', 'desc')
+                ->paginate(10);
             return view('front.camera.index', compact('cameras'));
         }
 
         return filter($request, 'cameras'); //helper
     }
 
-    public function create() // muestra formulario para nuevo registro
+    public function create()
     {
         $nvrsAll = Nvr::with('camera')->get();
 
@@ -53,7 +53,7 @@ class CameraController extends Controller
         return view('front.camera.create', compact('nvrs', 'marks'));
     }
 
-    public function store(Request $request) //valida los datos para un nuevo registro
+    public function store(Request $request)
     {
         try {
             $validator = Validator::make(
@@ -90,14 +90,12 @@ class CameraController extends Controller
         }
     }
 
-    public function edit($name) //muestra la vista para editar
+    public function edit($name)
     {
         try {
-
             $camera = Camera::where('name', $name)->firstOrFail();
             $nvrsAll = Nvr::with('camera')->get();
 
-            $camera = Camera::where('name', $name)->firstOrFail();
             $currentNvrId = $camera->nvr->mac;
 
             $nvrs = $nvrsAll->filter(function ($nvr) use ($currentNvrId) {
@@ -115,14 +113,14 @@ class CameraController extends Controller
         }
     }
 
-    public function update(Request $request, $mac) //valida los datos d edicion
+    public function update(Request $request, $mac)
     {
         try {
-            $camera = Camera::findOrFail($mac);
+            $camera = Camera::where('mac', $mac)->firstOrFail();
 
             $validator = Validator::make(
                 $request->all(),
-                [ //para capturar si hay dato incorrecto
+                [
                     'mark' => 'required',
                     'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
                     'nvr_id' => 'required',
@@ -158,10 +156,9 @@ class CameraController extends Controller
         }
     }
 
-    public function show($name) //muestra detalles de un registro 
+    public function show($name)
     {
         try {
-
             $camera = Camera::where('name', $name)->firstOrFail();
             $conditions = $camera->conditionAttention()->orderBy('created_at', 'desc')->paginate(5); // Cargar los registros de condicion de atención con paginación
 
@@ -171,11 +168,9 @@ class CameraController extends Controller
         }
     }
 
-    public function destroy(Request $request, $mac) //elimina un registro
+    public function destroy(Request $request, $mac)
     {
-
-        $camera = Camera::findOrFail($mac);
-
+        $camera = Camera::where('mac', $mac)->firstOrFail();
         $equipment = EquipmentDisuse::find($mac);
         if ($equipment)
             return redirect()->route('camara.index')->with('warning', 'Ya existe un registro eliminado con el mismo ID.');
@@ -188,9 +183,7 @@ class CameraController extends Controller
             'equipment' => 'Cámara',
             'description' => $request->input('deletion_description')
         ]);
-
         $nvr = $camera->nvr->mac . " - " . $camera->nvr->name; // para almecenar mac y nombre del nvr 
-
         CameraDisuse::create([
             'id' => $camera->mac,
             'name' => $camera->name,

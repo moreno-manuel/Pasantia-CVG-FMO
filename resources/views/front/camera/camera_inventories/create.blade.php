@@ -1,6 +1,7 @@
 @extends('layouts.app-home')
 @section('content')
     <!-- resources/views/front/camera/camera_inventories/create.blade.php -->
+    
     <div class="container mx-auto px-4 py-6">
         <div class="bg-gray-800 shadow overflow-hidden sm:rounded-lg p-6 border border-gray-700">
 

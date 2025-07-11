@@ -4,13 +4,14 @@ namespace App\Models\monitoringSystem;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class Nvr extends Model
 {
+    use LogsActivity;
+
     protected $table = 'nvrs';
-    protected $primaryKey = 'mac';
-    public $icrementing = false;
-    protected $keyType = 'string';
 
     protected $fillable = [
         'mac',
@@ -28,13 +29,13 @@ class Nvr extends Model
     //relaciones
     public function slotNvr()
     {
-        return $this->hasMany(SlotNvr::class, 'nvr_id', 'mac');
+        return $this->hasMany(SlotNvr::class);
     }
 
     public function camera()
     {
 
-        return $this->hasMany(Camera::class, 'nvr_id', 'mac');
+        return $this->hasMany(Camera::class);
     }
 
 
@@ -88,6 +89,8 @@ class Nvr extends Model
         return long2ip($value);
     }
 
+    //metodos especificos 
+
     //para calcular el nvr hay puertos disponibles 
     public function getAvailablePortsAttribute()
     {
@@ -103,5 +106,23 @@ class Nvr extends Model
                 $nvr->status = 'online';
             }
         });
+    }
+
+    //para logs
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'mac',
+                'mark',
+                'model',
+                'name',
+                'ip',
+                'ports_number',
+                'location',
+                'description'
+            ])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }

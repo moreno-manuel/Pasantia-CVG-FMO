@@ -19,7 +19,7 @@ class UserController extends Controller
 
     public function index()
     {
-        $persons = Person::orderBy('created_at', 'desc')->paginate(10);
+        $persons = Person::with('user')->orderBy('created_at', 'desc')->paginate(10);
         return view('front.user.index', compact('persons'));
     }
 
@@ -68,9 +68,8 @@ class UserController extends Controller
             'sex' => $request->input('sex'),
             'license' => $request->input('license')
         ]);
-
         User::create([
-            'person_id' => $person->license,
+            'person_id' => $person->id,
             'userName' => $request->input('userName'),
             'email' => $request->input('email'),
             'rol' => $request->input('rol'),
@@ -155,10 +154,10 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'Datos de usuario actualizados exitosamente ');
     }
 
-    public function destroy($person)
+    public function destroy($id)
     {
 
-        $person = Person::findOrFail($person);
+        $person = Person::findOrFail($id);
 
         if ($person->is(Auth::user()->person))
             return redirect()->route('users.index')->with('warning', 'No se puede eliminar el usuario logueado');

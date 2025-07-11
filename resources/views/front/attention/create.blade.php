@@ -57,8 +57,8 @@
                             required>
                             <option value="">Selecciona...</option>
                             @foreach ($cameras as $camera)
-                                <option value="{{ $camera->mac }}"
-                                    {{ old('camera_id') == $camera->mac ? 'selected' : '' }}>
+                                <option value="{{ $camera->id }}"
+                                    {{ old('camera_id') == $camera->id ? 'selected' : '' }}>
                                     {{ $camera->name }}
                                 </option>
                             @endforeach

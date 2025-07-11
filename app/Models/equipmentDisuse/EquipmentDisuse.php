@@ -24,21 +24,26 @@ class EquipmentDisuse extends Model
 
     public function switchDisuse()
     {
-        return $this->hasOne(SwitchDisuse::class,'id','id');
+        return $this->hasOne(SwitchDisuse::class, 'id', 'id');
     }
 
     public function linkDisuse()
     {
-        return $this->hasOne(LinkDisuse::class,'id','id');
+        return $this->hasOne(LinkDisuse::class, 'id', 'id');
     }
 
     public function cameraDisuse()
     {
-        return $this->hasOne(CameraDisuse::class,'id','id');
+        return $this->hasOne(CameraDisuse::class, 'id', 'id');
     }
 
     public function nvrDisuse()
     {
-        return $this->hasOne(NvrDisuse::class,'id','id');
+        return $this->hasOne(NvrDisuse::class, 'id', 'id');
+    }
+
+    public function cameraInventoriesDisuse()
+    {
+        return $this->hasOne(CameraInventoriesDisuse::class, 'id', 'id');
     }
 }

@@ -69,18 +69,19 @@
                 </dl>
             </div>
         </div>
+        {{-- Acciones --}}
         @if (auth()->user()->rol != 'lector')
             <!-- Acciones -->
             <div class="mt-6 flex space-x-3">
-                <a href="{{ route('switch.edit', $switch) }}"
+                <a href="{{ route('switch.edit', $switch->serial) }}"
                     class="inline-flex items-center px-3 py-1.5 bg-yellow-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-yellow-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
                     Editar
                 </a>
 
                 @if (auth()->user()->rol == 'admin')
                     <!-- Botón Eliminar -->
-                    <button type="button" onclick="openDeleteModal('{{ route('switch.destroy', $switch) }}')"
-                        class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                    <button type="button" onclick="openDeleteModal('{{ route('switch.destroy', $switch->serial) }}')"
+                        class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-red-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                         Eliminar
                     </button>
                 @endif
@@ -88,31 +89,7 @@
         @endif
     </div>
 
-    <!-- Modal para confirmar eliminación con descripción -->
-    <div id="deleteModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-50">
-        <div class="bg-white rounded-lg p-6 w-full max-w-md">
-            <h3 class="text-lg font-bold mb-4">Confirmar Eliminación</h3>
-            <p>¿Estás seguro de que deseas eliminar este switch?</p>
 
-            <label for="reason" class="block mt-4 mb-2 font-medium">Motivo de eliminación:</label>
-            <textarea id="reason" name="reason" rows="3"
-                class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-                placeholder="Describa el motivo..."></textarea>
-
-            <div class="mt-6 flex justify-end space-x-3">
-                <button type="button" onclick="closeDeleteModal()"
-                    class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">Cancelar</button>
-                <button type="button" onclick="submitDeleteForm()"
-                    class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Eliminar</button>
-            </div>
-        </div>
-    </div>
-
-    <form id="deleteForm" method="POST" style="display: none;">
-        @csrf
-        @method('DELETE')
-        <input type="hidden" name="deletion_description" id="deletionReasonInput">
-    </form>
 
     {{-- funcion para obtener la descripcion de eliminación --}}
     @push('scripts')
@@ -144,4 +121,30 @@
             }
         </script>
     @endpush
+
+    <!-- Modal para confirmar eliminación con descripción -->
+    <div id="deleteModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-50">
+        <div class="bg-white rounded-lg p-6 w-full max-w-md">
+            <h3 class="text-lg font-bold mb-4">Confirmar Eliminación</h3>
+            <p>¿Estás seguro de que deseas eliminar este switch?</p>
+
+            <label for="reason" class="block mt-4 mb-2 font-medium">Motivo de eliminación:</label>
+            <textarea id="reason" name="reason" rows="3"
+                class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+                placeholder="Describa el motivo..."></textarea>
+
+            <div class="mt-6 flex justify-end space-x-3">
+                <button type="button" onclick="closeDeleteModal()"
+                    class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">Cancelar</button>
+                <button type="button" onclick="submitDeleteForm()"
+                    class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <form id="deleteForm" method="POST" style="display: none;">
+        @csrf
+        @method('DELETE')
+        <input type="hidden" name="deletion_description" id="deletionReasonInput">
+    </form>
 @endsection

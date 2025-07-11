@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('switches', function (Blueprint $table) { //enlaces
-            $table->string('serial')->primary();
+        Schema::create('switches', function (Blueprint $table) { //switches
+            $table->bigIncrements('id');
+            $table->string('serial');
             $table->string('mark');
             $table->string('model');
             $table->string('location');
@@ -22,7 +23,8 @@ return new class extends Migration
         });
 
         Schema::create('links', function (Blueprint $table) { // enlaces
-            $table->string('mac')->primary();
+            $table->bigIncrements('id');
+            $table->string('mac');
             $table->string('mark');
             $table->string('model');
             $table->string('name');
@@ -34,7 +36,8 @@ return new class extends Migration
         });
 
         Schema::create('camera_inventories', function (Blueprint $table) { // enlaces
-            $table->string('mac')->primary();
+            $table->bigIncrements('id');
+            $table->string('mac');
             $table->string('mark');
             $table->string('model');
             $table->string('delivery_note'); //nota de entrega

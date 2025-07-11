@@ -112,7 +112,7 @@
         </div>
     </div>
 
-    {{-- para el campo marca  --}}
+    {{-- para el campo nueva marca personalizada --}}
     @push('scripts')
         <script>
             document.addEventListener('DOMContentLoaded', function() {

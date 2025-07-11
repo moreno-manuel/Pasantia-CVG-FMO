@@ -6,41 +6,44 @@ use App\Http\Controllers\Controller;
 use App\Models\EquipmentDisuse\EquipmentDisuse;
 use App\Models\EquipmentDisuse\SwitchDisuse;
 use App\Models\networkInfrastructure\Switche;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 use function app\Helpers\filter;
 use function app\Helpers\marksUpdate;
 
-//controlador para el crud del switch
+/* controlador para el 
+crud del switch */
+
 class SwitchController extends Controller
 {
 
-    public function index(Request $request) //muestra los registros en la tabla principal switch
+    public function index(Request $request)
     {
 
-        $hasFilters = $request->filled('serial') || // Valida si hay algún filtro activo
-            $request->filled('location');
+        $hasFilters = $request->filled('serial') ||
+            $request->filled('location'); 
 
         if (!$hasFilters) { //si no se aplica un filtro
-            $switches = Switche::select('serial','mark','model','number_ports','location')
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            $switches = Switche::select('serial', 'mark', 'model', 'number_ports', 'location')
+                ->orderBy('created_at', 'desc')
+                ->paginate(10);
             return view('front.switch.index', compact('switches'));
         }
 
         return filter($request, 'switches'); //helper
     }
 
-    public function create() //muestra la vista para crear un nuevo switch
+    public function create()
     {
-        $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['switch_marks']; // json con las marcas agregadas
+        $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['switch_marks']; // json con las marcas 
+
         return view('front.switch.create', compact('marks'));
     }
 
-    public function store(Request $request) //guarda los datos de un switch nuevo
+    public function store(Request $request)
     {
-
         $validator = Validator::make(
             $request->all(),
             [
@@ -61,24 +64,31 @@ class SwitchController extends Controller
             return redirect()->back()->withInput()->withErrors($validator);
         }
 
-        $request = marksUpdate($request, 'switch_marks');
+        $request = marksUpdate($request, 'switch_marks'); // wn caso de que haya una marca nueva
 
         Switche::create($request->all())->save();
         return redirect()->route('switch.index')->with('success', 'Switch creado exitosamente.');
     }
 
-    public function edit(Switche $switch) //muestra la vista para editar un switch
+    public function edit($serial)
     {
-        $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['switch_marks']; // json con las marcas agregadas
-        return view('front.switch.edit', compact('switch', 'marks'));
+        try {
+            $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['switch_marks']; // json con las marcas agregadas
+
+            $switch = Switche::where('serial', $serial)->firstOrFail();
+            return view('front.switch.edit', compact('switch', 'marks'));
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route('enlace.index')->with('warnings', 'Switch no encontrado');
+        }
     }
 
-    public function update(Request $request, Switche $switch) //Actualiza los datos de un switch
+    public function update(Request $request, $serial)
     {
+        $switch = Switche::where('serial', $serial)->firstOrFail();
 
         $validator = Validator::make(
             $request->all(),
-            [ //para capturar si hay dato incorrecto
+            [
                 'mark' => 'required',
                 'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
                 'number_ports' => 'required',
@@ -99,16 +109,19 @@ class SwitchController extends Controller
         return redirect()->route('switch.index')->with('success', 'Switch actualizado exitosamente.');
     }
 
-    public function show(Switche $switch) //muestra la vista y datos para los detalles un switch
+    public function show($serial)
     {
+        $switch = Switche::where('serial', $serial)->firstOrFail();
         return view('front.switch.show', compact('switch'));
     }
 
-    public function destroy(Switche $switch, Request $request) //Elimina un switch
+    public function destroy($serial, Request $request)
     {
-        $equipment = EquipmentDisuse::find($switch->serial);
+        $switch = Switche::where('serial', $serial)->firstOrFail();
 
-        if ($equipment)
+
+        $equipment = EquipmentDisuse::find($serial);
+        if ($equipment) //si en el historial de equipos eliminados existe el mismo serial
             return redirect()->route('switch.index')->with('warning', 'Ya existe un registro eliminado con el mismo ID.');
 
         EquipmentDisuse::create([
@@ -119,7 +132,6 @@ class SwitchController extends Controller
             'equipment' => 'Switch',
             'description' => $request->input('deletion_description')
         ]);
-
         SwitchDisuse::create([
             'id' => $switch->serial,
             'number_ports' => $switch->number_ports

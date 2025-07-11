@@ -20,7 +20,7 @@ class NvrExport implements ShouldAutoSize, WithDrawings, WithEvents
     {
         // Cargar NVR con su relación slot_nvr y cámaras
         $this->data = Nvr::with(['slotNvr', 'camera'])
-            ->select('name', 'ip', 'location', 'mac', 'mark', 'model', 'description', 'status', 'ports_number')
+            ->select('id', 'mac', 'mark', 'model', 'name', 'ip', 'location',  'description', 'status', 'ports_number')
             ->get()
             ->sortBy('location');
     }
@@ -64,7 +64,7 @@ class NvrExport implements ShouldAutoSize, WithDrawings, WithEvents
                     'Status',
                 ];
 
-                // Añadir encabezados dinámicos para cada slot (hasta 4)
+                // Añadir encabezados dinámicos para cada slot (hasta 2)
                 for ($i = 1; $i <= 2; $i++) {
                     $headers[] = " Vol. {$i} Capacidad/Max.(TB) ";
                     $headers[] = "Serial HDD (TB)";

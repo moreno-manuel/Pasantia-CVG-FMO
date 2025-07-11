@@ -9,9 +9,6 @@ use Illuminate\Database\Eloquent\Model;
 class Person extends Model
 {
     protected $table = 'persons';
-    protected $primaryKey = 'license'; // Clave primaria personalizada
-    public $incrementing = false; // Desactivar auto-incremento
-    protected $keyType = 'string'; // Tipo de la clave primaria
 
     protected $fillable = [
         'license',
@@ -30,7 +27,7 @@ class Person extends Model
      */
     public function user()
     {
-        return $this->hasOne(User::class, 'person_id', 'license');
+        return $this->hasOne(User::class);
     }
 
     //casteos convertir la primera letra en mayuscula

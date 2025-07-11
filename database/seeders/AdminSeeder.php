@@ -28,7 +28,7 @@ class AdminSeeder extends Seeder
             'email' => 'manuel@example.com',
             'password' => '0', 
             'rol' => 'admin',
-            'person_id' => $person->license,
+            'person_id' => $person->id,
         ]);
     }
 }

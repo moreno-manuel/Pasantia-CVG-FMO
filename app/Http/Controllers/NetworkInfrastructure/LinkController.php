@@ -16,36 +16,37 @@ use Illuminate\Validation\Rule;
 use function app\Helpers\filter;
 use function app\Helpers\marksUpdate;
 
-//controlador para el crud del Link (enlace)
+/* controlador para el 
+crud del Link (enlace) */
+
 class LinkController extends Controller
 {
-    public function index(Request $request) //muestra los registros en la tabla principal link
+    public function index(Request $request)
     {
-        // Valida si hay algún filtro activo
         $hasFilters = $request->filled('location');
 
-        if (!$hasFilters) { //si no se aplica un filtro
-            $links = Link::select('name','ip','ssid','location','model','mark','mac')
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+        if (!$hasFilters) {  // Valida si hay algún filtro activo
+            $links = Link::select('mac', 'name', 'mark', 'model', 'ssid', 'location', 'ip')
+                ->orderBy('created_at', 'desc')
+                ->paginate(10);
             return view('front.link.index', compact('links'));
         }
 
         return filter($request, 'links'); //helper
     }
 
-    public function create() //muestra la vista para crear un nuevo link
+    public function create()
     {
         $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['link_marks']; // json con las marcas agregadas
         return view('front.link.create', compact('marks'));
     }
 
-    public function store(Request $request) //guarda los datos de un link nuevo
+    public function store(Request $request)
     {
         try {
             $validator = Validator::make(
                 $request->all(),
-                [ //para capturar si hay dato incorrecto
+                [
                     'mac' => 'required|unique:links,mac|alpha_num|size:12',
                     'mark' => 'required',
                     'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
@@ -77,26 +78,25 @@ class LinkController extends Controller
         }
     }
 
-    public function edit($name) //muestra la vista para editar un link
+    public function edit($name)
     {
         try {
             $link = Link::where('name', $name)->firstOrFail();
             $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['link_marks']; // json con las marcas agregadas
             return view('front.link.edit', compact('link', 'marks'));
         } catch (ModelNotFoundException $e) {
-            return redirect()->route('enlace.index')->with('warnings', 'Nvr no encontrado');
+            return redirect()->route('enlace.index')->with('warnings', 'Enlace no encontrado');
         }
     }
 
-    public function update(Request $request,  $mac) //Actualiza los datos de un link
+    public function update(Request $request,  $mac)
     {
-
         try {
-            $link = Link::findOrFail($mac);
+             $link = Link::where('mac', $mac)->firstOrFail();
 
             $validator = Validator::make(
                 $request->all(),
-                [ //para capturar si hay dato incorrecto
+                [
                     'model' => 'required|alpha_dash|min:3',
                     'name' => [
                         'required',
@@ -133,7 +133,7 @@ class LinkController extends Controller
         }
     }
 
-    public function show($name) //muestra la vista y datos para los detalles un link
+    public function show($name)
     {
         try {
             $link = Link::where('name', $name)->firstOrFail();
@@ -143,11 +143,11 @@ class LinkController extends Controller
         }
     }
 
-    public function destroy(Request $request, $mac) //Elimina un link
+    public function destroy(Request $request, $mac)
     {
-        $link = Link::findOrFail($mac);
+        $link = Link::where('mac', $mac)->firstOrFail();
 
-        $equipment = EquipmentDisuse::find($mac);
+        $equipment = EquipmentDisuse::find($link->mac);
         if ($equipment)
             return redirect()->route('enlace.index')->with('warning', 'Ya existe un registro eliminado con el mismo ID.');
 
@@ -159,7 +159,6 @@ class LinkController extends Controller
             'equipment' => 'Enlace',
             'description' => $request->input('deletion_description')
         ]);
-
         LinkDisuse::create([
             'id' => $link->mac,
             'name' => $link->name,

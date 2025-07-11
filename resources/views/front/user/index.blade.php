@@ -68,7 +68,7 @@
                                         </a>
 
                                         <!-- Botón Eliminar -->
-                                        <form action="{{ route('users.destroy', $person) }}" method="POST">
+                                        <form action="{{ route('users.destroy', $person->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"

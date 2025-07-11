@@ -91,7 +91,6 @@
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Marca</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Modelo</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Nombre</th>
-                            <th class="px-6 py-3 text-center text-sm font-medium text-white">N°/Puertos</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">N°/Puertos Disponibles</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Localidad</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">IP</th>
@@ -107,7 +106,6 @@
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $nvr['mark'] }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $nvr['model'] }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $nvr['name'] }}</td>
-                                <td class="px-6 py-4 text-center text-sm text-white">{{ $nvr['ports_number'] }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $nvr->available_ports }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $nvr['location'] }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $nvr['ip'] }}</td>
@@ -144,7 +142,7 @@
                                                 @if (auth()->user()->rol == 'admin')
                                                     <!-- Botón Eliminar -->
                                                     <button type="button"
-                                                        onclick="openDeleteModal('{{ route('nvr.destroy', $nvr) }}')"
+                                                        onclick="openDeleteModal('{{ route('nvr.destroy', $nvr->mac) }}')"
                                                         class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                                                         Eliminar
                                                     </button>
@@ -192,31 +190,6 @@
         </script>
     @endpush
 
-    <!-- Modal para confirmar eliminación con descripción -->
-    <div id="deleteModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-50">
-        <div class="bg-white rounded-lg p-6 w-full max-w-md">
-            <h3 class="text-lg font-bold mb-4">Confirmar Eliminación</h3>
-            <p>¿Estás seguro de que deseas eliminar este Enlace?</p>
-
-            <label for="reason" class="block mt-4 mb-2 font-medium">Motivo de eliminación:</label>
-            <textarea id="reason" name="reason" rows="3"
-                class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-                placeholder="Describa el motivo..."></textarea>
-
-            <div class="mt-6 flex justify-end space-x-3">
-                <button type="button" onclick="closeDeleteModal()"
-                    class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">Cancelar</button>
-                <button type="button" onclick="submitDeleteForm()"
-                    class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Eliminar</button>
-            </div>
-        </div>
-    </div>
-
-    <form id="deleteForm" method="POST" style="display: none;">
-        @csrf
-        @method('DELETE')
-        <input type="hidden" name="deletion_description" id="deletionReasonInput">
-    </form>
 
     {{-- funcion para obtener la descripcion --}}
     @push('scripts')
@@ -254,4 +227,30 @@
             }
         </script>
     @endpush
+
+    <!-- Modal para confirmar eliminación con descripción -->
+    <div id="deleteModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-50">
+        <div class="bg-white rounded-lg p-6 w-full max-w-md">
+            <h3 class="text-lg font-bold mb-4">Confirmar Eliminación</h3>
+            <p>¿Estás seguro de que deseas eliminar este Enlace?</p>
+
+            <label for="reason" class="block mt-4 mb-2 font-medium">Motivo de eliminación:</label>
+            <textarea id="reason" name="reason" rows="3"
+                class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+                placeholder="Describa el motivo..."></textarea>
+
+            <div class="mt-6 flex justify-end space-x-3">
+                <button type="button" onclick="closeDeleteModal()"
+                    class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">Cancelar</button>
+                <button type="button" onclick="submitDeleteForm()"
+                    class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <form id="deleteForm" method="POST" style="display: none;">
+        @csrf
+        @method('DELETE')
+        <input type="hidden" name="deletion_description" id="deletionReasonInput">
+    </form>
 @endsection

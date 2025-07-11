@@ -1,6 +1,7 @@
 @extends('layouts.app-home')
 @section('content')
     <!-- resources/views/front/link/create.blade.php -->
+
     <div class="container mx-auto px-4 py-6">
         <div class="bg-gray-800 shadow overflow-hidden sm:rounded-lg p-6 border border-gray-700">
 
@@ -139,7 +140,7 @@
         </div>
     </div>
 
-    {{-- para el campo marca  --}}
+    {{-- para el campo marca personalizada  --}}
     @push('scripts')
         <script>
             document.addEventListener('DOMContentLoaded', function() {

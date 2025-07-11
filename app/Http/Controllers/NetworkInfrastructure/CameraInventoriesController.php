@@ -17,15 +17,16 @@ crud de camaras en inventario */
 
 class CameraInventoriesController extends Controller
 {
-    //
-    public function index(Request $request) //lista los registros 
+
+    public function index(Request $request)
     {
-        // Valida si hay algún filtro activo
         $hasFilters = $request->filled('mark') ||
             $request->filled('delivery_note');
 
-        if (!$hasFilters) {
-            $cameras = CameraInventory::orderBy('created_at', 'desc')->paginate(10);
+        if (!$hasFilters) { // Valida si hay algún filtro activo
+            $cameras = CameraInventory::select('mac', 'mark', 'model', 'delivery_note', 'destination', 'description')
+                ->orderBy('created_at', 'desc')
+                ->paginate(10);
 
             $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['marks']; // json con las marcas agregadas
 
@@ -35,15 +36,14 @@ class CameraInventoriesController extends Controller
         return filter($request, 'camera_inventories');
     }
 
-    public function create() //muestra el formulario 
-    { 
+    public function create()
+    {
         $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['marks']; // json con las marcas agregadas
         return view('front.camera.camera_inventories.create', compact('marks'));
     }
 
-    public function store(Request $request) // registra un nuevo registro
+    public function store(Request $request)
     {
-
         $validator = Validator::make(
             $request->all(),
             [
@@ -64,7 +64,7 @@ class CameraInventoriesController extends Controller
             return redirect()->back()->withInput()->withErrors($validator);
         }
 
-        $request = marksUpdate($request, 'marks');
+        $request = marksUpdate($request, 'marks'); //verifica si hay una marca nueva
 
         CameraInventory::create($request->all())->save();
         return redirect()->route('inventories.index')->with('success', 'Cámara agregada exitosamente');
@@ -72,10 +72,10 @@ class CameraInventoriesController extends Controller
 
     public function destroy($mac, Request $request) //elimina un registro
     {
-        $camera = CameraInventory::findOrFail($mac);
+        $camera = CameraInventory::where('mac', $mac)->firstOrFail();
 
         $equipment = EquipmentDisuse::find($mac);
-        if ($equipment)
+        if ($equipment) //verifica si hay un regisro e eliminados con la misma mac
             return redirect()->route('inventories.index')->with('warning', 'Ya existe un registro eliminado con el mismo ID.');
 
         EquipmentDisuse::create([
@@ -86,7 +86,6 @@ class CameraInventoriesController extends Controller
             'location' => 'No Aplica',
             'description' => $request->input('deletion_description')
         ]);
-
         CameraInventoriesDisuse::create([
             'id' => $camera->mac,
             'destination' => $camera->destination,

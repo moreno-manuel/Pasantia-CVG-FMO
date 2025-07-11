@@ -20,7 +20,7 @@ class SlotNvr extends Model
     //Relaciones
     public function nvr()
     {
-        return $this->belongsTo(Nvr::class, 'nvr_id', 'mac');
+        return $this->belongsTo(Nvr::class);
     }
 
     //casteos

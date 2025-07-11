@@ -25,36 +25,33 @@ y sus volumenes */
 
 class NvrController extends Controller
 {
-    //
 
-    public function index(Request $request) // Lista de registros
+    public function index(Request $request)
     {
-
-        $hasFilters = $request->filled('location') ||     // Valida si hay algún filtro activo
+        $hasFilters = $request->filled('location') ||
             $request->filled('status');
 
-        if (!$hasFilters) { //si no se aplica un filtro
-            $nvrs = Nvr::select('mac','mark','model','name','ip','ports_number','location','status')
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+        if (!$hasFilters) { // Valida si hay algún filtro activo
+            $nvrs = Nvr::select('id', 'mac', 'mark', 'model', 'name', 'ip', 'ports_number', 'location', 'status')
+                ->orderBy('created_at', 'desc')
+                ->paginate(10);
             return view('front.nvr.index', compact('nvrs'));
         }
 
         return filter($request, 'nvrs'); //helper
     }
 
-    public function create() //muestra el  formulario de validacion
+    public function create()
     {
         $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['marks']; // json con las marcas agregadas
         return view('front.nvr.create', compact('marks'));
     }
 
-    public function store(Request $request) //validad cuando se crea un nuevo registro
+    public function store(Request $request)
     {
-        try { //try para para evitar ip duplicadas
-
-            $validated = $request->validate(
-                [  // Validación principal del NVR
+        try {
+            $request->validate(
+                [
                     'mac' => 'required|unique:nvrs,mac|alpha_num|min:10|max:12',
                     'mark' => 'required',
                     'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
@@ -70,23 +67,19 @@ class NvrController extends Controller
                 ['name' => 'Nombre', 'location' => 'Localidad', 'model' => 'Modelo']
             );
 
-            $slots = nvrSlotValidateCreate($request); //valida slot y devuelve un arreglo con datos de los slots 
+            $slots = nvrSlotValidateCreate($request); //validacion para (slot)
 
-            $request = marksUpdate($request, 'marks');
+            $request = marksUpdate($request, 'marks'); //si hay  una marca nueva
 
-            Nvr::create($request->all());       // Guarda el NVR
+            $nvr = Nvr::create($request->all());
 
-            foreach ($slots as $index => $slot) { // Guarda los datos para cada volumen (slot)
-                $status = 'Disponible';
-                if ($slot['serial_disco'] != null) {
-                    $status = 'Ocupado';
-                }
+            foreach ($slots as $index => $slot) { // Guarda los datos para cada (slot)
                 SlotNvr::create([
-                    'nvr_id' => $validated['mac'],
+                    'nvr_id' => $nvr->id,
                     'hdd_serial' => $slot['serial_disco'],
                     'hdd_capacity' => $slot['capacidad_disco'],
                     'capacity_max' => $slot['capacidad_max_volumen'],
-                    'status' => $status
+                    'status' => $slot['serial_disco'] == null ? 'Disponible' : 'Ocupado'
                 ]);
             }
 
@@ -100,7 +93,7 @@ class NvrController extends Controller
         }
     }
 
-    public function edit($name) //muestra el formulario editar 
+    public function edit($name)
     {
         try {
             $nvr = Nvr::where('name', $name)->firstOrFail();
@@ -112,12 +105,12 @@ class NvrController extends Controller
         }
     }
 
-    public function update(Request $request, Nvr $nvr) //valida la actualizacion 
+    public function update(Request $request, $mac)
     {
-        try { //try para para evitar ip duplicadas
-
-            $validated = $request->validate(
-                [       // Validación principal del NVR
+        try {
+            $nvr = Nvr::where('mac', $mac)->firstOrFail();
+            $request->validate(
+                [
                     'mark' => 'required',
                     'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
                     'model' => 'required|alpha_dash|min:3',
@@ -135,21 +128,17 @@ class NvrController extends Controller
 
             $request = marksUpdate($request, 'marks');
 
-            $nvr->update($request->all());   // actualiza nvr
+            $nvr->update($request->all());
 
             $slots = $nvr->slotNvr;  //slots que seran actualizados 
             $i = 0;
             foreach ($slotsRequest as $slotData) { // actualiza volumen (sltos)
                 $slot = $slots[$i];
-                $status = 'Disponible';
-                if ($slotData['serial_disco'] != null) {
-                    $status = 'Ocupado';
-                }
                 if ($slot) {
                     $slot->update([
                         'hdd_serial' => $slotData['serial_disco'],
                         'hdd_capacity' => $slotData['capacidad_disco'],
-                        'status' => $status,
+                        'status' => $slotData['serial_disco'] == null ? 'Disponible' : 'Ocupado'
                     ]);
                 }
                 $i++;
@@ -165,7 +154,7 @@ class NvrController extends Controller
         }
     }
 
-    public function show($name) //muestra los datos de un registro
+    public function show($name)
     {
         try {
             $nvr = Nvr::where('name', $name)->firstOrFail();
@@ -176,9 +165,11 @@ class NvrController extends Controller
         }
     }
 
-    public function destroy(Request $request, Nvr $nvr) //elimina un nvr
+    public function destroy(Request $request, $mac) //elimina un nvr
     {
-        $equipment = EquipmentDisuse::find($nvr->mac);
+        $nvr = Nvr::where('mac', $mac)->firstOrFail();
+
+        $equipment = EquipmentDisuse::find($mac);
         if ($equipment)
             return redirect()->route('nvr.index')->with('warning', 'Ya existe un registro eliminado con el mismo ID.');
 
@@ -191,7 +182,6 @@ class NvrController extends Controller
             'equipment' => 'Nvr',
             'description' => $request->input('deletion_description')
         ]);
-
         NvrDisuse::create([
             'id' => $nvr->mac,
             'name' => $nvr->name,
@@ -202,7 +192,7 @@ class NvrController extends Controller
 
         foreach ($nvr->slotNvr as  $slot) {
             SlotNvrDisuse::create([
-                'nvr_id' => $slot->nvr_id,
+                'nvr_id' => $nvr->mac,
                 'capacity_max' => $slot->capacity_max
             ]);
         }

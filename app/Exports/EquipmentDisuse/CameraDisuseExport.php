@@ -10,7 +10,7 @@ class CameraDisuseExport extends EquipmentDisuseExport implements WithTitle
 {
     public function collection()
     {
-        return EquipmentDisuse::where('equipment', 'Cámara')->with('cameraDisuse')->get()->sortBy('nvr');
+        return EquipmentDisuse::where('equipment', 'Cámara')->with(['cameraDisuse', 'cameraInventoriesDisuse'])->get()->sortBy('nvr');
     }
 
     public function getSheetName(): string
@@ -31,15 +31,16 @@ class CameraDisuseExport extends EquipmentDisuseExport implements WithTitle
     public function map($device): array
     {
         $camera = optional($device->cameraDisuse);
+        $cameraInventories = optional($device->cameraInventoriesDisuse);
 
         return [
             $device->id,
             $device->mark,
             $device->model,
-            $camera->name,
-            $camera->nvr,
-            $camera->ip,
-            $device->location,
+            $camera->name ?? 'Nota de Entrega - ' . $cameraInventories->delivery_note,
+            $camera->nvr ?? 'No aplica',
+            $camera->ip ?? 'No aplica',
+            $device->location != 'No Aplica' ?: 'Destino - ' . $cameraInventories->destination,
             $device->description,
             $device->created_at->format('d/m/Y')
         ];
@@ -47,6 +48,6 @@ class CameraDisuseExport extends EquipmentDisuseExport implements WithTitle
 
     public function title(): string
     {
-        return 'Cámaras'; 
+        return 'Cámaras';
     }
 }

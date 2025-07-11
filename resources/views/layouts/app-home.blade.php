@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'App')</title>
+    <title>@yield('title', 'KrhonosVision')</title>
     <script src="https://cdn.tailwindcss.com "></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css ">
 </head>
@@ -18,7 +18,7 @@
         </aside>
 
         <!-- Main Content -->
-        <main class="flex-1 ml-64 p-6 overflow-y-auto relative">
+        <main id="app" class="flex-1 ml-64 p-6 overflow-y-auto relative">
 
             <!-- Contenedor para mensajes -->
             <div class="relative z-20">
@@ -93,6 +93,16 @@
                                 closeAlertSmooth('alert-warning');
                             }, 3000);
                         });
+
+                        function closeAlertSmooth(id) {
+                            const alert = document.getElementById(id);
+                            alert.classList.add('opacity-0', 'translate-y-10', 'scale-95');
+                            alert.classList.remove('pointer-events-none');
+
+                            setTimeout(() => {
+                                if (alert) alert.remove();
+                            }, 300);
+                        }
                     </script>
                 @endif
             </div>
@@ -110,6 +120,71 @@
     </footer>
 
     @stack('scripts')
+
+
+    <!-- Loader -->
+    <div id="loading-spinner"
+        class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="flex flex-col items-center">
+            <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white"></div>
+            <p class="mt-4 text-white text-lg">Cargando...</p>
+        </div>
+    </div>
+
+    {{-- para no recargar la pagina --}}
+    <script>
+        // Función para mostrar el spinner
+        function showLoader() {
+            document.getElementById('loading-spinner').classList.remove('hidden');
+        }
+
+        // Función para ocultar el spinner
+        function hideLoader() {
+            document.getElementById('loading-spinner').classList.add('hidden');
+        }
+
+        async function loadContent(url) {
+            showLoader();
+
+            try {
+                const response = await fetch(url);
+                const text = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(text, "text/html");
+
+                const newContent = doc.querySelector("main").innerHTML;
+
+                // Forzar un retraso mínimo de 200ms
+                await new Promise(resolve => setTimeout(resolve, 200));
+
+                document.getElementById("app").innerHTML = newContent;
+                history.pushState(null, '', url);
+            } catch (error) {
+                console.error("Error al cargar el contenido:", error);
+                document.getElementById("app").innerHTML =
+                    `<div class="p-4 text-red-600">Error al cargar el contenido.</div>`;
+            } finally {
+                hideLoader();
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.body.addEventListener("click", function(e) {
+                const link = e.target.closest("a");
+                if (link && link.href) {
+                    e.preventDefault();
+                    const url = link.getAttribute("href");
+                    loadContent(url);
+                }
+            });
+
+            window.addEventListener("popstate", () => {
+                loadContent(location.pathname);
+            });
+        });
+    </script>
+
+
 </body>
 
 </html>

@@ -4,13 +4,14 @@ namespace App\Models\networkInfrastructure;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class Link extends Model
 {
+    use LogsActivity;
+
     protected $table = 'links';
-    protected $primaryKey = 'mac';
-    public $incrementing = false;
-    protected $keyType = 'string';
 
     protected $fillable = [
         'mac',
@@ -71,5 +72,23 @@ class Link extends Model
         return Attribute::make(
             set: fn($location) => strtoupper($location),
         );
+    }
+
+    //para logs
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'mac',
+                'mark',
+                'model',
+                'name',
+                'ssid',
+                'location',
+                'ip',
+                'description'
+            ])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }

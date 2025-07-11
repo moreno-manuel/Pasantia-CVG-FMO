@@ -81,7 +81,7 @@
                             required>
                             <option value="">Seleccione...</option>
                             @foreach ($nvrs as $nvr)
-                                <option value="{{ $nvr->mac }}" {{ old('nvr_id') == $nvr->mac ? 'selected' : '' }}>
+                                <option value="{{ $nvr->id }}" {{ old('nvr_id') == $nvr->id ? 'selected' : '' }}>
                                     {{ $nvr->name }}
                                 </option>
                             @endforeach
@@ -144,7 +144,7 @@
         </div>
     </div>
 
-    {{-- para el campo marca  --}}
+    {{-- para el campo marca personalizada  --}}
     @push('scripts')
         <script>
             document.addEventListener('DOMContentLoaded', function() {

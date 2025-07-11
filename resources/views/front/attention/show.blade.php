@@ -99,6 +99,9 @@
 
         <br>
         <br>
+
+
+        {{-- tabla de control de la condicion --}}
         <div class="flex justify-left items-center mb-6">
             <h1 class="font-bold text-white bg-gray-800 rounded-md px-3 py-1">Control de la condición</h1>
         </div>

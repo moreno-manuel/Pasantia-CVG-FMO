@@ -4,21 +4,23 @@ namespace App\Models\networkInfrastructure;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class CameraInventory extends Model
 {
+    use LogsActivity;
+
     protected $table = 'camera_inventories';
-    protected $primaryKey = 'mac';
-    public $incrementing = false;
-    protected $keyType = 'String';
+
 
     protected $fillable = [
         'mac',
-        'model',
         'mark',
+        'model',
         'delivery_note',
-        'description',
-        'destination'
+        'destination',
+        'description'
     ];
 
     //casteos 
@@ -35,5 +37,21 @@ class CameraInventory extends Model
         return Attribute::make(
             set: fn($mac) => strtoupper($mac),
         );
+    }
+
+    //para logs
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'mac',
+                'mark',
+                'model',
+                'delivery_note',
+                'destination',
+                'description'
+            ])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }

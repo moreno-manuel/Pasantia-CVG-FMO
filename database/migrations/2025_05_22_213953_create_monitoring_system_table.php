@@ -9,7 +9,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('nvrs', function (Blueprint $table) {
-            $table->string('mac')->primary();
+            $table->bigIncrements('id');
+            $table->string('mac');
             $table->string('mark');
             $table->string('model');
             $table->string('name')->unique()->required();
@@ -23,9 +24,10 @@ return new class extends Migration
         });
 
         Schema::create('slot_nvrs', function (Blueprint $table) {
-            $table->id();
-            $table->string('nvr_id');
-            $table->foreign('nvr_id')->references('mac')->on('nvrs')->onDelete('cascade');
+            $table->bigIncrements('id');
+            $table->foreignId('nvr_id')
+                ->constrained('nvrs')
+                ->onDelete('cascade');
             $table->bigInteger('capacity_max');
             $table->string('hdd_serial')->nullable();
             $table->bigInteger('hdd_capacity')->nullable();
@@ -34,9 +36,11 @@ return new class extends Migration
         });
 
         Schema::create('cameras', function (Blueprint $table) {
-            $table->string('mac')->primary();
-            $table->string('nvr_id');
-            $table->foreign('nvr_id')->references('mac')->on('nvrs');
+            $table->bigIncrements('id');
+            $table->string('mac');
+            $table->foreignId('nvr_id')
+                ->constrained('nvrs')
+                ->onDelete('cascade');
             $table->string('mark');
             $table->string('model');
             $table->string('name')->unique()->required();
@@ -49,8 +53,9 @@ return new class extends Migration
 
         Schema::create('condition_attentions', function (Blueprint $table) {
             $table->id();
-            $table->string('camera_id');
-            $table->foreign('camera_id')->references('mac')->on('cameras')->onDelete('cascade');
+            $table->foreignId('camera_id')
+                ->constrained('cameras')
+                ->onDelete('cascade');
             $table->string('name');
             $table->date('date_ini');
             $table->date('date_end')->nullable();

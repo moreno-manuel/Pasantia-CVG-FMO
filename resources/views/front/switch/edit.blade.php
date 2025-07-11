@@ -16,7 +16,7 @@
             </div>
 
             {{-- Formulario --}}
-            <form action="{{ route('switch.update', $switch) }}" method="POST">
+            <form action="{{ route('switch.update', $switch->serial) }}" method="POST">
                 @csrf
                 @method('PUT')
 
@@ -110,7 +110,7 @@
         </div>
     </div>
 
-    {{-- para el campo marca  --}}
+    {{-- para el campo marca personalizada --}}
     @push('scripts')
         <script>
             document.addEventListener('DOMContentLoaded', function() {

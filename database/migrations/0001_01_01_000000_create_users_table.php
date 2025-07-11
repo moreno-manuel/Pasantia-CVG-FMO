@@ -11,7 +11,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('persons', function (Blueprint $table) {
-            $table->string('license')->primary(); // ficha
+            $table->bigIncrements('id');
+            $table->string('license');
             $table->string('name');
             $table->string('last_name');
             $table->string('sex');
@@ -20,9 +21,10 @@ return new class extends Migration
 
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('person_id')
+                ->constrained('persons')
+                ->onDelete('cascade');
             $table->string('userName')->unique();
-            $table->string('person_id');
-            $table->foreign('person_id')->references('license')->on('persons')->onDelete('cascade');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

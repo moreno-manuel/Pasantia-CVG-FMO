@@ -18,7 +18,7 @@
             </div>
 
             {{-- Formulario --}}
-            <form action="{{ route('nvr.update', $nvr) }}" method="POST">
+            <form action="{{ route('nvr.update', $nvr->mac) }}" method="POST">
                 @csrf
                 @method('PUT')
 

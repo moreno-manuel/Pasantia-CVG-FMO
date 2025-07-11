@@ -81,6 +81,8 @@ Route::controller(ReportController::class) //para exportar los reportes
         Route::get('camera', 'exportCamera')->name('export.camera');
         Route::get('disuse', 'exportEquipmentDisuse')->name('export.EquipmentDisuse');
         Route::get('report', 'exportReport')->name('export.report');
+        Route::get('log', 'exportLog')->name('export.log');
+
     });
 
 
