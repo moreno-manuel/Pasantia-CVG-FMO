@@ -36,37 +36,79 @@ class ReportController extends Controller
 
     public function exportCamera()
     {
-        return Excel::download(new CameraExport(), 'Inventario_Camara.xlsx');
+        set_time_limit(300); // Solo aplica a esta ruta
+
+        try {
+            return Excel::download(new CameraExport(), 'Inventario_Cámaras_' . now()->format('Ymd_His') . '.xlsx');
+        } catch (\Exception $e) {
+            return back()->withError('Error al exportar: ' . $e->getMessage());
+        }
     }
 
     public function exportNvr()
     {
-        return Excel::download(new NvrExport(), 'Inventario_Nvr.xlsx');
+        set_time_limit(300);
+
+        try {
+            return Excel::download(new NvrExport(), 'Inventario_Nvr_' . now()->format('Ymd_His') . '.xlsx');
+        } catch (\Exception $e) {
+            return back()->withError('Error al exportar: ' . $e->getMessage());
+        }
     }
 
     public function exportCameraStock()
     {
-        return Excel::download(new CameraStockExport(), 'Inventario_Camaras_Stock.xlsx');
+        set_time_limit(300);
+
+        try {
+            return Excel::download(new CameraStockExport(), 'Inventario_Cámaras_Stock' . now()->format('Ymd_His') . '.xlsx');
+        } catch (\Exception $e) {
+            return back()->withError('Error al exportar: ' . $e->getMessage());
+        }
     }
 
     public function exportSwitch()
     {
-        return Excel::download(new SwitchExport(), 'Inventario_Switches.xlsx');
+        set_time_limit(300);
+
+        try {
+            return Excel::download(new SwitchExport(), 'Inventario_Switches_' . now()->format('Ymd_His') . '.xlsx');
+        } catch (\Exception $e) {
+            return back()->withError('Error al exportar: ' . $e->getMessage());
+        }
     }
 
     public function exportLink()
     {
-        return Excel::download(new LinkExport(), 'Inventario_Enlaces.xlsx');
+        set_time_limit(300);
+
+        try {
+            return Excel::download(new LinkExport(), 'Inventario_Enlaces_' . now()->format('Ymd_His') . '.xlsx');
+        } catch (\Exception $e) {
+            return back()->withError('Error al exportar: ' . $e->getMessage());
+        }
     }
 
     public function exportEquipmentDisuse()
     {
-        return Excel::download(new ReportEquipmentDisuse(), 'Equipos_Eliminados.xlsx');
+        set_time_limit(300);
+
+        try {
+            return Excel::download(new ReportEquipmentDisuse(), 'Equipos_Eliminados_' . now()->format('Ymd_His') . '.xlsx');
+        } catch (\Exception $e) {
+            return back()->withError('Error al exportar: ' . $e->getMessage());
+        }
     }
 
     public function exportReport()
     {
-        return Excel::download(new ReportFinalExport(), 'Informe_Final.xlsx');
+        set_time_limit(300);
+
+        try {
+            return Excel::download(new ReportFinalExport(), 'Informe_Final.xlsx');
+        } catch (\Exception $e) {
+            return back()->withError('Error al exportar: ' . $e->getMessage());
+        }
     }
 
     public function exportLog(Request $request)
@@ -109,7 +151,7 @@ class ReportController extends Controller
         foreach ($records as $record) {
 
             $user = User::find($record->subject_id);    // Buscar el usuario por subject_id
-            $userName = $user ? $user->userName: 'Desconocido';
+            $userName = $user ? $user->userName : 'Desconocido';
 
             // Concatenar al contenido
             $content .= "ID: {$record->id} | Usuario: {$userName} | Descripción: {$record->description} | Objeto: {$record->subject_type} | Evento: {$record->event}  | Propiedades: {$record->properties} | Fecha: {$record->created_at} \n";

@@ -149,11 +149,6 @@ abstract class BaseReportExport implements WithEvents, WithDrawings, WithHeading
                     ->getAlignment()
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
-                // Ancho automático
-                foreach (range('A', 'I') as $col) {
-                    $phpSheet->getColumnDimension($col)->setAutoSize(true);
-                }
-
                 // Protección de hoja
                 $phpSheet->getProtection()->setSheet(true);
             },

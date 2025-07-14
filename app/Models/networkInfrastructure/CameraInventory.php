@@ -50,8 +50,6 @@ class CameraInventory extends Model
                 'delivery_note',
                 'destination',
                 'description'
-            ])
-            ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
+            ]);
     }
 }

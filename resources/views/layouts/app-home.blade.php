@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'KrhonosVision')</title>
-    <script src="https://cdn.tailwindcss.com "></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css ">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body class="bg-gray-100 min-h-screen flex flex-col">
@@ -115,13 +115,14 @@
     </div>
 
     <!-- Loader -->
-    <div id="loading-spinner"
-        class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div id="loading-spinner" class="fixed inset-0 bg-black-opaco  flex items-center justify-center z-50 hidden">
         <div class="flex flex-col items-center">
             <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white"></div>
             <p class="mt-4 text-white text-lg">Cargando...</p>
         </div>
     </div>
+
+
 
     <script>
         // Función para mostrar el spinner
@@ -134,7 +135,7 @@
             document.getElementById('loading-spinner').classList.add('hidden');
         }
 
-        // transisicon 
+        // cargar contenido
         async function loadContent(url) {
             showLoader();
 
@@ -151,12 +152,11 @@
 
                 document.getElementById("app").innerHTML = newContent;
 
-                // Inicializar scripts dinámicos
+                history.pushState(null, '', url);
+
+                /* inicia scripts */
                 initDynamicScripts();
                 initScripts();
-                initDeviceStatusUpdate();
-
-                history.pushState(null, '', url);
             } catch (error) {
                 console.error("Error al cargar el contenido:", error);
                 document.getElementById("app").innerHTML =
@@ -176,16 +176,13 @@
                     "_blank") { // Permitir que el navegador maneje la navegación normalmente (descargas)
                     return;
                 }
-
                 e.preventDefault();
                 loadContent(url);
             }
-            // Inicializar scripts dinámicos
-            initDynamicScripts();
 
         });
 
-        // Cpara para personalizar
+        // para para personalizar
         function initDynamicScripts() {
 
             //perrsonaliza marca
@@ -216,6 +213,7 @@
                 }
             }
 
+            //para eliminar nvr con camaras conectadas
             window.submit = function() {
                 alert("El Nvr a eliminar tiene cámaras conectadas.");
                 return false;
@@ -319,107 +317,12 @@
             };
         }
 
-
-        // Llamamos por primera vez y programamos la repetición
-        function initDeviceStatusUpdate() {
-            const cameraTable = document.getElementById('camera-status-table');
-            const nvrTable = document.getElementById('nvr-status-table');
-
-            if (!cameraTable && !nvrTable) return;
-
-            function updateDeviceStatus() {
-                fetch("{{ route('test.check') }}")
-                    .then(response => response.json())
-                    .then(data => {
-                        if (cameraTable) updateTable('camera-status-table', data.cameras, 'camera');
-                        if (nvrTable) updateTable('nvr-status-table', data.nvrs, 'nvr');
-                    })
-                    .catch(error => {
-                        console.error('Error al actualizar estados:', error);
-                        if (cameraTable) showError('camera-status-table', 'Error en cámaras');
-                        if (nvrTable) showError('nvr-status-table', 'Error en NVRs');
-                    });
-            }
-
-
-            //para monitoreo 
-            function updateTable(tableId, devices, type) {
-                const tableBody = document.getElementById(tableId);
-                tableBody.innerHTML = '';
-
-                if (devices.length === 0) {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-400 italic">
-                    No hay equipos inactivos
-                </td>
-            `;
-                    tableBody.appendChild(row);
-                    return;
-                }
-
-                devices.forEach(device => {
-                    const row = document.createElement('tr');
-                    row.className = 'hover:bg-gray-900 transition-colors duration-150';
-
-                    if (type === 'camera') {
-                        row.innerHTML = `
-                    <td class="px-6 py-4 text-center text-sm text-white">${device.mac}</td>
-                    <td class="px-6 py-4 text-center text-sm text-white">${device.nvr || '-'}</td>
-                    <td class="px-6 py-4 text-center text-sm text-white">${device.name}</td>
-                    <td class="px-6 py-4 text-center text-sm text-white">${device.location}</td>
-                    <td class="px-6 py-4 text-center text-sm text-white">${device.ip}</td>
-                    <td class="px-6 py-4 text-center text-sm">
-                        <span id="status-${device.mac}" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                            ${device.status === 'offline' ? 'bg-red-600 text-red-100' : 'bg-yellow-600 text-yellow-100'}">
-                            ${device.status}
-                        </span>
-                    </td>
-                `;
-                    } else {
-                        row.innerHTML = `
-                    <td class="px-6 py-4 text-center text-sm text-white">${device.mac}</td>
-                    <td class="px-6 py-4 text-center text-sm text-white">${device.name}</td>
-                    <td class="px-6 py-4 text-center text-sm text-white">${device.location}</td>
-                    <td class="px-6 py-4 text-center text-sm text-white">${device.ip}</td>
-                    <td class="px-6 py-4 text-center text-sm">
-                        <span id="nvr-status-${device.mac}" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                            ${device.status === 'offline' ? 'bg-red-600 text-red-100' : 'bg-yellow-600 text-yellow-100'}">
-                            ${device.status}
-                        </span>
-                    </td>
-                `;
-                    }
-
-                    tableBody.appendChild(row);
-                });
-            }
-
-            function showError(tableId, message) {
-                const tableBody = document.getElementById(tableId);
-                if (!tableBody) return;
-                tableBody.innerHTML = `
-            <tr>
-                <td colspan="6" class="px-6 py-4 text-center text-sm text-red-500">
-                    ${message}
-                </td>
-            </tr>
-        `;
-            }
-
-
-            updateDeviceStatus();
-            setInterval(updateDeviceStatus, 15000);
-        }
     </script>
 
     @stack('scripts')
 
     <!-- Footer estático al final -->
-    <footer class="text-black p-4 z-10 mt-auto shadow-md ">
-        <div class="text-center">
-            <p class="text-sm">© {{ date('Y') }}. CVG Ferrominera. Seguridad Tecnológica</p>
-        </div>
+    <footer>
     </footer>
 
 </body>

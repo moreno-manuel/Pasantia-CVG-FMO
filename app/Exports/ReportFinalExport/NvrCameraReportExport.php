@@ -55,7 +55,7 @@ class NvrCameraReportExport extends BaseReportExport implements WithTitle
                                 $carry['onProcess']++;
                             } elseif ($name === 'PARA REMPLAZAR') {
                                 $carry['replace']++;
-                            } elseif($name != null) {
+                            } elseif ($name != null) {
                                 $carry['others']++;
                             }
 
@@ -189,6 +189,11 @@ class NvrCameraReportExport extends BaseReportExport implements WithTitle
             ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
         $currentRow++;
+
+        // Ancho automático
+        foreach (range('A', 'I') as $col) {
+            $phpSheet->getColumnDimension($col)->setAutoSize(true);
+        }
     }
 
     public function map(array $item): array

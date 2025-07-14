@@ -87,8 +87,6 @@ class Link extends Model
                 'location',
                 'ip',
                 'description'
-            ])
-            ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
+            ]);
     }
 }

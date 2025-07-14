@@ -119,10 +119,11 @@ class Nvr extends Model
                 'name',
                 'ip',
                 'ports_number',
+                'slot_number',
                 'location',
+                'status',
                 'description'
             ])
-            ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
+            ->dontLogIfAttributesChangedOnly(['description']);
     }
 }

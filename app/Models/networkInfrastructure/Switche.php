@@ -58,8 +58,6 @@ class Switche extends Model
                 'location',
                 'number_ports',
                 'description'
-            ])
-            ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
+            ]);
     }
 }

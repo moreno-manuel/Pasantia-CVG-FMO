@@ -108,11 +108,10 @@ class Camera extends Model
                 'name',
                 'location',
                 'ip',
+                'status',
                 'description',
                 'nvr.mac',
                 'nvr.name',
-            ])
-            ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
+            ]);
     }
 }

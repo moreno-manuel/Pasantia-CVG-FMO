@@ -3,9 +3,13 @@
 namespace App\Models\EquipmentDisuse;
 
 use Illuminate\Database\Eloquent\Model;
+/* use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions; */
 
 class EquipmentDisuse extends Model
 {
+    //use LogsActivity; 
+
     protected $table = 'equipment_disuses';
     protected $primaryKey = 'id';
     public $incrementing = false;
@@ -46,4 +50,18 @@ class EquipmentDisuse extends Model
     {
         return $this->hasOne(CameraInventoriesDisuse::class, 'id', 'id');
     }
+
+    //para logs
+    /* public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'id',
+                'mark',
+                'model',
+                'location',
+                'description',
+                'equipment'
+            ]);
+    } */
 }

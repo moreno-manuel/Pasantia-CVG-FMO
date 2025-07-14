@@ -40,11 +40,12 @@ class SlotNvr extends Model
     {
         return LogOptions::defaults()
             ->logOnly([
-                'nvr.mac',
-                'nvr.name',
+                'nvr_id',
                 'capacity_max',
                 'hdd_serial',
-                'hdd_capacity'
+                'hdd_capacity',
+                'nvr.mac',
+                'nvr.name',
             ]);
     }
 }

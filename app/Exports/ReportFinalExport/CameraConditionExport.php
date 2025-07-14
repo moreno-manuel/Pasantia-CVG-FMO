@@ -85,8 +85,10 @@ class CameraConditionExport extends BaseReportExport implements WithTitle
     {
         return [
             'Tipo de condición',
-            'Fecha de Inicio',
+            'Fecha de inicio',
             'Descripción',
+            'Fecha Control/Condición',
+            'Última descripción',
             'Nvr/Conexión',
             'Nombre',
             'Marca',
@@ -130,7 +132,7 @@ class CameraConditionExport extends BaseReportExport implements WithTitle
                     $phpSheet->setCellValue("{$colLetter}{$currentRow}", $value);
                 }
 
-                $phpSheet->getStyle("B{$currentRow}:I{$currentRow}")
+                $phpSheet->getStyle("B{$currentRow}:j{$currentRow}")
                     ->getAlignment()
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
                     ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
@@ -164,6 +166,11 @@ class CameraConditionExport extends BaseReportExport implements WithTitle
 
             $currentRow += 2;
         }
+
+        // Ancho automático
+        foreach (range('A', 'J') as $col) {
+            $phpSheet->getColumnDimension($col)->setAutoSize(true);
+        }
     }
 
     public function map($camera): array
@@ -186,21 +193,17 @@ class CameraConditionExport extends BaseReportExport implements WithTitle
             }
         }
 
-        //obtener el texto de la ultima  descrpcion generada  en control de condición
-        $textControl = null;
-        if ($lastCondition) {
-            $textControl = $lastCondition->controlCondition()
-                ->select('text')
-                ->latest('created_at')
-                ->first();
-        }
-        $description = optional($textControl)->text == null ? optional($lastCondition)->description :
-            optional($textControl)->text; // verifica que no sea null
+        //obtener el último control de condición
+        $lastControlCondition = optional($lastCondition)->controlCondition()
+            ->latest('created_at')
+            ->first();
 
         return [
             $namecondition,
             optional($lastCondition)->created_at ? $lastCondition->created_at->format('d/m/Y') : '', // Fecha formateada
-            $description ?? '',
+            optional($lastCondition)->description ?? '',
+            optional($lastControlCondition)->created_at ? $lastControlCondition->created_at->format('d/m/Y') : '', // Fecha formateada
+            optional($lastControlCondition)->text ?? '', // Última descripción
             $camera->nvr->name,
             $camera->name,
             $camera->mark,

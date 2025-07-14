@@ -201,7 +201,7 @@
     </div>
 
     <!-- Modal para confirmar eliminación con descripción -->
-    <div id="deleteModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-50">
+    <div id="deleteModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black-opaco">
         <div class="bg-white rounded-lg p-6 w-full max-w-md">
             <h3 class="text-lg font-bold mb-4">Confirmar Eliminación</h3>
             <p>¿Estás seguro de que deseas eliminar este Enlace?</p>
