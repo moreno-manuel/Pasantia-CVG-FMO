@@ -17,7 +17,7 @@
 
 
         <!-- Filtros para búsqueda -->
-        <form method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6" onsubmit="return validateFilters()">
+        <form method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6" onsubmit="return validateFilters('atencion')">
 
             <!-- tipo de condición -->
             <div>
@@ -146,24 +146,4 @@
         @endif
 
     </div>
-
-    {{-- funcion para los filtros --}}
-    @push('scripts')
-        <script>
-            function validateFilters() {
-                // Obtén los valores de los campos de filtro
-                const name = document.querySelector("select[name='name']")?.value.trim();
-
-                // Verifica si está vacio
-                if (!name) {
-                    // Cancelar envío del formulario
-                    alert('Por favor, ingresa al menos un valor para filtrar.');
-                    return false;
-                }
-
-                // Si tiene un valor
-                return true;
-            }
-        </script>
-    @endpush
 @endsection

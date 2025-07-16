@@ -17,7 +17,7 @@
         </div>
 
         <!-- Filtros para búsqueda -->
-        <form method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6" onsubmit="return validateFilters()">
+        <form method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6" onsubmit="return validateFilters('stock')">
             <!-- Campo Nota de Entrega -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Nota de Entrega</label>
@@ -33,7 +33,7 @@
                     class="w-full rounded-md bg-white border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                     <option value="">Seleccione..</option>
                     @foreach ($marks as $mark)
-                        <option value="{{ $mark }}" {{ old('mark') == $mark ? 'selected' : '' }}>
+                        <option value="{{ $mark }}" {{ ($filters['mark'] ?? '') == $mark ? 'selected' : '' }}>
                             {{ $mark }}
                         </option>
                     @endforeach
@@ -147,22 +147,33 @@
 
     </div>
 
-    {{-- funcion para los filtros --}}
+    {{-- funcion para obtener la descripcion de eliminacion --}}
     @push('scripts')
         <script>
-            function validateFilters() {
-                // Obtén los valores de los campos de filtro
-                const delivery_note = document.querySelector("input[name='delivery_note']")?.value.trim();
-                const mark = document.querySelector("select[name='mark']")?.value.trim();
+            let deleteUrl = '';
 
-                // Verifica si estávacíos
-                if (!delivery_note && !mark) {
-                    // Cancelar envío del formulario
-                    alert('Por favor, ingresa al menos un valor para filtrar.');
-                    return false;
+            function openDeleteModal(url) {
+                deleteUrl = url;
+                document.getElementById('deleteModal').classList.remove('hidden');
+                document.getElementById('reason').value = '';
+            }
+
+            function closeDeleteModal() {
+                document.getElementById('deleteModal').classList.add('hidden');
+            }
+
+            function submitDeleteForm() {
+                const reason = document.getElementById('reason').value.trim();
+
+                if (!reason) {
+                    alert("Por favor, describa un motivo para eliminar.");
+                    return;
                 }
-                // Si hay un valor
-                return true;
+
+                const form = document.getElementById('deleteForm');
+                form.action = deleteUrl;
+                document.getElementById('deletionReasonInput').value = reason;
+                form.submit();
             }
         </script>
     @endpush

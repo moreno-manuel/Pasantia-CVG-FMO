@@ -16,7 +16,7 @@
         </div>
 
         <!-- Filtros para búsqueda -->
-        <form method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6" onsubmit="return validateFilters()">
+        <form method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6" onsubmit="return validateFilters('link')">
 
             <!-- Localidad -->
             <div>
@@ -136,27 +136,37 @@
 
     </div>
 
-
-    {{-- funcion para los filtros --}}
+    {{-- funcion para obtener la descripcion de eliminacion --}}
     @push('scripts')
         <script>
-            function validateFilters() {
-                // Obtén los valores de los campos de filtro
-                const location = document.querySelector("input[name='location']")?.value.trim();
+            let deleteUrl = '';
 
-                // Verifica si estávacíos
-                if (!location) {
-                    // Cancelar envío del formulario
-                    alert('Por favor, ingresa un valor para filtrar.');
-                    return false;
+            function openDeleteModal(url) {
+                deleteUrl = url;
+                document.getElementById('deleteModal').classList.remove('hidden');
+                document.getElementById('reason').value = '';
+            }
+
+            function closeDeleteModal() {
+                document.getElementById('deleteModal').classList.add('hidden');
+            }
+
+            function submitDeleteForm() {
+                const reason = document.getElementById('reason').value.trim();
+
+                if (!reason) {
+                    alert("Por favor, describa un motivo para eliminar.");
+                    return;
                 }
-                // Si hay un valor
-                return true;
+
+                const form = document.getElementById('deleteForm');
+                form.action = deleteUrl;
+                document.getElementById('deletionReasonInput').value = reason;
+                form.submit();
             }
         </script>
     @endpush
 
-    
     <!-- Modal para confirmar eliminación con descripción -->
     <div id="deleteModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black-opaco">
         <div class="bg-white rounded-lg p-6 w-full max-w-md">

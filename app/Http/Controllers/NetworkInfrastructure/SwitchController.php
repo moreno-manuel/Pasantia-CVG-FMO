@@ -56,7 +56,7 @@ class SwitchController extends Controller
                 'description' => 'nullable'
             ],
             ['required_if' => 'Debe agregar el nombre de la marca'],
-            ['serial' => 'Serial', 'location' => 'Localidad', 'model' => 'Modelo']
+            ['serial' => 'Serial', 'location' => 'Localidad', 'model' => 'Modelo' , 'other_mark' => 'Marca']
         );
 
 
@@ -97,7 +97,7 @@ class SwitchController extends Controller
                 'description' => 'nullable'
             ],
             ['required_if' => 'Debe agregar el nombre de la marca'],
-            ['serial' => 'Serial', 'location' => 'Localidad', 'model' => 'Modelo']
+            ['serial' => 'Serial', 'location' => 'Localidad', 'model' => 'Modelo' , 'other_mark' => 'Marca']
         );
 
 

@@ -58,7 +58,7 @@ class LinkController extends Controller
                     'description' => 'nullable'
                 ],
                 ['required_if' => 'Debe agregar el nombre de la marca'],
-                ['name' => 'Nombre', 'location' => 'Localidad', 'model' => 'Modelo', 'ssid' => 'SSID']
+                ['name' => 'Nombre', 'location' => 'Localidad', 'model' => 'Modelo', 'ssid' => 'SSID', 'other_mark' => 'Marca']
             );
 
             if ($validator->fails()) {
@@ -92,7 +92,7 @@ class LinkController extends Controller
     public function update(Request $request,  $mac)
     {
         try {
-             $link = Link::where('mac', $mac)->firstOrFail();
+            $link = Link::where('mac', $mac)->firstOrFail();
 
             $validator = Validator::make(
                 $request->all(),
@@ -112,7 +112,7 @@ class LinkController extends Controller
                     'description' => 'nullable'
                 ],
                 ['required_if' => 'Debe agregar el nombre de la marca'],
-                ['name' => 'Nombre', 'location' => 'Localidad', 'model' => 'Modelo', 'ssid' => 'SSID']
+                ['name' => 'Nombre', 'location' => 'Localidad', 'model' => 'Modelo', 'ssid' => 'SSID', 'other_mark' => 'Marca']
             );
 
             if ($validator->fails()) {

@@ -187,4 +187,23 @@
             </form>
         </div>
     </div>
+
+    {{--  para para personalizar --}}
+    @push('scripts')
+        <script>
+            const select = document.getElementById('mark');
+            const otherField = document.getElementById('other-brand-field');
+
+
+            if (select && otherField) {
+                select.addEventListener('change', function() {
+                    otherField.classList.toggle('hidden', select.value !== 'Otra');
+                });
+
+                if (select.value === 'Otra') {
+                    otherField.classList.remove('hidden');
+                }
+            }
+        </script>
+    @endpush
 @endsection

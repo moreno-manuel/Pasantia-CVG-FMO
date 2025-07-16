@@ -64,7 +64,7 @@ class NvrController extends Controller
                     'description' => 'nullable'
                 ],
                 ['required_if' => 'Debe agregar el nombre de la marca'],
-                ['name' => 'Nombre', 'location' => 'Localidad', 'model' => 'Modelo']
+                ['name' => 'Nombre', 'location' => 'Localidad', 'model' => 'Modelo', 'other_mark' => 'Marca']
             );
 
             $slots = nvrSlotValidateCreate($request); //validacion para (slot)
@@ -120,7 +120,7 @@ class NvrController extends Controller
                     'description' => 'nullable'
                 ],
                 ['required_if' => 'Debe agregar el nombre de la marca'],
-                ['location' => 'Localidad', 'model' => 'Modelo']
+                ['location' => 'Localidad', 'model' => 'Modelo', 'other_mark' => 'Marca']
             );
 
 

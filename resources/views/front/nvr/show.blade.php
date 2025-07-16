@@ -231,15 +231,11 @@
                                                 </a>
 
                                                 @if (auth()->user()->rol == 'admin')
-                                                    <form action="{{ route('camara.destroy', $camera['mac']) }}"
-                                                        method="POST" class="inline">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit"
-                                                            class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                                            Eliminar
-                                                        </button>
-                                                    </form>
+                                                    <button type="button"
+                                                        onclick="openDeleteModal('{{ route('camara.destroy', $camera['mac']) }}')"
+                                                        class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                                        Eliminar
+                                                    </button>
                                                 @endif
                                             @endif
                                         </div>
@@ -259,6 +255,43 @@
         @endif
 
     </div>
+
+    {{-- funcion para obtener la descripcion de eliminacion --}}
+    @push('scripts')
+        <script>
+            let deleteUrl = '';
+
+            function openDeleteModal(url) {
+                deleteUrl = url;
+                document.getElementById('deleteModal').classList.remove('hidden');
+                document.getElementById('reason').value = '';
+            }
+
+            function closeDeleteModal() {
+                document.getElementById('deleteModal').classList.add('hidden');
+            }
+
+            function submitDeleteForm() {
+                const reason = document.getElementById('reason').value.trim();
+
+                if (!reason) {
+                    alert("Por favor, describa un motivo para eliminar.");
+                    return;
+                }
+
+                const form = document.getElementById('deleteForm');
+                form.action = deleteUrl;
+                document.getElementById('deletionReasonInput').value = reason;
+                form.submit();
+            }
+
+            //para eliminar nvr con camaras conectadas
+            window.submit = function() {
+                alert("El Nvr a eliminar tiene cámaras conectadas.");
+                return false;
+            };
+        </script>
+    @endpush
 
     <!-- Modal para confirmar eliminación con descripción -->
     <div id="deleteModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black-opaco">

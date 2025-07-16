@@ -22,7 +22,7 @@
         <!-- Main Content -->
         <main id="app" class="flex-1 ml-64 p-6 overflow-y-auto relative">
 
-            <!-- Contenedor para mensajes -->
+            <!-- Contenedor para mensajes de advertencia -->
             <div class="relative z-20">
                 <!-- Mensaje de éxito -->
                 @if (session('success'))
@@ -123,7 +123,6 @@
     </div>
 
 
-
     <script>
         // Función para mostrar el spinner
         function showLoader() {
@@ -166,7 +165,7 @@
             }
         }
 
-        // no recarga 
+        // para capturar el click
         document.body.addEventListener("click", function(e) {
             const link = e.target.closest("a");
             if (link && link.href) {
@@ -181,45 +180,6 @@
             }
 
         });
-
-        // para para personalizar
-        function initDynamicScripts() {
-
-            //perrsonaliza marca
-            const select = document.getElementById('mark');
-            const otherField = document.getElementById('other-brand-field');
-
-            if (select && otherField) {
-                select.addEventListener('change', function() {
-                    otherField.classList.toggle('hidden', select.value !== 'Otra');
-                });
-
-                if (select.value === 'Otra') {
-                    otherField.classList.remove('hidden');
-                }
-            }
-
-            //personaliza condicion 
-            const selectName = document.getElementById('name');
-            const other_condition_field = document.getElementById('other-condition-field');
-
-            if (selectName && other_condition_field) {
-                selectName.addEventListener('change', function() {
-                    other_condition_field.toggle('hidden', select.value !== 'OTROS');
-                });
-
-                if (selectName.value === 'OTROS') {
-                    other_condition_field.classList.remove('hidden');
-                }
-            }
-
-            //para eliminar nvr con camaras conectadas
-            window.submit = function() {
-                alert("El Nvr a eliminar tiene cámaras conectadas.");
-                return false;
-            };
-
-        }
 
         /* para numero de HDD */
         function generateHDDForm(count) {
@@ -276,7 +236,8 @@
                 for (let i = 0; i < existingData.length; i++) {
                     const vol = existingData[i];
                     document.querySelector(`input[name='volumen[${i}][serial_disco]']`).value = vol.serial_disco || '';
-                    document.querySelector(`input[name='volumen[${i}][capacidad_disco]']`).value = vol.capacidad_disco ||
+                    document.querySelector(`input[name='volumen[${i}][capacidad_disco]']`).value = vol
+                        .capacidad_disco ||
                         '';
                     document.querySelector(`input[name='volumen[${i}][capacidad_max_volumen]']`).value = vol
                         .capacidad_max_volumen || '';
@@ -286,7 +247,6 @@
 
         // Inicializar scripts modal para eliminacion
         function initScripts() {
-            // Asegúrate de que las funciones estén definidas en window
             window.deleteUrl = '';
 
             window.openDeleteModal = function(url) {
@@ -317,6 +277,101 @@
             };
         }
 
+        // para para personalizar
+        function initDynamicScripts() {
+
+            //personaliza marca
+            if (document.getElementById('mark')) {
+
+                const select = document.getElementById('mark');
+                const otherField = document.getElementById('other-brand-field');
+
+
+                if (select && otherField) {
+                    select.addEventListener('change', function() {
+                        otherField.classList.toggle('hidden', select.value !== 'Otra');
+                    });
+
+                    if (select.value === 'Otra') {
+                        otherField.classList.remove('hidden');
+                    }
+                }
+            }
+
+            //personaliza condicion 
+            if (document.getElementById('name')) {
+
+                const select = document.getElementById('name');
+                const otherField = document.getElementById('other-condition-field');
+
+                if (select && otherField) {
+                    select.addEventListener('change', function() {
+                        otherField.classList.toggle('hidden', select.value !== 'OTROS');
+                    });
+
+                    if (select.value === 'OTROS') {
+                        otherField.classList.remove('hidden');
+                    }
+                }
+            }
+
+            //para eliminar nvr con camaras conectadas
+            window.submit = function() {
+                alert("El Nvr a eliminar tiene cámaras conectadas.");
+                return false;
+            };
+
+        }
+
+        //para validar filtros
+        function validateFilters(type) {
+
+            switch (type) {
+                case 'atencion':
+                    if (!document.querySelector("select[name='name']")?.value.trim()) {
+                        alert('Por favor, ingresa al menos un valor para filtrar.');
+                        return false;
+                    }
+                    return true;
+                case 'stock':
+                    if (!document.querySelector("select[name='mark']")?.value.trim() && !document.querySelector(
+                            "input[name='delivery_note']")?.value.trim()) {
+                        alert('Por favor, ingresa al menos un valor para filtrar.');
+                        return false;
+                    }
+                    return true;
+                case 'switch':
+                    if (!document.querySelector("input[name='serial']")?.value.trim() && !document.querySelector(
+                            "input[name='location']")?.value.trim()) {
+                        alert('Por favor, ingresa al menos un valor para filtrar.');
+                        return false;
+                    }
+                    return true;
+                case 'camera':
+                    if (!document.querySelector("input[name='location']")?.value.trim() && !document.querySelector(
+                            "select[name='status']")?.value.trim()) {
+                        alert('Por favor, ingresa al menos un valor para filtrar.');
+                        return false;
+                    }
+                    return true;
+                case 'nvr':
+                    if (!document.querySelector("input[name='location']")?.value.trim() && !document.querySelector(
+                            "select[name='status']")?.value.trim()) {
+                        alert('Por favor, ingresa al menos un valor para filtrar.');
+                        return false;
+                    }
+                    return true;
+                case 'link':
+                    if (!document.querySelector("input[name='location']")?.value.trim()) {
+                        alert('Por favor, ingresa al menos un valor para filtrar.');
+                        return false;
+                    }
+                    return true;
+                default:
+                    return true;
+            }
+
+        }
     </script>
 
     @stack('scripts')

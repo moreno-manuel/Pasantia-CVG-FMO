@@ -107,4 +107,22 @@
             </form>
         </div>
     </div>
+
+    {{-- personaliza nombre  --}}
+    @push('script')
+        <script>
+            const select = document.getElementById('name');
+            const otherField = document.getElementById('other-condition-field');
+
+            if (select && otherField) {
+                select.addEventListener('change', function() {
+                    otherField.classList.toggle('hidden', select.value !== 'OTROS');
+                });
+
+                if (select.value === 'OTROS') {
+                    otherField.classList.remove('hidden');
+                }
+            }
+        </script>
+    @endpush
 @endsection

@@ -105,7 +105,7 @@ class ReportController extends Controller
         set_time_limit(300);
 
         try {
-            return Excel::download(new ReportFinalExport(), 'Informe_Final.xlsx');
+            return Excel::download(new ReportFinalExport(), 'Informe_Final_'  . now()->format('Ymd_His') . '.xlsx');
         } catch (\Exception $e) {
             return back()->withError('Error al exportar: ' . $e->getMessage());
         }

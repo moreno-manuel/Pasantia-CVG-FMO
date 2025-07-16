@@ -17,7 +17,7 @@
         </div>
 
         <!-- Filtros para búsqueda -->
-        <form method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6" onsubmit="return validateFilters()">
+        <form method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6" onsubmit="return validateFilters('switch')">
 
             <!-- Serial -->
             <div>
@@ -146,28 +146,6 @@
         @endif
 
     </div>
-
-    {{-- funcion para los filtros --}}
-    @push('scripts')
-        <script>
-            function validateFilters() {
-                // Obtén los valores de los campos de filtro
-                const serial = document.querySelector("input[name='serial']")?.value.trim();
-                const location = document.querySelector("input[name='location']")?.value.trim();
-
-                // Verifica si está vacio
-                if (!serial && !location) {
-                    // Cancelar envío del formulario
-                    alert('Por favor, ingresa al menos un valor para filtrar.');
-                    return false;
-                }
-
-                // Si tiene un valor
-                return true;
-            }
-        </script>
-    @endpush
-
 
     {{-- funcion para obtener la descripcion de eliminacion --}}
     @push('scripts')

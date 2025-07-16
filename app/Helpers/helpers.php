@@ -204,7 +204,7 @@ function filter(Request $request, string $table)
 
                 // Ejecuta la consulta y aplica paginación
                 $cameras = $query->orderBy('created_at', 'desc')->paginate(10);
-                $marks = json_decode(file_get_contents(resource_path('js/marks.json')), true)['marks']; // json con las marcas agregadas
+                $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['marks']; // json con las marcas agregadas
 
                 // Mantiene los valores de los filtros en la vista
                 return view('front.camera.camera_inventories.index', compact('cameras', 'marks'))

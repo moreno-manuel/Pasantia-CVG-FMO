@@ -140,26 +140,22 @@
         </div>
     </div>
 
-    {{-- para el campo marca  --}}
+    {{--  para para personalizar --}}
     @push('scripts')
         <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const select = document.getElementById('mark');
-                const otherField = document.getElementById('other-brand-field');
+            const select = document.getElementById('mark');
+            const otherField = document.getElementById('other-brand-field');
 
+
+            if (select && otherField) {
                 select.addEventListener('change', function() {
-                    if (select.value === 'Otra') {
-                        otherField.classList.remove('hidden');
-                    } else {
-                        otherField.classList.add('hidden');
-                    }
+                    otherField.classList.toggle('hidden', select.value !== 'Otra');
                 });
 
-                // Mostrar campo si ya se había seleccionado "Other" (ej: tras error de validación)
                 if (select.value === 'Otra') {
                     otherField.classList.remove('hidden');
                 }
-            });
+            }
         </script>
     @endpush
 @endsection

@@ -194,9 +194,12 @@ class CameraConditionExport extends BaseReportExport implements WithTitle
         }
 
         //obtener el último control de condición
-        $lastControlCondition = optional($lastCondition)->controlCondition()
-            ->latest('created_at')
-            ->first();
+        $lastControlCondition = null;
+        if ($lastCondition) {
+            $lastControlCondition = $lastCondition->controlCondition()
+                ->latest('created_at')
+                ->first();
+        }
 
         return [
             $namecondition,

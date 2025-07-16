@@ -57,7 +57,7 @@ class CameraInventoriesController extends Controller
 
             ],
             ['required_if' => 'Debe agregar el nombre de la marca'],
-            ['location' => 'Localidad', 'model' => 'Modelo', 'delivery_note' => 'Nota de entrega', 'destination' => 'Destino de instalación']
+            ['location' => 'Localidad', 'model' => 'Modelo', 'delivery_note' => 'Nota de entrega', 'destination' => 'Destino de instalación', 'other_mark' => 'Marca']
         );
 
         if ($validator->fails()) {

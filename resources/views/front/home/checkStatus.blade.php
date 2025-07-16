@@ -129,7 +129,7 @@
                     .catch(error => {
                         console.error('Error al actualizar estados:', error);
                         showError('camera-status-table', 'Error en cámaras');
-                        showError('nvr-status-table', 'Error en NVRs');
+                        showError('nvr-status-table', 'Error en Nvr');
                     });
             }
 
