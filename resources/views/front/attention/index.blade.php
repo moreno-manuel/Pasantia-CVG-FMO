@@ -97,9 +97,11 @@
 
                         @foreach ($conditions as $condition)
                             <tr class="hover:bg-gray-900 transition-colors duration-150">
-                                <td class="px-6 py-4 text-center text-sm text-white">{{ $condition->camera->nvr->name }} </td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $condition->camera->nvr->name }}
+                                </td>
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $condition->camera->name }} </td>
-                                <td class="px-6 py-4 text-center text-sm text-white">{{ $condition['name'] }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-white">
+                                    {{ $condition['other_name'] ?? $condition['name'] }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $condition['date_ini'] }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-white">
                                     {{ $condition['description'] }}</td>

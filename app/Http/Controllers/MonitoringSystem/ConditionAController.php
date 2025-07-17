@@ -35,10 +35,17 @@ class ConditionAController extends Controller
 
     public function create()
     {
-        $cameras = Camera::where('status', '!=', 'online')->select('id', 'name', 'mac')->get();
+        $camerasAll = Camera::with('conditionAttention')->where('status', '!=', 'online')->select('id', 'name', 'mac')->get();
 
-        if ($cameras->isEmpty()) //verifica que hayas camaras fuera de linea 
-            return redirect()->back()->with('warning', 'No hay Cámaras fuera de servicio');
+        $cameras = $camerasAll->filter(function ($camera) { //evita cargar camaras con condiciones pendientes
+            $latestCondition = $camera->conditionAttention()
+                ->latest()
+                ->first();
+            if ($latestCondition)
+                return $latestCondition->status == 'Atendido';
+
+            return true;
+        });
 
         $names = json_decode(file_get_contents(resource_path('js/data.json')), true)['conditions']; // json con los tipos de condicion
         return view('front.attention.create', compact('cameras', 'names'));
@@ -67,21 +74,9 @@ class ConditionAController extends Controller
             return redirect()->back()->withInput()->withErrors($validator);
         }
 
-        $condition = ConditionAttention::where('camera_id', $request->input('camera_id'))
-            ->latest()
-            ->first(); //busqueda explicita,last condición
-
-        if ($request->filled('other_condition')) //nombre no prdefinido
-            $request['name'] = strtoupper($request->input('other_condition'));
-
-        if ($condition) {
-            $validate = conditionValidate($request, $condition); //reglas de validación 
-            if ($validate != 'success')
-                return redirect()->back()->withInput()->withErrors($validate);
-        }
-
-        $condition = ConditionAttention::create([
+        ConditionAttention::create([
             'name' => $request->input('name'),
+            'other_name' => $request->input('other_condition'),
             'camera_id' => $request->input('camera_id'),
             'date_ini' => $request->input('date_ini'),
             'date_end' => $request->input('date_end'),
@@ -124,10 +119,11 @@ class ConditionAController extends Controller
             ]);
         }
 
-        $condition->update([
-            'date_end' => $request->input('date_end'),
-            'status' => $request->filled('date_end') ? 'Atendido' : 'Por atender'
-        ]);
+        if ($request->filled('date_end'))
+            $condition->update([
+                'date_end' => $request->input('date_end'),
+                'status' => $request->filled('date_end') ? 'Atendido' : 'Por atender'
+            ]);
 
         return redirect()->route('atencion.index')->with('success', 'Condición de Atención actualizada exitosamente.');
     }

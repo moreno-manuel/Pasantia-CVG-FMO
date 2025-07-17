@@ -117,7 +117,7 @@ class NvrExport implements ShouldAutoSize, WithDrawings, WithEvents
 
                     // Agregar datos de slots
                     for ($i = 0; $i < 2; $i++) {
-                        $rowData[] = $slots[$i]['capacity_max'] ?? '';
+                        $rowData[] = $slots[$i]['capacity_max'] ?? 'No aplica';
                         $rowData[] = $slots[$i]['hdd_serial'] ?? 'Sin HDD';
                         $rowData[] = $slots[$i]['hdd_capacity'] ?? '';
                     }

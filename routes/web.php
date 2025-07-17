@@ -82,7 +82,6 @@ Route::controller(ReportController::class) //para exportar los reportes y log
         Route::get('disuse', 'exportEquipmentDisuse')->name('export.EquipmentDisuse');
         Route::get('report', 'exportReport')->name('export.report');
         Route::get('log', 'exportLog')->name('export.log');
-
     });
 
 
@@ -104,3 +103,9 @@ Route::controller(QuestionsSecurityController::class) // preguntas de seguridad 
     });
 
 Route::resource('users', UserController::class)->middleware(UsersAccesMiddleware::class)->except('show'); //para el control de los usuarios registrados  
+
+Route::get('/manual', function () {
+    $path = public_path('files/manual.pdf');
+
+    return response()->file($path);
+});

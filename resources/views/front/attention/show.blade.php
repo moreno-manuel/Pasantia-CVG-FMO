@@ -6,10 +6,10 @@
 
         <!-- Botón Volver -->
         <div class="flex justify-end items-center mb-6">
-            <a href="{{ route('atencion.index') }}"
+            <button type="button" onclick="window.history.back()"
                 class="inline-flex items-center px-3 py-1.5 bg-gray-500 text-white font-semibold rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-gray-600 hover:shadow-md hover:-translate-y-px text-xs uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
                 Volver
-            </a>
+            </button>
         </div>
 
         <!-- Tarjeta de información general -->
@@ -37,7 +37,8 @@
                     <!-- Campo nombre condicion -->
                     <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">Tipo de Condición de Atención</dt>
-                        <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $condition['name'] }}</dd>
+                        <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
+                            {{ $condition['other_name'] ?? $condition['name'] }}</dd>
                     </div>
 
                     <!-- Campo fecha ini -->

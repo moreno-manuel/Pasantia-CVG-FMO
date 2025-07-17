@@ -14,7 +14,7 @@ class CheckStatusController extends Controller
 
     public function home()
     {
-        $inactiveCameras = Camera::select(['id','mac', 'nvr_id', 'name', 'location', 'ip', 'status'])
+        $inactiveCameras = Camera::select(['id', 'mac', 'nvr_id', 'name', 'location', 'ip', 'status'])
             ->where('status', '!=', 'online')
             ->orderBy('location')
             ->paginate(10);

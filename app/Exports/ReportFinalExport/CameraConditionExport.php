@@ -181,28 +181,18 @@ class CameraConditionExport extends BaseReportExport implements WithTitle
             ->latest('created_at')
             ->first();
 
-
-        $names = json_decode(file_get_contents(resource_path('js/data.json')), true)['conditions']; //tipo de condicion
-
-        $namecondition = optional($lastCondition)->name == '' ? 'No se ha generado una condición' : 'OTROS / ' . $lastCondition->name; //concatena la palabra otro en caso de que sea otro tipo de condicion
-
-        foreach ($names as $name) { // en caso de que no sea otro se guarda el nombre 
-            if ($name == optional($lastCondition)->name) {
-                $namecondition = optional($lastCondition)->name;
-                break;
-            }
-        }
-
-        //obtener el último control de condición
+        $nameCondition = '';
         $lastControlCondition = null;
         if ($lastCondition) {
-            $lastControlCondition = $lastCondition->controlCondition()
+            $nameCondition = optional($lastCondition)->name == 'OTRO' ? 'OTRO' . ' / ' . optional($lastCondition)->other_name : optional($lastCondition)->name;
+
+            $lastControlCondition = $lastCondition->controlCondition() //obtener el último control de condición
                 ->latest('created_at')
                 ->first();
         }
 
         return [
-            $namecondition,
+            $nameCondition ?? 'Sin tipo de condición',
             optional($lastCondition)->created_at ? $lastCondition->created_at->format('d/m/Y') : '', // Fecha formateada
             optional($lastCondition)->description ?? '',
             optional($lastControlCondition)->created_at ? $lastControlCondition->created_at->format('d/m/Y') : '', // Fecha formateada

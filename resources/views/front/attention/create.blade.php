@@ -119,7 +119,7 @@
                     otherField.classList.toggle('hidden', select.value !== 'OTROS');
                 });
 
-                if (select.value === 'OTROS') {
+                if (select.value === 'OTRO') {
                     otherField.classList.remove('hidden');
                 }
             }

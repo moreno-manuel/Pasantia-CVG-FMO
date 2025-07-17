@@ -15,7 +15,7 @@
     <div class="flex flex-1 overflow-hidden">
 
         <!-- Sidebar -->
-        <aside class="w-64 bg-white shadow-lg fixed h-full top-0 left-0 z-20 overflow-y-auto">
+        <aside class="w-64  shadow-lg fixed h-full top-0 left-0 z-20 overflow-y-auto">
             @include('partials.sidebar')
         </aside>
 
@@ -109,17 +109,18 @@
                 @endif
             </div>
 
+            <!-- Loader -->
+            <div id="loading-spinner"
+                class="absolute inset-0 bg-black-opaco flex items-center justify-center z-50 hidden">
+                <div class="flex flex-col items-center">
+                    <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white"></div>
+                    <p class="mt-4 text-white text-lg">Cargando...</p>
+                </div>
+            </div>
+
             <!-- Contenido dinámico -->
             @yield('content')
         </main>
-    </div>
-
-    <!-- Loader -->
-    <div id="loading-spinner" class="fixed inset-0 bg-black-opaco  flex items-center justify-center z-50 hidden">
-        <div class="flex flex-col items-center">
-            <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white"></div>
-            <p class="mt-4 text-white text-lg">Cargando...</p>
-        </div>
     </div>
 
 
@@ -134,28 +135,40 @@
             document.getElementById('loading-spinner').classList.add('hidden');
         }
 
-        // cargar contenido
+        // Cargar contenido dinámico
         async function loadContent(url) {
             showLoader();
-
             try {
                 const response = await fetch(url);
                 const text = await response.text();
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(text, "text/html");
-
                 const newContent = doc.querySelector("main").innerHTML;
 
-                // Forzar un retraso mínimo de 200ms
                 await new Promise(resolve => setTimeout(resolve, 200));
-
                 document.getElementById("app").innerHTML = newContent;
-
                 history.pushState(null, '', url);
 
-                /* inicia scripts */
+                // Detectar si es la vista home desde la URL
+                const isHome = url.includes('/home') || url.includes('/home/');
+
+                // Iniciar actualización solo si es home
+                if (isHome) {
+                    if (!window.statusInterval) {
+                        updateDeviceStatus(); // Primera carga
+                        window.statusInterval = setInterval(updateDeviceStatus, 15000); // Cada 15 segundos
+                    }
+                } else {
+                    if (window.statusInterval) {
+                        clearInterval(window.statusInterval);
+                        window.statusInterval = null;
+                    }
+                }
+
+                // Iniciar scripts dinámicos
                 initDynamicScripts();
                 initScripts();
+
             } catch (error) {
                 console.error("Error al cargar el contenido:", error);
                 document.getElementById("app").innerHTML =
@@ -164,6 +177,16 @@
                 hideLoader();
             }
         }
+
+
+        // Detectar navegación del usuario (botón "Volver")
+        window.addEventListener('popstate', async function(event) {
+            if (event.state && event.state.path) {
+                await loadContent(event.state.path);
+            } else {
+                location.reload(); // Fallback
+            }
+        });
 
         // para capturar el click
         document.body.addEventListener("click", function(e) {
@@ -306,10 +329,10 @@
 
                 if (select && otherField) {
                     select.addEventListener('change', function() {
-                        otherField.classList.toggle('hidden', select.value !== 'OTROS');
+                        otherField.classList.toggle('hidden', select.value !== 'OTRO');
                     });
 
-                    if (select.value === 'OTROS') {
+                    if (select.value === 'OTRO') {
                         otherField.classList.remove('hidden');
                     }
                 }
@@ -371,6 +394,103 @@
                     return true;
             }
 
+        }
+    </script>
+
+    {{-- captura que  este en la vista home  --}}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Verificar si la URL actual es home
+            const currentUrl = window.location.pathname;
+            if (currentUrl === '/home' || currentUrl === '/home/') {
+                updateDeviceStatus(); // Primera carga
+                window.statusInterval = setInterval(updateDeviceStatus, 15000); // Cada 15 segundos
+            }
+        });
+    </script>
+
+    {{-- actualización de tabla en vista inicial  --}}
+    <script>
+        let statusInterval = null;
+
+        function updateDeviceStatus() {
+            fetch("{{ route('test.check') }}")
+                .then(response => response.json())
+                .then(data => {
+                    updateTable('camera-status-table', data.cameras, 'camera');
+                    updateTable('nvr-status-table', data.nvrs, 'nvr');
+                })
+                .catch(error => {
+                    console.error('Error al actualizar estados:', error);
+                    showError('camera-status-table', 'Error en cámaras');
+                    showError('nvr-status-table', 'Error en Nvr');
+                });
+        }
+
+        function updateTable(tableId, devices, type) {
+            const tableBody = document.getElementById(tableId);
+            if (!tableBody) return;
+
+            tableBody.innerHTML = '';
+            if (devices.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-400 italic">
+                    No hay equipos inactivos
+                </td>
+            `;
+                tableBody.appendChild(row);
+                return;
+            }
+
+            devices.forEach(device => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-900 transition-colors duration-150';
+
+                if (type === 'camera') {
+                    row.innerHTML = `
+                    <td class="px-6 py-4 text-center text-sm text-white">${device.mac}</td>
+                    <td class="px-6 py-4 text-center text-sm text-white">${device.nvr || '-'}</td>
+                    <td class="px-6 py-4 text-center text-sm text-white">${device.name}</td>
+                    <td class="px-6 py-4 text-center text-sm text-white">${device.location}</td>
+                    <td class="px-6 py-4 text-center text-sm text-white">${device.ip}</td>
+                    <td class="px-6 py-4 text-center text-sm">
+                        <span id="status-${device.mac}" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+                            ${device.status === 'offline' ? 'bg-red-600 text-red-100' : 'bg-yellow-600 text-yellow-100'}">
+                            ${device.status}
+                        </span>
+                    </td>
+                `;
+                } else {
+                    row.innerHTML = `
+                    <td class="px-6 py-4 text-center text-sm text-white">${device.mac}</td>
+                    <td class="px-6 py-4 text-center text-sm text-white">${device.name}</td>
+                    <td class="px-6 py-4 text-center text-sm text-white">${device.location}</td>
+                    <td class="px-6 py-4 text-center text-sm text-white">${device.ip}</td>
+                    <td class="px-6 py-4 text-center text-sm">
+                        <span id="nvr-status-${device.mac}" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+                            ${device.status === 'offline' ? 'bg-red-600 text-red-100' : 'bg-yellow-600 text-yellow-100'}">
+                            ${device.status}
+                        </span>
+                    </td>
+                `;
+                }
+
+                tableBody.appendChild(row);
+            });
+        }
+
+        function showError(tableId, message) {
+            const tableBody = document.getElementById(tableId);
+            if (!tableBody) return;
+
+            tableBody.innerHTML = `
+            <tr>
+                <td colspan="6" class="px-6 py-4 text-center text-sm text-red-500">
+                    ${message}
+                </td>
+            </tr>
+        `;
         }
     </script>
 

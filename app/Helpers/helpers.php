@@ -145,13 +145,8 @@ function filter(Request $request, string $table)
 
                 $names = json_decode(file_get_contents(resource_path('js/data.json')), true)['conditions']; // json con los tipos de condicion
 
-                // Aplica filtros y las que no se ham atendido
-                if ($name === 'OTROS')
-                    $query->whereNotIn('name', $names)
-                        ->where('status', 'Por atender');
-                else
-                    $query->where('name', $name)
-                        ->where('status', 'Por atender');
+                $query->where('name', $name)
+                    ->where('status', 'Por atender');
 
                 // Ejecuta la consulta y aplica paginación
                 $conditions = $query->orderBy('created_at', 'desc')->paginate(10);

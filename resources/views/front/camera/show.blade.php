@@ -7,10 +7,10 @@
 
         <!-- Botón Volver -->
         <div class="flex justify-end items-center mb-6">
-            <a href="{{ route('camara.index') }}"
+            <button type="button" onclick="window.history.back()"
                 class="inline-flex items-center px-3 py-1.5 bg-gray-500 text-white font-semibold rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-gray-600 hover:shadow-md hover:-translate-y-px text-xs uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
                 Volver
-            </a>
+            </button>
         </div>
 
         <!-- Tarjeta de información general -->
@@ -230,6 +230,7 @@
             }
         </script>
     @endpush
+    
     <!-- Modal para confirmar eliminación con descripción -->
     <div id="deleteModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black-opaco">
         <div class="bg-white rounded-lg p-6 w-full max-w-md">

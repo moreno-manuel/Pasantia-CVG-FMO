@@ -57,6 +57,7 @@ return new class extends Migration
                 ->constrained('cameras')
                 ->onDelete('cascade');
             $table->string('name');
+            $table->string('other_name')->nullable();
             $table->date('date_ini');
             $table->date('date_end')->nullable();
             $table->string('description');

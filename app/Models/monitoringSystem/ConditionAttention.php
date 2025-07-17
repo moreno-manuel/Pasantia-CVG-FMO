@@ -2,6 +2,7 @@
 
 namespace App\Models\monitoringSystem;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
@@ -15,6 +16,7 @@ class ConditionAttention extends Model
     protected $fillable = [
         'camera_id',
         'name',
+        'other_name',
         'date_ini',
         'date_end',
         'description',
@@ -38,6 +40,14 @@ class ConditionAttention extends Model
         return $this->hasMany(ControlCondition::class);
     }
 
+    //casteos 
+    protected function otherName(): Attribute //mac
+    {
+        return Attribute::make(
+            set: fn($other_name) => strtoupper($other_name),
+        );
+    }
+
     //para logs
     public function getActivitylogOptions(): LogOptions
     {
@@ -46,6 +56,7 @@ class ConditionAttention extends Model
                 'camera.name',
                 'camera.mac',
                 'name',
+                'other_name',
                 'date_ini',
                 'date_end',
                 'description',

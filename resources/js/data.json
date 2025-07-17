@@ -10,11 +10,10 @@
         "CAMION CESTA",
         "EN PROCESO DE ATENCION",
         "PARA REMPLAZAR",
-        "OTROS"
+        "OTRO"
     ],
     "switch_marks": [
         "HIKVISION",
-        "PRUEBA",
         "TP-LINK"
     ],
     "link_marks": [
