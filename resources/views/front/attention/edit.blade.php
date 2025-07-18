@@ -9,10 +9,13 @@
             <div class="flex justify-between items-center mb-6">
                 <h1 class="text-2xl font-bold text-white">Editar Condición de Atención</h1>
 
-                <a href="{{ route('atencion.index') }}"
-                    class="inline-flex items-center px-3 py-1.5 bg-gray-500 text-white font-semibold rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-gray-600 hover:shadow-md hover:-translate-y-px text-xs uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
-                    Volver
-                </a>
+                <!-- Botón Volver -->
+                <div class="flex justify-end items-center mb-6">
+                    <button type="button" onclick="window.history.back()"
+                        class="inline-flex items-center px-3 py-1.5 bg-gray-500 text-white font-semibold rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-gray-600 hover:shadow-md hover:-translate-y-px text-xs uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                        Volver
+                    </button>
+                </div>
             </div>
 
             {{-- Formulario --}}
@@ -24,10 +27,10 @@
 
                     <!-- Campo nombre de condicion no editable-->
                     <div>
-                        <label for="name" class="block text-sm font-medium text-white">Condicion de Atención</label>
-                        <input type="text" name="name" id="name"
+                        <label for="nvr" class="block text-sm font-medium text-white">Nvr/Conexión</label>
+                        <input type="text" name="nvr" id="nvr"
                             class="mt-1 block w-full rounded-md bg-gray-900 border border-gray-600 text-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            value="{{ old('name', $condition->name) }}" readonly disabled>
+                            value="{{ old('nvr', $condition->camera->nvr->name) }}" readonly disabled>
                     </div>
 
                     <!-- Campo camara ID -->
@@ -37,6 +40,24 @@
                             class="mt-1 block w-full rounded-md bg-gray-900 border border-gray-600 text-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             value="{{ old('camera_id', $condition->camera->name) }}" readonly disabled>
                     </div>
+
+                    <!-- Campo nombre de condicion no editable-->
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-white">Tipo de Condición</label>
+                        <input type="text" name="name" id="name"
+                            class="mt-1 block w-full rounded-md bg-gray-900 border border-gray-600 text-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            value="{{ old('name', $condition->name) }}" readonly disabled>
+                    </div>
+
+                    <!-- Campo nombre de condicion no editable-->
+                    @if ($condition->other_name)
+                        <div>
+                            <label for="" class="block text-sm font-medium text-white">Nombre</label>
+                            <input type="text" name="other_name" id="other_name"
+                                class="mt-1 block w-full rounded-md bg-gray-900 border border-gray-600 text-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                                value="{{ old('other_name', $condition->other_name) }}" readonly disabled>
+                        </div>
+                    @endif
 
                     <!-- Campo Fecha de Inicio -->
                     <div class="mb-4">

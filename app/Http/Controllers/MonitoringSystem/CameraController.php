@@ -192,6 +192,12 @@ class CameraController extends Controller
         ]);
 
         $camera->delete();
-        return redirect()->route('camara.index')->with('success', 'Cámara eliminada exitosamente.');
+
+        $previousUrl = url()->previous(); // Obtener la URL anterior
+
+        if (str_contains($previousUrl, 'camara/')) {
+            return 'prueba';
+        }
+        return redirect($previousUrl)->with('success', 'Cámara eliminada exitosamente.');
     }
 }

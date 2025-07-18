@@ -22,9 +22,37 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
+                    {{-- Campo Nvr --}}
+                    <div>
+                        <label for="nvr" class="block text-sm font-semibold text-white">Nvr</label>
+                        <select name="nvr" id="nvr"
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            required>
+                            <option value="">Selecciona...</option>
+                            @foreach ($nvrs as $nvr)
+                                <option value="{{ $nvr->id }}" {{ old('nvr') == $nvr->id ? 'selected' : '' }}>
+                                    {{ $nvr->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Campo Cámara -->
+                    <div>
+                        <label for="camera_id" class="block text-sm font-semibold text-white">Cámara</label>
+                        <select name="camera_id" id="camera_id"
+                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('camera_id') border-red-500 @enderror"
+                            required>
+                            <option value="">Selecciona un Nvr</option>
+                        </select>
+                        @error('camera_id')
+                            <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
+                        @enderror
+                    </div>
+
                     <!-- Campo Nombre Condición de Atencion -->
                     <div>
-                        <label for="name" class="block text-sm font-medium text-white">Condicion de Atención</label>
+                        <label for="name" class="block text-sm font-medium text-white">Tipo de Condición</label>
                         <select name="name" id="name"
                             class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm "
                             required>
@@ -48,25 +76,6 @@
                         @enderror
                     </div>
 
-                    <!-- Campo camara ID -->
-                    <div>
-                        <label for="camera_id" class="block text-sm font-semibold text-white">Cámara</label>
-                        <select name="camera_id" id="camera_id"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm  @error('camera_id') border-red-500 @enderror"
-                            required>
-                            <option value="">Selecciona...</option>
-                            @foreach ($cameras as $camera)
-                                <option value="{{ $camera->id }}" {{ old('camera_id') == $camera->id ? 'selected' : '' }}>
-                                    {{ $camera->name }}
-                                </option>
-                            @endforeach
-                        </select>
-
-                        @error('camera_id')
-                            <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
-                        @enderror
-                    </div>
-
                     <!-- Campo Fecha de Inicio -->
                     <div class="mb-4">
                         <label for="date_ini" class="block text-sm font-semibold text-white">Fecha de inicio</label>
@@ -81,7 +90,8 @@
 
                     <!-- Campo Fecha de Finalización -->
                     <div class="mb-4">
-                        <label for="date_end" class="block text-sm font-semibold text-white">Fecha de Realización</label>
+                        <label for="date_end" class="block text-sm font-semibold text-white">Fecha de
+                            Realización</label>
                         <input type="date" name="date_end" id="date_end" min="{{ now()->format('Y-m-d') }}"
                             class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             value="{{ old('date_end') }}">
@@ -107,22 +117,4 @@
             </form>
         </div>
     </div>
-
-    {{-- personaliza nombre  --}}
-    @push('script')
-        <script>
-            const select = document.getElementById('name');
-            const otherField = document.getElementById('other-condition-field');
-
-            if (select && otherField) {
-                select.addEventListener('change', function() {
-                    otherField.classList.toggle('hidden', select.value !== 'OTROS');
-                });
-
-                if (select.value === 'OTRO') {
-                    otherField.classList.remove('hidden');
-                }
-            }
-        </script>
-    @endpush
 @endsection

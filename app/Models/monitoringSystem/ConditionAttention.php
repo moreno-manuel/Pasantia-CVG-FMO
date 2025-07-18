@@ -40,14 +40,6 @@ class ConditionAttention extends Model
         return $this->hasMany(ControlCondition::class);
     }
 
-    //casteos 
-    protected function otherName(): Attribute //mac
-    {
-        return Attribute::make(
-            set: fn($other_name) => strtoupper($other_name),
-        );
-    }
-
     //para logs
     public function getActivitylogOptions(): LogOptions
     {

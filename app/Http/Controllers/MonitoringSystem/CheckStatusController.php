@@ -5,6 +5,7 @@ namespace App\Http\Controllers\MonitoringSystem;
 use App\Http\Controllers\Controller;
 use App\Jobs\CheckDeviceStatusJob;
 use App\Models\monitoringSystem\Camera;
+use App\Models\monitoringSystem\ConditionAttention;
 use App\Models\monitoringSystem\Nvr;
 use Illuminate\Support\Facades\Cache;
 
@@ -74,5 +75,16 @@ class CheckStatusController extends Controller
 
 
         return response()->json($data);
+    }
+
+    public function loadCamera($nvr_id)
+    {
+        $cameras = Camera::where('nvr_id', $nvr_id)
+            ->whereDoesntHave('conditionAttention', function ($query) {
+                $query->where('status', 'Por atender');
+            })
+            ->get(['id', 'name']);
+
+        return response()->json($cameras);
     }
 }

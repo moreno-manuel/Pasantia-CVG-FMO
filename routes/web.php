@@ -43,6 +43,7 @@ Route::controller(CheckStatusController::class) //monitoreo de camaras y nvr
     ->group(function () {
         Route::get('', 'home')->name('home');
         Route::get('check', 'checkStatus')->name('test.check');
+        Route::get('{nvr_id}', 'loadCamera')->name('test.loadCamera');
     });
 Route::resource('switch', SwitchController::class)->middleware('auth');
 Route::resource('enlace', LinkController::class)->middleware('auth');
@@ -104,8 +105,7 @@ Route::controller(QuestionsSecurityController::class) // preguntas de seguridad 
 
 Route::resource('users', UserController::class)->middleware(UsersAccesMiddleware::class)->except('show'); //para el control de los usuarios registrados  
 
-Route::get('/manual', function () {
+Route::get('/manual', function () { // abre el manual 
     $path = public_path('files/manual.pdf');
-
     return response()->file($path);
 });

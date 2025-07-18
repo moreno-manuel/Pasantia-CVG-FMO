@@ -10,10 +10,12 @@
                 <h1 class="text-2xl font-bold text-white">Editar Cámara</h1>
 
                 <!-- Botón Volver -->
-                <a href="{{ route('camara.index') }}"
-                    class="inline-flex items-center px-3 py-1.5 bg-gray-500 text-white font-semibold rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-gray-600 hover:shadow-md hover:-translate-y-px text-xs uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
-                    Volver
-                </a>
+                <div class="flex justify-end items-center mb-6">
+                    <button type="button" onclick="window.history.back()"
+                        class="inline-flex items-center px-3 py-1.5 bg-gray-500 text-white font-semibold rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-gray-600 hover:shadow-md hover:-translate-y-px text-xs uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                        Volver
+                    </button>
+                </div>
             </div>
 
             {{-- Formulario --}}
@@ -139,23 +141,4 @@
             </form>
         </div>
     </div>
-
-    {{--  para para personalizar --}}
-    @push('scripts')
-        <script>
-            const select = document.getElementById('mark');
-            const otherField = document.getElementById('other-brand-field');
-
-
-            if (select && otherField) {
-                select.addEventListener('change', function() {
-                    otherField.classList.toggle('hidden', select.value !== 'Otra');
-                });
-
-                if (select.value === 'Otra') {
-                    otherField.classList.remove('hidden');
-                }
-            }
-        </script>
-    @endpush
 @endsection

@@ -163,37 +163,6 @@
         @endif
 
     </div>
-    
-    {{-- funcion para obtener la descripcion de eliminacion --}}
-    @push('scripts')
-        <script>
-            let deleteUrl = '';
-
-            function openDeleteModal(url) {
-                deleteUrl = url;
-                document.getElementById('deleteModal').classList.remove('hidden');
-                document.getElementById('reason').value = '';
-            }
-
-            function closeDeleteModal() {
-                document.getElementById('deleteModal').classList.add('hidden');
-            }
-
-            function submitDeleteForm() {
-                const reason = document.getElementById('reason').value.trim();
-
-                if (!reason) {
-                    alert("Por favor, describa un motivo para eliminar.");
-                    return;
-                }
-
-                const form = document.getElementById('deleteForm');
-                form.action = deleteUrl;
-                document.getElementById('deletionReasonInput').value = reason;
-                form.submit();
-            }
-        </script>
-    @endpush
 
     <!-- Modal para confirmar eliminación con descripción -->
     <div id="deleteModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black-opaco">
@@ -220,6 +189,4 @@
         @method('DELETE')
         <input type="hidden" name="deletion_description" id="deletionReasonInput">
     </form>
-
-
 @endsection

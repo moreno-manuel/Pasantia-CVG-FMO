@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\monitoringSystem\Camera;
 use App\Models\monitoringSystem\ConditionAttention;
 use App\Models\monitoringSystem\ControlCondition;
+use App\Models\monitoringSystem\Nvr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -35,27 +36,17 @@ class ConditionAController extends Controller
 
     public function create()
     {
-        $camerasAll = Camera::with('conditionAttention')->where('status', '!=', 'online')->select('id', 'name', 'mac')->get();
-
-        $cameras = $camerasAll->filter(function ($camera) { //evita cargar camaras con condiciones pendientes
-            $latestCondition = $camera->conditionAttention()
-                ->latest()
-                ->first();
-            if ($latestCondition)
-                return $latestCondition->status == 'Atendido';
-
-            return true;
-        });
+        $nvrs = Nvr::with('camera')->select('id', 'name')->get();
 
         $names = json_decode(file_get_contents(resource_path('js/data.json')), true)['conditions']; // json con los tipos de condicion
-        return view('front.attention.create', compact('cameras', 'names'));
+        return view('front.attention.create', compact('nvrs', 'names'));
     }
 
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'other_condition' => 'nullable|regex:/^[a-zA-Z\s]+$/u|min:5|required_if:name,OTROS',
+            'other_condition' => 'nullable|regex:/^[a-zA-Z\s]+$/u|min:5|required_if:name,OTRO',
             'camera_id' => 'required',
             'date_ini' => 'required|date',
             'date_end' => 'nullable|date|after_or_equal:date_ini',
@@ -76,7 +67,7 @@ class ConditionAController extends Controller
 
         ConditionAttention::create([
             'name' => $request->input('name'),
-            'other_name' => $request->input('other_condition'),
+            'other_name' => $request->filled('other_condition') ? strtoupper($request->input('other_condition')) : null,
             'camera_id' => $request->input('camera_id'),
             'date_ini' => $request->input('date_ini'),
             'date_end' => $request->input('date_end'),
@@ -139,6 +130,11 @@ class ConditionAController extends Controller
     {
         $condition = ConditionAttention::findOrFail($id);
         $condition->delete();
-        return redirect()->route('atencion.index')->with('success', 'Condición de atención eliminada exitosamente.');
+
+        $previousUrl = url()->previous(); // Obtener la URL anterior
+        if (str_contains($previousUrl, 'atencion/')) {
+            return 'prueba';
+        }
+        return redirect($previousUrl)->with('success', 'Condición de atención eliminada exitosamente.');
     }
 }

@@ -125,48 +125,53 @@
 
 
     <script>
-        // Función para mostrar el spinner
+        // Funciones para mostrar y ocultar el loader
         function showLoader() {
-            document.getElementById('loading-spinner').classList.remove('hidden');
+            const spinner = document.getElementById('loading-spinner');
+            if (spinner) {
+                spinner.classList.remove('hidden');
+            }
         }
 
-        // Función para ocultar el spinner
         function hideLoader() {
-            document.getElementById('loading-spinner').classList.add('hidden');
+            const spinner = document.getElementById('loading-spinner');
+            if (spinner) {
+                spinner.classList.add('hidden');
+            }
         }
 
-        // Cargar contenido dinámico
+        // Cargar contenido dinámicamente
         async function loadContent(url) {
             showLoader();
+
+            // Forzar renderizado del spinner
+            await new Promise(resolve => requestAnimationFrame(() => setTimeout(resolve, 0)));
+
             try {
                 const response = await fetch(url);
                 const text = await response.text();
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(text, "text/html");
-                const newContent = doc.querySelector("main").innerHTML;
+                const mainElement = doc.querySelector("main");
 
-                await new Promise(resolve => setTimeout(resolve, 200));
-                document.getElementById("app").innerHTML = newContent;
-                history.pushState(null, '', url);
-
-                // Detectar si es la vista home desde la URL
-                const isHome = url.includes('/home') || url.includes('/home/');
-
-                // Iniciar actualización solo si es home
-                if (isHome) {
-                    if (!window.statusInterval) {
-                        updateDeviceStatus(); // Primera carga
-                        window.statusInterval = setInterval(updateDeviceStatus, 15000); // Cada 15 segundos
-                    }
-                } else {
-                    if (window.statusInterval) {
-                        clearInterval(window.statusInterval);
-                        window.statusInterval = null;
-                    }
+                if (!mainElement) {
+                    document.getElementById("app").innerHTML =
+                        `<div class="p-4 text-red-600">Error: No se encontró el elemento <main>.</div>`;
+                    return;
                 }
 
-                // Iniciar scripts dinámicos
-                initDynamicScripts();
+                const newContent = mainElement.innerHTML;
+
+                // Simular carga
+                await new Promise(resolve => setTimeout(resolve, 200));
+
+                document.getElementById("app").innerHTML = newContent;
+                history.pushState({
+                    path: url,
+                    html: newContent
+                }, '', url);
+
+                // Reiniciar scripts
                 initScripts();
 
             } catch (error) {
@@ -178,30 +183,39 @@
             }
         }
 
-
-        // Detectar navegación del usuario (botón "Volver")
-        window.addEventListener('popstate', async function(event) {
+        // Manejar retroceso
+        window.addEventListener('popstate', function(event) {
             if (event.state && event.state.path) {
-                await loadContent(event.state.path);
+                showLoader(); // Mostrar spinner
+
+                // Forzar renderizado visual del spinner
+                requestAnimationFrame(() => {
+                    setTimeout(async () => {
+                        if (event.state.html) {
+                            // Si ya tenemos el contenido en el estado, inyectarlo
+                            document.getElementById("app").innerHTML = event.state.html;
+                            initScripts();
+                            hideLoader();
+                        } else {
+                            // Si no, cargarlo dinámicamente
+                            await loadContent(event.state.path);
+                        }
+                    }, 10);
+                });
             } else {
                 location.reload(); // Fallback
             }
         });
 
-        // para capturar el click
+        // Intercepta enlaces
         document.body.addEventListener("click", function(e) {
             const link = e.target.closest("a");
             if (link && link.href) {
                 const url = link.getAttribute("href");
-
-                if (link.target ===
-                    "_blank") { // Permitir que el navegador maneje la navegación normalmente (descargas)
-                    return;
-                }
+                if (link.target === "_blank") return;
                 e.preventDefault();
                 loadContent(url);
             }
-
         });
 
         /* para numero de HDD */
@@ -298,6 +312,9 @@
                     form.submit();
                 }
             };
+            //incia scripts
+            initDynamicScripts();
+            initCameraLoader();
         }
 
         // para para personalizar
@@ -401,6 +418,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             // Verificar si la URL actual es home
+            initScripts();
             const currentUrl = window.location.pathname;
             if (currentUrl === '/home' || currentUrl === '/home/') {
                 updateDeviceStatus(); // Primera carga
@@ -491,6 +509,99 @@
                 </td>
             </tr>
         `;
+        }
+    </script>
+
+    {{-- para carga de camara --}}
+    <script>
+        //carga camaras 
+        const nvrSelect = document.getElementById('nvr');
+        const camaraSelect = document.getElementById('camera_id');
+
+        nvrSelect.addEventListener('change', function() {
+            const nvr_id = this.value;
+
+            // Limpiar el campo de cámaras
+            camaraSelect.innerHTML = '<option value="">Cargando...</option>';
+            camaraSelect.disabled = true;
+
+            if (!nvr_id) {
+                camaraSelect.innerHTML = '<option value="">Selecciona un NVR primero</option>';
+                camaraSelect.disabled = false;
+                return;
+            }
+
+            const url = "{{ route('test.loadCamera', ['nvr_id' => ':nvr_id']) }}".replace(':nvr_id',
+                nvr_id);
+            fetch(url)
+                .then(response => response.json())
+                .then(cameras => {
+                    camaraSelect.innerHTML = '<option value="">Selecciona una cámara</option>';
+                    if (cameras.length === 0) {
+                        camaraSelect.innerHTML =
+                            '<option value="">No hay cámaras disponibles</option>';
+                    } else {
+                        cameras.forEach(camera => {
+                            const option = document.createElement('option');
+                            option.value = camera.id;
+                            option.textContent = camera.name;
+                            camaraSelect.appendChild(option);
+                        });
+                    }
+                    camaraSelect.disabled = false;
+                })
+                .catch(error => {
+                    console.error('Error al cargar cámaras:', error);
+                    camaraSelect.innerHTML = '<option value="">Error al cargar cámaras</option>';
+                    camaraSelect.disabled = true;
+                });
+        });
+    </script>
+
+    {{-- cargas camaras para condicion de atencion --}}
+    <script>
+        function initCameraLoader() {
+            const nvrSelect = document.getElementById('nvr');
+            const camaraSelect = document.getElementById('camera_id');
+
+            if (!nvrSelect || !camaraSelect) return; // Si no existen, no hace nada
+
+            nvrSelect.addEventListener('change', function() {
+                const nvr_id = this.value;
+
+                camaraSelect.innerHTML = '<option value="">Cargando...</option>';
+                camaraSelect.disabled = true;
+
+                if (!nvr_id) {
+                    camaraSelect.innerHTML = '<option value="">Selecciona un NVR primero</option>';
+                    camaraSelect.disabled = false;
+                    return;
+                }
+
+                const url = "{{ route('test.loadCamera', ['nvr_id' => ':nvr_id']) }}".replace(':nvr_id', nvr_id);
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(cameras => {
+                        camaraSelect.innerHTML = '<option value="">Selecciona una cámara</option>';
+                        if (cameras.length === 0) {
+                            camaraSelect.innerHTML = '<option value="">No hay cámaras disponibles</option>';
+                        } else {
+                            cameras.forEach(camera => {
+                                const option = document.createElement('option');
+                                option.value = camera.id;
+                                option.textContent = camera.name;
+                                camaraSelect.appendChild(option);
+                            });
+                        }
+                        camaraSelect.disabled = false;
+                    })
+                    .catch(error => {
+                        console.error('Error al cargar cámaras:', error);
+                        camaraSelect.innerHTML = '<option value="">Error al cargar cámaras</option>';
+                        camaraSelect.disabled = true;
+                    });
+            });
         }
     </script>
 
