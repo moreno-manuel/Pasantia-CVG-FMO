@@ -37,16 +37,17 @@ class NvrCameraReportExport extends BaseReportExport implements WithTitle
             foreach ($nvrList as $nvr) {
                 $cameras = $nvr->camera;
 
-                // Filtrar cámaras offline y procesar su última condición en un solo paso
-                $inoperativeStats = $cameras
-                    ->filter(fn($c) => $c->status === 'offline')
-                    ->reduce(
-                        function ($carry, $camera) {
-                            // Obtener la última condición de atención
-                            $lastCondition = $camera->conditionAttention()
-                                ->latest('created_at')
-                                ->first();
-                            $name = optional($lastCondition)->name;
+
+                $inoperativeStats = $cameras->reduce( // camaras inoperativas
+                    function ($carry, $camera) {
+                        // Obtener la última condición de atención
+                        $lastCondition = $camera->conditionAttention()
+                            ->latest('created_at')
+                            ->first();
+
+                        // Solo si la condición existe y tiene status 'por atender'
+                        if (optional($lastCondition)->status === 'Por atender') {
+                            $name = $lastCondition->name;
 
                             // Clasificar según el nombre
                             if ($name === 'CAMION CESTA') {
@@ -55,16 +56,19 @@ class NvrCameraReportExport extends BaseReportExport implements WithTitle
                                 $carry['onProcess']++;
                             } elseif ($name === 'PARA REMPLAZAR') {
                                 $carry['replace']++;
-                            } elseif ($name != null) {
+                            } elseif ($name !== null) {
                                 $carry['others']++;
                             }
 
+                            // Incrementar total inoperativas
                             $carry['inoperative']++;
+                        } else
+                            $carry['operative']++;
 
-                            return $carry;
-                        },
-                        ['truck' => 0, 'onProcess' => 0, 'replace' => 0, 'others' => 0, 'inoperative' => 0]
-                    );
+                        return $carry;
+                    },
+                    ['truck' => 0, 'onProcess' => 0, 'replace' => 0, 'others' => 0, 'inoperative' => 0, 'operative' => 0]
+                );
 
                 // Asignar resultados a variables
                 $truck = $inoperativeStats['truck'];
@@ -75,7 +79,7 @@ class NvrCameraReportExport extends BaseReportExport implements WithTitle
                 $inoperative = $inoperativeStats['inoperative'];
 
                 // Contar cámaras online
-                $operative = $cameras->filter(fn($c) => $c->status === 'online')->count();
+                $operative = $inoperativeStats['operative'];
 
                 $items[] = [
                     'nvr' => $nvr,

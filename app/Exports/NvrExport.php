@@ -133,21 +133,7 @@ class NvrExport implements ShouldAutoSize, WithDrawings, WithEvents
                             ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
                             ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
                     }
-
-                    // Si el status es "Inactivo", coloreamos toda la fila de rojo
-                    if ($nvr->status === 'offline') {
-                        $phpSheet->getStyle("A{$rowNumber}:Q{$rowNumber}")
-                            ->getFill()
-                            ->setFillType(Fill::FILL_SOLID)
-                            ->getStartColor()->setARGB('FFFF0000'); // Rojo
-
-                        $phpSheet->getStyle("A{$rowNumber}:Q{$rowNumber}")
-                            ->getFont()
-                            ->setColor(new Color('FFFFFFFF')); // Texto blanco
-                    }
                 }
-
-
 
 
                 // Pie de página en columna A

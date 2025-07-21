@@ -512,51 +512,6 @@
         }
     </script>
 
-    {{-- para carga de camara --}}
-    <script>
-        //carga camaras 
-        const nvrSelect = document.getElementById('nvr');
-        const camaraSelect = document.getElementById('camera_id');
-
-        nvrSelect.addEventListener('change', function() {
-            const nvr_id = this.value;
-
-            // Limpiar el campo de cámaras
-            camaraSelect.innerHTML = '<option value="">Cargando...</option>';
-            camaraSelect.disabled = true;
-
-            if (!nvr_id) {
-                camaraSelect.innerHTML = '<option value="">Selecciona un NVR primero</option>';
-                camaraSelect.disabled = false;
-                return;
-            }
-
-            const url = "{{ route('test.loadCamera', ['nvr_id' => ':nvr_id']) }}".replace(':nvr_id',
-                nvr_id);
-            fetch(url)
-                .then(response => response.json())
-                .then(cameras => {
-                    camaraSelect.innerHTML = '<option value="">Selecciona una cámara</option>';
-                    if (cameras.length === 0) {
-                        camaraSelect.innerHTML =
-                            '<option value="">No hay cámaras disponibles</option>';
-                    } else {
-                        cameras.forEach(camera => {
-                            const option = document.createElement('option');
-                            option.value = camera.id;
-                            option.textContent = camera.name;
-                            camaraSelect.appendChild(option);
-                        });
-                    }
-                    camaraSelect.disabled = false;
-                })
-                .catch(error => {
-                    console.error('Error al cargar cámaras:', error);
-                    camaraSelect.innerHTML = '<option value="">Error al cargar cámaras</option>';
-                    camaraSelect.disabled = true;
-                });
-        });
-    </script>
 
     {{-- cargas camaras para condicion de atencion --}}
     <script>
@@ -602,6 +557,23 @@
                         camaraSelect.disabled = true;
                     });
             });
+        }
+    </script>
+
+    {{-- visualizar claves --}}
+    <script>
+        function togglePasswordVisibility(id) {
+            const input = document.getElementById(id);
+            const icon = document.getElementById(`eye-icon-${id}`);
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
+            } else {
+                input.type = "password";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            }
         }
     </script>
 

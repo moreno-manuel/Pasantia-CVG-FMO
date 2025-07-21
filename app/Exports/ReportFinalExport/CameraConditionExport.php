@@ -20,7 +20,10 @@ class CameraConditionExport extends BaseReportExport implements WithTitle
 
     protected function loadData()
     {
-        $cameras = Camera::with(['nvr', 'conditionAttention'])->where('status', 'offline')->get();
+        $cameras = Camera::with(['nvr', 'conditionAttention'])
+            ->whereHas('conditionAttention', function ($query) {
+                $query->where('status', 'Por atender');
+            })->get();
 
         // Agrupar por attention_type y luego por location
         $groupedByCondition = [];

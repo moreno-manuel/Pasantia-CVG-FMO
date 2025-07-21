@@ -18,8 +18,8 @@ class CameraExport implements ShouldAutoSize, WithDrawings, WithEvents
 
     public function __construct()
     {
-        $this->data = Camera::with('nvr')
-            ->select('mac', 'mark', 'model', 'name', 'ip', 'location', 'description', 'status', 'nvr_id')
+        $this->data = Camera::with(['nvr', 'conditionAttention'])
+            ->select('id', 'mac', 'mark', 'model', 'name', 'ip', 'location', 'description', 'status', 'nvr_id')
             ->get()
             ->groupBy(function ($camera) {
                 return $camera->nvr ? $camera->nvr->name : 'Sin NVR Asignado';
@@ -118,8 +118,10 @@ class CameraExport implements ShouldAutoSize, WithDrawings, WithEvents
                                 ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
                         }
 
-                        // Si el status es offline, colorear fila roja
-                        if ($camera->status === 'offline') {
+                        $lastcondition = $camera->conditionAttention()->latest('created_at')->first();
+
+                        
+                        if (optional($lastcondition)->status === 'Por atender') {
                             $phpSheet->getStyle("A{$currentRow}:H{$currentRow}")
                                 ->getFill()
                                 ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)

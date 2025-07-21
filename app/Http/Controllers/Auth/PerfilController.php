@@ -29,7 +29,7 @@ class PerfilController extends Controller
             $request->all(),
             [
                 'name' => 'required|min:3|alpha',
-                'last_name' => 'required|min:3|alpha',
+                'last_name' => 'required|min:3|regex:/^[a-zA-Z ]+$/',
                 'sex' =>  'required',
                 'email' => [
                     'required',

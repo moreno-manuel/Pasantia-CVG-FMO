@@ -56,7 +56,7 @@ class SwitchController extends Controller
                 'description' => 'nullable'
             ],
             ['required_if' => 'Debe agregar el nombre de la marca'],
-            ['serial' => 'Serial', 'location' => 'Localidad', 'model' => 'Modelo' , 'other_mark' => 'Marca']
+            ['serial' => 'Serial', 'location' => 'Localidad', 'model' => 'Modelo', 'other_mark' => 'Marca']
         );
 
 
@@ -97,7 +97,7 @@ class SwitchController extends Controller
                 'description' => 'nullable'
             ],
             ['required_if' => 'Debe agregar el nombre de la marca'],
-            ['serial' => 'Serial', 'location' => 'Localidad', 'model' => 'Modelo' , 'other_mark' => 'Marca']
+            ['serial' => 'Serial', 'location' => 'Localidad', 'model' => 'Modelo', 'other_mark' => 'Marca']
         );
 
 
@@ -108,7 +108,8 @@ class SwitchController extends Controller
         $request = marksUpdate($request, 'switch_marks'); // en caso de que haya una marca nueva
 
         $switch->update($request->all());
-        return redirect()->route('switch.index')->with('success', 'Switch actualizado exitosamente.');
+
+        return redirect()->route('switch.show', ['switch' => $switch->serial])->with('success', 'Switch actualizado.');
     }
 
     public function show($serial)

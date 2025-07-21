@@ -72,9 +72,13 @@
                         <!-- Campo ficha -->
                         <div>
                             <label for="license" class="block text-sm font-semibold text-white">Ficha</label>
-                            <input type="text" name="license" id="license" value="{{ $user->person->license }}"
-                                class="mt-1 block w-full rounded-md bg-gray-900 border border-gray-600 text-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm "
-                                disabled readonly>
+                            <input type="text" name="license" id="license"
+                                value="{{ old('license', $user->person->license) }}" minlength="3"
+                                class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('license') border-red-500 @enderror"
+                                required>
+                            @error('license')
+                                <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
                 </div>
@@ -134,7 +138,8 @@
                             <div class="sm:col-span-1">
                                 <label for="password" class="block text-sm font-semibold text-white">Contraseña</label>
                                 <div class="relative">
-                                    <input id="password" type="password" name="password" minlength="8" value="{{old('password')}}"
+                                    <input id="password" type="password" name="password" minlength="8"
+                                        value="{{ old('password') }}"
                                         class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('password') border-red-500 @enderror">
                                     <!-- Botón para mostrar/ocultar -->
                                     <button type="button" onclick="togglePasswordVisibility('password')"
@@ -152,7 +157,8 @@
                                 <label for="password_confirmation" class="block text-sm font-semibold text-white">Confirmar
                                     Contraseña</label>
                                 <div class="relative">
-                                    <input id="password_confirmation" type="password" name="password_confirmation" minlength="8" value="{{old('password_confirmation')}}"
+                                    <input id="password_confirmation" type="password" name="password_confirmation"
+                                        minlength="8" value="{{ old('password_confirmation') }}"
                                         class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('password_confirmation') border-red-500 @enderror">
                                     <!-- Botón para mostrar/ocultar -->
                                     <button type="button" onclick="togglePasswordVisibility('password_confirmation')"
@@ -179,23 +185,4 @@
             </form>
         </div>
     </div>
-
-    {{-- para visualizar las contraseñas --}}
-    @push('scripts')
-        <script>
-            function togglePasswordVisibility(id) {
-                const input = document.getElementById(id);
-                const icon = document.getElementById(`eye-icon-${id}`);
-                if (input.type === "password") {
-                    input.type = "text";
-                    icon.classList.remove("fa-eye");
-                    icon.classList.add("fa-eye-slash");
-                } else {
-                    input.type = "password";
-                    icon.classList.remove("fa-eye-slash");
-                    icon.classList.add("fa-eye");
-                }
-            }
-        </script>
-    @endpush
 @endsection

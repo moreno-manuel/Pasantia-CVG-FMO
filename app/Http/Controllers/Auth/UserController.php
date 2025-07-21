@@ -35,9 +35,9 @@ class UserController extends Controller
             $request->all(),
             [
                 'name' => 'required|min:3|alpha',
-                'last_name' => 'required|min:3|alpha',
+                'last_name' => 'required|min:3|regex:/^[a-zA-Z ]+$/',
                 'sex' => 'required',
-                'license' => 'required|alpha_num|unique:persons,license|min:3',
+                'license' => 'required|numeric|unique:persons,license|min:3',
                 'userName' => [
                     'required',
                     'unique:users,userName',
@@ -55,7 +55,8 @@ class UserController extends Controller
                 'userName' => 'Nombre de usuario',
                 'license' => 'Ficha',
                 'name' => 'Nombre',
-                'last_name' => 'Apellido'
+                'last_name' => 'Apellido',
+                'license' => 'Ficha'
             ]
         );
 
@@ -96,7 +97,13 @@ class UserController extends Controller
             $request->all(),
             [
                 'name' => 'required|min:3|alpha',
-                'last_name' => 'required|min:3|alpha',
+                'last_name' => 'required|min:3|regex:/^[a-zA-Z ]+$/',
+                'license' => [
+                    'required',
+                    'numeric',
+                    'min:3',
+                    Rule::unique('persons')->ignore($person->license, 'license')
+                ],
                 'sex' => 'required',
                 'userName' =>
                 [
@@ -122,7 +129,8 @@ class UserController extends Controller
             [
                 'userName' => 'Nombre de usuario',
                 'name' => 'Nombre',
-                'last_name' => 'Apellido'
+                'last_name' => 'Apellido',
+                'license' => 'Ficha'
             ]
         );
 
@@ -133,7 +141,8 @@ class UserController extends Controller
         $person->update([
             'name' => $request->input('name'),
             'last_name' => $request->input('last_name'),
-            'sex' => $request->input('sex')
+            'sex' => $request->input('sex'),
+            'license' => $request->input('license')
         ]);
 
         if ($request->filled('password'))

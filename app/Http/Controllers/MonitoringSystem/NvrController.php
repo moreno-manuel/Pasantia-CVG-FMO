@@ -144,7 +144,7 @@ class NvrController extends Controller
                 $i++;
             }
 
-            return redirect()->route('nvr.index')->with('success', 'NVR actualizado exitosamente.');
+            return redirect()->route('nvr.show', ['nvr' => $nvr->name])->with('success', 'Nvr actualizado.');
         } catch (QueryException $e) {
             if ($e->getCode() === '23000') { // Código de error de integridad para la db *IP*
                 return redirect()->back()->withInput()->withErrors([

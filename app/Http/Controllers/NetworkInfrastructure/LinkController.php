@@ -121,9 +121,9 @@ class LinkController extends Controller
 
             $request = marksUpdate($request, 'link_marks');
 
-
             $link->update($request->all());
-            return redirect()->route('enlace.index')->with('success', 'Enlace actualizado exitosamente.');
+
+            return redirect()->route('enlace.show', ['enlace' => $link->name])->with('success', 'Enlace actualizado.');
         } catch (QueryException $e) {
             if ($e->getCode() === '23000') { // Código de error de integridad para la db *IP*
                 return redirect()->back()->withInput()->withErrors([
@@ -139,7 +139,7 @@ class LinkController extends Controller
             $link = Link::where('name', $name)->firstOrFail();
             return view('front.link.show', compact('link'));
         } catch (ModelNotFoundException $e) {
-            return redirect()->route('enlace.index')->with('warnings', 'Nvr no encontrado');
+            return redirect()->route('enlace.index')->with('warnings', 'Enlace no encontrado');
         }
     }
 

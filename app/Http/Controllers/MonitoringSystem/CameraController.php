@@ -109,7 +109,7 @@ class CameraController extends Controller
 
             return view('front.camera.edit', compact('camera', 'nvrs', 'marks'));
         } catch (ModelNotFoundException $e) {
-            return redirect()->route('camera.index')->with('warnings', 'cámara no encontrada');
+            return redirect()->route('camera.index')->with('warnings', 'Cámara no encontrada');
         }
     }
 
@@ -146,7 +146,8 @@ class CameraController extends Controller
             $request = marksUpdate($request, 'marks');
 
             $camera->update($request->all());
-            return redirect()->route('camara.index')->with('success', 'Cámara actualizada exitosamente.');
+
+            return redirect()->route('camara.show', ['camara' => $camera->name])->with('success', 'Cámara actualizada.');
         } catch (QueryException $e) {
             if ($e->getCode() === '23000') { // Código de error de integridad para la db *IP*
                 return redirect()->back()->withInput()->withErrors([
@@ -159,12 +160,14 @@ class CameraController extends Controller
     public function show($name)
     {
         try {
+            session(['urlCamera' => url()->previous()]); //captura ruta desde donde se llama el metodo
+
             $camera = Camera::where('name', $name)->firstOrFail();
             $conditions = $camera->conditionAttention()->orderBy('created_at', 'desc')->paginate(5); // Cargar los registros de condicion de atención con paginación
 
             return view('front.camera.show', compact('camera', 'conditions'));
         } catch (ModelNotFoundException $e) {
-            return redirect()->route('camera.index')->with('warnings', 'cámara  no encontrada');
+            return redirect()->route('camera.index')->with('warnings', 'Cámara  no encontrada');
         }
     }
 
@@ -196,7 +199,7 @@ class CameraController extends Controller
         $previousUrl = url()->previous(); // Obtener la URL anterior
 
         if (str_contains($previousUrl, 'camara/')) {
-            return 'prueba';
+            return redirect(session('urlCamera'))->with('success', 'Cámara eliminada exitosamente.');
         }
         return redirect($previousUrl)->with('success', 'Cámara eliminada exitosamente.');
     }

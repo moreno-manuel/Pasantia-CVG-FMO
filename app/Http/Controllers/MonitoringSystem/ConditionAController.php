@@ -3,15 +3,13 @@
 namespace App\Http\Controllers\MonitoringSystem;
 
 use App\Http\Controllers\Controller;
-use App\Models\monitoringSystem\Camera;
 use App\Models\monitoringSystem\ConditionAttention;
 use App\Models\monitoringSystem\ControlCondition;
 use App\Models\monitoringSystem\Nvr;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-
-use function app\Helpers\conditionValidate;
 use function app\Helpers\filter;
 
 /* Controlador crud 
@@ -19,6 +17,7 @@ condición de atención */
 
 class ConditionAController extends Controller
 {
+
     public function index(Request $request)
     {
         if (!$request->filled('name')) { //si no se aplica un filtro
@@ -86,7 +85,6 @@ class ConditionAController extends Controller
 
     public function update(Request $request,  $id)
     {
-
         $validator = Validator::make($request->all(), [
             'date_end' => 'nullable|date',
             'description' => [
@@ -116,14 +114,20 @@ class ConditionAController extends Controller
                 'status' => $request->filled('date_end') ? 'Atendido' : 'Por atender'
             ]);
 
-        return redirect()->route('atencion.index')->with('success', 'Condición de Atención actualizada exitosamente.');
+        return redirect()->route('atencion.show', ['atencion' => $condition->id])->with('success', 'Condición de atención actualizada.');
     }
 
     public function show($id)
     {
-        $condition = ConditionAttention::findOrFail($id);
-        $controlConditions = $condition->controlCondition()->orderBy('created_at', 'desc')->paginate(5); //obtiene las descripciones de la condición
-        return view('front.attention.show', compact('condition', 'controlConditions'));
+        try {
+            session(['url' => url()->previous()]); //captura ruta desde donde se llama el metodo
+
+            $condition = ConditionAttention::findOrFail($id);
+            $controlConditions = $condition->controlCondition()->orderBy('created_at', 'desc')->paginate(5); //obtiene las descripciones de la condición
+            return view('front.attention.show', compact('condition', 'controlConditions'));
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route('atencion.index')->with('warnings', 'Condición de atención no encontrada');
+        }
     }
 
     public function destroy($id)
@@ -131,10 +135,11 @@ class ConditionAController extends Controller
         $condition = ConditionAttention::findOrFail($id);
         $condition->delete();
 
-        $previousUrl = url()->previous(); // Obtener la URL anterior
-        if (str_contains($previousUrl, 'atencion/')) {
-            return 'prueba';
-        }
-        return redirect($previousUrl)->with('success', 'Condición de atención eliminada exitosamente.');
+        $previousUrl = url()->previous();
+
+        if (str_contains($previousUrl, 'atencion/'))
+            return redirect(session('url'))->with('success', 'Condición de atención eliminada exitosamente.');
+
+        return back()->with('success', 'Condición de atención eliminada exitosamente.');
     }
 }
