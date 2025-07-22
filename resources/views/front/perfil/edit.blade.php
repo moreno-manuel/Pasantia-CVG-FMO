@@ -3,7 +3,7 @@
     <!-- resources/views/front/perfil/edit.blade.php -->
 
     <div class="container mx-auto px-4 py-6">
-        <div class="bg-gray-800 shadow overflow-hidden sm:rounded-lg p-6 border border-gray-700">
+        <div class="bg-zinc-600 shadow overflow-hidden sm:rounded-lg p-6 border border-gray-700">
 
             {{-- Título  --}}
             <div class="flex justify-between items-center mb-6">
@@ -11,7 +11,7 @@
 
                 <!-- Botón preguntas de seguridad -->
                 <a href="{{ route('security.showForm') }}"
-                    class="inline-flex items-center px-3 py-1.5 bg-gray-500 text-white font-semibold rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-gray-600 hover:shadow-md hover:-translate-y-px text-xs uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                    class="inline-flex items-center px-3 py-1.5 bg-zinc-500 text-white font-semibold rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-zinc-600 hover:shadow-md hover:-translate-y-px text-xs uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
                     Preguntas de Seguridad
                 </a>
             </div>
@@ -28,7 +28,7 @@
                     <div>
                         <label for="ficha" class="block text-sm font-semibold text-white">Ficha</label>
                         <input type="text" name="ficha" value="{{ $user->person->license }}"
-                            class="mt-1 block w-full rounded-md bg-gray-900 border border-gray-600 text-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            class="mt-1 block w-full rounded-md bg-zinc-900 border border-gray-600 text-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             disabled readonly>
                     </div>
 
@@ -36,7 +36,7 @@
                     <div>
                         <label for="name" class="block text-sm font-semibold text-white">Nombre</label>
                         <input type="text" name="name" id="name" minlength="3"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm  @error('name') border-red-500 @enderror"
+                            class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm  @error('name') border-red-500 @enderror"
                             value="{{ old('name', $user->person->name) }}" required>
                         @error('name')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -48,7 +48,7 @@
                         <label for="last_name" class="block text-sm font-semibold text-white">Apellido</label>
                         <input type="text" name="last_name" value="{{ old('last_name', $user->person->last_name) }}"
                             minlength="3"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm  @error('last_name') border-red-500 @enderror"
+                            class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm  @error('last_name') border-red-500 @enderror"
                             required>
                         @error('last_name')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -59,7 +59,7 @@
                     <div>
                         <label for="sex" class="block text-sm font-semibold text-white">Género</label>
                         <select name="sex" id="sex"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
                             <option value="">Seleccione..</option>
                             <option value="Masculino" {{ old('sex', $user->person->sex) == 'Masculino' ? 'selected' : '' }}>
@@ -81,7 +81,7 @@
                     <div>
                         <label for="name" class="block text-sm font-semibold text-white">Nombre de Usuario</label>
                         <input type="text" name="name" value="{{ $user->userName }}"
-                            class="mt-1 block w-full rounded-md bg-gray-900 border border-gray-600 text-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            class="mt-1 block w-full rounded-md bg-zinc-900 border border-gray-600 text-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             disabled readonly>
                     </div>
 
@@ -89,7 +89,7 @@
                     <div>
                         <label for="email" class="block text-sm font-semibold text-white">Email</label>
                         <input type="email" name="email" value="{{ old('email', $user->email) }}"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm  @error('email') border-red-500 @enderror"
+                            class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm  @error('email') border-red-500 @enderror"
                             required>
                         @error('email')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -101,7 +101,7 @@
                         <label for="password" class="block text-sm font-semibold text-white">Contraseña</label>
                         <div class="relative">
                             <input id="password" type="password" minlength="8"
-                                class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('password') border-red-500 @enderror"
+                                class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('password') border-red-500 @enderror"
                                 name="password" value="{{ old('password') }}" autocomplete="current-password">
                             <!-- Botón para mostrar/ocultar contraseña -->
                             <button type="button" onclick="togglePasswordVisibility('password')"
@@ -121,7 +121,7 @@
                         <div class="relative">
                             <input id="password_confirmation" type="password" value="{{ old('password_confirmation') }}"
                                 minlength="8"
-                                class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('password_confirmation') border-red-500 @enderror"
+                                class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('password_confirmation') border-red-500 @enderror"
                                 name="password_confirmation">
                             <!-- Botón para mostrar/ocultar contraseña -->
                             <button type="button" onclick="togglePasswordVisibility('password_confirmation')"

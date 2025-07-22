@@ -6,7 +6,7 @@
 
         <!-- Encabezado -->
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold text-white bg-gray-600 rounded-md px-3 py-1">Monitoreo</h1>
+            <h1 class="text-2xl font-bold text-white bg-zinc-500 rounded-md px-3 py-1">Monitoreo</h1>
         </div>
 
         {{-- logo --}}
@@ -18,13 +18,13 @@
 
         {{-- Tabla de Nvr inactivos  --}}
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-1xl font-bold text-white bg-gray-600 rounded-md px-3 py-1">Nvr</h1>
+            <h1 class="text-1xl font-bold text-white bg-zinc-500 rounded-md px-3 py-1">Nvr</h1>
         </div>
 
-        <div class="overflow-x-auto rounded-lg shadow border border-gray-700 bg-gray-800">
+        <div class="overflow-x-auto rounded-lg shadow border border-zinc-500 bg-zinc-700">
             <table class="min-w-full shadow-md rounded-lg overflow-hidden divide-gray-700">
-                <thead class="bg-gray-700 divide-x divide-blue-400">
-                    <tr class="divide-x divide-blue-400">
+                <thead class="bg-red-900 divide-x divide-white">
+                    <tr class="divide-x divide-white">
                         <th class="px-6 py-3 text-center text-sm font-medium text-white w-32">MAC</th>
                         <th class="px-6 py-3 text-center text-sm font-medium text-white w-32">Nombre</th>
                         <th class="px-6 py-3 text-center text-sm font-medium text-white w-32">Localidad</th>
@@ -34,14 +34,14 @@
                 </thead>
                 @if ($inactiveNvr->isEmpty())
                     <tr>
-                        <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-400 italic">
+                        <td colspan="5" class="px-6 py-4 text-center text-sm text-white italic">
                             No hay equipos inactivos
                         </td>
                     </tr>
                 @else
-                    <tbody class="divide-y divide-gray-200" id="nvr-status-table">
+                    <tbody class="divide-y divide-zinc-200" id="nvr-status-table">
                         @foreach ($inactiveNvr as $nvr)
-                            <tr class="hover:bg-gray-900 transition-colors duration-150">
+                            <tr class="hover:bg-zinc-800 transition-colors duration-150">
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $nvr['mac'] }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $nvr['name'] }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $nvr['location'] }}</td>
@@ -66,13 +66,13 @@
 
         {{-- Tabla de cámaras inactivas --}}
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-1xl font-bold text-white bg-gray-600 rounded-md px-3 py-1">Cámaras</h1>
+            <h1 class="text-1xl font-bold text-white bg-zinc-500 rounded-md px-3 py-1">Cámaras</h1>
         </div>
 
-        <div class="overflow-x-auto rounded-lg shadow border border-gray-700 bg-gray-800">
+        <div class="overflow-x-auto rounded-lg shadow border border-zinc-500 bg-zinc-700">
             <table class="min-w-full shadow-md rounded-lg overflow-hidden divide-gray-700">
-                <thead class="bg-gray-700 divide-x divide-blue-400">
-                    <tr class="divide-x divide-blue-400">
+                <thead class="bg-red-900 divide-x divide-white">
+                    <tr class="divide-x divide-white">
                         <th class="px-6 py-3 text-center text-sm font-medium text-white w-32">MAC</th>
                         <th class="px-6 py-3 text-center text-sm font-medium text-white w-24">NVR/Conexión</th>
                         <th class="px-6 py-3 text-center text-sm font-medium text-white w-32">Nombre</th>
@@ -83,14 +83,14 @@
                 </thead>
                 @if ($inactiveCameras->isEmpty())
                     <tr>
-                        <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-400 italic">
+                        <td colspan="6" class="px-6 py-4 text-center text-sm text-white italic">
                             No hay equipos inactivos
                         </td>
                     </tr>
                 @else
-                    <tbody class="divide-y divide-gray-200" id="camera-status-table">
+                    <tbody class="divide-y divide-zinc-200" id="camera-status-table">
                         @foreach ($inactiveCameras as $camera)
-                            <tr class="hover:bg-gray-900 transition-colors duration-150">
+                            <tr class="hover:bg-zinc-800 transition-colors duration-150">
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $camera['mac'] }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $camera->nvr->name }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $camera['name'] }}</td>

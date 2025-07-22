@@ -8,6 +8,7 @@ use App\Models\monitoringSystem\ControlCondition;
 use App\Models\monitoringSystem\Nvr;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use function app\Helpers\filter;
@@ -79,6 +80,8 @@ class ConditionAController extends Controller
 
     public function edit($id)
     {
+        session(['url' => url()->previous()]); //captura ruta desde donde se llama el metodo
+
         $condition = ConditionAttention::findOrFail($id);
         return view('front.attention.edit', compact('condition'));
     }
@@ -113,6 +116,10 @@ class ConditionAController extends Controller
                 'date_end' => $request->input('date_end'),
                 'status' => $request->filled('date_end') ? 'Atendido' : 'Por atender'
             ]);
+
+        $redirectRoute = Route::getRoutes()->match(app('request')->create(session('url')))->getName();
+        if ($redirectRoute != 'atencion.show')
+            return redirect(session('url'))->with('success', 'Condición de atención actualizada.');
 
         return redirect()->route('atencion.show', ['atencion' => $condition->id])->with('success', 'Condición de atención actualizada.');
     }

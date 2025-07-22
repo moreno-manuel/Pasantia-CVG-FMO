@@ -6,7 +6,7 @@
 
         <!-- Encabezado  -->
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold text-white bg-gray-600 rounded-md px-3 py-1">
+            <h1 class="text-2xl font-bold text-white bg-zinc-500 rounded-md px-3 py-1">
                 Switches
             </h1>
         </div>
@@ -82,10 +82,10 @@
         {{-- valida para mostrar tabla o mensaje --}}
         @if ($switches->isNotEmpty())
             <!-- Tabla -->
-            <div class="overflow-x-auto rounded-lg shadow border border-gray-700 bg-gray-800">
+            <div class="overflow-x-auto rounded-lg shadow border border-zinc-500 bg-zinc-700">
                 <table class="min-w-full shadow-md rounded-lg overflow-hidden divide-gray-700">
-                    <thead class="bg-gray-700 divide-x divide-blue-400">
-                        <tr class="divide-x divide-blue-400">
+                    <thead class="bg-red-900 divide-x divide-white">
+                        <tr class="divide-x divide-white">
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Serial</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Marca</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Model</th>
@@ -97,7 +97,7 @@
                     <tbody class="divide-y divide-gray-200">
 
                         @foreach ($switches as $switch)
-                            <tr class="hover:bg-gray-900 transition-colors duration-150">
+                            <tr class="hover:bg-zinc-800 transition-colors duration-150">
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $switch['serial'] }} </td>
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $switch['mark'] }} </td>
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $switch['model'] }}</td>
@@ -140,7 +140,7 @@
                     'location' => $filters['location'] ?? '',
                 ])->links() }}
         @else
-            <div class="text-center mt-6 bg-gray-800 border border-black rounded-md p-4 text-white">
+            <div class="text-center mt-6 bg-red-900 border border-black rounded-md p-4 text-white">
                 <p>No hay registros existentes</p>
             </div>
         @endif

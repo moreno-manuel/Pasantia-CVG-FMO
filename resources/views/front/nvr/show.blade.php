@@ -8,13 +8,13 @@
 
             <!-- Botón Volver -->
             <a href="{{ route('nvr.index') }}"
-                class="inline-flex items-center px-3 py-1.5 bg-gray-500 text-white font-semibold rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-gray-600 hover:shadow-md hover:-translate-y-px text-xs uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                class="inline-flex items-center px-3 py-1.5 bg-zinc-600 text-white font-semibold rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-zinc-600 hover:shadow-md hover:-translate-y-px text-xs uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
                 Volver
             </a>
         </div>
 
         <!-- Tarjeta de información general -->
-        <div class="bg-gray-800 shadow overflow-hidden sm:rounded-lg border border-gray-700">
+        <div class="bg-red-900 shadow overflow-hidden sm:rounded-lg border border-gray-700">
 
             <div class="px-4 py-5 sm:px-6 border-b border-gray-700">
                 <h3 class="text-lg leading-6 font-medium text-white">
@@ -30,49 +30,49 @@
                 <dl>
 
                     <!-- Campo MAC -->
-                    <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="bg-zinc-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">Dirección MAC</dt>
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $nvr->mac }}</dd>
                     </div>
 
                     <!-- Campo Nombre -->
-                    <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="bg-zinc-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">Nombre</dt>
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $nvr->name }}</dd>
                     </div>
 
                     <!-- Campo Marca -->
-                    <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="bg-zinc-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">Marca</dt>
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $nvr->mark }}</dd>
                     </div>
 
                     <!-- Campo Modelo -->
-                    <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="bg-zinc-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">Modelo</dt>
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $nvr->model }}</dd>
                     </div>
 
                     <!-- Campo IP -->
-                    <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="bg-zinc-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">Dirección IP</dt>
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $nvr->ip }}</dd>
                     </div>
 
                     <!-- Campo Puertos Disponibles -->
-                    <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="bg-zinc-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">N° Puertos</dt>
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $nvr->ports_number }}</dd>
                     </div>
 
                     <!-- Campo Puertos Usados -->
-                    <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="bg-zinc-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">N° Puertos/Usados</dt>
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $nvr->camera()->count() }}</dd>
                     </div>
 
                     <!-- Campo Puertos Disponibles -->
-                    <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="bg-zinc-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">N° Puertos/Disponibles</dt>
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
                             {{ $nvr->ports_number - $nvr->camera()->count() }}
@@ -80,19 +80,19 @@
                     </div>
 
                     <!-- Campo Ranuras de Disco -->
-                    <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="bg-zinc-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">N° Volumen</dt>
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $nvr->slot_number }}</dd>
                     </div>
 
                     <!-- Campo Localidad -->
-                    <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="bg-zinc-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">Localidad</dt>
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $nvr->location }}</dd>
                     </div>
 
                     <!-- Campo Status -->
-                    <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="bg-zinc-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">Status</dt>
                         <dd class="mt-1 text-sm sm:mt-0 sm:col-span-2">
                             <span
@@ -106,7 +106,7 @@
                     </div>
 
                     <!-- Campo Descripción -->
-                    <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="bg-zinc-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">Descripción</dt>
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
                             {{ $nvr->description ?? 'Sin descripción' }}
@@ -118,10 +118,10 @@
 
         <!-- Tabla de Volumenes-->
         <div class="mt-8">
-            <div class="overflow-x-auto rounded-lg shadow border border-gray-700 bg-gray-800">
-                <table class="min-w-full shadow-md rounded-lg overflow-hidden divide-gray-700">
-                    <thead class="bg-gray-700 divide-x divide-blue-400">
-                        <tr class="divide-x divide-blue-400">
+            <div class="overflow-x-auto rounded-lg shadow border border-gray-700 bg-zinc-600">
+                <table class="min-w-full shadow-md rounded-lg overflow-hidden divide-white">
+                    <thead class="bg-zinc-700 divide-x divide-white">
+                        <tr class="divide-x divide-white">
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Volumen</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Serial</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Capacidad/Disco (TB)</th>
@@ -132,7 +132,7 @@
                     </thead>
                     <tbody class="divide-y divide-gray-200">
                         @foreach ($nvr->slotNvr as $index => $slot)
-                            <tr class="hover:bg-gray-900 transition-colors duration-150">
+                            <tr class="hover:bg-zinc-600 transition-colors duration-150">
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $loop->iteration }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $slot->hdd_serial }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $slot->hdd_capacity }}</td>
@@ -183,16 +183,16 @@
         <br>
 
         <div class="flex justify-left items-center mb-6">
-            <h1 class="font-bold text-white bg-gray-800 rounded-md px-3 py-1">Cámaras Conectadas al Nvr seleccionado</h1>
+            <h1 class="font-bold text-white bg-zinc-600 rounded-md px-3 py-1">Cámaras Conectadas al Nvr seleccionado</h1>
         </div>
 
         {{-- tabla de cámaras conectadas al nvr --}}
         @if ($cameras->isNotEmpty())
             <div class="mt-8">
-                <div class="overflow-x-auto rounded-lg shadow border border-gray-700 bg-gray-800">
+                <div class="overflow-x-auto rounded-lg shadow border border-gray-700 bg-zinc-600">
                     <table class="min-w-full shadow-md rounded-lg overflow-hidden divide-gray-700">
-                        <thead class="bg-gray-700 divide-x divide-blue-400">
-                            <tr class="divide-x divide-blue-400">
+                        <thead class="bg-red-900 divide-x divide-blue-400">
+                            <tr class="divide-x divide-white">
                                 <th class="px-6 py-3 text-center text-sm font-medium text-white">Mac</th>
                                 <th class="px-6 py-3 text-center text-sm font-medium text-white">Nombre</th>
                                 <th class="px-6 py-3 text-center text-sm font-medium text-white">Localidad</th>
@@ -203,7 +203,7 @@
                         </thead>
                         <tbody class="divide-y divide-gray-200">
                             @foreach ($cameras as $camera)
-                                <tr class="hover:bg-gray-900 transition-colors duration-150">
+                                <tr class="hover:bg-zinc-800 transition-colors duration-150">
                                     <td class="px-6 py-4 text-center text-sm text-white">{{ $camera->mac }}</td>
                                     <td class="px-6 py-4 text-center text-sm text-white">{{ $camera->name }}</td>
                                     <td class="px-6 py-4 text-center text-sm text-white">{{ $camera->location }}</td>
@@ -249,8 +249,8 @@
             {{-- paginacion --}}
             {{ $cameras->links() }}
         @else
-            <div class="text-center mt-6 bg-gray-800 border border-black rounded-md p-4 text-white">
-                <p>No hay cámaras conectadas al Nvr seleccionado</p>
+            <div class="text-center mt-6 bg-red-900 border border-black rounded-md p-4 text-white">
+                <p>No hay cámaras conectadas al Nvr</p>
             </div>
         @endif
 
@@ -269,7 +269,7 @@
 
             <div class="mt-6 flex justify-end space-x-3">
                 <button type="button" onclick="closeDeleteModal()"
-                    class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">Cancelar</button>
+                    class="px-4 py-2 bg-zinc-600 text-white rounded hover:bg-zinc-700">Cancelar</button>
                 <button type="button" onclick="submitDeleteForm()"
                     class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Eliminar</button>
             </div>

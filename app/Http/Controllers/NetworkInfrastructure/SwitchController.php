@@ -8,6 +8,7 @@ use App\Models\EquipmentDisuse\SwitchDisuse;
 use App\Models\networkInfrastructure\Switche;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 
 use function app\Helpers\filter;
@@ -73,6 +74,8 @@ class SwitchController extends Controller
     public function edit($serial)
     {
         try {
+            session(['switchUrl' => url()->previous()]);
+
             $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['switch_marks']; // json con las marcas agregadas
 
             $switch = Switche::where('serial', $serial)->firstOrFail();
@@ -109,7 +112,11 @@ class SwitchController extends Controller
 
         $switch->update($request->all());
 
-        return redirect()->route('switch.show', ['switch' => $switch->serial])->with('success', 'Switch actualizado.');
+        $redirectRoute = Route::getRoutes()->match(app('request')->create(session('switchUrl')))->getName();
+        if ($redirectRoute === 'switch.show')
+            return redirect()->route('switch.show', ['switch' => $switch->serial])->with('success', 'Switch actualizado.');
+
+        return redirect()->route('switch.index')->with('success', 'Switch actualizado.');
     }
 
     public function show($serial)

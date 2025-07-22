@@ -9,7 +9,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="bg-gray-100 min-h-screen flex flex-col">
+<body class="flex flex-col min-h-screen bg-gradient-to-br from-blue-50 to-gray-100">
 
 
     <div class="flex flex-1 overflow-hidden">
@@ -118,6 +118,7 @@
                 </div>
             </div>
 
+
             <!-- Contenido dinámico -->
             @yield('content')
         </main>
@@ -173,6 +174,11 @@
 
                 // Reiniciar scripts
                 initScripts();
+                const currentUrl = window.location.pathname;
+                if (currentUrl === '/home' || currentUrl === '/home/') {
+                    updateDeviceStatus(); // Primera carga
+                    window.statusInterval = setInterval(updateDeviceStatus, 15000); // Cada 15 segundos
+                }
 
             } catch (error) {
                 console.error("Error al cargar el contenido:", error);
@@ -236,21 +242,21 @@
                 const number = i + 1;
 
                 const html = `
-            <div class="bg-gray-700 p-4 rounded-md border border-gray-600 mb-4">
+            <div class="bg-zinc-500 p-4 rounded-md border border-gray-600 mb-4">
                 <h4 class="text-sm font-medium text-white mb-2">Volumen #${number}</h4>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <!-- Serial del disco -->
                     <div>
                         <label class="block text-sm font-medium text-white">Serial</label>
                         <input type="text" name="volumen[${index}][serial_disco]" 
-                            class="mt-1 block w-full rounded-md bg-gray-600 border border-gray-500 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" minlength="4">
+                            class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-500 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" minlength="4">
                         <span class="text-red-400 text-sm mt-1 hidden">Este campo es obligatorio</span>
                     </div>
                     <!-- Capacidad del disco -->
                     <div>
                         <label class="block text-sm font-medium text-white">Capacidad/Disco (TB)</label>
                         <input type="number" name="volumen[${index}][capacidad_disco]"
-                            class="mt-1 block w-full rounded-md bg-gray-600 border border-gray-500 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-500 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             min="1">
                         <span class="text-red-400 text-sm mt-1 hidden">Este campo es obligatorio</span>
                     </div>
@@ -258,7 +264,7 @@
                     <div>
                         <label class="block text-sm font-medium text-white">Capacidad Máxima/volumen (TB)</label>
                         <input type="number" name="volumen[${index}][capacidad_max_volumen]"
-                            class="mt-1 block w-full rounded-md bg-gray-600 border border-gray-500 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-500 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             min="1" required>
                         <span class="text-red-400 text-sm mt-1 hidden">Este campo es obligatorio</span>
                     </div>
@@ -365,7 +371,6 @@
 
         //para validar filtros
         function validateFilters(type) {
-
             switch (type) {
                 case 'atencion':
                     if (!document.querySelector("select[name='name']")?.value.trim()) {
@@ -408,7 +413,7 @@
                     }
                     return true;
                 default:
-                    return true;
+                    return false;
             }
 
         }
@@ -463,7 +468,7 @@
 
             devices.forEach(device => {
                 const row = document.createElement('tr');
-                row.className = 'hover:bg-gray-900 transition-colors duration-150';
+                row.className = 'hover:bg-zinc-800 transition-colors duration-150';
 
                 if (type === 'camera') {
                     row.innerHTML = `
@@ -511,7 +516,6 @@
         `;
         }
     </script>
-
 
     {{-- cargas camaras para condicion de atencion --}}
     <script>

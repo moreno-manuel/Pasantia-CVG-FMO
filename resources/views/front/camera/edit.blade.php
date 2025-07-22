@@ -3,7 +3,7 @@
     <!-- resources/views/front/camera/edit.blade.php -->
 
     <div class="container mx-auto px-4 py-6">
-        <div class="bg-gray-800 shadow overflow-hidden sm:rounded-lg p-6 border border-gray-700">
+        <div class="bg-zinc-600 shadow overflow-hidden sm:rounded-lg p-6 border border-gray-600">
 
             {{-- Título y botón volver --}}
             <div class="flex justify-between items-center mb-6">
@@ -24,20 +24,11 @@
                 @method('PUT')
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                    <!-- Campo Dirección MAC (no editable) -->
-                    <div>
-                        <label for="mac" class="block text-sm font-semibold text-white">Dirección MAC</label>
-                        <input type="text" name="mac" id="mac"
-                            class="mt-1 block w-full rounded-md bg-gray-900 border border-gray-600 text-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            value="{{ $camera->mac }}" readonly disabled>
-                    </div>
-
                     <!-- Campo Marca -->
                     <div>
                         <label for="mark" class="block text-sm font-semibold text-white">Marca</label>
                         <select name="mark" id="mark"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
                             <option value="">Seleccione..</option>
                             @foreach ($marks as $mark)
@@ -55,7 +46,7 @@
                         <label for="other_brand" class="block text-sm font-semibold text-white">Especifica la marca</label>
                         <input type="text" name="other_mark" id="other_mark" value="{{ old('other_mark') }}"
                             minlength="3"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('other_mark') border-red-500 @enderror"
+                            class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('other_mark') border-red-500 @enderror"
                             placeholder="Nombre de la marca">
                         @error('other_mark')
                             <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
@@ -66,7 +57,7 @@
                     <div>
                         <label for="model" class="block text-sm font-semibold text-white">Modelo</label>
                         <input type="text" name="model" id="model" minlength="3"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('model') border-red-500 @enderror"
+                            class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('model') border-red-500 @enderror"
                             value="{{ old('model', $camera->model) }} " required>
                         @error('model')
                             <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
@@ -77,7 +68,7 @@
                     <div>
                         <label for="nvr_id" class="block text-sm font-medium text-white">NVR</label>
                         <select name="nvr_id" id="nvr_id"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
                             <option value="">Seleccione...</option>
                             @foreach ($nvrs as $nvr)
@@ -93,7 +84,7 @@
                     <div>
                         <label for="name" class="block text-sm font-semibold text-white">Nombre</label>
                         <input type="text" name="name" id="name" minlength="5"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('name') border-red-500 @enderror"
+                            class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('name') border-red-500 @enderror"
                             value="{{ old('name', $camera->name) }}" required>
                         @error('name')
                             <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
@@ -104,7 +95,7 @@
                     <div>
                         <label for="ip" class="block text-sm font-semibold text-white">Dirección IP</label>
                         <input type="text" name="ip" id="ip"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('ip') border-red-500 @enderror"
+                            class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('ip') border-red-500 @enderror"
                             value="{{ old('ip', $camera->ip) }}" required>
                         @error('ip')
                             <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
@@ -115,7 +106,7 @@
                     <div>
                         <label for="location" class="block text-sm font-semibold text-white">Localidad</label>
                         <input type="text" name="location" id="location" minlength="5"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm  @error('location') border-red-500 @enderror"
+                            class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm  @error('location') border-red-500 @enderror"
                             value="{{ old('location', $camera->location) }}" required>
                         @error('location')
                             <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
@@ -126,7 +117,7 @@
                     <div class="md:col-span-2">
                         <label for="description" class="block text-sm font-semibold text-white">Descripción</label>
                         <textarea name="description" id="description" rows="3"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             placeholder="Describe brevemente este enlace...">{{ old('description', $camera->description) }}</textarea>
                     </div>
                 </div>

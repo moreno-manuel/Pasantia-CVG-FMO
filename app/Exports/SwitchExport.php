@@ -163,7 +163,7 @@ class SwitchExport implements ShouldAutoSize, WithDrawings, WithEvents
         $drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
         $drawing->setName('Logo');
         $drawing->setDescription('Logo de la empresa');
-        $drawing->setPath(public_path('images/logo.png'));
+        $drawing->setPath(public_path('images/LogosCVG_Ferro.png'));
         $drawing->setHeight(50);
         $drawing->setCoordinates('A1');
         $drawing->setOffsetX(5);

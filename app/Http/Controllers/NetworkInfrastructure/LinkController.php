@@ -9,6 +9,7 @@ use App\Models\networkInfrastructure\Link;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -81,6 +82,8 @@ class LinkController extends Controller
     public function edit($name)
     {
         try {
+            session(['linkhUrl' => url()->previous()]);
+
             $link = Link::where('name', $name)->firstOrFail();
             $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['link_marks']; // json con las marcas agregadas
             return view('front.link.edit', compact('link', 'marks'));
@@ -123,7 +126,11 @@ class LinkController extends Controller
 
             $link->update($request->all());
 
-            return redirect()->route('enlace.show', ['enlace' => $link->name])->with('success', 'Enlace actualizado.');
+            $redirectRoute = Route::getRoutes()->match(app('request')->create(session('linkhUrl')))->getName();
+            if ($redirectRoute === 'enlace.show')
+                return redirect()->route('enlace.show', ['enlace' => $link->name])->with('success', 'Enlace actualizado.');
+
+            return redirect()->route('enlace.index')->with('success', 'Enlace actualizado.');
         } catch (QueryException $e) {
             if ($e->getCode() === '23000') { // Código de error de integridad para la db *IP*
                 return redirect()->back()->withInput()->withErrors([

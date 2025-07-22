@@ -8,13 +8,13 @@
         <!-- Botón Volver -->
         <div class="flex justify-end items-center mb-6">
             <button type="button" onclick="window.history.back()"
-                class="inline-flex items-center px-3 py-1.5 bg-gray-500 text-white font-semibold rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-gray-600 hover:shadow-md hover:-translate-y-px text-xs uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                class="inline-flex items-center px-3 py-1.5 bg-gray-500 text-white font-semibold rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-zinc-600 hover:shadow-md hover:-translate-y-px text-xs uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
                 Volver
             </button>
         </div>
 
         <!-- Tarjeta de información general -->
-        <div class="bg-gray-800 shadow overflow-hidden sm:rounded-lg border border-gray-700">
+        <div class="bg-red-900 shadow overflow-hidden sm:rounded-lg border border-gray-700">
 
             <div class="px-4 py-5 sm:px-6 border-b border-gray-700">
                 <h3 class="text-lg leading-6 font-medium text-white">
@@ -30,49 +30,49 @@
                 <dl>
 
                     <!-- Campo MAC -->
-                    <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="bg-zinc-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">Dirección MAC</dt>
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $camera['mac'] }}</dd>
                     </div>
 
                     <!-- Campo Marca -->
-                    <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="bg-zinc-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">Marca</dt>
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $camera['mark'] }}</dd>
                     </div>
 
                     <!-- Campo Modelo -->
-                    <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="bg-zinc-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">Modelo</dt>
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $camera['model'] }}</dd>
                     </div>
 
                     <!-- Campo nvr conexión -->
-                    <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="bg-zinc-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">Nvr/Conexión</dt>
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $camera->nvr->name }}</dd>
                     </div>
 
                     <!-- Campo Nombre -->
-                    <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="bg-zinc-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">Nombre</dt>
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $camera['name'] }}</dd>
                     </div>
 
                     <!-- Campo IP -->
-                    <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="bg-zinc-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">Dirección IP</dt>
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $camera['ip'] }}</dd>
                     </div>
 
                     <!-- Campo Localidad -->
-                    <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="bg-zinc-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">Localidad</dt>
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $camera['location'] }}</dd>
                     </div>
 
                     <!-- Campo Status -->
-                    <div class="bg-gray-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="bg-zinc-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">Status</dt>
                         <dd class="mt-1 text-sm sm:mt-0 sm:col-span-2">
                             <span
@@ -86,7 +86,7 @@
                     </div>
 
                     <!-- Campo Descripción -->
-                    <div class="bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="bg-zinc-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">Descripción</dt>
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
                             {{ $camera['description'] ?? 'Sin descripción' }}
@@ -120,7 +120,7 @@
 
 
         <div class="flex justify-left items-center mb-6">
-            <h1 class="font-bold text-white bg-gray-800 rounded-md px-3 py-1">Condición de atención de Cámara seleccionada
+            <h1 class="font-bold text-white bg-zinc-500 rounded-md px-3 py-1">Condición de atención de Cámara seleccionada
             </h1>
         </div>
 
@@ -128,10 +128,10 @@
         @if ($conditions->isNotEmpty())
             <!-- Tabla -->
             <div class="mt-8">
-                <div class="overflow-x-auto rounded-lg shadow border border-gray-700 bg-gray-800">
+                <div class="overflow-x-auto rounded-lg shadow border border-gray-700 bg-zinc-600">
                     <table class="min-w-full shadow-md rounded-lg overflow-hidden divide-gray-700">
-                        <thead class="bg-gray-700 divide-x divide-blue-400">
-                            <tr class="divide-x divide-blue-400">
+                        <thead class="bg-red-900 divide-x divide-blue-400">
+                            <tr class="divide-x divide-white">
                                 <th class="px-6 py-3 text-center text-sm font-medium text-white">Tipo de Condición</th>
                                 <th class="px-6 py-3 text-center text-sm font-medium text-white">Fecha-Inicio</th>
                                 <th class="px-6 py-3 text-center text-sm font-medium text-white">Fecha-Fin</th>
@@ -141,7 +141,7 @@
                         </thead>
                         <tbody class="divide-y divide-gray-200">
                             @foreach ($conditions as $condition)
-                                <tr class="hover:bg-gray-900 transition-colors duration-150">
+                                <tr class="hover:bg-zinc-800 transition-colors duration-150">
                                     <td class="px-6 py-4 text-center text-sm text-white">
                                         {{ $condition['other_name'] ?? $condition['name'] }}</td>
                                     <td class="px-6 py-4 text-center text-sm text-white">{{ $condition->date_ini }}</td>
@@ -194,14 +194,14 @@
             {{-- paginacion --}}
             {{ $conditions->links() }}
         @else
-            <div class="text-center mt-6 bg-gray-800 border border-black rounded-md p-4 text-white">
+            <div class="text-center mt-6 bg-red-900 border border-black rounded-md p-4 text-white">
                 <p>No hay condición de atención asociadas a la cámara seleccionada.</p>
             </div>
         @endif
 
     </div>
 
-    
+
     <!-- Modal para confirmar eliminación con descripción -->
     <div id="deleteModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black-opaco">
         <div class="bg-white rounded-lg p-6 w-full max-w-md">

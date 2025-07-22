@@ -11,8 +11,7 @@ use App\Models\monitoringSystem\Nvr;
 use App\Models\monitoringSystem\SlotNvr;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-
-
+use Illuminate\Support\Facades\Route;
 
 use function app\Helpers\filter;
 use function app\Helpers\marksUpdate;
@@ -96,6 +95,8 @@ class NvrController extends Controller
     public function edit($name)
     {
         try {
+            session(['nvrUrl' => url()->previous()]);
+
             $nvr = Nvr::where('name', $name)->firstOrFail();
 
             $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['marks']; // json con las marcas agregadas
@@ -144,7 +145,11 @@ class NvrController extends Controller
                 $i++;
             }
 
-            return redirect()->route('nvr.show', ['nvr' => $nvr->name])->with('success', 'Nvr actualizado.');
+            $redirectRoute = Route::getRoutes()->match(app('request')->create(session('nvrUrl')))->getName();
+            if ($redirectRoute === 'nvr.show')
+                return redirect()->route('nvr.show', ['nvr' => $nvr->name])->with('success', 'Nvr actualizado.');
+
+            return redirect()->route('nvr.index')->with('success', 'Nvr actualizado.');
         } catch (QueryException $e) {
             if ($e->getCode() === '23000') { // Código de error de integridad para la db *IP*
                 return redirect()->back()->withInput()->withErrors([

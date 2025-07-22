@@ -9,7 +9,7 @@
 
             <!-- Botón de redirección al Login -->
             <a href="{{ route('login') }}"
-                class="absolute top-4 right-4 text-gray-600 hover:text-blue-600 transition-colors duration-300"
+                class="absolute top-4 right-4 text-zinc-500 hover:text-red-600 transition-colors duration-300"
                 title="Volver al inicio de sesión">
                 <i class="fas fa-arrow-left text-xl"></i>
             </a>
@@ -31,7 +31,7 @@
                             {{ $user->questionsRecovery->question_1 }}
                         </label>
                         <input type="text" name="answer_1" required
-                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 @error('answer_1') border-red-500 @enderror">
+                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-red-600 @error('answer_1') border-red-500 @enderror">
                         @error('answer_1')
                             <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span>
                         @enderror
@@ -42,7 +42,7 @@
                             {{ $user->questionsRecovery->question_2 }}
                         </label>
                         <input type="text" name="answer_2" required
-                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 @error('answer_2') border-red-500 @enderror">
+                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-red-600 @error('answer_2') border-red-500 @enderror">
                         @error('answer_2')
                             <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span>
                         @enderror
@@ -53,7 +53,7 @@
                             {{ $user->questionsRecovery->question_3 }}
                         </label>
                         <input type="text" name="answer_3" required
-                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 @error('answer_3') border-red-500 @enderror">
+                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-red-600 @error('answer_3') border-red-500 @enderror">
                         @error('answer_3')
                             <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span>
                         @enderror
@@ -61,7 +61,7 @@
 
                     <!-- Botón de acción -->
                     <button type="submit"
-                        class="w-full bg-gray-800 hover:bg-blue-600 text-white text-sm font-medium py-2 px-4 rounded transition-colors flex items-center justify-center gap-2">
+                        class="w-full bg-zinc-500 hover:bg-red-600 text-white text-sm font-medium py-2 px-4 rounded transition-colors flex items-center justify-center gap-2">
                         <i class="fas fa-check"></i> Verificar
                     </button>
 

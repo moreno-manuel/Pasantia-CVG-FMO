@@ -9,7 +9,7 @@
 
             <!-- Botón de redirección al Login -->
             <a href="{{ route('login') }}"
-                class="absolute top-4 right-4 text-gray-600 hover:text-blue-600 transition-colors duration-300"
+                class="absolute top-4 right-4 text-zinc-500 hover:text-red-600 transition-colors duration-300"
                 title="Volver al inicio de sesión">
                 <i class="fas fa-arrow-left text-xl"></i>
             </a>
@@ -34,7 +34,7 @@
 
                         <!-- Campo de entrada  -->
                         <input id="userName" type="text"
-                            class="w-full pl-10 pr-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 @error('userName') border-red-500 @enderror"
+                            class="w-full pl-10 pr-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-red-600 @error('userName') border-red-500 @enderror"
                             placeholder="Usuario" name="userName" required>
                     </div>
 
@@ -57,7 +57,7 @@
 
                         <!-- Campo de entrada-->
                         <input id="license" type="text"
-                            class="w-full pl-10 pr-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 @error('license') border-red-500 @enderror"
+                            class="w-full pl-10 pr-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-red-600 @error('license') border-red-500 @enderror"
                             placeholder="N° de Ficha" name="license" required>
                     </div>
 
@@ -71,7 +71,7 @@
 
                 <!-- Botón de Acción  -->
                 <button type="submit"
-                    class="w-full bg-gray-800 hover:bg-blue-600 text-white text-sm font-medium py-2 px-4 rounded 
+                    class="w-full bg-zinc-500 hover:bg-red-600 text-white text-sm font-medium py-2 px-4 rounded 
                     transition-colors duration-300 ease-in-out flex items-center justify-center gap-2">
                     <i class="fas fa-arrow-right"></i> Continuar
                 </button>

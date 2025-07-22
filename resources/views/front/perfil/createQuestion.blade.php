@@ -3,7 +3,7 @@
     <!-- resources/views/front/perfil/createQuestion.blade.php -->
 
     <div class="container mx-auto px-4 py-6">
-        <div class="bg-gray-800 shadow overflow-hidden sm:rounded-lg p-6 border border-gray-700">
+        <div class="bg-zinc-600 shadow overflow-hidden sm:rounded-lg p-6 border border-gray-700">
 
             {{-- Título y botón volver --}}
             <div class="flex justify-between items-center mb-6">
@@ -11,7 +11,7 @@
 
                 <!-- Botón Volver -->
                 <a href="{{ route('perfil.edit', ['user' => auth()->user()->userName]) }}"
-                    class="inline-flex items-center px-3 py-1.5 bg-gray-500 text-white font-semibold rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-gray-600 hover:shadow-md hover:-translate-y-px text-xs uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                    class="inline-flex items-center px-3 py-1.5 bg-zinc-500 text-white font-semibold rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-zinc-600 hover:shadow-md hover:-translate-y-px text-xs uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
                     Volver
                 </a>
             </div>
@@ -26,7 +26,7 @@
                     <div>
                         <label for="question_1" class="block text-sm font-semibold text-white">Pregunta 1</label>
                         <select name="question_1" id="question_1"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
                             <option value="">Seleccione..</option>
                             @foreach ($questions as $question)
@@ -41,7 +41,7 @@
                     <div>
                         <label for="answer_1" class="block text-sm font-semibold text-white">Respuesta 1</label>
                         <input type="text" name="answer_1" value="{{ old('answer_1') }}"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('answer_1') border-red-500 @enderror"
+                            class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('answer_1') border-red-500 @enderror"
                             required>
                         @error('answer_1')
                             <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
@@ -52,7 +52,7 @@
                     <div>
                         <label for="question_2" class="block text-sm font-semibold text-white">Pregunta 2</label>
                         <select name="question_2" id="question_2"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
                             <option value="">Seleccione..</option>
                             @foreach ($questions as $question)
@@ -67,7 +67,7 @@
                     <div>
                         <label for="answer_2" class="block text-sm font-semibold text-white">Respuest 2</label>
                         <input type="text" name="answer_2" value="{{ old('answer_2') }}"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('answer_2') border-red-500 @enderror"
+                            class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('answer_2') border-red-500 @enderror"
                             required>
                         @error('answer_2')
                             <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
@@ -78,7 +78,7 @@
                     <div>
                         <label for="question_3" class="block text-sm font-semibold text-white">Pregunta 3</label>
                         <select name="question_3" id="question_3"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
                             <option value="">Seleccione..</option>
                             @foreach ($questions as $question)
@@ -94,7 +94,7 @@
                     <div>
                         <label for="answer_3" class="block text-sm font-semibold text-white">Respuesta 3</label>
                         <input type="text" name="answer_3" value="{{ old('answer_3') }}"
-                            class="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('answer_3') border-red-500 @enderror"
+                            class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('answer_3') border-red-500 @enderror"
                             required>
                         @error('answer_3')
                             <span class="text-red-400 text-sm mt-1">{{ $message }}</span>

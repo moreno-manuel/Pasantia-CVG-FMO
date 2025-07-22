@@ -10,6 +10,7 @@ use App\Models\monitoringSystem\Nvr;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -93,6 +94,8 @@ class CameraController extends Controller
     public function edit($name)
     {
         try {
+            session(['urlCamera' => url()->previous()]); //captura ruta desde donde se llama el metodo
+
             $camera = Camera::where('name', $name)->firstOrFail();
             $nvrsAll = Nvr::with('camera')->get();
 
@@ -146,6 +149,10 @@ class CameraController extends Controller
             $request = marksUpdate($request, 'marks');
 
             $camera->update($request->all());
+
+            $redirectRoute = Route::getRoutes()->match(app('request')->create(session('urlCamera')))->getName();
+            if ($redirectRoute != 'camara.show')
+                return redirect(session('urlCamera'))->with('success', 'Cámara actualizada.');
 
             return redirect()->route('camara.show', ['camara' => $camera->name])->with('success', 'Cámara actualizada.');
         } catch (QueryException $e) {

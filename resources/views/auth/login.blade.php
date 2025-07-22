@@ -27,10 +27,9 @@
 
                         <!-- Campo de entrada -->
                         <input id="name" type="text"
-                            class="w-full pl-10 pr-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 @error('userName') border-red-500 @enderror"
+                            class="w-full pl-10 pr-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-red-600 @error('userName') border-red-500 @enderror"
                             placeholder="Usuario" name="userName" required autocomplete="username" autofocus>
                     </div>
-
                     <!-- Contenedor fijo para mensaje de error -->
                     <div class="mt-1 h-5">
                         @error('userName')
@@ -50,7 +49,7 @@
 
                         <!-- Campo de entrada -->
                         <input id="password" type="password"
-                            class="w-full pl-10 pr-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 @error('password') border-red-500 @enderror"
+                            class="w-full pl-10 pr-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-red-600 @error('password') border-red-500 @enderror"
                             placeholder="Contraseña" name="password" required autocomplete="current-password">
                     </div>
 
@@ -63,13 +62,13 @@
                 </div>
 
                 <button type="submit"
-                    class="w-full bg-gray-800 hover:bg-blue-600 text-white text-sm font-medium py-2 px-4 rounded transition-all duration-300 ease-in-out flex items-center justify-center gap-2">
+                    class="w-full bg-zinc-500 hover:bg-red-600 text-white text-sm font-medium py-2 px-4 rounded transition-all duration-300 ease-in-out flex items-center justify-center gap-2">
                     <i class="fas fa-sign-in-alt"></i> Ingresar
                 </button>
 
                 <!-- Enlace de recuperación -->
                 <div class="text-center mt-6">
-                    <a href="{{ route('recovery.showStep1') }}" class="text-xs text-gray-600 hover:text-blue-600">
+                    <a href="{{ route('recovery.showStep1') }}" class="text-xs text-zinc-500 hover:text-red-600">
                         ¿Olvidó su contraseña?
                     </a>
                 </div>

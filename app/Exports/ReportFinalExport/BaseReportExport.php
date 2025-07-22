@@ -175,7 +175,7 @@ abstract class BaseReportExport implements WithEvents, WithDrawings, WithHeading
         $drawing = new Drawing();
         $drawing->setName('Logo');
         $drawing->setDescription('Logo de la empresa');
-        $drawing->setPath(public_path('images/logo.png'));
+        $drawing->setPath(public_path('images/LogosCVG_Ferro.png'));
         $drawing->setHeight(50);
         $drawing->setCoordinates('A1');
         return $drawing;
