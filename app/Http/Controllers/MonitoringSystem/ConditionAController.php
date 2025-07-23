@@ -127,7 +127,9 @@ class ConditionAController extends Controller
     public function show($id)
     {
         try {
-            session(['url' => url()->previous()]); //captura ruta desde donde se llama el metodo
+            $redirectRoute = Route::getRoutes()->match(app('request')->create(url()->previous()))->getName();
+            if ($redirectRoute != 'atencion.edit')
+                session(['urlAtencion' => url()->previous()]);
 
             $condition = ConditionAttention::findOrFail($id);
             $controlConditions = $condition->controlCondition()->orderBy('created_at', 'desc')->paginate(5); //obtiene las descripciones de la condición

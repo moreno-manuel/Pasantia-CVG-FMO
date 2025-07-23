@@ -39,6 +39,13 @@ class CameraInventory extends Model
         );
     }
 
+    protected function destination(): Attribute //destination
+    {
+        return Attribute::make(
+            set: fn($destination) => strtoupper($destination),
+        );
+    }
+
     //para logs
     public function getActivitylogOptions(): LogOptions
     {

@@ -167,7 +167,9 @@ class CameraController extends Controller
     public function show($name)
     {
         try {
-            session(['urlCamera' => url()->previous()]); //captura ruta desde donde se llama el metodo
+            $redirectRoute = Route::getRoutes()->match(app('request')->create(url()->previous()))->getName();
+            if (($redirectRoute != 'camara.edit') && ($redirectRoute != 'atencion.show') && ($redirectRoute != 'atencion.edit'))
+                session(['urlCameraShow' => url()->previous()]);
 
             $camera = Camera::where('name', $name)->firstOrFail();
             $conditions = $camera->conditionAttention()->orderBy('created_at', 'desc')->paginate(5); // Cargar los registros de condicion de atención con paginación

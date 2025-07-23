@@ -15,14 +15,14 @@
         </div>
 
         <!-- Filtros para búsqueda -->
-        <form method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4" onsubmit="return validateFilters()">
+        <form method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4" onsubmit="return validateFilters('eliminated')">
 
             <!-- tipo de condición -->
             <div>
                 <label for="equipment" class="block text-sm font-medium text-black">Tipo de Equipo</label>
-                <select name="equipment" id="equipment"
+                <select name="equipment" 
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                    required>
+                    >
                     <option value="">Seleccione..</option>
                     <option value="Nvr" {{ ($filters['equipment'] ?? '') == 'Nvr' ? 'selected' : '' }}>
                         Nvr</option>
@@ -129,25 +129,4 @@
         @endif
 
     </div>
-
-    {{-- funcion para los filtros --}}
-    @push('scripts')
-        <script>
-            function validateFilters() {
-                // Obtén los valores de los campos de filtro
-                const equipment = document.querySelector("select[name='equipment']")?.value.trim();
-
-                // Verifica si está vacio
-                if (!equipment) {
-                    // Cancelar envío del formulario
-                    alert('Por favor, ingresa al menos un valor para filtrar.');
-                    return false;
-                }
-
-                // Si tiene un valor
-                return true;
-            }
-        </script>
-    @endpush
-
 @endsection

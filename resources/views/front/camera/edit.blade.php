@@ -11,10 +11,10 @@
 
                 <!-- Botón Volver -->
                 <div class="flex justify-end items-center mb-6">
-                    <button type="button" onclick="window.history.back()"
+                    <a href="{{ url()->previous() }}"
                         class="inline-flex items-center px-3 py-1.5 bg-gray-500 text-white font-semibold rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-gray-600 hover:shadow-md hover:-translate-y-px text-xs uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
                         Volver
-                    </button>
+                    </a>
                 </div>
             </div>
 

@@ -150,7 +150,7 @@ class ReportController extends Controller
 
         foreach ($records as $record) {
 
-            $user = User::find($record->subject_id);    // Buscar el usuario por subject_id
+            $user = User::find($record->causer_id);    // Buscar el usuario por subject_id
             $userName = $user ? $user->userName : 'Desconocido';
 
             // Concatenar al contenido

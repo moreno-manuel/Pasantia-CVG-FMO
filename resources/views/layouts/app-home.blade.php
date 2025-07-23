@@ -42,16 +42,18 @@
 
                     <script>
                         document.addEventListener("DOMContentLoaded", function() {
-                            const alert = document.getElementById('alert-success');
-                            setTimeout(() => {
-                                alert.classList.remove('opacity-0', 'translate-y-10', 'scale-95');
-                                alert.classList.add('opacity-100', 'translate-y-0', 'scale-100');
-                                alert.classList.remove('pointer-events-none');
-                            }, 100);
+                            if (document.getElementById('alert-success')) {
+                                const alert = document.getElementById('alert-success');
+                                setTimeout(() => {
+                                    alert.classList.remove('opacity-0', 'translate-y-10', 'scale-95');
+                                    alert.classList.add('opacity-100', 'translate-y-0', 'scale-100');
+                                    alert.classList.remove('pointer-events-none');
+                                }, 100);
 
-                            setTimeout(() => {
-                                closeAlertSmooth('alert-success');
-                            }, 3000);
+                                setTimeout(() => {
+                                    closeAlertSmooth('alert-success');
+                                }, 3000);
+                            }
                         });
 
                         function closeAlertSmooth(id) {
@@ -84,16 +86,18 @@
 
                     <script>
                         document.addEventListener("DOMContentLoaded", function() {
-                            const alert = document.getElementById('alert-warning');
-                            setTimeout(() => {
-                                alert.classList.remove('opacity-0', 'translate-y-10', 'scale-95');
-                                alert.classList.add('opacity-100', 'translate-y-0', 'scale-100');
-                                alert.classList.remove('pointer-events-none');
-                            }, 100);
+                            if (document.getElementById('alert-warning')) {
+                                const alert = document.getElementById('alert-warning');
+                                setTimeout(() => {
+                                    alert.classList.remove('opacity-0', 'translate-y-10', 'scale-95');
+                                    alert.classList.add('opacity-100', 'translate-y-0', 'scale-100');
+                                    alert.classList.remove('pointer-events-none');
+                                }, 100);
 
-                            setTimeout(() => {
-                                closeAlertSmooth('alert-warning');
-                            }, 3000);
+                                setTimeout(() => {
+                                    closeAlertSmooth('alert-warning');
+                                }, 3000);
+                            }
                         });
 
                         function closeAlertSmooth(id) {
@@ -371,10 +375,11 @@
 
         //para validar filtros
         function validateFilters(type) {
+
             switch (type) {
                 case 'atencion':
                     if (!document.querySelector("select[name='name']")?.value.trim()) {
-                        alert('Por favor, ingresa al menos un valor para filtrar.');
+                        alert('Por favor, ingresa un valor para filtrar.');
                         return false;
                     }
                     return true;
@@ -408,7 +413,13 @@
                     return true;
                 case 'link':
                     if (!document.querySelector("input[name='location']")?.value.trim()) {
-                        alert('Por favor, ingresa al menos un valor para filtrar.');
+                        alert('Por favor, ingresa un valor para filtrar.');
+                        return false;
+                    }
+                    return true;
+                case 'eliminated':
+                    if (!document.querySelector("select[name='equipment']")?.value.trim()) {
+                        alert('Por favor, ingresa un valor para filtrar.');
                         return false;
                     }
                     return true;

@@ -40,7 +40,7 @@ class CameraDisuseExport extends EquipmentDisuseExport implements WithTitle
             $camera->name ?? 'Nota de Entrega - ' . $cameraInventories->delivery_note,
             $camera->nvr ?? 'No aplica',
             $camera->ip ?? 'No aplica',
-            $device->location != 'No Aplica' ?: 'Destino - ' . $cameraInventories->destination,
+            $device->location != 'No Aplica' ? $device->location : 'Destino - ' . $cameraInventories->destination,
             $device->description,
             $device->created_at->format('d/m/Y')
         ];
