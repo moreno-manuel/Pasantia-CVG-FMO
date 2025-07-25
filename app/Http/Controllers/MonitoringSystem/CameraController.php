@@ -94,7 +94,10 @@ class CameraController extends Controller
     public function edit($name)
     {
         try {
-            session(['urlCamera' => url()->previous()]); //captura ruta desde donde se llama el metodo
+
+            $redirectRoute = Route::getRoutes()->match(app('request')->create(url()->previous()))->getName();
+            if ($redirectRoute != 'camara.edit')
+                session(['urlCamera' => url()->previous()]); //captura ruta desde donde se llama el metodo
 
             $camera = Camera::where('name', $name)->firstOrFail();
             $nvrsAll = Nvr::with('camera')->get();
@@ -176,7 +179,7 @@ class CameraController extends Controller
 
             return view('front.camera.show', compact('camera', 'conditions'));
         } catch (ModelNotFoundException $e) {
-            return redirect()->route('camera.index')->with('warnings', 'Cámara  no encontrada');
+            return redirect()->route('camara.index')->with('warnings', 'Cámara  no encontrada');
         }
     }
 
@@ -184,8 +187,10 @@ class CameraController extends Controller
     {
         $camera = Camera::where('mac', $mac)->firstOrFail();
         $equipment = EquipmentDisuse::find($mac);
-        if ($equipment)
-            return redirect()->route('camara.index')->with('warning', 'Ya existe un registro eliminado con el mismo ID.');
+        if ($equipment) {
+            return redirect(url()->previous())->with('warning', ' existe un registro eliminado con el mismo ID.');
+        }
+
 
         EquipmentDisuse::create([
             'id' => $camera->mac,
@@ -205,11 +210,13 @@ class CameraController extends Controller
 
         $camera->delete();
 
-        $previousUrl = url()->previous(); // Obtener la URL anterior
-
-        if (str_contains($previousUrl, 'camara/')) {
-            return redirect(session('urlCamera'))->with('success', 'Cámara eliminada exitosamente.');
+        $redirectRoute = Route::getRoutes()->match(app('request')->create(url()->previous()))->getName();
+        if ($redirectRoute === 'camara.index') {
+            return back()->with('success', 'Cámara eliminada exitosamente.');
+        } else if (session()->has('urlCameraShow')) {
+            return redirect(session('urlCameraShow'))->with('success', 'Cámara eliminada exitosamente.');
+        } else {
+            return redirect(url()->previous())->with('success', 'Cámara eliminada exitosamente.');
         }
-        return redirect($previousUrl)->with('success', 'Cámara eliminada exitosamente.');
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\MonitoringSystem;
 
 use App\Http\Controllers\Controller;
+use App\Models\monitoringSystem\Camera;
 use App\Models\monitoringSystem\ConditionAttention;
 use App\Models\monitoringSystem\ControlCondition;
 use App\Models\monitoringSystem\Nvr;
@@ -30,7 +31,6 @@ class ConditionAController extends Controller
 
             return view('front.attention.index', compact('conditions', 'names'));
         }
-
         return filter($request, 'conditions'); //helper
     }
 
@@ -60,10 +60,35 @@ class ConditionAController extends Controller
             'other_condition' => 'Nombre'
         ]);
 
+        $checkName = false; // verifica si nuevo nombre esta en el arreglo
+        $conditionExists = false; // verifica que no haya una condicion nombre y fecha igual 
+        if ($request->filled('other_condition')) {
+            $conditionExists = ConditionAttention::where('other_name', $request->input('other_condition'))
+                ->where('date_ini', $request->input('date_ini'))
+                ->exists(); // consulta si existe una condicion con el mismo nombre y fecha 
+
+            $names = json_decode(file_get_contents(resource_path('js/data.json')), true)['conditions']; // json
+            $checkName = in_array(strtoupper($request->input('other_condition')), $names); //nueva condicion no este en arreglo
+        } else
+            $conditionExists = ConditionAttention::where('name', $request->input('name'))
+                ->where('date_ini', $request->input('date_ini'))
+                ->exists(); // consulta si existe una condicion con el mismo nombre y fecha 
+
+
 
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator);
+        } else if ($conditionExists) { //si existe retorna un error
+            $validator->errors()->add(
+                $request->input('name') === 'OTRO' ? 'other_condition' : 'name',
+                'Ya existe una condición con este nombre y fecha de inicio para la cámara ' . Camera::where('id', $request->input('camera_id'))->value('name')
+            );
+            return redirect()->back()->withInput()->withErrors($validator);
+        } else if ($checkName) { //si nuevo nombre ya se encontraba en la lista
+            $validator->errors()->add('other_condition', 'El nombre de la condición ya está en la lista');
+            return redirect()->back()->withInput()->withErrors($validator);
         }
+
 
         ConditionAttention::create([
             'name' => $request->input('name'),
@@ -80,7 +105,9 @@ class ConditionAController extends Controller
 
     public function edit($id)
     {
-        session(['url' => url()->previous()]); //captura ruta desde donde se llama el metodo
+        $redirectRoute = Route::getRoutes()->match(app('request')->create(url()->previous()))->getName();
+        if ($redirectRoute != 'atencion.edit')
+            session(['url' => url()->previous()]); //captura ruta desde donde se llama el metodo
 
         $condition = ConditionAttention::findOrFail($id);
         return view('front.attention.edit', compact('condition'));
@@ -144,11 +171,12 @@ class ConditionAController extends Controller
         $condition = ConditionAttention::findOrFail($id);
         $condition->delete();
 
-        $previousUrl = url()->previous();
-
-        if (str_contains($previousUrl, 'atencion/'))
-            return redirect(session('url'))->with('success', 'Condición de atención eliminada exitosamente.');
-
-        return back()->with('success', 'Condición de atención eliminada exitosamente.');
+        $redirectRoute = Route::getRoutes()->match(app('request')->create(url()->previous()))->getName();
+        if ($redirectRoute === 'atencion.index')
+            return back()->with('success', 'Condición de atención eliminada exitosamente.');
+        else if (session()->has('urlAtencion'))
+            return redirect(session('urlAtencion'))->with('success', 'Condición de atención eliminada exitosamente.');
+        else
+            return redirect(url()->previous())->with('success', 'Condición de atención eliminada exitosamente.');
     }
 }

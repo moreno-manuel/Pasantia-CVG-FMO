@@ -2,7 +2,6 @@
 @section('content')
     <!-- resources/views/front/nvr/edit.blade.php -->
 
-
     <div class="container mx-auto px-4 py-6">
         <div class="bg-zinc-600 shadow overflow-hidden sm:rounded-lg p-6 border border-white">
 
@@ -12,10 +11,10 @@
 
                 <!-- Botón Volver -->
                 <div class="flex justify-end items-center mb-6">
-                    <button type="button" onclick="window.history.back()"
-                        class="inline-flex items-center px-3 py-1.5 bg-gray-500 text-white font-semibold rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-zinc-700 hover:shadow-md hover:-translate-y-px text-xs uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                    <a href="{{ session('nvrUrl') }}"
+                        class="inline-flex items-center px-3 py-1.5 bg-yellow-600 text-white font-semibold rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-yellow-700 hover:shadow-md hover:-translate-y-px text-xs uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
                         Volver
-                    </button>
+                    </a>
                 </div>
             </div>
 
@@ -70,8 +69,11 @@
                     <div>
                         <label for="ip" class="block text-sm font-semibold text-white">Dirección IP</label>
                         <input type="text" name="ip" id="ip"
-                            class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('ip') border-red-500 @enderror"
                             value="{{ old('ip', $nvr->ip) }}" required>
+                        @error('ip')
+                            <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <!-- Campo Puertos Disponibles -->

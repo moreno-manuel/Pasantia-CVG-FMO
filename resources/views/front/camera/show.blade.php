@@ -2,9 +2,8 @@
 
 @section('content')
     <!-- resources/views/front/camera/show.blade.php -->
-
     <div class="container mx-auto px-4 py-6">
-        
+
         <!-- Botón Volver -->
         <div class="flex justify-end items-center mb-6">
             <a href="{{ session('urlCameraShow') ?? url()->previous() }}"

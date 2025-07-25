@@ -74,7 +74,9 @@ class SwitchController extends Controller
     public function edit($serial)
     {
         try {
-            session(['switchUrl' => url()->previous()]);
+            $redirectRoute = Route::getRoutes()->match(app('request')->create(url()->previous()))->getName();
+            if ($redirectRoute != 'switch.edit')
+                session(['switchUrl' => url()->previous()]);
 
             $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['switch_marks']; // json con las marcas agregadas
 

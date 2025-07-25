@@ -95,7 +95,9 @@ class NvrController extends Controller
     public function edit($name)
     {
         try {
-            session(['nvrUrl' => url()->previous()]);
+            $redirectRoute = Route::getRoutes()->match(app('request')->create(url()->previous()))->getName();
+            if ($redirectRoute != 'nvr.edit')
+                session(['nvrUrl' => url()->previous()]); //captura ruta desde donde se llama el metodo
 
             $nvr = Nvr::where('name', $name)->firstOrFail();
 
@@ -115,7 +117,7 @@ class NvrController extends Controller
                     'mark' => 'required',
                     'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
                     'model' => 'required|alpha_dash|min:3',
-                    'ip' => 'required|ip|unique:nvrs',
+                    'ip' => 'required|ip|unique:nvrs,ip',
                     'ports_number' => 'required',
                     'location' => 'required|regex:/^[a-zA-Z0-9\/\- ]+$/|min:5',
                     'description' => 'nullable'

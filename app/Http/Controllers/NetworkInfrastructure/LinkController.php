@@ -82,7 +82,9 @@ class LinkController extends Controller
     public function edit($name)
     {
         try {
-            session(['linkhUrl' => url()->previous()]);
+            $redirectRoute = Route::getRoutes()->match(app('request')->create(url()->previous()))->getName();
+            if ($redirectRoute != 'enlace.edit')
+                session(['linkUrl' => url()->previous()]);
 
             $link = Link::where('name', $name)->firstOrFail();
             $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['link_marks']; // json con las marcas agregadas
@@ -126,7 +128,7 @@ class LinkController extends Controller
 
             $link->update($request->all());
 
-            $redirectRoute = Route::getRoutes()->match(app('request')->create(session('linkhUrl')))->getName();
+            $redirectRoute = Route::getRoutes()->match(app('request')->create(session('linkUrl')))->getName();
             if ($redirectRoute === 'enlace.show')
                 return redirect()->route('enlace.show', ['enlace' => $link->name])->with('success', 'Enlace actualizado.');
 

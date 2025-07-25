@@ -1,7 +1,6 @@
 @extends('layouts.app-home')
 @section('content')
     <!-- resources/views/front/attention/show.blade.php -->
-
     <div class="container mx-auto px-4 py-6">
 
         <!-- Botón Volver -->
