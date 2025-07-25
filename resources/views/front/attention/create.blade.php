@@ -82,9 +82,9 @@
                     <!-- Campo Fecha de Inicio -->
                     <div class="mb-4">
                         <label for="date_ini" class="block text-sm font-semibold text-white">Fecha de inicio</label>
-                        <input type="date" name="date_ini" id="date_ini" max="{{ now()->format('Y-m-d') }}"
-                            class="custom-date-icon mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('date_ini') border-red-500 @enderror"
-                            value="{{ old('date_ini') }}" required>
+                        <input type="date" name="date_ini" id="date_ini"
+                            class="custom-date-icon mt-1 block w-full rounded-md bg-zinc-900 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('date_ini') border-red-500 @enderror"
+                            value="{{ now()->format('Y-m-d') }}" readonly required>
 
                         @error('date_ini')
                             <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
@@ -106,7 +106,7 @@
                         <label for="description" class="block text-sm font-semibold text-white">Descripción</label>
                         <textarea name="description" id="description" value="{{ old('description') }}" rows="3"
                             class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            placeholder="Describe brevemente la condición de atención..." required></textarea>
+                            placeholder="Describe brevemente la condición de atención..."></textarea>
                     </div>
                 </div>
 

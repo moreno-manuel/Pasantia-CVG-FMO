@@ -321,3 +321,34 @@ function nvrSlotValidateUpdate(Request $request, Nvr $nvr)
 
     return $slotsRequest;
 }
+
+
+/* para liberar el metodo store de y update de
+ConditionAttentionController en las validaciones */
+function conditionAttentionValidate(Request $request)
+{
+    $conditionExists = null; // determina si existe una condicion con el mismo nombre y fecha para la misma camara
+
+    if ($request->input('name') === 'OTRO') {
+        $conditionExists = ConditionAttention::where('other_name', $request->input('other_condition'))
+            ->where('date_ini', $request->input('date_ini'))
+            ->exists(); // consulta si existe una condicion con el mismo nombre y fecha
+
+        $names = json_decode(file_get_contents(resource_path('js/data.json')), true)['conditions']; // json
+        $checkName = in_array(strtoupper($request->input('other_condition')), $names); //para validar si el nombre ya se encontraba en la lista predefinida 
+        if ($checkName) { // si el nombre ya se encontraba en la lista predefinida
+            return 'El nombre de la condición ya está en la lista de Tipo de Condición';
+        }
+    } else {
+        $conditionExists = ConditionAttention::where('name', $request->input('name'))
+            ->where('date_ini', $request->input('date_ini'))
+            ->exists(); // consulta si existe una condicion con el mismo nombre y fecha
+    }
+    if ($conditionExists) {
+        return 'Ya existe una condición con este nombre y fecha de inicio para la cámara ' . Camera::where('id', $request->input('camera_id'))->value('name');
+    }
+
+    return ''; // si no existe retorna un string vacio
+}
+
+

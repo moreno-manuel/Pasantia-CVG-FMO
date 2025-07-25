@@ -14,7 +14,7 @@
     <header class="bg-red-900 text-white p-4 flex items-center justify-center relative h-24">
         <!-- Logo -->
         <div class="absolute left-4 top-1/2 -translate-y-1/2">
-            <img src="{{ asset('images/logo_ferro.png') }}" alt="Logo" class="h-20 w-auto object-contain">
+            <img src="{{ asset('images/logo_ferro.png') }}" alt="Logo" class="h-24 w-auto object-contain">
         </div>
 
         <h1 class="text-2xl font-bold">KrhonosVision</h1>

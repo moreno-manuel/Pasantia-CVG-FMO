@@ -24,14 +24,45 @@
                 @method('PUT')
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                    <!-- Campo Nombre Condición de Atencion -->
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-white">Tipo de Condición</label>
+                        <select name="name" id="name"
+                            class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('name') border-red-500 @enderror"
+                            required>
+                            <option value="">Selecciona...</option>
+                            @foreach ($names as $name)
+                                <option value="{{ $name }}"
+                                    {{ old('name', isset($condition) ? $condition->name : '') == $name ? 'selected' : '' }}>
+                                    {{ $name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('name')
+                            <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div id="other-condition-field" class="hidden">
+                        <label for="other_condition" class="block text-sm font-semibold text-white">Nombre</label>
+                        <input type="text" name="other_condition" id="other_condition"
+                            value="{{ old('other_condition', $condition->other_name) }}" minlength="5"
+                            class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('other_condition') border-red-500 @enderror"
+                            placeholder="Especifica el nombre de la condición">
+                        @error('other_condition')
+                            <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
+                        @enderror
+                    </div>
+
                     <!-- Campo Fecha de Finalización -->
                     <div class="mb-4">
                         <label for="date_end" class="block text-sm font-semibold text-white">Fecha de Realización</label>
                         <input type="date" name="date_end" id="date_end" min="{{ now()->format('Y-m-d') }}"
+                            max="{{ now()->format('Y-m-d') }}"
                             class="custom-date-icon mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             value="{{ old('date_end', $condition->date_end) }}">
                     </div>
-
 
                     <!-- Campo Descripción -->
                     <div class="md:col-span-2">
@@ -64,6 +95,12 @@
                         Guardar Condición
                     </button>
                 </div>
+
+                {{-- campo oculto de camera_id para validacion --}}
+                <input type="hidden" name="camera_id" id="camera_id" value="{{ $condition->camera_id }}">
+
+                {{-- campo oculto de fecha incial para validacion --}}
+                <input type="hidden" name="date_ini" id="date_ini" value="{{ $condition->date_ini }}">
             </form>
         </div>
     </div>

@@ -357,6 +357,9 @@
                 if (select && otherField) {
                     select.addEventListener('change', function() {
                         otherField.classList.toggle('hidden', select.value !== 'OTRO');
+
+                        if(document.getElementById('other_condition').value !== 'OTRO')
+                            document.getElementById('other_condition').value = null;
                     });
 
                     if (select.value === 'OTRO') {
