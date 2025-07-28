@@ -35,15 +35,20 @@ Route::controller(RecoveryUserController::class)
         Route::post('passwordStore', 'storeStep3')->name('recovery.storeStep3');
     });
 
-
-
 Route::controller(CheckStatusController::class) //monitoreo de camaras y nvr
     ->prefix('/home')
     ->middleware('auth')
     ->group(function () {
         Route::get('', 'home')->name('home');
+    });
+
+Route::controller(CheckStatusController::class) //monitoreo de camaras y nvr
+    ->prefix('/test')
+    ->middleware('auth')
+    ->group(function () {
+        Route::get('', 'test')->name('test');
         Route::get('check', 'checkStatus')->name('test.check');
-        Route::get('{nvr_id}', 'loadCamera')->name('test.loadCamera');
+        Route::get('{nvr_id}', 'loadCamera')->name('test.loadCamera'); //carga cámaras en condicion de atencion
     });
 Route::resource('switch', SwitchController::class)->middleware('auth');
 Route::resource('enlace', LinkController::class)->middleware('auth');

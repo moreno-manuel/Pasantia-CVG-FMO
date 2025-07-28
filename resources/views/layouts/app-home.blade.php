@@ -179,7 +179,7 @@
                 // Reiniciar scripts
                 initScripts();
                 const currentUrl = window.location.pathname;
-                if (currentUrl === '/home' || currentUrl === '/home/') {
+                if (currentUrl === '/test' || currentUrl === '/test/') {
                     updateDeviceStatus(); // Primera carga
                     window.statusInterval = setInterval(updateDeviceStatus, 15000); // Cada 15 segundos
                 }
@@ -439,7 +439,7 @@
             // Verificar si la URL actual es home
             initScripts();
             const currentUrl = window.location.pathname;
-            if (currentUrl === '/home' || currentUrl === '/home/') {
+            if (currentUrl === '/test' || currentUrl === '/test/') {
                 updateDeviceStatus(); // Primera carga
                 window.statusInterval = setInterval(updateDeviceStatus, 15000); // Cada 15 segundos
             }

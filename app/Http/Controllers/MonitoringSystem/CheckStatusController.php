@@ -5,7 +5,6 @@ namespace App\Http\Controllers\MonitoringSystem;
 use App\Http\Controllers\Controller;
 use App\Jobs\CheckDeviceStatusJob;
 use App\Models\monitoringSystem\Camera;
-use App\Models\monitoringSystem\ConditionAttention;
 use App\Models\monitoringSystem\Nvr;
 use Illuminate\Support\Facades\Cache;
 
@@ -14,6 +13,25 @@ class CheckStatusController extends Controller
     //
 
     public function home()
+    {
+        $nvr = Nvr::all();
+        $nvrAll = $nvr->count();
+        $nvrOnline = $nvr->where('status', 'online')->count();
+        $nvrOffline = $nvr->where('status', 'offline')->count();
+        $nvrConecting = $nvr->where('status', 'conecting...')->count();
+
+
+        $camera = Camera::all();
+        $cameraAll = $camera->count();
+        $cameraOnline = $camera->where('status', 'online')->count();
+        $cameraOffline = $camera->where('status', 'offline')->count();
+        $cameraConecting = $camera->where('status', 'conecting...')->count();
+
+
+        return view('front.home.home', compact('nvrAll', 'nvrOnline', 'nvrOffline', 'nvrConecting', 'cameraAll', 'cameraOnline', 'cameraOffline', 'cameraConecting'));
+    }
+
+    public function test()
     {
         $inactiveCameras = Camera::select(['id', 'mac', 'nvr_id', 'name', 'location', 'ip', 'status'])
             ->where('status', '!=', 'online')
@@ -25,7 +43,7 @@ class CheckStatusController extends Controller
             ->orderBy('location')
             ->paginate(10);
 
-        return view('front.home.checkStatus', compact('inactiveCameras', 'inactiveNvr'));
+        return view('front.testView.checkStatus', compact('inactiveCameras', 'inactiveNvr'));
     }
 
     public function checkStatus()

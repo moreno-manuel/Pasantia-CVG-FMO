@@ -11,7 +11,7 @@
 
         {{-- logo --}}
         <div class="absolute top-4 right-4 z-10 pointer-events-none">
-            <img src="{{ asset('images/logo_view.png') }}" alt="Logo" style="filter: opacity(60%)">
+            <img src="{{ asset('images/logo_view.png') }}" alt="Logo" class="h-14" style="filter: opacity(60%)">
         </div>
 
         <!-- Filtros para búsqueda -->
@@ -20,9 +20,8 @@
             <!-- tipo de condición -->
             <div>
                 <label for="equipment" class="block text-sm font-medium text-black">Tipo de Equipo</label>
-                <select name="equipment" 
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                    >
+                <select name="equipment"
+                    class="mt-1 block w-full rounded-md bg-white border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
                     <option value="">Seleccione..</option>
                     <option value="Nvr" {{ ($filters['equipment'] ?? '') == 'Nvr' ? 'selected' : '' }}>
                         Nvr</option>

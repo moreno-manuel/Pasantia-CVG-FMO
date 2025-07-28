@@ -13,7 +13,7 @@
 
         {{-- logo --}}
         <div class="absolute top-4 right-4 z-10 pointer-events-none">
-            <img src="{{ asset('images/logo_view.png') }}" alt="Logo" style="filter: opacity(60%)">
+            <img src="{{ asset('images/logo_view.png') }}" alt="Logo" class="h-14" style="filter: opacity(60%)">
         </div>
 
         <!-- Filtros para búsqueda -->
