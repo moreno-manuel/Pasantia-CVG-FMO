@@ -183,7 +183,7 @@
         <br>
 
         <div class="flex justify-left items-center mb-6">
-            <h1 class="font-bold text-white bg-zinc-600 rounded-md px-3 py-1">Cámaras Conectadas al Nvr seleccionado</h1>
+            <h1 class="font-bold text-white bg-zinc-600 rounded-md px-3 py-1">Cámaras Conectadas al NVR seleccionado</h1>
         </div>
 
         {{-- tabla de cámaras conectadas al nvr --}}

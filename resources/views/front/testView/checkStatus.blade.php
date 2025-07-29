@@ -18,7 +18,7 @@
 
         {{-- Tabla de Nvr inactivos  --}}
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-1xl font-bold text-white bg-zinc-500 rounded-md px-3 py-1">Nvr</h1>
+            <h1 class="text-1xl font-bold text-white bg-zinc-500 rounded-md px-3 py-1">NVR</h1>
         </div>
 
         <div class="overflow-x-auto rounded-lg shadow border border-zinc-500 bg-zinc-700">

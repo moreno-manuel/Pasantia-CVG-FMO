@@ -24,7 +24,7 @@
                     class="mt-1 block w-full rounded-md bg-white border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
                     <option value="">Seleccione..</option>
                     <option value="Nvr" {{ ($filters['equipment'] ?? '') == 'Nvr' ? 'selected' : '' }}>
-                        Nvr</option>
+                        NVR</option>
                     <option value="Cámara" {{ ($filters['equipment'] ?? '') == 'Cámara' ? 'selected' : '' }}>Cámara
                     </option>
                     <option value="Enlace" {{ ($filters['equipment'] ?? '') == 'Enlace' ? 'selected' : '' }}>Enlace

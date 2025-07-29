@@ -82,7 +82,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
                                 </svg>
-                                <span>Nvr</span>
+                                <span>NVR</span>
                             </a>
                         </li>
 
@@ -236,7 +236,7 @@
 
                         @if ($user)
                             @if (auth()->user()->rol != 'lector')
-                                <li><a href="/manual"
+                                <li><a href="{{ route('manual.view', ['manual_type' => 'usuario']) }}"
                                         class="flex items-center space-x-2 px-4 py-2 hover:bg-yellow-700 rounded"
                                         target = "_blank">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white"
@@ -252,7 +252,7 @@
 
                         @if ($user)
                             @if (auth()->user()->rol != 'lector')
-                                <li><a href="#"
+                                <li><a href="{{ route('manual.view', ['manual_type' => 'desarrollador']) }}"
                                         class="flex items-center space-x-2 px-4 py-2 hover:bg-yellow-700 rounded"
                                         target = "_blank">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white"

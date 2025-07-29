@@ -92,7 +92,7 @@ class CameraConditionExport extends BaseReportExport implements WithTitle
             'Descripción',
             'Fecha Control/Condición',
             'Última descripción',
-            'Nvr/Conexión',
+            'NVR/Conexión',
             'Nombre',
             'Marca',
             'Modelo',
@@ -255,6 +255,6 @@ class CameraConditionExport extends BaseReportExport implements WithTitle
 
     public function title(): string
     {
-        return 'cámaras por tipo de condición';
+        return 'Cámaras por tipo de condición';
     }
 }

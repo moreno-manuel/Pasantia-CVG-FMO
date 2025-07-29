@@ -21,7 +21,7 @@ class ReportController extends Controller
     public function index()
     {
         $reports = [
-            ['name' => 'Inventario Nvr', 'url' => 'export.nvr'],
+            ['name' => 'Inventario NVR', 'url' => 'export.nvr'],
             ['name' => 'Inventario Cámaras', 'url' => 'export.camera'],
             ['name' => 'Inventario Cámaras en stock', 'url' => 'export.cameraStock'],
             ['name' => 'Inventario Switches', 'url' => 'export.switch'],

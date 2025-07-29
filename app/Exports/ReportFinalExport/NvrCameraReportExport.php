@@ -125,7 +125,7 @@ class NvrCameraReportExport extends BaseReportExport implements WithTitle
 
     public function getTitle(): string
     {
-        return 'Relación Nvr - Cámaras';
+        return 'Relación NVR - Cámaras';
     }
 
     public function headings(): array
@@ -273,6 +273,6 @@ class NvrCameraReportExport extends BaseReportExport implements WithTitle
 
     public function title(): string
     {
-        return 'nvr - cámaras';
+        return 'NVR - Cámaras';
     }
 }

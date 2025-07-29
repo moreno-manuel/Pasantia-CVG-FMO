@@ -81,7 +81,7 @@ class CameraExport implements ShouldAutoSize, WithDrawings, WithEvents
                 foreach ($groupedData as $nvrName => $cameras) {
                     // Imprimir nombre del NVR como subtítulo
                     $phpSheet->mergeCells("A{$currentRow}:H{$currentRow}");
-                    $phpSheet->setCellValue("A{$currentRow}", "{$nvrName}");
+                    $phpSheet->setCellValue("A{$currentRow}", "NVR: {$nvrName}");
 
                     $phpSheet->getStyle("A{$currentRow}")
                         ->getFont()

@@ -24,7 +24,7 @@
 
                     {{-- Campo Nvr --}}
                     <div>
-                        <label for="nvr" class="block text-sm font-semibold text-white">Nvr</label>
+                        <label for="nvr" class="block text-sm font-semibold text-white">NVR</label>
                         <select name="nvr" id="nvr"
                             class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
@@ -43,7 +43,7 @@
                         <select name="camera_id" id="camera_id"
                             class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('camera_id') border-red-500 @enderror"
                             required>
-                            <option value="">Selecciona un Nvr</option>
+                            <option value="">Selecciona un NVR</option>
                         </select>
                         @error('camera_id')
                             <span class="text-red-400 text-sm mt-1">{{ $message }}</span>

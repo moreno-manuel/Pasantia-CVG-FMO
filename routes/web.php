@@ -110,7 +110,23 @@ Route::controller(QuestionsSecurityController::class) // preguntas de seguridad 
 
 Route::resource('users', UserController::class)->middleware(UsersAccesMiddleware::class)->except('show'); //para el control de los usuarios registrados  
 
-Route::get('/manual', function () { // abre el manual 
-    $path = public_path('files/manual.pdf');
+
+Route::get('/manual/{manual_type}', function ($manual_type) { //apertura el manual de usuario y de desarrollador
+    $filename = match ($manual_type) {
+        'usuario' => 'manual_usuario.pdf',
+        'desarrollador' => 'manual_desarrollador.pdf',
+        default   => null, // Si el tipo no es válido, será nulo
+    };
+
+    if (!$filename) {
+        abort(404, 'Tipo de manual no válido.');
+    }
+
+    $path = public_path('files/' . $filename);
+
+    if (!file_exists($path)) {
+        abort(404, 'El archivo del manual no fue encontrado.');
+    }
+
     return response()->file($path);
-});
+})->middleware('auth')->name('manual.view');

@@ -186,7 +186,7 @@ class NvrController extends Controller
             'mark' => $nvr->mark,
             'model' => $nvr->model,
             'location' => $nvr->location,
-            'equipment' => 'Nvr',
+            'equipment' => 'NVR',
             'description' => $request->input('deletion_description')
         ]);
         NvrDisuse::create([
