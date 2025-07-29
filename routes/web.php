@@ -35,12 +35,7 @@ Route::controller(RecoveryUserController::class)
         Route::post('passwordStore', 'storeStep3')->name('recovery.storeStep3');
     });
 
-Route::controller(CheckStatusController::class) //monitoreo de camaras y nvr
-    ->prefix('/home')
-    ->middleware('auth')
-    ->group(function () {
-        Route::get('', 'home')->name('home');
-    });
+Route::get('/home',[CheckStatusController::class,'home'])->name('home')->middleware('auth'); // pagina principal
 
 Route::controller(CheckStatusController::class) //monitoreo de camaras y nvr
     ->prefix('/test')

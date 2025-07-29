@@ -6,6 +6,8 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/* para que solo el admin acceda 
+a la seccion Usuarios */
 class UsersAccesMiddleware
 {
     /**

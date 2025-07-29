@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 
 use function app\Helpers\conditionAttentionValidate;
 use function app\Helpers\filter;

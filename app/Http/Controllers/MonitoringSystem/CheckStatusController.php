@@ -8,9 +8,10 @@ use App\Models\monitoringSystem\Camera;
 use App\Models\monitoringSystem\Nvr;
 use Illuminate\Support\Facades\Cache;
 
+/* controlador para chequeo de status y otras funcionalidades */
+
 class CheckStatusController extends Controller
 {
-    //
 
     public function home()
     {

@@ -6,6 +6,8 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/* para que lector no 
+acceda a la seccion Reporte */
 
 class ReportlAccesMiddleware
 {

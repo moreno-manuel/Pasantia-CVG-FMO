@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Maatwebsite\Excel\Facades\Excel;
 
+/* Controlador para exportaciones de archivos */
+
 class ReportController extends Controller
 {
     public function index()

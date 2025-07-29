@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
+/* Controlador para autenticcacion */
+
 class AuthController extends Controller
 {
     public function showLoginForm()

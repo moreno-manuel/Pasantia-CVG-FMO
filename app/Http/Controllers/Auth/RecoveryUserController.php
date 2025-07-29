@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Person;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+
 
 /* controlador para 
 recuperacion de usuario */

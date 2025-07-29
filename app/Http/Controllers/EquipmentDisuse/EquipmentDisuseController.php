@@ -9,10 +9,11 @@ use App\Models\EquipmentDisuse\EquipmentDisuse;
 use App\Models\EquipmentDisuse\LinkDisuse;
 use App\Models\EquipmentDisuse\NvrDisuse;
 use App\Models\EquipmentDisuse\SwitchDisuse;
-use App\Models\networkInfrastructure\CameraInventory;
 use Illuminate\Http\Request;
 
 use function app\Helpers\filter;
+
+/* Controlador para equipos eliminados */
 
 class EquipmentDisuseController extends Controller
 {
