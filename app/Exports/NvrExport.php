@@ -51,7 +51,7 @@ class NvrExport implements ShouldAutoSize, WithDrawings, WithEvents
 
                 // Encabezados (con soporte para hasta 4 slots)
                 $headers = [
-                    'Mac',
+                    'MAC',
                     'Marca',
                     'Modelo',
                     'Nombre',
@@ -66,9 +66,9 @@ class NvrExport implements ShouldAutoSize, WithDrawings, WithEvents
 
                 // Añadir encabezados dinámicos para cada slot (hasta 2)
                 for ($i = 1; $i <= 2; $i++) {
-                    $headers[] = " Vol. {$i} Capacidad/Max.(TB) ";
-                    $headers[] = "Serial HDD (TB)";
-                    $headers[] = "Capacidad HDD (TB)";
+                    $headers[] = "Capacidad/Max.(TB) - Vol. {$i}";
+                    $headers[] = "Serial HDD - Vol. {$i}";
+                    $headers[] = "Capacidad HDD (TB) - Vol. {$i}";
                 }
 
                 $headerRow = 3;
@@ -151,7 +151,7 @@ class NvrExport implements ShouldAutoSize, WithDrawings, WithEvents
                     ->getAlignment()
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
                 // Segunda línea: Área
-                $phpSheet->setCellValue("A" . ($footerRow + 1), "Área: Seguridad Tecnológica");
+                $phpSheet->setCellValue("A" . ($footerRow + 1), "Sección: Seguridad Tecnológica");
                 $phpSheet->getStyle("A" . ($footerRow + 1))
                     ->getFont()
                     ->setItalic(true)

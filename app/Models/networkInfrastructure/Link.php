@@ -53,12 +53,6 @@ class Link extends Model
         );
     }
 
-    protected function model(): Attribute //model
-    {
-        return Attribute::make(
-            set: fn($model) => strtoupper($model),
-        );
-    }
 
     protected function name(): Attribute //name
     {

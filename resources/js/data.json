@@ -31,5 +31,17 @@
         "Comida favorita",
         "Deporte favorito",
         "Nombre de mascota"
+    ],
+    "equipments": [
+        "Camara",
+        "Enlace",
+        "NVR",
+        "Switch"
+    ],
+    "locations": [
+        "Ciudad Piar",
+        "Palua",
+        "Planta de Pella",
+        "Puerto Ordaz"
     ]
 }

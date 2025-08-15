@@ -53,6 +53,7 @@ return new class extends Migration
 
         Schema::create('condition_attentions', function (Blueprint $table) {
             $table->id();
+            $table->string('user');
             $table->foreignId('camera_id')
                 ->constrained('cameras')
                 ->onDelete('cascade');
@@ -67,6 +68,7 @@ return new class extends Migration
 
         Schema::create('control_conditions', function (Blueprint $table) {
             $table->id();
+            $table->string('user');
             $table->foreignId('condition_attention_id')
                 ->constrained('condition_attentions')
                 ->onDelete('cascade');

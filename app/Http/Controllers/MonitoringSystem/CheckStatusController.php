@@ -102,6 +102,7 @@ class CheckStatusController extends Controller
             ->whereDoesntHave('conditionAttention', function ($query) {
                 $query->where('status', 'Por atender');
             })
+            ->orderBy('name','asc')
             ->get(['id', 'name']);
 
         return response()->json($cameras);

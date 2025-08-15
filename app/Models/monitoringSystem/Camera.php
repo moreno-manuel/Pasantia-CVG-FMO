@@ -66,13 +66,6 @@ class Camera extends Model
         );
     }
 
-    protected function location(): Attribute //name
-    {
-        return Attribute::make(
-            set: fn($location) => strtoupper($location),
-        );
-    }
-
 
     // Convertir IP a entero antes de guardar
     public function setIpAttribute($value)

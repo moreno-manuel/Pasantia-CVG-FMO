@@ -87,7 +87,7 @@ abstract class EquipmentDisuseExport implements WithEvents, WithDrawings, WithHe
                 $lastRow = count($data) + 6;
                 $footerRow = $lastRow + 2;
                 $phpSheet->setCellValue("A{$footerRow}", "Gerencia: Telemática");
-                $phpSheet->setCellValue("A" . ($footerRow + 1), "Área: Seguridad Tecnológica");
+                $phpSheet->setCellValue("A" . ($footerRow + 1), "Sección: Seguridad Tecnológica");
 
                 $phpSheet->getStyle("A{$footerRow}")
                     ->getFont()

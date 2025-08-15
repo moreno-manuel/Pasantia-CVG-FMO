@@ -16,14 +16,29 @@
         </div>
 
         <!-- Filtros para búsqueda -->
-        <form method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6" onsubmit="return validateFilters('link')">
+        <form method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6" onsubmit="return validateFilters('network')">
 
-            <!-- Localidad -->
+            <!-- Campo localidad -->
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Localidad</label>
-                <input type="text" name="location" value="{{ $filters['location'] ?? '' }}"
+                <label for="location" class="block text-sm font-semibold text-gray-700 mb-1">Localidad</label>
+                <select name="location"
+                    class="w-full rounded-md bg-white border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                    <option value="">Seleccione..</option>
+                    @foreach ($locations as $location)
+                        <option value="{{ $location }}"
+                            {{ ($filters['location'] ?? '') == $location ? 'selected' : '' }}>
+                            {{ $location }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <!-- model -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Modelo</label>
+                <input type="text" name="model" value="{{ $filters['model'] ?? '' }}"
                     class="w-full rounded-md bg-white border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
-                    placeholder="Buscar por localidad">
+                    placeholder="Buscar por modelo">
             </div>
 
             <!-- Botones: Filtrar + Limpiar -->
@@ -127,6 +142,7 @@
             {{-- paginacion --}}
             {{ $links->appends([
                     'location' => $filters['location'] ?? '',
+                    'model' => $filters['model'] ?? '',
                 ])->links() }}
         @else
             <div class="text-center mt-6 bg-red-900 border border-black rounded-md p-4 text-white">

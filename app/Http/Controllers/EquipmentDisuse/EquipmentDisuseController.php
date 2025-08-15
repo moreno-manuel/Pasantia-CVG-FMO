@@ -4,10 +4,10 @@ namespace App\Http\Controllers\EquipmentDisuse;
 
 use App\Http\Controllers\Controller;
 use App\Models\EquipmentDisuse\CameraDisuse;
-use App\Models\EquipmentDisuse\CameraInventoriesDisuse;
 use App\Models\EquipmentDisuse\EquipmentDisuse;
 use App\Models\EquipmentDisuse\LinkDisuse;
 use App\Models\EquipmentDisuse\NvrDisuse;
+use App\Models\EquipmentDisuse\StockEqDisuse;
 use App\Models\EquipmentDisuse\SwitchDisuse;
 use Illuminate\Http\Request;
 
@@ -31,15 +31,7 @@ class EquipmentDisuseController extends Controller
 
     public function show($id)
     {
-        $equipment = EquipmentDisuse::find($id);
-
-        $camera_inventories = CameraInventoriesDisuse::find($id);
-        if ($camera_inventories) {
-            if ($equipment->id == $camera_inventories->id) { // si la camara pertenece a la tabla de camara_inventories_disuses
-                $equipment_type = 'camera_inventories';
-                return view('front.eliminated.show', compact('equipment', 'camera_inventories', 'equipment_type'));
-            }
-        }
+        $equipment = EquipmentDisuse::findOrFail($id);
 
         switch ($equipment->equipment) {
             case 'Switch':
@@ -61,6 +53,11 @@ class EquipmentDisuseController extends Controller
                 $link = LinkDisuse::find($id);
                 $equipment_type = $equipment->equipment;
                 return view('front.eliminated.show', compact('equipment', 'link', 'equipment_type'));
+                break;
+            default:
+                $stock = StockEqDisuse::find($id);
+                $equipment_type = 'stock';
+                return view('front.eliminated.show', compact('equipment', 'stock', 'equipment_type'));
                 break;
         }
     }

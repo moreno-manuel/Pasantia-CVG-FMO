@@ -33,7 +33,7 @@
 
     <!-- Footer -->
     <footer class="bg-red-900 text-white p-4">
-        <p class="text-center text-sm">© {{ date('Y') }}. CVG Ferrominera. Seguridad Tecnologica. CamStatus-Security
+        <p class="text-center text-sm">© {{ date('Y') }}. CVG Ferrominera Orinoco. Seguridad Tecnológica.
         </p>
     </footer>
 

@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\networkInfrastructure\CameraInventory;
+use App\Models\networkInfrastructure\StockEquipment;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithDrawings;
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -11,13 +11,13 @@ use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Protection;
 
-class CameraStockExport implements ShouldAutoSize, WithDrawings, WithEvents
+class StockEquipmentExport implements ShouldAutoSize, WithDrawings, WithEvents
 {
     protected $data;
 
     public function __construct()
     {
-        $this->data = CameraInventory::select('mac', 'mark', 'model', 'delivery_note', 'destination', 'description')
+        $this->data = StockEquipment::select('equipment', 'mac', 'mark', 'model', 'delivery_note', 'description')
             ->get()
             ->sortBy('mark');
     }
@@ -35,7 +35,7 @@ class CameraStockExport implements ShouldAutoSize, WithDrawings, WithEvents
 
                 // Título ocupando filas 1 y 2
                 $phpSheet->mergeCells("A1:F2");
-                $phpSheet->setCellValue('A1', 'Inventario de Cámaras en Stock');
+                $phpSheet->setCellValue('A1', 'Inventario de Equipos en Stock');
 
                 $phpSheet->getStyle('A1')->getFont()
                     ->setBold(true)
@@ -46,7 +46,7 @@ class CameraStockExport implements ShouldAutoSize, WithDrawings, WithEvents
                     ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
 
                 // Encabezados
-                $headers = ['Mac', 'Marca', 'Modelo', 'Nota de Entrega', 'Destino/Instalación', 'Descripción'];
+                $headers = ['Equipo', 'MAC', 'Marca', 'Modelo', 'Nota de Entrega', 'Descripción'];
                 $headerRow = 3;
 
                 foreach ($headers as $colIndex => $header) {
@@ -74,11 +74,11 @@ class CameraStockExport implements ShouldAutoSize, WithDrawings, WithEvents
                 $startRow = 4;
                 foreach ($data as $rowIndex => $row) {
                     $rowData = [
+                        $row->equipment,
                         $row->mac,
                         $row->mark,
                         $row->model,
                         $row->delivery_note,
-                        $row->destination,
                         $row->description,
                     ];
 
@@ -118,7 +118,7 @@ class CameraStockExport implements ShouldAutoSize, WithDrawings, WithEvents
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
 
                 // Segunda línea: Área
-                $phpSheet->setCellValue("A" . ($footerRow + 1), "Área: Seguridad Tecnológica");
+                $phpSheet->setCellValue("A" . ($footerRow + 1), "Sección: Seguridad Tecnológica");
                 $phpSheet->getStyle("A" . ($footerRow + 1))
                     ->getFont()
                     ->setItalic(true)

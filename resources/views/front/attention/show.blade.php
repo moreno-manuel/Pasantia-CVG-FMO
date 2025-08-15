@@ -27,6 +27,12 @@
             <div class="border-t border-gray-700">
                 <dl>
 
+                    <!-- Campo usuario -->
+                    <div class="bg-zinc-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-300">Creado por</dt>
+                        <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $condition->user }}</dd>
+                    </div>
+
                     <!-- Campo Nvr -->
                     <div class="bg-zinc-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-300">Nvr/Conexión</dt>
@@ -118,6 +124,7 @@
                     <table class="min-w-full shadow-md rounded-lg overflow-hidden divide-gray-700">
                         <thead class="bg-red-900 divide-x divide-blue-400">
                             <tr class="divide-x divide-white">
+                                <th class="px-6 py-3 text-center text-sm font-medium text-white">Usuario</th>
                                 <th class="px-6 py-3 text-center text-sm font-medium text-white">Descripción</th>
                                 <th class="px-6 py-3 text-center text-sm font-medium text-white">Fecha</th>
                                 <th class="px-6 py-3 text-center text-sm font-medium text-white">Hora</th>
@@ -126,6 +133,7 @@
                         <tbody class="divide-y divide-gray-200">
                             @foreach ($controlConditions as $controlCondition)
                                 <tr class="hover:bg-zinc-800 transition-colors duration-150">
+                                    <td class="px-6 py-4 text-center text-sm text-white">{{ $condition->user }}</td>
                                     <td class="px-6 py-4 text-center text-sm text-white">{{ $controlCondition->text }}</td>
                                     <td class="px-6 py-4 text-center text-sm text-white">
                                         {{ $controlCondition->created_at->format('d/m/Y') }}</td>

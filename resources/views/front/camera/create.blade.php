@@ -75,7 +75,7 @@
 
                     <!-- Campo NVR ID -->
                     <div>
-                        <label for="nvr_id" class="block text-sm font-medium text-white">NVR</label>
+                        <label for="nvr_id" class="block text-sm font-medium text-white">NVR/Conexión</label>
                         <select name="nvr_id" id="nvr_id"
                             class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
@@ -112,13 +112,31 @@
                         @enderror
                     </div>
 
-                    <!-- Campo Localidad -->
+                    <!-- Campo localidad -->
                     <div>
                         <label for="location" class="block text-sm font-semibold text-white">Localidad</label>
-                        <input type="text" name="location" value="{{ old('location') }}" minlength="5"
-                            class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('location') border-red-500 @enderror"
+                        <select name="location" id="location"
+                            class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             required>
-                        @error('location')
+                            <option value="">Seleccione..</option>
+                            @foreach ($locations as $location)
+                                <option value="{{ $location }}" {{ old('location') == $location ? 'selected' : '' }}>
+                                    {{ $location }}
+                                </option>
+                            @endforeach
+                            <option value="Otra" {{ old('location') == 'Otra' ? 'selected' : '' }}>Otra
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Campo Especificar Otra localidad -->
+                    <div id="other-location-field" class="hidden">
+                        <label for="other_location" class="block text-sm font-semibold text-white">Especifica la
+                            localidad</label>
+                        <input type="text" name="other_location" id="other_location" minlength="3"
+                            class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('other_location') border-red-500 @enderror"
+                            placeholder="Nombre de la localidad" value="{{ old('other_location') }}">
+                        @error('other_location')
                             <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
                         @enderror
                     </div>

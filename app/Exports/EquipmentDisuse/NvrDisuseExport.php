@@ -15,17 +15,17 @@ class NvrDisuseExport extends EquipmentDisuseExport implements WithTitle
 
     public function getSheetName(): string
     {
-        return 'Nvr';
+        return 'NVR';
     }
 
     public function getTitle(): string
     {
-        return 'Nvr Eliminados';
+        return 'NVR Eliminados';
     }
 
     public function headings(): array
     {
-        return ['Mac', 'Marca', 'Modelo', 'Nombre', 'N°/Puertos', 'IP', 'Volumen 1/Capacidad Max. (TB)', 'Volumen 2/Capacidad Max. (TB)', 'Localidad', 'Descripción', 'Fecha'];
+        return ['MAC', 'Marca', 'Modelo', 'Nombre', 'N°/Puertos', 'IP', 'Volumen 1/Capacidad Max. (TB)', 'Volumen 2/Capacidad Max. (TB)', 'Localidad', 'Descripción', 'Fecha'];
     }
 
     public function map($device): array

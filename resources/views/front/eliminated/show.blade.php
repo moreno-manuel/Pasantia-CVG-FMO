@@ -31,7 +31,7 @@
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $equipment['id'] }}</dd>
                     </div>
 
-                    <!-- NVR - Marca -->
+                    <!-- Marca -->
                     <div class="bg-zinc-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-semibold text-gray-300">Marca</dt>
                         <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $equipment['mark'] }}</dd>
@@ -162,21 +162,13 @@
                         @break
 
                         @default
-                            <!-- Por defecto: Cámaras inventario o similares -->
+                            <!-- Por defecto: equipo en stock -->
                             <div class="bg-zinc-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                 <dt class="text-sm font-semibold text-gray-300">Nota de Entrega</dt>
                                 <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
-                                    {{ $camera_inventories['delivery_note'] ?? 'N/A' }}
+                                    {{ $stock['delivery_note'] ?? 'N/A' }}
                                 </dd>
                             </div>
-
-                            <div class="bg-zinc-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-semibold text-gray-300">Destino</dt>
-                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
-                                    {{ $camera_inventories['destination'] ?? 'N/A' }}
-                                </dd>
-                            </div>
-                        @break
                     @endswitch
 
                     <!-- Campo Descripción -->

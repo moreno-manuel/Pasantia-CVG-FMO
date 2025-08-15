@@ -17,7 +17,7 @@
         <!-- Filtros para búsqueda -->
         <form method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4" onsubmit="return validateFilters('eliminated')">
 
-            <!-- tipo de condición -->
+            <!-- tipo de equipo -->
             <div>
                 <label for="equipment" class="block text-sm font-medium text-black">Tipo de Equipo</label>
                 <select name="equipment"

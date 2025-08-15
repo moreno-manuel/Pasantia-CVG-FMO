@@ -117,7 +117,7 @@ abstract class BaseReportExport implements WithEvents, WithDrawings, WithHeading
                 // Pie de página
                 $footerRow = $currentRow + 5;
                 $phpSheet->setCellValue("A{$footerRow}", "Gerencia: Telemática");
-                $phpSheet->setCellValue("A" . ($footerRow + 1), "Área: Seguridad Tecnológica");
+                $phpSheet->setCellValue("A" . ($footerRow + 1), "Sección: Seguridad Tecnológica");
 
                 $phpSheet->getStyle("A{$footerRow}")
                     ->getFont()

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 
 use function app\Helpers\filter;
+use function app\Helpers\locationUpdate;
 use function app\Helpers\marksUpdate;
 
 /* controlador para el 
@@ -23,14 +24,15 @@ class SwitchController extends Controller
     public function index(Request $request)
     {
 
-        $hasFilters = $request->filled('serial') ||
+        $hasFilters = $request->filled('model') ||
             $request->filled('location');
 
         if (!$hasFilters) { //si no se aplica un filtro
             $switches = Switche::select('serial', 'mark', 'model', 'number_ports', 'location')
                 ->orderBy('created_at', 'desc')
                 ->paginate(10);
-            return view('front.switch.index', compact('switches'));
+            $locations = json_decode(file_get_contents(resource_path('js/data.json')), true)['locations']; // json con las localidades agregadas
+            return view('front.switch.index', compact('switches', 'locations'));
         }
 
         return filter($request, 'switches'); //helper
@@ -39,8 +41,8 @@ class SwitchController extends Controller
     public function create()
     {
         $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['switch_marks']; // json con las marcas 
-
-        return view('front.switch.create', compact('marks'));
+        $locations = json_decode(file_get_contents(resource_path('js/data.json')), true)['locations']; // json con las localidades
+        return view('front.switch.create', compact('marks', 'locations'));
     }
 
     public function store(Request $request)
@@ -51,13 +53,14 @@ class SwitchController extends Controller
                 'serial' => 'required|unique:switches|alpha_num|min:9|max:10',
                 'mark' => 'required',
                 'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
-                'location' => 'required|regex:/^[a-zA-Z0-9\/\-. ]+$/|min:5',
+                'location' => 'required',
+                'other_location' => 'nullable|alpha_num|min:3|required_if:location,Otra',
                 'model' => 'required|alpha_dash|min:3',
                 'number_ports' => 'required',
                 'description' => 'nullable'
             ],
-            ['required_if' => 'Debe agregar el nombre de la marca'],
-            ['serial' => 'Serial', 'location' => 'Localidad', 'model' => 'Modelo', 'other_mark' => 'Marca']
+            ['required_if' => 'Debe agregar el nombre de :attribute'],
+            ['serial' => 'Serial', 'location' => 'Localidad', 'model' => 'Modelo', 'other_mark' => 'Marca', 'other_location' => 'Localidad']
         );
 
 
@@ -66,6 +69,7 @@ class SwitchController extends Controller
         }
 
         $request = marksUpdate($request, 'switch_marks'); // en caso de que haya una marca nueva
+        $request = locationUpdate($request, 'locations'); // en caso de que haya una localidad nueva
 
         Switche::create($request->all())->save();
         return redirect()->route('switch.index')->with('success', 'Switch creado exitosamente.');
@@ -79,9 +83,10 @@ class SwitchController extends Controller
                 session(['switchUrl' => url()->previous()]);
 
             $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['switch_marks']; // json con las marcas agregadas
-
+            $locations = json_decode(file_get_contents(resource_path('js/data.json')), true)['locations']; // json con las localidades
+            
             $switch = Switche::where('serial', $serial)->firstOrFail();
-            return view('front.switch.edit', compact('switch', 'marks'));
+            return view('front.switch.edit', compact('switch', 'marks', 'locations'));
         } catch (ModelNotFoundException $e) {
             return redirect()->route('enlace.index')->with('warnings', 'Switch no encontrado');
         }
@@ -97,12 +102,13 @@ class SwitchController extends Controller
                 'mark' => 'required',
                 'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
                 'number_ports' => 'required',
-                'location' => 'required|regex:/^[a-zA-Z0-9\/\-. ]+$/|min:5',
+                'location' => 'required',
+                'other_location' => 'nullable|alpha_num|min:3|required_if:location,Otra',
                 'model' => 'required|alpha_dash|min:3',
                 'description' => 'nullable'
             ],
-            ['required_if' => 'Debe agregar el nombre de la marca'],
-            ['serial' => 'Serial', 'location' => 'Localidad', 'model' => 'Modelo', 'other_mark' => 'Marca']
+            ['required_if' => 'Debe agregar el nombre de :attribute'],
+            ['serial' => 'Serial', 'location' => 'Localidad', 'model' => 'Modelo', 'other_mark' => 'Marca', 'other_location' => 'Localidad']
         );
 
 
@@ -111,6 +117,7 @@ class SwitchController extends Controller
         }
 
         $request = marksUpdate($request, 'switch_marks'); // en caso de que haya una marca nueva
+        $request = locationUpdate($request, 'locations'); // en caso de que haya una localidad nueva
 
         $switch->update($request->all());
 

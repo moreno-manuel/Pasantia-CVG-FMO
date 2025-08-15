@@ -11,6 +11,7 @@ class ControlCondition extends Model
 
     protected $fillable = [
         'condition_attention_id',
+        'user',
         'text'
     ];
 

@@ -48,7 +48,7 @@ class LinkExport implements ShouldAutoSize, WithDrawings, WithEvents
 
 
                 // Encabezados
-                $headers = ['Mac', 'Marca', 'Modelo', 'Nombre', 'Ssid', 'IP', 'Localidad', 'Descripción'];
+                $headers = ['MAC', 'Marca', 'Modelo', 'Nombre', 'SSID', 'IP', 'Localidad', 'Descripción'];
                 $headerRow = 3;
 
                 foreach ($headers as $colIndex => $header) {
@@ -123,7 +123,7 @@ class LinkExport implements ShouldAutoSize, WithDrawings, WithEvents
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
 
                 // Segunda línea: Área
-                $phpSheet->setCellValue("A" . ($footerRow + 1), "Área: Seguridad Tecnológica");
+                $phpSheet->setCellValue("A" . ($footerRow + 1), "Sección: Seguridad Tecnológica");
                 $phpSheet->getStyle("A" . ($footerRow + 1))
                     ->getFont()
                     ->setItalic(true)

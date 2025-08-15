@@ -85,6 +85,7 @@
                 <table class="min-w-full shadow-md rounded-lg overflow-hidden divide-gray-700">
                     <thead class="bg-red-900 divide-x divide-white">
                         <tr class="divide-x divide-white">
+                            <th class="px-6 py-3 text-center text-sm font-medium text-white">Usuario</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Nvr/Conexión</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Cámara</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white">Tipo de Condición</th>
@@ -97,6 +98,8 @@
 
                         @foreach ($conditions as $condition)
                             <tr class="hover:bg-zinc-800 transition-colors duration-150">
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $condition->user }}
+                                </td>
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $condition->camera->nvr->name }}
                                 </td>
                                 <td class="px-6 py-4 text-center text-sm text-white">{{ $condition->camera->name }} </td>

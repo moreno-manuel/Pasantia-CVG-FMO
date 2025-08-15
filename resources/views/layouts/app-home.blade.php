@@ -358,11 +358,29 @@
                     select.addEventListener('change', function() {
                         otherField.classList.toggle('hidden', select.value !== 'OTRO');
 
-                        if(document.getElementById('other_condition').value !== 'OTRO')
+                        if (document.getElementById('other_condition').value !== 'OTRO')
                             document.getElementById('other_condition').value = null;
                     });
 
                     if (select.value === 'OTRO') {
+                        otherField.classList.remove('hidden');
+                    }
+                }
+            }
+
+            //personaliza marca
+            if (document.getElementById('location')) {
+
+                const select = document.getElementById('location');
+                const otherField = document.getElementById('other-location-field');
+
+
+                if (select && otherField) {
+                    select.addEventListener('change', function() {
+                        otherField.classList.toggle('hidden', select.value !== 'Otra');
+                    });
+
+                    if (select.value === 'Otra') {
                         otherField.classList.remove('hidden');
                     }
                 }
@@ -387,36 +405,25 @@
                     }
                     return true;
                 case 'stock':
-                    if (!document.querySelector("select[name='mark']")?.value.trim() && !document.querySelector(
-                            "input[name='delivery_note']")?.value.trim()) {
+                    if ((!document.querySelector("input[name='model']")?.value.trim() &&
+                            !document.querySelector("input[name='delivery_note']")?.value.trim()) &&
+                        !document.querySelector("select[name='equipment']")?.value.trim()) {
                         alert('Por favor, ingresa al menos un valor para filtrar.');
                         return false;
                     }
                     return true;
-                case 'switch':
-                    if (!document.querySelector("input[name='serial']")?.value.trim() && !document.querySelector(
-                            "input[name='location']")?.value.trim()) {
+                case 'network': // link y switch
+                    if (!document.querySelector("input[name='model']")?.value.trim() && !document.querySelector(
+                            "select[name='location']")?.value.trim()) {
                         alert('Por favor, ingresa al menos un valor para filtrar.');
                         return false;
                     }
                     return true;
-                case 'camera':
-                    if (!document.querySelector("input[name='location']")?.value.trim() && !document.querySelector(
-                            "select[name='status']")?.value.trim()) {
+                case 'monitoring': // camara y NVR
+                    if ((!document.querySelector("select[name='location']")?.value.trim() && !document.querySelector(
+                            "input[name='model']")?.value.trim()) &&
+                        !document.querySelector("select[name='status']")?.value.trim()) {
                         alert('Por favor, ingresa al menos un valor para filtrar.');
-                        return false;
-                    }
-                    return true;
-                case 'nvr':
-                    if (!document.querySelector("input[name='location']")?.value.trim() && !document.querySelector(
-                            "select[name='status']")?.value.trim()) {
-                        alert('Por favor, ingresa al menos un valor para filtrar.');
-                        return false;
-                    }
-                    return true;
-                case 'link':
-                    if (!document.querySelector("input[name='location']")?.value.trim()) {
-                        alert('Por favor, ingresa un valor para filtrar.');
                         return false;
                     }
                     return true;
@@ -441,7 +448,7 @@
             const currentUrl = window.location.pathname;
             if (currentUrl === '/test' || currentUrl === '/test/') {
                 updateDeviceStatus(); // Primera carga
-                window.statusInterval = setInterval(updateDeviceStatus, 15000); // Cada 15 segundos
+                window.statusInterval = setInterval(updateDeviceStatus, 10000); // Cada 10 segundos
             }
         });
     </script>

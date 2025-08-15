@@ -7,19 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
-class CameraInventory extends Model
+class StockEquipment extends Model
 {
     use LogsActivity;
 
-    protected $table = 'camera_inventories';
+    protected $table = 'stock_equipments';
 
 
     protected $fillable = [
         'mac',
+        'equipment',
         'mark',
         'model',
         'delivery_note',
-        'destination',
         'description'
     ];
 
@@ -39,12 +39,6 @@ class CameraInventory extends Model
         );
     }
 
-    protected function destination(): Attribute //destination
-    {
-        return Attribute::make(
-            set: fn($destination) => strtoupper($destination),
-        );
-    }
 
     //para logs
     public function getActivitylogOptions(): LogOptions
@@ -54,8 +48,8 @@ class CameraInventory extends Model
                 'mac',
                 'mark',
                 'model',
+                'equipment',
                 'delivery_note',
-                'destination',
                 'description'
             ]);
     }

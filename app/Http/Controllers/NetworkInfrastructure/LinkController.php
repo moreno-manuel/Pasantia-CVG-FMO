@@ -15,6 +15,7 @@ use Illuminate\Validation\Rule;
 
 
 use function app\Helpers\filter;
+use function app\Helpers\locationUpdate;
 use function app\Helpers\marksUpdate;
 
 /* controlador para el 
@@ -24,13 +25,14 @@ class LinkController extends Controller
 {
     public function index(Request $request)
     {
-        $hasFilters = $request->filled('location');
+        $hasFilters = $request->filled('location') || $request->filled('model');
 
         if (!$hasFilters) {  // Valida si hay algún filtro activo
             $links = Link::select('mac', 'name', 'mark', 'model', 'ssid', 'location', 'ip')
                 ->orderBy('created_at', 'desc')
                 ->paginate(10);
-            return view('front.link.index', compact('links'));
+                $locations = json_decode(file_get_contents(resource_path('js/data.json')), true)['locations']; // json con las localidades agregadas
+            return view('front.link.index', compact('links', 'locations'));
         }
 
         return filter($request, 'links'); //helper
@@ -39,7 +41,8 @@ class LinkController extends Controller
     public function create()
     {
         $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['link_marks']; // json con las marcas agregadas
-        return view('front.link.create', compact('marks'));
+        $locations = json_decode(file_get_contents(resource_path('js/data.json')), true)['locations']; // json con las localidades agregadas
+        return view('front.link.create', compact('marks', 'locations'));
     }
 
     public function store(Request $request)
@@ -54,11 +57,12 @@ class LinkController extends Controller
                     'model' => 'required|alpha_dash|min:3',
                     'name' => 'required|unique:links,name|regex:/^[a-zA-Z0-9\/\-. ]+$/|min:5',
                     'ssid' => 'required|alpha_num|min:3',
-                    'location' => 'required|regex:/^[a-zA-Z0-9\/\-. ]+$/|min:5',
+                    'location' => 'required',
+                    'other_location' => 'nullable|regex:/^[a-zA-Z0-9\/\-. ]+$/|min:5|required_if:location,Otra',
                     'ip' => 'required|ip|unique:links,ip',
                     'description' => 'nullable'
                 ],
-                ['required_if' => 'Debe agregar el nombre de la marca'],
+                ['required_if' => 'Debe agregar el nombre de :attribute'],
                 ['name' => 'Nombre', 'location' => 'Localidad', 'model' => 'Modelo', 'ssid' => 'SSID', 'other_mark' => 'Marca']
             );
 
@@ -67,6 +71,7 @@ class LinkController extends Controller
             }
 
             $request = marksUpdate($request, 'link_marks');
+            $request = locationUpdate($request, 'locations'); //si hay una localidad nueva
 
             Link::create($request->all())->save();
             return redirect()->route('enlace.index')->with('success', 'Enlace agregado exitosamente.');
@@ -88,7 +93,8 @@ class LinkController extends Controller
 
             $link = Link::where('name', $name)->firstOrFail();
             $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['link_marks']; // json con las marcas agregadas
-            return view('front.link.edit', compact('link', 'marks'));
+            $locations = json_decode(file_get_contents(resource_path('js/data.json')), true)['locations']; // json con las localidades agregadas
+            return view('front.link.edit', compact('link', 'marks', 'locations'));
         } catch (ModelNotFoundException $e) {
             return redirect()->route('enlace.index')->with('warnings', 'Enlace no encontrado');
         }
@@ -112,11 +118,12 @@ class LinkController extends Controller
                     'mark' => 'required',
                     'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
                     'ssid' => 'required|alpha_num|min:3',
-                    'location' => 'required|regex:/^[a-zA-Z0-9\/\-. ]+$/|min:5',
+                    'location' => 'required',
+                    'other_location' => 'nullable|regex:/^[a-zA-Z0-9\/\-. ]+$/|min:5|required_if:location,Otra',
                     'ip' => 'required|ip|unique:links,ip',
                     'description' => 'nullable'
                 ],
-                ['required_if' => 'Debe agregar el nombre de la marca'],
+                ['required_if' => 'Debe agregar el nombre de :attribute'],
                 ['name' => 'Nombre', 'location' => 'Localidad', 'model' => 'Modelo', 'ssid' => 'SSID', 'other_mark' => 'Marca']
             );
 
@@ -125,6 +132,7 @@ class LinkController extends Controller
             }
 
             $request = marksUpdate($request, 'link_marks');
+            $request = locationUpdate($request, 'locations'); //si hay una localidad nueva
 
             $link->update($request->all());
 

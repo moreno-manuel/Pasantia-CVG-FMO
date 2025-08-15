@@ -35,13 +35,13 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('camera_inventories', function (Blueprint $table) { // enlaces
+        Schema::create('stock_equipments', function (Blueprint $table) { // enlaces
             $table->bigIncrements('id');
+            $table->string('equipment');
             $table->string('mac');
             $table->string('mark');
             $table->string('model');
             $table->string('delivery_note'); //nota de entrega
-            $table->string('destination'); //destino de instalacion
             $table->string('description')->nullable();
             $table->timestamps();
         });
@@ -54,6 +54,6 @@ return new class extends Migration
     {
         Schema::dropIfExists('switches');
         Schema::dropIfExists('links');
-        Schema::dropIfExists('camera_inventories');
+        Schema::dropIfExists('stock_equipments');
     }
 };

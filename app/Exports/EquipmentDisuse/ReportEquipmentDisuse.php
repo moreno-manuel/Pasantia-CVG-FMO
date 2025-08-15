@@ -14,6 +14,7 @@ class ReportEquipmentDisuse implements WithMultipleSheets
             'Cámaras' => new CameraDisuseExport(),
             'Switches' => new SwitchDisuseExport(),
             'Enlaces' => new LinkDisuseExport(),
+            'Equipos en Stock' => new StockEqDisuse(),
         ];
     }
 }

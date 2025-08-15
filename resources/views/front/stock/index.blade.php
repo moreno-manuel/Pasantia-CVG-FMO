@@ -2,13 +2,13 @@
 
 @section('content')
 
-    <!-- resources/views/front/camera/camera_inventories/show.blade.php -->
+    <!-- resources/views/front/stock/index.blade.php -->
 
     <div class="container mx-auto px-4 py-6">
 
         <!-- Encabezado -->
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold text-white bg-zinc-500 rounded-md px-3 py-1">Cámaras en Stock</h1>
+            <h1 class="text-2xl font-bold text-white bg-zinc-500 rounded-md px-3 py-1">Equipos en Stock</h1>
         </div>
 
         {{-- logo --}}
@@ -18,26 +18,35 @@
 
         <!-- Filtros para búsqueda -->
         <form method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6" onsubmit="return validateFilters('stock')">
+
+            <!-- Campo eq -->
+            <div>
+                <label for="equipment" class="block text-sm font-medium text-gray-700 mb-1">Tipo de Equipo</label>
+                <select name="equipment" id="equipment"
+                    class="w-full rounded-md bg-white border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                    <option value="">Seleccione..</option>
+                    @foreach ($equipments as $equipment)
+                        <option value="{{ $equipment }}" {{ old('equipment') == $equipment ? 'selected' : '' }}>
+                            {{ $equipment }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <!-- Campo Modelo -->
+            <div>
+                <label for="model" class="block text-sm font-medium text-gray-700 mb-1">Modelo</label>
+                <input type="text" name="model" value="{{ $filters['model'] ?? '' }}"
+                    class="w-full rounded-md bg-white border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
+                    placeholder="Buscar por modelo">
+            </div>
+
             <!-- Campo Nota de Entrega -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Nota de Entrega</label>
                 <input type="text" name="delivery_note" value="{{ $filters['delivery_note'] ?? '' }}"
                     class="w-full rounded-md bg-white border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
                     placeholder="Buscar por nota de entrega">
-            </div>
-
-            <!-- Campo Marca -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Marca</label>
-                <select name="mark"
-                    class="w-full rounded-md bg-white border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
-                    <option value="">Seleccione..</option>
-                    @foreach ($marks as $mark)
-                        <option value="{{ $mark }}" {{ ($filters['mark'] ?? '') == $mark ? 'selected' : '' }}>
-                            {{ $mark }}
-                        </option>
-                    @endforeach
-                </select>
             </div>
 
             <!-- Botones: Filtrar + Limpiar -->
@@ -55,7 +64,7 @@
                 </button>
 
                 <!-- Botón Limpiar -->
-                <a href="{{ route('inventories.index') }}"
+                <a href="{{ route('stock.index') }}"
                     class="inline-flex items-center px-2 py-1 bg-gray-500 text-white text-xs font-semibold uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-gray-600 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
                     <!-- Icono de limpiar -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
@@ -72,29 +81,29 @@
         @if (auth()->user()->rol != 'lector')
             <div class="flex justify-end items-center mb-6">
 
-                <a href="{{ route('inventories.create') }}"
+                <a href="{{ route('stock.create') }}"
                     class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white font-semibold text-xs uppercase tracking-widest rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-blue-700 hover:shadow-md hover:-translate-y-px focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                     <!-- Icono de agregar -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     </svg>
-                    Agregar Nueva Cámara
+                    Agregar Nueva Equipo
                 </a>
             </div>
         @endif
 
         {{-- valida para mostrar tabla o mensaje --}}
-        @if ($cameras->isNotEmpty())
+        @if ($eqs->isNotEmpty())
             {{-- tabla --}}
             <div class="overflow-x-auto rounded-lg shadow border border-zinc-500 bg-zinc-700">
                 <table class="min-w-full shadow-md rounded-lg overflow-hidden divide-gray-700">
                     <thead class="bg-red-900 divide-x divide-white">
                         <tr class="divide-x divide-white">
+                            <th class="px-6 py-3 text-center text-sm font-medium text-white w-32">Equipo</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white w-32">MAC</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white w-24">Marca</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white w-24">Modelo</th>
-                            <th class="px-6 py-3 text-center text-sm font-medium text-white w-32">Destino/Instalación</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white w-24">Nota/entrega</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-white w-32">Descripción</th>
                             @if (auth()->user()->rol != 'lector')
@@ -103,31 +112,36 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
-                        @foreach ($cameras as $camera)
+                        @foreach ($eqs as $eq)
                             <tr class="hover:bg-zinc-800 transition-colors duration-150">
-                                <td class="px-6 py-4 text-center text-sm text-white">{{ $camera['mac'] }}</td>
-                                <td class="px-6 py-4 text-center text-sm text-white">{{ $camera['mark'] }}</td>
-                                <td class="px-6 py-4 text-center text-sm text-white">{{ $camera['model'] }}</td>
-                                <td class="px-6 py-4 text-center text-sm text-white">{{ $camera['destination'] }}</td>
-                                <td class="px-6 py-4 text-center text-sm text-white">{{ $camera['delivery_note'] }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $eq['equipment'] }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $eq['mac'] }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $eq['mark'] }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $eq['model'] }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-white">{{ $eq['delivery_note'] }}</td>
                                 <td class="px-6 py-4 text-center text-sm text-white">
-                                    {{ $camera['description'] ?? 'Sin descripción' }}</td>
+                                    {{ $eq['description'] ?? 'Sin descripción' }}</td>
 
-                                @if (auth()->user()->rol == 'admin')
-                                    {{-- Acciones --}}
-                                    <td class="px-6 py-4 text-sm align-middle">
-                                        <div class="flex justify-center space-x-2">
+                                {{-- Acciones --}}
+                                <td class="px-6 py-4 text-sm align-middle">
+                                    <div class="flex justify-center space-x-2">
 
-                                            <!-- Botón Eliminar -->
-                                            <button type="button"
-                                                onclick="openDeleteModal('{{ route('inventories.destroy', $camera['mac']) }}')"
-                                                onsubmit="return confirm('¿Estás seguro de eliminar este equipo permanentemente?');"
-                                                class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                                Eliminar
-                                            </button>
-                                        </div>
-                                    </td>
-                                @endif
+                                        @if (auth()->user()->rol != 'lector')
+                                            <a href="{{ route('stock.edit', $eq->mac) }}"
+                                                class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                                                Editar
+                                            </a>
+                                            @if (auth()->user()->rol == 'admin')
+                                                <!-- Botón Eliminar -->
+                                                <button type="button"
+                                                    onclick="openDeleteModal('{{ route('stock.destroy', $eq->mac) }}')"
+                                                    class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                                    Eliminar
+                                                </button>
+                                            @endif
+                                        @endif
+                                    </div>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -135,9 +149,10 @@
             </div>
 
             {{-- paginacion --}}
-            {{ $cameras->appends([
+            {{ $eqs->appends([
                     'delivery_note' => $filters['delivery_note'] ?? '',
-                    'mark' => $filters['mark'] ?? '',
+                    'model' => $filters['model'] ?? '',
+                    'equipment' => $filters['equipment'] ?? '',
                 ])->links() }}
         @else
             <div class="text-center mt-6 bg-red-900 border border-black rounded-md p-4 text-white">

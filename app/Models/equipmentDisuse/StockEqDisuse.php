@@ -4,17 +4,15 @@ namespace App\Models\EquipmentDisuse;
 
 use Illuminate\Database\Eloquent\Model;
 
-class CameraInventoriesDisuse extends Model
+class StockEqDisuse extends Model
 {
-    protected $table = 'camera_inventories_disuses';
+    protected $table = 'stock_equ_disuses';
     protected $primaryKey = 'id';
     public $incrementing = false;
     protected $keyType = 'string';
 
     protected $fillable = [
         'id',
-        'mark',
-        'destination',
         'delivery_note',
     ];
 

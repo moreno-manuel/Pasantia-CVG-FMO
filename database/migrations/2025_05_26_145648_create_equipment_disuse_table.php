@@ -46,10 +46,9 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('camera_inventories_disuses', function (Blueprint $table) {
+        Schema::create('stock_equ_disuses', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->foreign('id')->references('id')->on('equipment_disuses')->onDelete('cascade');
-            $table->string('destination');
             $table->string('delivery_note');
             $table->timestamps();
         });
@@ -78,7 +77,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('disused_equipments');
+        Schema::dropIfExists('stock_equ_disuses');
         Schema::dropIfExists('camera_disuses');
         Schema::dropIfExists('link_disuses');
         Schema::dropIfExists('nvr_disuses');

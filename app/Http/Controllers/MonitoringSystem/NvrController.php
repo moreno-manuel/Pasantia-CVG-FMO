@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use function app\Helpers\filter;
+use function app\Helpers\locationUpdate;
 use function app\Helpers\marksUpdate;
 use function app\Helpers\nvrSlotValidateCreate;
 use function app\Helpers\nvrSlotValidateUpdate;
@@ -27,14 +28,15 @@ class NvrController extends Controller
 
     public function index(Request $request)
     {
-        $hasFilters = $request->filled('location') ||
+        $hasFilters = $request->filled('location') || $request->filled('model') ||
             $request->filled('status');
 
         if (!$hasFilters) { // Valida si hay algún filtro activo
+            $locations = json_decode(file_get_contents(resource_path('js/data.json')), true)['locations']; // json con las localidades agregadas
             $nvrs = Nvr::select('id', 'mac', 'mark', 'model', 'name', 'ip', 'ports_number', 'location', 'status')
                 ->orderBy('created_at', 'desc')
                 ->paginate(10);
-            return view('front.nvr.index', compact('nvrs'));
+            return view('front.nvr.index', compact('nvrs', 'locations'));
         }
 
         return filter($request, 'nvrs'); //helper
@@ -43,7 +45,9 @@ class NvrController extends Controller
     public function create()
     {
         $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['marks']; // json con las marcas agregadas
-        return view('front.nvr.create', compact('marks'));
+        $locations = json_decode(file_get_contents(resource_path('js/data.json')), true)['locations']; // json con las localidades agregadas
+
+        return view('front.nvr.create', compact('marks', 'locations'));
     }
 
     public function store(Request $request)
@@ -59,16 +63,19 @@ class NvrController extends Controller
                     'ip' => 'required|ip|unique:nvrs,ip',
                     'ports_number' => 'required',
                     'slot_number' => 'required',
-                    'location' => 'required|regex:/^[a-zA-Z0-9\/\-. ]+$/|min:5',
+                    'location' => 'required',
+                    'other_location' => 'nullable|regex:/^[a-zA-Z0-9\/\-. ]+$/|min:5|required_if:location,Otra',
                     'description' => 'nullable'
                 ],
-                ['required_if' => 'Debe agregar el nombre de la marca'],
-                ['name' => 'Nombre', 'location' => 'Localidad', 'model' => 'Modelo', 'other_mark' => 'Marca']
+                ['required_if' => 'Debe agregar el nombre de :attribute'],
+                ['name' => 'Nombre', 'location' => 'Localidad', 'model' => 'Modelo', 'other_mark' => 'Marca' ,'other_location' => 'Localidad']
             );
 
             $slots = nvrSlotValidateCreate($request); //validacion para (slot)
 
             $request = marksUpdate($request, 'marks'); //si hay  una marca nueva
+
+            $request = locationUpdate($request, 'locations'); //si hay  una localidad nueva
 
             $nvr = Nvr::create($request->all());
 
@@ -102,7 +109,8 @@ class NvrController extends Controller
             $nvr = Nvr::where('name', $name)->firstOrFail();
 
             $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['marks']; // json con las marcas agregadas
-            return view('front.nvr.edit', compact('nvr', 'marks'));
+            $locations = json_decode(file_get_contents(resource_path('js/data.json')), true)['locations']; // json con las localidades agregadas
+            return view('front.nvr.edit', compact('nvr', 'marks', 'locations'));
         } catch (ModelNotFoundException $e) {
             return redirect()->route('nvr.index')->with('warnings', 'Nvr no encontrado');
         }
@@ -119,17 +127,20 @@ class NvrController extends Controller
                     'model' => 'required|alpha_dash|min:3',
                     'ip' => 'required|ip|unique:nvrs,ip',
                     'ports_number' => 'required',
-                    'location' => 'required|regex:/^[a-zA-Z0-9\/\- ]+$/|min:5',
+                    'location' => 'required',
+                    'other_location' => 'nullable|regex:/^[a-zA-Z0-9\/\-. ]+$/|min:5|required_if:location,Otra',
                     'description' => 'nullable'
                 ],
-                ['required_if' => 'Debe agregar el nombre de la marca'],
-                ['location' => 'Localidad', 'model' => 'Modelo', 'other_mark' => 'Marca']
+                ['required_if' => 'Debe agregar el nombre de :attribute'],
+                ['location' => 'Localidad', 'model' => 'Modelo', 'other_mark' => 'Marca', 'other_location' => 'Localidad']
             );
 
 
             $slotsRequest = nvrSlotValidateUpdate($request, $nvr); //validación para los slots
 
             $request = marksUpdate($request, 'marks');
+
+            $request = locationUpdate($request, 'locations'); //si hay  una localidad nueva
 
             $nvr->update($request->all());
 

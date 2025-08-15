@@ -3,8 +3,6 @@
 namespace App\Models\EquipmentDisuse;
 
 use Illuminate\Database\Eloquent\Model;
-/* use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\LogOptions; */
 
 class EquipmentDisuse extends Model
 {
@@ -46,22 +44,11 @@ class EquipmentDisuse extends Model
         return $this->hasOne(NvrDisuse::class, 'id', 'id');
     }
 
-    public function cameraInventoriesDisuse()
+    public function stockEqDisuse()
     {
-        return $this->hasOne(CameraInventoriesDisuse::class, 'id', 'id');
+        return $this->hasOne(StockEqDisuse::class, 'id', 'id');
     }
 
-    //para logs
-    /* public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->logOnly([
-                'id',
-                'mark',
-                'model',
-                'location',
-                'description',
-                'equipment'
-            ]);
-    } */
+    
+
 }

@@ -15,6 +15,7 @@ class ConditionAttention extends Model
 
     protected $fillable = [
         'camera_id',
+        'user',
         'name',
         'other_name',
         'date_ini',
@@ -48,6 +49,7 @@ class ConditionAttention extends Model
                 'camera.name',
                 'camera.mac',
                 'name',
+                'user',
                 'other_name',
                 'date_ini',
                 'date_end',

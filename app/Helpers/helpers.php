@@ -6,8 +6,8 @@ use App\Models\EquipmentDisuse\EquipmentDisuse;
 use App\Models\monitoringSystem\Camera;
 use App\Models\monitoringSystem\ConditionAttention;
 use App\Models\monitoringSystem\Nvr;
-use App\Models\networkInfrastructure\CameraInventory;
 use App\Models\networkInfrastructure\Link;
+use App\Models\networkInfrastructure\StockEquipment;
 use App\Models\networkInfrastructure\Switche;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
@@ -24,15 +24,15 @@ function filter(Request $request, string $table)
     switch ($table) {
         case 'switches': {
                 // Obtén el valor del filtro
-                $serial = $request->input('serial');
+                $model = $request->input('model');
                 $location = $request->input('location');
 
                 // Construye la consulta base
                 $query = Switche::query();
 
                 // Aplica filtros condicionalmente
-                if ($serial) {
-                    $query->where('serial', 'like',  $serial . '%');
+                if ($model) {
+                    $query->where('model', 'like',  $model . '%');
                 }
 
                 if ($location) {
@@ -44,8 +44,10 @@ function filter(Request $request, string $table)
                     ->orderBy('created_at', 'desc')
                     ->paginate(10);
 
+                $locations = json_decode(file_get_contents(resource_path('js/data.json')), true)['locations']; // json con las localidades agregadas
+
                 // Mantiene los valores de los filtros en la vista
-                return view('front.switch.index', compact('switches'))
+                return view('front.switch.index', compact('switches', 'locations'))
                     ->with('filters', $request->all());
                 break;
             }
@@ -54,6 +56,8 @@ function filter(Request $request, string $table)
         case 'links': {
                 // Obtén los valores de los filtros
                 $location = $request->input('location');
+                $model = $request->input('model');
+
 
                 // Construye la consulta base
                 $query = Link::query();
@@ -63,14 +67,20 @@ function filter(Request $request, string $table)
                     $query->where('location', 'like',  $location . '%');
                 }
 
+                if ($model) {
+                    $query->where('model', 'like',  $model . '%');
+                }
+
 
                 // Ejecuta la consulta y aplica paginación
                 $links = $query->select('name', 'ip', 'ssid', 'location', 'model', 'mark', 'mac')
                     ->orderBy('created_at', 'desc')
                     ->paginate(10);
 
+                $locations = json_decode(file_get_contents(resource_path('js/data.json')), true)['locations']; // json con las localidades agregadas
+
                 // Mantiene los valores de los filtros en la vista
-                return view('front.link.index', compact('links'))
+                return view('front.link.index', compact('links', 'locations'))
                     ->with('filters', $request->all());
                 break;
             }
@@ -78,6 +88,7 @@ function filter(Request $request, string $table)
         case 'nvrs': {
                 // Obtén los valores de los filtros
                 $location = $request->input('location');
+                $model = $request->input('model');
                 $status = $request->input('status');
 
 
@@ -89,7 +100,10 @@ function filter(Request $request, string $table)
                     $query->where('location', 'like',  $location . '%');
                 }
 
-                // Aplica filtros condicionalmente
+                if ($model) {
+                    $query->where('model', 'like',  $model . '%');
+                }
+
                 if ($status) {
                     $query->where('status', 'like',  $status . '%');
                 }
@@ -100,14 +114,16 @@ function filter(Request $request, string $table)
                     ->orderBy('created_at', 'desc')
                     ->paginate(10);
 
+                $locations = json_decode(file_get_contents(resource_path('js/data.json')), true)['locations']; // json con las localidades agregadas
                 // Mantiene los valores de los filtros en la vista
-                return view('front.nvr.index', compact('nvrs'))
+                return view('front.nvr.index', compact('nvrs', 'locations'))
                     ->with('filters', $request->all());
                 break;
             }
         case 'cameras': {
                 // Obtén los valores de los filtros
                 $location = $request->input('location');
+                $model = $request->input('model');
                 $status = $request->input('status');
 
 
@@ -117,6 +133,10 @@ function filter(Request $request, string $table)
                 // Aplica filtros condicionalmente
                 if ($location) {
                     $query->where('location', 'like',  $location . '%');
+                }
+
+                if ($model) {
+                    $query->where('model', 'like',  $model . '%');
                 }
 
                 // Aplica filtros condicionalmente
@@ -130,8 +150,10 @@ function filter(Request $request, string $table)
                     ->orderBy('created_at', 'desc')
                     ->paginate(10);
 
+                $locations = json_decode(file_get_contents(resource_path('js/data.json')), true)['locations']; // json con las localidades agregadas
+
                 // Mantiene los valores de los filtros en la vista
-                return view('front.camera.index', compact('cameras'))
+                return view('front.camera.index', compact('cameras', 'locations'))
                     ->with('filters', $request->all());
                 break;
             }
@@ -175,33 +197,38 @@ function filter(Request $request, string $table)
                     ->with('filters', $request->all());
                 break;
             }
-        case 'camera_inventories': {
+        case 'stock': {
 
                 // Obtén los valores de los filtros
                 $delivery_note = $request->input('delivery_note');
-                $mark = $request->input('mark');
+                $model = $request->input('model');
+                $equipment = $request->input('equipment');
 
 
                 // Construye la consulta base
-                $query = CameraInventory::query();
+                $query = StockEquipment::query();
 
                 // Aplica filtros condicionalmente
                 if ($delivery_note) {
                     $query->where('delivery_note', 'like',  $delivery_note . '%');
                 }
 
-                // Aplica filtros condicionalmente
-                if ($mark) {
-                    $query->where('mark', 'like',  $mark . '%');
+                if ($model) {
+                    $query->where('model', 'like',  $model . '%');
+                }
+
+                if ($equipment) {
+                    $query->where('equipment', 'like',  $equipment . '%');
                 }
 
 
                 // Ejecuta la consulta y aplica paginación
-                $cameras = $query->orderBy('created_at', 'desc')->paginate(10);
+                $eqs = $query->orderBy('created_at', 'desc')->paginate(10);
                 $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['marks']; // json con las marcas agregadas
+                $equipments = json_decode(file_get_contents(resource_path('js/data.json')), true)['equipments']; // json tipo de quipos
 
                 // Mantiene los valores de los filtros en la vista
-                return view('front.camera.camera_inventories.index', compact('cameras', 'marks'))
+                return view('front.stock.index', compact('eqs', 'marks', 'equipments'))
                     ->with('filters', $request->all());
                 break;
             }
@@ -239,6 +266,37 @@ function marksUpdate(Request $request, $data)
         }
     }
     $request->offsetUnset('other_mark'); // se elimina el campo other_mark y se agrega el valor en el campo mark
+    return $request;
+}
+
+/* para actualizar el json locations
+para el manejo de las localidades */
+function locationUpdate(Request $request, $data)
+{
+    if ($request->filled('other_location')) {
+        $newLocation = $request->input('other_location');
+
+        $filePath = resource_path('js/data.json'); // Ruta del archivo JSON
+
+        if (File::exists($filePath)) {
+            $jsonData = json_decode(File::get($filePath), true); // Cargar TODO el contenido JSON actual
+
+            if (isset($jsonData[$data])) {   // Verificar si la clave existe en el JSON
+                $currentArray = $jsonData[$data];  // Obtener el arreglo específico
+
+                if (!in_array($newLocation, $currentArray)) { // Verificar si el nuevo valor ya existe
+                    array_unshift($currentArray, $newLocation);  // Agregar el valor
+
+                    sort($currentArray); //ordena array A-Z
+                    $jsonData[$data] = $currentArray;   // Actualizar SOLO el arreglo modificado
+
+                    File::put($filePath, json_encode($jsonData, JSON_PRETTY_PRINT)); // Guardar TODO el JSON con los cambios
+                }
+            }
+            $request['location'] = $newLocation;
+        }
+    }
+    $request->offsetUnset('other_location'); // se elimina el campo other_location y se agrega el valor en el campo location
     return $request;
 }
 
@@ -340,15 +398,14 @@ function conditionAttentionValidate(Request $request)
             return 'El nombre de la condición ya está en la lista de Tipo de Condición';
         }
     } else {
-        $conditionExists = ConditionAttention::where('name', $request->input('name'))
-            ->where('date_ini', $request->input('date_ini'))
+        $conditionExists = ConditionAttention::where('camera_id', $request->input('camera_id'))
+            ->where('name', $request->input('name'))
+            ->where('name', $request->input('name'))
             ->exists(); // consulta si existe una condicion con el mismo nombre y fecha
     }
     if ($conditionExists) {
-        return 'Ya existe una condición con este nombre y fecha de inicio para la cámara ' . Camera::where('id', $request->input('camera_id'))->value('name');
+        return 'Ya existe una condición por atender para la cámara ' . Camera::where('id', $request->input('camera_id'))->value('name');
     }
 
     return ''; // si no existe retorna un string vacio
 }
-
-

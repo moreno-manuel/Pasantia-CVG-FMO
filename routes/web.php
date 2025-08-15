@@ -10,8 +10,8 @@ use App\Http\Controllers\MonitoringSystem\CameraController;
 use App\Http\Controllers\MonitoringSystem\CheckStatusController;
 use App\Http\Controllers\MonitoringSystem\ConditionAController;
 use App\Http\Controllers\MonitoringSystem\NvrController;
-use App\Http\Controllers\NetworkInfrastructure\CameraInventoriesController;
 use App\Http\Controllers\NetworkInfrastructure\LinkController;
+use App\Http\Controllers\NetworkInfrastructure\StockEquipmentController;
 use App\Http\Controllers\NetworkInfrastructure\SwitchController;
 use App\Http\Controllers\ReportController;
 use App\Http\Middleware\ReportlAccesMiddleware;
@@ -35,7 +35,7 @@ Route::controller(RecoveryUserController::class)
         Route::post('passwordStore', 'storeStep3')->name('recovery.storeStep3');
     });
 
-Route::get('/home',[CheckStatusController::class,'home'])->name('home')->middleware('auth'); // pagina principal
+Route::get('/home', [CheckStatusController::class, 'home'])->name('home')->middleware('auth'); // pagina principal
 
 Route::controller(CheckStatusController::class) //monitoreo de camaras y nvr
     ->prefix('/test')
@@ -49,15 +49,8 @@ Route::resource('switch', SwitchController::class)->middleware('auth');
 Route::resource('enlace', LinkController::class)->middleware('auth');
 Route::resource('nvr', NvrController::class)->middleware('auth');
 Route::resource('camara', CameraController::class)->middleware('auth');
-Route::controller(CameraInventoriesController::class)
-    ->prefix('camara-stock')
-    ->middleware('auth')
-    ->group(function () {
-        Route::get('', 'index')->name('inventories.index');
-        Route::get('crear', 'create')->name('inventories.create');
-        Route::post('', 'store')->name('inventories.store');
-        Route::delete('{id}', 'destroy')->name('inventories.destroy');
-    });
+Route::resource('stock', StockEquipmentController::class)->middleware('auth')->except('show');
+
 Route::resource('atencion', ConditionAController::class)->middleware('auth');
 
 
@@ -77,10 +70,10 @@ Route::controller(ReportController::class) //para exportar los reportes y log
         Route::get('', 'index')->name('report.index');
         Route::get('switch', 'exportSwitch')->name('export.switch');
         Route::get('link', 'exportLink')->name('export.link');
-        Route::get('camera-stock', 'exportCameraStock')->name('export.cameraStock');
+        Route::get('equipment-stock', 'exportStock')->name('export.stock');
         Route::get('nvr', 'exportNvr')->name('export.nvr');
         Route::get('camera', 'exportCamera')->name('export.camera');
-        Route::get('disuse', 'exportEquipmentDisuse')->name('export.EquipmentDisuse');
+        Route::get('disuse', 'exportEquipmentDisuse')->name('export.equipmentDisuse');
         Route::get('report', 'exportReport')->name('export.report');
         Route::get('log', 'exportLog')->name('export.log');
     });

@@ -8,6 +8,7 @@ use App\Models\monitoringSystem\ControlCondition;
 use App\Models\monitoringSystem\Nvr;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 
@@ -50,14 +51,15 @@ class ConditionAController extends Controller
             'camera_id' => 'required',
             'date_ini' => 'required|date',
             'date_end' => 'nullable|date|after_or_equal:date_ini',
-            'description' => 'nullable'
+            'description' => 'required'
         ], [
             'after_or_equal' => 'La :attribute debe ser posterior o igual a :date',
             'required_if' => 'Formato de :attribute inválido'
         ], [
             'date_ini' => 'Fecha de Inicio',
             'date_end' => 'Fecha de Realización',
-            'other_condition' => 'Nombre'
+            'other_condition' => 'Nombre',
+            'description' => 'Descripción'
         ]);
 
 
@@ -73,7 +75,9 @@ class ConditionAController extends Controller
             return redirect()->back()->withInput()->withErrors($validator);
         }
 
+      
         ConditionAttention::create([
+            'user' => Auth::user()->person->name . ' ' . Auth::user()->person->last_name,
             'name' => $request->input('name'),
             'other_name' => $request->filled('other_condition') ? strtoupper($request->input('other_condition')) : null,
             'camera_id' => $request->input('camera_id'),
@@ -132,6 +136,7 @@ class ConditionAController extends Controller
 
                 ControlCondition::create([
                     'condition_attention_id' => $condition->id,
+                    'user' => Auth::user()->person->name . ' ' . Auth::user()->last_name,
                     'text' => "Tipo de condición modificada de {$condition->name} a {$request->input('name')} " . ($request->filled('other_condition') ? "/ " . strtoupper($request->input('other_condition')) : ""),
                 ]);
 
@@ -146,6 +151,7 @@ class ConditionAController extends Controller
         if ($request->filled('description')) { //si se agrega una descripción
             ControlCondition::create([
                 'condition_attention_id' => $condition->id,
+                'user' => Auth::user()->person->name . ' ' . Auth::user()->last_name,
                 'text' => $request->input('description'),
             ]);
         }

@@ -25,7 +25,7 @@ class LinkDisuseExport extends EquipmentDisuseExport implements WithTitle
 
     public function headings(): array
     {
-        return ['Mac', 'Marca', 'Modelo', 'Nombre', 'Ssid', 'IP', 'Localidad', 'Descripción','Fecha'];
+        return ['MAC', 'Marca', 'Modelo', 'Nombre', 'SSID', 'IP', 'Localidad', 'Descripción','Fecha'];
     }
 
     public function map($device): array

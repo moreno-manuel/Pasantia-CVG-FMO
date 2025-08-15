@@ -39,14 +39,7 @@ class Switche extends Model
             set: fn($model) => strtoupper($model),
         );
     }
-
-    protected function location(): Attribute //location
-    {
-        return Attribute::make(
-            set: fn($location) => strtoupper($location),
-        );
-    }
-
+    
     //para logs 
     public function getActivitylogOptions(): LogOptions
     {

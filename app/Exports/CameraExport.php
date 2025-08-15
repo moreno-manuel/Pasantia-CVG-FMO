@@ -51,7 +51,7 @@ class CameraExport implements ShouldAutoSize, WithDrawings, WithEvents
                     ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
 
                 // Encabezados
-                $headers = ['Mac', 'Marca', 'Modelo', 'Nombre', 'Localidad', 'IP', 'Descripción', 'Status'];
+                $headers = ['MAC', 'Marca', 'Modelo', 'Nombre', 'Localidad', 'IP', 'Descripción', 'Status'];
                 $headerRow = 4;
 
                 foreach ($headers as $colIndex => $header) {
@@ -161,7 +161,7 @@ class CameraExport implements ShouldAutoSize, WithDrawings, WithEvents
                     ->setSize(10)
                     ->setColor(new Color('FF555555'));
 
-                $phpSheet->setCellValue("A" . ($footerRow + 1), "Área: Seguridad Tecnológica");
+                $phpSheet->setCellValue("A" . ($footerRow + 1), "Sección: Seguridad Tecnológica");
                 $phpSheet->getStyle("A" . ($footerRow + 1))
                     ->getFont()
                     ->setItalic(true)

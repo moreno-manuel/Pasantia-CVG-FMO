@@ -16,6 +16,7 @@ use Illuminate\Validation\Rule;
 
 
 use function app\Helpers\filter;
+use function app\Helpers\locationUpdate;
 use function app\Helpers\marksUpdate;
 
 /* controlador para el 
@@ -27,7 +28,7 @@ class CameraController extends Controller
 
     public function index(Request $request)
     {
-        $hasFilters = $request->filled('location') ||
+        $hasFilters = $request->filled('location') || $request->filled('model') ||
             $request->filled('status');
 
         if (!$hasFilters) { //si no se aplica un filtro
@@ -35,7 +36,8 @@ class CameraController extends Controller
                 ->select('name', 'ip', 'location', 'mac', 'status', 'mark', 'model', 'nvr_id')
                 ->orderBy('created_at', 'desc')
                 ->paginate(10);
-            return view('front.camera.index', compact('cameras'));
+                $locations = json_decode(file_get_contents(resource_path('js/data.json')), true)['locations']; // json con las localidades agregadas
+            return view('front.camera.index', compact('cameras', 'locations'));
         }
 
         return filter($request, 'cameras'); //helper
@@ -43,15 +45,15 @@ class CameraController extends Controller
 
     public function create()
     {
-        $nvrsAll = Nvr::with('camera')->get();
+        $nvrsAll = Nvr::with('camera')->orderBy('name', 'asc')->get();
 
         $nvrs = $nvrsAll->filter(function ($nvr) { // Filtrar la colección para mantener solo los NVRs con puertos disponibles
             return $nvr->available_ports > 0;
         });
 
         $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['marks']; // json con las marcas agregadas
-
-        return view('front.camera.create', compact('nvrs', 'marks'));
+        $locations = json_decode(file_get_contents(resource_path('js/data.json')), true)['locations']; // json con las localidades agregadas
+        return view('front.camera.create', compact('nvrs', 'marks', 'locations'));
     }
 
     public function store(Request $request)
@@ -65,12 +67,13 @@ class CameraController extends Controller
                     'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
                     'nvr_id' => 'required',
                     'model' => 'required|alpha_dash|min:3',
-                    'name' => 'required|unique:cameras,name|regex:/^[a-zA-Z0-9\/\-. ]+$/|min:5',
-                    'location' => 'required|regex:/^[a-zA-Z0-9\/\-. ]+$/|min:5',
+                    'name' => 'required|unique:cameras,name|regex:/^[a-zA-Z0-9Ññ\/\-. ]+$/|min:5',
+                    'location' => 'required',
+                    'other_location' => 'nullable|regex:/^[a-zA-Z0-9Ññ\/\-. ]+$/|min:5|required_if:location,Otra',
                     'ip' => 'required|ip|unique:cameras,ip',
                     'description' => 'nullable'
                 ],
-                ['required_if' => 'Debe agregar el nombre de la marca'],
+                ['required_if' => 'Debe agregar el nombre de :attribute'],
                 ['name' => 'Nombre', 'location' => 'Localidad', 'model' => 'Modelo', 'other_mark' => 'Marca']
             );
 
@@ -79,6 +82,7 @@ class CameraController extends Controller
             }
 
             $request = marksUpdate($request, 'marks');
+            $request = locationUpdate($request, 'locations'); //si hay una localidad nueva
 
             Camera::create($request->all());
             return redirect()->route('camara.index')->with('success', 'Cámara agregada exitosamente.');
@@ -112,8 +116,8 @@ class CameraController extends Controller
             });
 
             $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['marks']; // json con las marcas agregadas
-
-            return view('front.camera.edit', compact('camera', 'nvrs', 'marks'));
+            $locations = json_decode(file_get_contents(resource_path('js/data.json')), true)['locations']; // json con las localidades agregadas
+            return view('front.camera.edit', compact('camera', 'nvrs', 'marks', 'locations'));
         } catch (ModelNotFoundException $e) {
             return redirect()->route('camera.index')->with('warnings', 'Cámara no encontrada');
         }
@@ -133,15 +137,16 @@ class CameraController extends Controller
                     'model' => 'required|alpha_dash|min:3',
                     'name' => [
                         'required',
-                        'regex:/^[a-zA-Z0-9\/\-. ]+$/',
+                        'regex:/^[a-zA-Z0-9Ññ\/\-. ]+$/',
                         'min:5',
                         Rule::unique('cameras')->ignore($camera->mac, 'mac') //ignora el nombre registro que va actualizar 
                     ],
-                    'location' => 'required|regex:/^[a-zA-Z0-9\/\-. ]+$/|min:5',
+                    'location' => 'required',
+                    'other_location' => 'nullable|regex:/^[a-zA-Z0-9Ññ\/\-. ]+$/|min:5|required_if:location,Otra',
                     'ip' => 'required|ip|unique:cameras,ip',
                     'description' => 'nullable'
                 ],
-                ['required_if' => 'Debe agregar el nombre de la marca'],
+                ['required_if' => 'Debe agregar el nombre de :attribute'],
                 ['location' => 'Localidad', 'model' => 'Modelo', 'other_mark' => 'Marca']
             );
 
@@ -150,6 +155,7 @@ class CameraController extends Controller
             }
 
             $request = marksUpdate($request, 'marks');
+            $request = locationUpdate($request, 'locations'); //si hay una localidad nueva
 
             $camera->update($request->all());
 

@@ -18,16 +18,16 @@ class AdminSeeder extends Seeder
         // Crear la persona
         $person = Person::create([
             'license' => '0',
-            'name' => 'Manuel',
-            'last_name' => 'Moreno',
+            'name' => 'admin',
+            'last_name' => 'admin',
             'sex' => 'Masculino',
         ]);
 
         // Crear el usuario asociado
         $user = User::create([
             'userName' => 'admin',
-            'email' => 'manuel@example.com',
-            'password' => '0',
+            'email' => 'GETE-SecciondeSeguridadTecnologica@ferrominera.com.gob.ve',
+            'password' => 'Getesi.ST0',
             'rol' => 'admin',
             'person_id' => $person->id,
         ]);

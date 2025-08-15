@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Exports\CameraExport;
-use App\Exports\CameraStockExport;
 use App\Exports\EquipmentDisuse\ReportEquipmentDisuse;
 use App\Exports\LinkExport;
 use App\Exports\NvrExport;
 use App\Exports\ReportFinalExport\ReportFinalExport;
+use App\Exports\StockEquipmentExport;
 use App\Exports\SwitchExport;
 use App\Models\User;
 use Carbon\Carbon;
@@ -25,10 +25,10 @@ class ReportController extends Controller
         $reports = [
             ['name' => 'Inventario NVR', 'url' => 'export.nvr'],
             ['name' => 'Inventario Cámaras', 'url' => 'export.camera'],
-            ['name' => 'Inventario Cámaras en stock', 'url' => 'export.cameraStock'],
-            ['name' => 'Inventario Switches', 'url' => 'export.switch'],
             ['name' => 'Inventario Enlaces', 'url' => 'export.link'],
-            ['name' => 'Equipos Eliminados', 'url' => 'export.EquipmentDisuse'],
+            ['name' => 'Inventario Switches', 'url' => 'export.switch'],
+            ['name' => 'Inventario Equipos en Stock', 'url' => 'export.stock'],
+            ['name' => 'Historial de Equipos Eliminados', 'url' => 'export.equipmentDisuse'],
             ['name' => 'Informe Final', 'url' => 'export.report'],
         ];
 
@@ -58,12 +58,12 @@ class ReportController extends Controller
         }
     }
 
-    public function exportCameraStock()
+    public function exportStock()
     {
         set_time_limit(300);
 
         try {
-            return Excel::download(new CameraStockExport(), 'Inventario_Cámaras_Stock' . now()->format('Ymd_His') . '.xlsx');
+            return Excel::download(new StockEquipmentExport(), 'Inventario_Equipos_Stock' . now()->format('Ymd_His') . '.xlsx');
         } catch (\Exception $e) {
             return back()->withError('Error al exportar: ' . $e->getMessage());
         }
