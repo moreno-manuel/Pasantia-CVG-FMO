@@ -59,12 +59,12 @@ class NvrController extends Controller
                     'mark' => 'required',
                     'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
                     'model' => 'required|alpha_dash|min:3',
-                    'name' => 'required|unique:nvrs,name|regex:/^[a-zA-Z0-9\/\-. ]+$/|min:5',
+                    'name' => 'required|unique:nvrs,name|regex:/^[a-zA-Z0-9\/\-.Ññ ]+$/|min:5',
                     'ip' => 'required|ip|unique:nvrs,ip',
                     'ports_number' => 'required',
                     'slot_number' => 'required',
                     'location' => 'required',
-                    'other_location' => 'nullable|regex:/^[a-zA-Z0-9\/\-. ]+$/|min:5|required_if:location,Otra',
+                    'other_location' => 'nullable|regex:/^[a-zA-Z0-9\/\-.Ññ ]+$/|min:5|required_if:location,Otra',
                     'description' => 'nullable'
                 ],
                 ['required_if' => 'Debe agregar el nombre de :attribute'],
@@ -128,7 +128,7 @@ class NvrController extends Controller
                     'ip' => 'required|ip|unique:nvrs,ip',
                     'ports_number' => 'required',
                     'location' => 'required',
-                    'other_location' => 'nullable|regex:/^[a-zA-Z0-9\/\-. ]+$/|min:5|required_if:location,Otra',
+                    'other_location' => 'nullable|regex:/^[a-zA-Z0-9\/\-.Ññ ]+$/|min:5|required_if:location,Otra',
                     'description' => 'nullable'
                 ],
                 ['required_if' => 'Debe agregar el nombre de :attribute'],

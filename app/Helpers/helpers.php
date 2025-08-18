@@ -186,7 +186,7 @@ function filter(Request $request, string $table)
                 $query = EquipmentDisuse::query();
 
                 // Aplica filtros 
-                $query->where('equipment',  $equipment);
+                $query->where('equipment', 'like', "%{$equipment}%");
 
 
                 // Ejecuta la consulta y aplica paginación
@@ -274,7 +274,7 @@ para el manejo de las localidades */
 function locationUpdate(Request $request, $data)
 {
     if ($request->filled('other_location')) {
-        $newLocation = $request->input('other_location');
+        $newLocation = strtoupper($request->input('other_location'));
 
         $filePath = resource_path('js/data.json'); // Ruta del archivo JSON
 
@@ -297,6 +297,37 @@ function locationUpdate(Request $request, $data)
         }
     }
     $request->offsetUnset('other_location'); // se elimina el campo other_location y se agrega el valor en el campo location
+    return $request;
+}
+
+/* para actualizar el json equipments
+para el manejo de los tipos de equipos */
+function equipmentUpdate(Request $request, $data)
+{
+    if ($request->filled('other_eq')) {
+        $newEq = $request->input('other_eq');
+
+        $filePath = resource_path('js/data.json'); // Ruta del archivo JSON
+
+        if (File::exists($filePath)) {
+            $jsonData = json_decode(File::get($filePath), true); // Cargar TODO el contenido JSON actual
+
+            if (isset($jsonData[$data])) {   // Verificar si la clave existe en el JSON
+                $currentArray = $jsonData[$data];  // Obtener el arreglo específico
+
+                if (!in_array($newEq, $currentArray)) { // Verificar si el nuevo valor ya existe
+                    array_unshift($currentArray, $newEq);  // Agregar el valor
+
+                    sort($currentArray); //ordena array A-Z
+                    $jsonData[$data] = $currentArray;   // Actualizar SOLO el arreglo modificado
+
+                    File::put($filePath, json_encode($jsonData, JSON_PRETTY_PRINT)); // Guardar TODO el JSON con los cambios
+                }
+            }
+            $request['equipment'] = $newEq;
+        }
+    }
+    $request->offsetUnset('other_eq'); // se elimina el campo other_location y se agrega el valor en el campo location
     return $request;
 }
 
@@ -388,7 +419,8 @@ function conditionAttentionValidate(Request $request)
     $conditionExists = null; // determina si existe una condicion con el mismo nombre y fecha para la misma camara
 
     if ($request->input('name') === 'OTRO') {
-        $conditionExists = ConditionAttention::where('other_name', $request->input('other_condition'))
+        $conditionExists = ConditionAttention::where('camera_id', $request->input('camera_id'))
+            ->where('other_name', $request->input('other_condition'))
             ->where('date_ini', $request->input('date_ini'))
             ->exists(); // consulta si existe una condicion con el mismo nombre y fecha
 
@@ -400,11 +432,11 @@ function conditionAttentionValidate(Request $request)
     } else {
         $conditionExists = ConditionAttention::where('camera_id', $request->input('camera_id'))
             ->where('name', $request->input('name'))
-            ->where('name', $request->input('name'))
+            ->where('date_ini', $request->input('date_ini'))
             ->exists(); // consulta si existe una condicion con el mismo nombre y fecha
     }
     if ($conditionExists) {
-        return 'Ya existe una condición por atender para la cámara ' . Camera::where('id', $request->input('camera_id'))->value('name');
+        return 'Ya existe una condición con el mismo nombre y fecha para ' . Camera::where('id', $request->input('camera_id'))->value('name');
     }
 
     return ''; // si no existe retorna un string vacio

@@ -105,12 +105,13 @@ abstract class BaseReportExport implements WithEvents, WithDrawings, WithHeading
                         ->setSize(12); // texto en negrita
                 }
 
-                $phpSheet->getStyle("A{$currentRow}:H{$currentRow}")
+                $phpSheet->getStyle("A{$currentRow}:$lastColumn{$currentRow}")
                     ->getFill()
                     ->setFillType(Fill::FILL_SOLID)
-                    ->getStartColor()->setARGB('FFE600'); // Amarillo claro
+                    ->getStartColor()->setARGB('FFE600'); // filla Amarillo claro
 
-                $phpSheet->getStyle("B{$currentRow}:H{$currentRow}")
+                // alineamiento numeros en la celda de amarillo
+                $phpSheet->getStyle("B{$currentRow}:$lastColumn{$currentRow}")
                     ->getAlignment()
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
@@ -140,17 +141,22 @@ abstract class BaseReportExport implements WithEvents, WithDrawings, WithHeading
 
                 // Fecha de exportación
                 $date = now()->format('d/m/Y H:i');
-                $phpSheet->setCellValue("H" . ($footerRow - 2), "Fecha: {$date}");
-                $phpSheet->getStyle("H" . ($footerRow - 2))->getFont()
+                $phpSheet->setCellValue($lastColumn . ($footerRow - 2), "Fecha: {$date}");
+                $phpSheet->getStyle($lastColumn . ($footerRow - 2))->getFont()
                     ->setItalic(true)
                     ->setSize(10)
                     ->setColor(new Color('FF0000')); // Rojo
-                $phpSheet->getStyle("H" . ($footerRow - 2))
+                $phpSheet->getStyle($lastColumn . ($footerRow - 2))
                     ->getAlignment()
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
                 // Protección de hoja
                 $phpSheet->getProtection()->setSheet(true);
+
+                // Ancho automático
+                foreach (range('A', $lastColumn) as $col) {
+                    $phpSheet->getColumnDimension($col)->setAutoSize(true);
+                }
             },
         ];
     }

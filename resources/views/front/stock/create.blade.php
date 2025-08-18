@@ -11,7 +11,7 @@
 
                 <!-- Botón Volver -->
                 <a href="{{ route('stock.index') }}"
-                    class="inline-flex items-center px-3 py-1.5 bg-zinc-500 text-white font-semibold rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-zinc-600 hover:shadow-md hover:-translate-y-px text-xs uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                    class="inline-flex items-center px-3 py-1.5 bg-yellow-600 text-white font-semibold rounded-md shadow-sm transition-all duration-200 ease-in-out hover:bg-yellow-700 hover:shadow-md hover:-translate-y-px text-xs uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
                     Volver
                 </a>
             </div>
@@ -34,8 +34,20 @@
                                     {{ $equipment }}
                                 </option>
                             @endforeach
+                            <option value="Otro" {{ old('equipment') == 'Otro' ? 'selected' : '' }}>Otro
                         </select>
                         @error('equipment')
+                            <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <!-- Campo para equipo personalizado -->
+                    <div id="other-eq-field" class="hidden">
+                        <label for="other_eq" class="block text-sm font-semibold text-white">Especifica el Tipo de
+                            Equipo</label>
+                        <input type="text" name="other_eq" id="other_eq" value="{{ old('other_eq') }}" minlength="3"
+                            class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('other_eq') border-red-500 @enderror">
+                        @error('other_eq')
                             <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
                         @enderror
                     </div>
@@ -51,29 +63,13 @@
                         @enderror
                     </div>
 
-                    <!-- Campo Marca -->
+                    <!-- Campo Modelo -->
                     <div>
-                        <label for="mark" class="block text-sm font-semibold text-white">Marca</label>
-                        <select name="mark" id="mark"
-                            class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            required>
-                            <option value="">Seleccione..</option>
-                            @foreach ($marks as $mark)
-                                <option value="{{ $mark }}" {{ old('mark') == $mark ? 'selected' : '' }}>
-                                    {{ $mark }}
-                                </option>
-                            @endforeach
-                            <option value="Otra" {{ old('mark') == 'Otra' ? 'selected' : '' }}>Otra
-                        </select>
-                    </div>
-
-                    <!-- Campo para marca personalizada -->
-                    <div id="other-brand-field" class="hidden">
-                        <label for="other_brand" class="block text-sm font-semibold text-white">Especifica la marca</label>
-                        <input type="text" name="other_mark" id="other_mark" value="{{ old('other_mark') }}"
-                            class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('other_mark') border-red-500 @enderror"
-                            placeholder="Nombre de la marca">
-                        @error('other_mark')
+                        <label for="marca" class="block text-sm font-semibold text-white">Marca</label>
+                        <input type="text" name="mark" id="mark" minlength="3"
+                            class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('mark') border-red-500 @enderror"
+                            value="{{ old('mark') }}" placeholder="Especifique la marca" required>
+                        @error('mark')
                             <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
                         @enderror
                     </div>

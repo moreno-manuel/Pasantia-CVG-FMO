@@ -9,6 +9,7 @@ use App\Models\networkInfrastructure\StockEquipment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
+use function app\Helpers\equipmentUpdate;
 use function app\Helpers\filter;
 use function app\Helpers\marksUpdate;
 
@@ -42,8 +43,7 @@ class StockEquipmentController extends Controller
     {
         $equipments = json_decode(file_get_contents(resource_path('js/data.json')), true)['equipments']; // json tipo de quipos
 
-        $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['marks']; // json con las marcas agregadas
-        return view('front.stock.create', compact('marks', 'equipments'));
+        return view('front.stock.create', compact('equipments'));
     }
 
     public function store(Request $request)
@@ -53,22 +53,24 @@ class StockEquipmentController extends Controller
             [
                 'mac' => 'required|unique:stock_equipments|alpha_num|size:12',
                 'model' => 'required|alpha_num|min:3',
-                'mark' => 'required',
-                'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
+                'mark' => 'nullable|alpha_num|min:3',
                 'delivery_note' => 'required|numeric|min:3',
                 'equipment' => 'required',
+                'other_eq' => 'nullable|regex:/^[a-zA-Z0-9\/\-.Ññ ]+$/|min:3|required_if:equipment,Otro',
                 'description' => 'required'
 
             ],
-            ['required_if' => 'Debe agregar el nombre de la marca'],
-            ['model' => 'Modelo', 'delivery_note' => 'Nota de entrega', 'other_mark' => 'Marca', 'equipment' => 'Equipo']
+            ['required_if' => 'Debe agregar el tipo de :attribute'],
+            ['model' => 'Modelo', 'delivery_note' => 'Nota de entrega', 'mark' => 'Marca', 'equipment' => 'Equipo', 'other_eq' => 'Equipo']
         );
 
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator);
         }
 
-        $request = marksUpdate($request, 'marks'); //verifica si hay una marca nueva
+
+        $request = equipmentUpdate($request, 'equipments'); //verifica si hay un equipo nuevo
+
 
         StockEquipment::create($request->all())->save();
         return redirect()->route('stock.index')->with('success', 'Equipo agregada exitosamente');
@@ -77,10 +79,10 @@ class StockEquipmentController extends Controller
     public function edit($mac)
     {
         $eq = StockEquipment::where('mac', $mac)->firstOrFail(); //verifica si existe el equipo
+
         $equipments = json_decode(file_get_contents(resource_path('js/data.json')), true)['equipments']; // json tipo de quipos
 
-        $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['marks']; // json con las marcas agregadas
-        return view('front.stock.edit', compact('marks', 'equipments', 'eq'));
+        return view('front.stock.edit', compact('equipments', 'eq'));
     }
 
     public function update($mac, Request $request)
@@ -91,22 +93,22 @@ class StockEquipmentController extends Controller
             $request->all(),
             [
                 'model' => 'required|alpha_num|min:3',
-                'mark' => 'required',
-                'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
+                'mark' => 'nullable|alpha_num|min:3',
                 'delivery_note' => 'required|numeric|min:3',
                 'equipment' => 'required',
+                'other_eq' => 'nullable|regex:/^[a-zA-Z0-9\/\-.Ññ ]+$/|min:3|required_if:equipment,Otro',
                 'description' => 'required'
 
             ],
-            ['required_if' => 'Debe agregar el nombre de la marca'],
-            ['model' => 'Modelo', 'delivery_note' => 'Nota de entrega', 'other_mark' => 'Marca', 'equipment' => 'Equipo']
+            ['required_if' => 'Debe agregar :attribute'],
+            ['model' => 'Modelo', 'delivery_note' => 'Nota de entrega', 'mark' => 'Marca', 'equipment' => 'Equipo', 'other_eq' => 'Equipo']
         );
 
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator);
         }
 
-        $request = marksUpdate($request, 'marks'); //verifica si hay una marca nueva
+        $request = equipmentUpdate($request, 'equipments'); //verifica si hay un equipo nuevo
 
         $eq->update($request->all());
 

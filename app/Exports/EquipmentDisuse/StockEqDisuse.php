@@ -24,7 +24,7 @@ class StockEqDisuse extends EquipmentDisuseExport implements WithTitle
 
     public function getTitle(): string
     {
-        return 'Equipos Stock';
+        return 'Equipos Stock Eliminados';
     }
 
     public function headings(): array

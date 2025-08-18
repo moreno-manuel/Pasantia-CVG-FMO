@@ -105,9 +105,9 @@
                     <!-- Campo Descripción -->
                     <div class="md:col-span-2">
                         <label for="description" class="block text-sm font-semibold text-white">Descripción</label>
-                        <textarea name="description" id="description" value="{{ old('description') }}" rows="3"
+                        <textarea name="description" id="description" rows="3"
                             class="mt-1 block w-full rounded-md bg-zinc-700 border border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('description') border-red-500 @enderror"
-                            placeholder="Describe brevemente la condición de atención..." required></textarea>
+                            placeholder="Describe brevemente la condición de atención..." required>{{ old('description') }}</textarea>
                         @error('description')
                             <span class="text-red-400 text-sm mt-1">{{ $message }}</span>
                         @enderror

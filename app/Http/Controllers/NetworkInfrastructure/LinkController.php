@@ -31,7 +31,8 @@ class LinkController extends Controller
             $links = Link::select('mac', 'name', 'mark', 'model', 'ssid', 'location', 'ip')
                 ->orderBy('created_at', 'desc')
                 ->paginate(10);
-                $locations = json_decode(file_get_contents(resource_path('js/data.json')), true)['locations']; // json con las localidades agregadas
+
+            $locations = json_decode(file_get_contents(resource_path('js/data.json')), true)['locations']; // json con las localidades agregadas
             return view('front.link.index', compact('links', 'locations'));
         }
 
@@ -55,10 +56,10 @@ class LinkController extends Controller
                     'mark' => 'required',
                     'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
                     'model' => 'required|alpha_dash|min:3',
-                    'name' => 'required|unique:links,name|regex:/^[a-zA-Z0-9\/\-. ]+$/|min:5',
+                    'name' => 'required|unique:links,name|regex:/^[a-zA-Z0-9\/\-.Ññ ]+$/|min:5',
                     'ssid' => 'required|alpha_num|min:3',
                     'location' => 'required',
-                    'other_location' => 'nullable|regex:/^[a-zA-Z0-9\/\-. ]+$/|min:5|required_if:location,Otra',
+                    'other_location' => 'nullable|regex:/^[a-zA-Z0-9\/\-.Ññ ]+$/|min:5|required_if:location,Otra',
                     'ip' => 'required|ip|unique:links,ip',
                     'description' => 'nullable'
                 ],
@@ -92,6 +93,7 @@ class LinkController extends Controller
                 session(['linkUrl' => url()->previous()]);
 
             $link = Link::where('name', $name)->firstOrFail();
+
             $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['link_marks']; // json con las marcas agregadas
             $locations = json_decode(file_get_contents(resource_path('js/data.json')), true)['locations']; // json con las localidades agregadas
             return view('front.link.edit', compact('link', 'marks', 'locations'));
@@ -111,7 +113,7 @@ class LinkController extends Controller
                     'model' => 'required|alpha_dash|min:3',
                     'name' => [
                         'required',
-                        'regex:/^[a-zA-Z0-9\/\-. ]+$/',
+                        'regex:/^[a-zA-Z0-9\/\-.Ññ ]+$/',
                         'min:5',
                         Rule::unique('links')->ignore($link->mac, 'mac') //ignora el registro que va actualizar 
                     ],
@@ -119,12 +121,12 @@ class LinkController extends Controller
                     'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
                     'ssid' => 'required|alpha_num|min:3',
                     'location' => 'required',
-                    'other_location' => 'nullable|regex:/^[a-zA-Z0-9\/\-. ]+$/|min:5|required_if:location,Otra',
+                    'other_location' => 'nullable|regex:/^[a-zA-Z0-9\/\-.Ññ ]+$/|min:5|required_if:location,Otra',
                     'ip' => 'required|ip|unique:links,ip',
                     'description' => 'nullable'
                 ],
                 ['required_if' => 'Debe agregar el nombre de :attribute'],
-                ['name' => 'Nombre', 'location' => 'Localidad', 'model' => 'Modelo', 'ssid' => 'SSID', 'other_mark' => 'Marca']
+                ['name' => 'Nombre', 'other_location' => 'Localidad', 'model' => 'Modelo', 'ssid' => 'SSID', 'other_mark' => 'Marca']
             );
 
             if ($validator->fails()) {
@@ -137,6 +139,7 @@ class LinkController extends Controller
             $link->update($request->all());
 
             $redirectRoute = Route::getRoutes()->match(app('request')->create(session('linkUrl')))->getName();
+
             if ($redirectRoute === 'enlace.show')
                 return redirect()->route('enlace.show', ['enlace' => $link->name])->with('success', 'Enlace actualizado.');
 

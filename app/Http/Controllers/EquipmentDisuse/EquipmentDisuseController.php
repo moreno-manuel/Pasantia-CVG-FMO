@@ -39,7 +39,7 @@ class EquipmentDisuseController extends Controller
                 $equipment_type = $equipment->equipment;
                 return view('front.eliminated.show', compact('equipment', 'switch', 'equipment_type'));
                 break;
-            case 'Nvr':
+            case 'NVR':
                 $nvr = NvrDisuse::find($id);
                 $equipment_type = $equipment->equipment;
                 return view('front.eliminated.show', compact('equipment', 'nvr', 'equipment_type'));

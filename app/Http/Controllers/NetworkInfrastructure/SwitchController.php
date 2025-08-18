@@ -54,7 +54,7 @@ class SwitchController extends Controller
                 'mark' => 'required',
                 'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
                 'location' => 'required',
-                'other_location' => 'nullable|alpha_num|min:3|required_if:location,Otra',
+                'other_location' => 'nullable|regex:/^[a-zA-Z0-9\/\-.Ññ ]+$/|min:5|required_if:location,Otra',
                 'model' => 'required|alpha_dash|min:3',
                 'number_ports' => 'required',
                 'description' => 'nullable'
@@ -84,7 +84,7 @@ class SwitchController extends Controller
 
             $marks = json_decode(file_get_contents(resource_path('js/data.json')), true)['switch_marks']; // json con las marcas agregadas
             $locations = json_decode(file_get_contents(resource_path('js/data.json')), true)['locations']; // json con las localidades
-            
+
             $switch = Switche::where('serial', $serial)->firstOrFail();
             return view('front.switch.edit', compact('switch', 'marks', 'locations'));
         } catch (ModelNotFoundException $e) {
@@ -103,7 +103,7 @@ class SwitchController extends Controller
                 'other_mark' => 'nullable|alpha_num|min:3|required_if:mark,Otra',
                 'number_ports' => 'required',
                 'location' => 'required',
-                'other_location' => 'nullable|alpha_num|min:3|required_if:location,Otra',
+                'other_location' => 'nullable|regex:/^[a-zA-Z0-9\/\-.Ññ ]+$/|min:5|required_if:location,Otra',
                 'model' => 'required|alpha_dash|min:3',
                 'description' => 'nullable'
             ],

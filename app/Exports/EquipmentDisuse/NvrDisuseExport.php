@@ -4,13 +4,14 @@ namespace App\Exports\EquipmentDisuse;
 
 
 use App\Models\EquipmentDisuse\EquipmentDisuse;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Concerns\WithTitle;
 
 class NvrDisuseExport extends EquipmentDisuseExport implements WithTitle
 {
     public function collection()
     {
-        return EquipmentDisuse::where('equipment', 'Nvr')->with('nvrDisuse')->get()->sortBy('location');
+        return EquipmentDisuse::where('equipment', 'NVR')->with('nvrDisuse')->get()->sortBy('location');
     }
 
     public function getSheetName(): string
@@ -25,20 +26,29 @@ class NvrDisuseExport extends EquipmentDisuseExport implements WithTitle
 
     public function headings(): array
     {
-        return ['MAC', 'Marca', 'Modelo', 'Nombre', 'N°/Puertos', 'IP', 'Volumen 1/Capacidad Max. (TB)', 'Volumen 2/Capacidad Max. (TB)', 'Localidad', 'Descripción', 'Fecha'];
+        return [
+            'MAC',
+            'Marca',
+            'Modelo',
+            'Nombre',
+            'N°/Puertos',
+            'IP',
+            'Vol. 1 - Capacidad/Max.(TB)',
+            'Vol. 2 - Capacidad/Max.(TB)',
+            'Localidad',
+            'Descripción',
+            'Fecha'
+        ];
     }
 
     public function map($device): array
     {
         $nvr = optional($device->nvrDisuse);
-
-        // Obtener los volúmenes si existen
-        $slot1 = '';
-        $slot2 = '';
-
-        if ($nvr && $nvr->slotNvrDisuse->isNotEmpty()) {
-            $slot1 = optional($nvr->slotNvrDisuse->first())->capacity_max;
-            $slot2 = optional($nvr->slotNvrDisuse->first())->capacity_max;
+        $slots = [];
+        $i = 0;
+        foreach ($nvr->slotNvrDisuse as $slot) {
+            $slots[$i] = $slot->capacity_max;
+            $i++;
         }
 
         return [
@@ -48,8 +58,8 @@ class NvrDisuseExport extends EquipmentDisuseExport implements WithTitle
             $nvr->name,
             $nvr->ports_number,
             $nvr->ip,
-            $slot1,
-            $slot2,
+            $slots[0],
+            $slots[1] ?? 'No Aplica',
             $device->location,
             $device->description,
             $device->created_at->format('d/m/Y')
@@ -58,6 +68,6 @@ class NvrDisuseExport extends EquipmentDisuseExport implements WithTitle
 
     public function title(): string
     {
-        return 'Nvr';
+        return 'NVR';
     }
 }

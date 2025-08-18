@@ -60,9 +60,17 @@
                                     {{ $equipment['location'] ?? 'N/A' }}
                                 </dd>
                             </div>
+
+                            <!-- Campo Descripción -->
+                            <div class="bg-zinc-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                <dt class="text-sm font-semibold text-gray-300">Descripción</dt>
+                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
+                                    {{ $equipment['description'] }}
+                                </dd>
+                            </div>
                         @break
 
-                        @case('Nvr')
+                        @case('NVR')
                             <!-- NVR - Nombre -->
                             <div class="bg-zinc-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                 <dt class="text-sm font-semibold text-gray-300">Nombre</dt>
@@ -90,21 +98,30 @@
                             <!-- NVR - Capacidad de cada volumen -->
                             @foreach ($nvr->slotNvrDisuse as $slot)
                                 <div class="bg-zinc-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                    <dt class="text-sm font-semibold text-gray-300">Capacidad Máxima / Volumen
-                                        {{ $loop->iteration }}</dt>
+                                    <dt class="text-sm font-semibold text-gray-300"> Vol
+                                        {{ $loop->iteration }} - Capacidad/Max.(TB)</dt>
                                     <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $slot['capacity_max'] ?? 'N/A' }}
                                     </dd>
                                 </div>
                             @endforeach
+
+                            <!-- Campo Localidad -->
+                            <div class="bg-zinc-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                <dt class="text-sm font-semibold text-gray-300">Localidad</dt>
+                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
+                                    {{ $equipment['location'] ?? 'N/A' }}
+                                </dd>
+                            </div>
+
+                            <!-- Campo Descripción -->
+                            <div class="bg-zinc-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                <dt class="text-sm font-semibold text-gray-300">Descripción</dt>
+                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
+                                    {{ $equipment['description'] }}
+                                </dd>
+                            </div>
                         @break
 
-                        <!-- Campo Localidad -->
-                        <div class="bg-zinc-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                            <dt class="text-sm font-semibold text-gray-300">Localidad</dt>
-                            <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
-                                {{ $equipment['location'] ?? 'N/A' }}
-                            </dd>
-                        </div>
                         @case('Cámara')
                             <!-- Cámara - Nombre -->
                             <div class="bg-zinc-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -114,7 +131,7 @@
 
                             <!-- Cámara - NVR donde estaba conectada -->
                             <div class="bg-zinc-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-semibold text-gray-300">NVR/Conexión (mac - nombre)</dt>
+                                <dt class="text-sm font-semibold text-gray-300">NVR/Conexión (MAC - nombre)</dt>
                                 <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">{{ $camera['nvr'] ?? 'N/A' }}</dd>
                             </div>
 
@@ -129,6 +146,14 @@
                                 <dt class="text-sm font-semibold text-gray-300">Localidad</dt>
                                 <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
                                     {{ $equipment['location'] ?? 'N/A' }}
+                                </dd>
+                            </div>
+
+                            <!-- Campo Descripción -->
+                            <div class="bg-zinc-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                <dt class="text-sm font-semibold text-gray-300">Descripción</dt>
+                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
+                                    {{ $equipment['description'] }}
                                 </dd>
                             </div>
                         @break
@@ -159,6 +184,14 @@
                                     {{ $equipment['location'] ?? 'N/A' }}
                                 </dd>
                             </div>
+
+                            <!-- Campo Descripción -->
+                            <div class="bg-zinc-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                <dt class="text-sm font-semibold text-gray-300">Descripción</dt>
+                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
+                                    {{ $equipment['description'] }}
+                                </dd>
+                            </div>
                         @break
 
                         @default
@@ -169,16 +202,15 @@
                                     {{ $stock['delivery_note'] ?? 'N/A' }}
                                 </dd>
                             </div>
+
+                            <!-- Campo Descripción -->
+                            <div class="bg-zinc-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                <dt class="text-sm font-semibold text-gray-300">Descripción</dt>
+                                <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
+                                    {{ $equipment['description'] }}
+                                </dd>
+                            </div>
                     @endswitch
-
-                    <!-- Campo Descripción -->
-                    <div class="bg-zinc-600 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-semibold text-gray-300">Descripción</dt>
-                        <dd class="mt-1 text-sm text-white sm:mt-0 sm:col-span-2">
-                            {{ $equipment['description'] }}
-                        </dd>
-                    </div>
-
                 </dl>
             </div>
         </div>

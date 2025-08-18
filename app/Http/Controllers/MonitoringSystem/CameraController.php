@@ -36,7 +36,7 @@ class CameraController extends Controller
                 ->select('name', 'ip', 'location', 'mac', 'status', 'mark', 'model', 'nvr_id')
                 ->orderBy('created_at', 'desc')
                 ->paginate(10);
-                $locations = json_decode(file_get_contents(resource_path('js/data.json')), true)['locations']; // json con las localidades agregadas
+            $locations = json_decode(file_get_contents(resource_path('js/data.json')), true)['locations']; // json con las localidades agregadas
             return view('front.camera.index', compact('cameras', 'locations'));
         }
 
@@ -104,7 +104,8 @@ class CameraController extends Controller
                 session(['urlCamera' => url()->previous()]); //captura ruta desde donde se llama el metodo
 
             $camera = Camera::where('name', $name)->firstOrFail();
-            $nvrsAll = Nvr::with('camera')->get();
+
+            $nvrsAll = Nvr::with('camera')->orderBy('name', 'asc')->get();
 
             $currentNvrId = $camera->nvr->mac;
 

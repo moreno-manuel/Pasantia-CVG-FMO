@@ -25,7 +25,7 @@ class StockEquipment extends Model
 
     //casteos 
 
-    protected function model(): Attribute //model
+    protected function model(): Attribute //modelo
     {
         return Attribute::make(
             set: fn($model) => strtoupper($model),
@@ -36,6 +36,13 @@ class StockEquipment extends Model
     {
         return Attribute::make(
             set: fn($mac) => strtoupper($mac),
+        );
+    }
+
+    protected function mark(): Attribute //marca
+    {
+        return Attribute::make(
+            set: fn($mark) => strtoupper($mark),
         );
     }
 

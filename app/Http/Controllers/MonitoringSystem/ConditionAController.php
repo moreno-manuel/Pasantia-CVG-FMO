@@ -75,7 +75,7 @@ class ConditionAController extends Controller
             return redirect()->back()->withInput()->withErrors($validator);
         }
 
-      
+
         ConditionAttention::create([
             'user' => Auth::user()->person->name . ' ' . Auth::user()->person->last_name,
             'name' => $request->input('name'),

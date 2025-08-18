@@ -20,7 +20,7 @@ class NvrExport implements ShouldAutoSize, WithDrawings, WithEvents
     {
         // Cargar NVR con su relación slot_nvr y cámaras
         $this->data = Nvr::with(['slotNvr', 'camera'])
-            ->select('id', 'mac', 'mark', 'model', 'name', 'ip', 'location',  'description', 'status', 'ports_number')
+            ->select('id', 'mac', 'mark', 'model', 'name', 'ip', 'location',  'description', 'ports_number')
             ->get()
             ->sortBy('location');
     }
@@ -37,7 +37,7 @@ class NvrExport implements ShouldAutoSize, WithDrawings, WithEvents
                 $phpSheet->getRowDimension('2')->setRowHeight(30);
 
                 // Título ocupando filas 1 y 2
-                $phpSheet->mergeCells("A1:Q2");
+                $phpSheet->mergeCells("A1:P2");
                 $phpSheet->setCellValue('A1', 'Inventario de NVR');
 
                 $phpSheet->getStyle('A1')->getFont()
@@ -61,14 +61,13 @@ class NvrExport implements ShouldAutoSize, WithDrawings, WithEvents
                     'N° de Puertos',
                     'N° de Puertos Usados',
                     'N° de Puertos Disponibles',
-                    'Status',
                 ];
 
                 // Añadir encabezados dinámicos para cada slot (hasta 2)
                 for ($i = 1; $i <= 2; $i++) {
-                    $headers[] = "Capacidad/Max.(TB) - Vol. {$i}";
-                    $headers[] = "Serial HDD - Vol. {$i}";
-                    $headers[] = "Capacidad HDD (TB) - Vol. {$i}";
+                    $headers[] = "Vol. {$i} - Capacidad/Max.(TB)";
+                    $headers[] = "Vol. {$i} - Serial HDD";
+                    $headers[] = "Vol. {$i} - Capacidad HDD (TB)";
                 }
 
                 $headerRow = 3;
@@ -112,7 +111,6 @@ class NvrExport implements ShouldAutoSize, WithDrawings, WithEvents
                         $nvr->ports_number,
                         $nvr->camera->count(),
                         $nvr->getAvailablePortsAttribute(),
-                        $nvr->status,
                     ];
 
                     // Agregar datos de slots
@@ -163,17 +161,17 @@ class NvrExport implements ShouldAutoSize, WithDrawings, WithEvents
 
                 // Fecha de exportación en pie de página (derecha, en rojo)
                 $date = now()->format('d/m/Y H:i');
-                $phpSheet->setCellValue("Q{$lastRow}", "Fecha de Exportación: {$date}");
-                $phpSheet->getStyle("Q{$lastRow}")->getFont()
+                $phpSheet->setCellValue("P{$lastRow}", "Fecha de Exportación: {$date}");
+                $phpSheet->getStyle("P{$lastRow}")->getFont()
                     ->setItalic(true)
                     ->setSize(10)
                     ->setColor(new Color('FF0000')); // Rojo
-                $phpSheet->getStyle("Q{$lastRow}")->getAlignment()
+                $phpSheet->getStyle("P{$lastRow}")->getAlignment()
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
 
                 // Ajustar ancho automático
-                foreach (range('A', 'Q') as $col) {
+                foreach (range('A', 'P') as $col) {
                     $phpSheet->getColumnDimension($col)->setAutoSize(true);
                 }
 
@@ -182,7 +180,7 @@ class NvrExport implements ShouldAutoSize, WithDrawings, WithEvents
                 $lastDataRow = $startRow + count($data) - 1;
 
                 $phpSheet->getProtection()->setSheet(true);
-                $phpSheet->getStyle("A{$startRow}:Q{$lastDataRow}")
+                $phpSheet->getStyle("A{$startRow}:P{$lastDataRow}")
                     ->getProtection()
                     ->setLocked(Protection::PROTECTION_UNPROTECTED);
             },

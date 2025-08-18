@@ -386,6 +386,24 @@
                 }
             }
 
+            //personaliza tipo de equipo
+            if (document.getElementById('equipment')) {
+
+                const select = document.getElementById('equipment');
+                const otherField = document.getElementById('other-eq-field');
+
+
+                if (select && otherField) {
+                    select.addEventListener('change', function() {
+                        otherField.classList.toggle('hidden', select.value !== 'Otro');
+                    });
+
+                    if (select.value === 'Otro') {
+                        otherField.classList.remove('hidden');
+                    }
+                }
+            }
+
             //para eliminar nvr con camaras conectadas
             window.submit = function() {
                 alert("El Nvr a eliminar tiene cámaras conectadas.");

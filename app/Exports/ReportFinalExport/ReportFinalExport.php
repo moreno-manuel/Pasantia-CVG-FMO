@@ -10,9 +10,11 @@ class ReportFinalExport implements WithMultipleSheets
     public function sheets(): array
     {
         return [
-            
-            'Informe consolidado' => new NvrCameraReportExport(),
+
+            'Informe consolidado' => new GeneralReporExport(),
+            'NVR - Cámaras' => new NvrCameraReportExport(),
             'Cámaras por condición' => new CameraConditionExport(),
+
         ];
     }
 }

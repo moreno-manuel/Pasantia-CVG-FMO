@@ -22,7 +22,7 @@ class CameraExport implements ShouldAutoSize, WithDrawings, WithEvents
             ->select('id', 'mac', 'mark', 'model', 'name', 'ip', 'location', 'description', 'status', 'nvr_id')
             ->get()
             ->groupBy(function ($camera) {
-                return $camera->nvr ? $camera->nvr->name : 'Sin NVR Asignado';
+                return $camera->nvr->name;
             })
             ->map(function ($cameras) {
                 // Ordenar las cámaras por nombre dentro de cada grupo
@@ -138,6 +138,9 @@ class CameraExport implements ShouldAutoSize, WithDrawings, WithEvents
                     // Espacio entre grupos
                     $currentRow++;
                 }
+
+                $currentRow++;
+
 
                 // Pie de página - Fecha
                 $date = now()->format('d/m/Y H:i');

@@ -120,7 +120,7 @@ class NvrCameraReportExport extends BaseReportExport implements WithTitle
 
     public function getSheetName(): string
     {
-        return 'Informe Consolidado';
+        return 'NVR - Cámaras';
     }
 
     public function getTitle(): string
@@ -131,7 +131,7 @@ class NvrCameraReportExport extends BaseReportExport implements WithTitle
     public function headings(): array
     {
         return [
-            'Ubicación',
+            'Localidad',
             'Cantidad',
             'Inoperativas',
             'Operativas',
@@ -194,10 +194,6 @@ class NvrCameraReportExport extends BaseReportExport implements WithTitle
 
         $currentRow++;
 
-        // Ancho automático
-        foreach (range('A', 'I') as $col) {
-            $phpSheet->getColumnDimension($col)->setAutoSize(true);
-        }
     }
 
     public function map(array $item): array

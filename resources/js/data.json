@@ -36,12 +36,13 @@
         "Camara",
         "Enlace",
         "NVR",
-        "Switch"
+        "Switch",
+        "servcidor"
     ],
     "locations": [
-        "Ciudad Piar",
-        "Palua",
-        "Planta de Pella",
-        "Puerto Ordaz"
+        "CIUDAD PIAR",
+        "PALUA",
+        "PLANTA DE PELLAS",
+        "PUERTO ORDAZ"
     ]
 }

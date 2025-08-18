@@ -30,7 +30,7 @@ class CameraConditionExport extends BaseReportExport implements WithTitle
 
         foreach ($cameras as $camera) {
             $condition = optional($camera->conditionAttention)->name ?? 'SIN TIPO DE CONDICIÓN';
-            $location = optional($camera->nvr)->location;
+            $location = optional($camera)->location;
 
             if (!isset($groupedByCondition[$condition])) {
                 $groupedByCondition[$condition] = [];
@@ -120,7 +120,7 @@ class CameraConditionExport extends BaseReportExport implements WithTitle
                 : [];
 
             // Título de ubicación
-            $phpSheet->setCellValue("A{$currentRow}", "Ubicación: {$location}");
+            $phpSheet->setCellValue("A{$currentRow}", "Localidad: {$location}");
             $phpSheet->getStyle("A{$currentRow}")
                 ->getFont()
                 ->setBold(true)
@@ -158,21 +158,16 @@ class CameraConditionExport extends BaseReportExport implements WithTitle
                     ->setSize(12); // texto en negrita
             }
 
-            $phpSheet->getStyle("A{$totalRow}:H{$totalRow}")
+            $phpSheet->getStyle("A{$totalRow}:J{$totalRow}")
                 ->getFill()
                 ->setFillType(Fill::FILL_SOLID)
                 ->getStartColor()->setARGB('FFE600'); // Amarillo claro
 
-            $phpSheet->getStyle("B{$totalRow}:H{$totalRow}")
+            $phpSheet->getStyle("B{$totalRow}:J{$totalRow}")
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-            $currentRow += 2;
-        }
-
-        // Ancho automático
-        foreach (range('A', 'J') as $col) {
-            $phpSheet->getColumnDimension($col)->setAutoSize(true);
+            $currentRow += 3;
         }
     }
 
@@ -218,6 +213,8 @@ class CameraConditionExport extends BaseReportExport implements WithTitle
             '', // vacío
             '', // vacío
             '', // vacío
+            '', // vacío
+            '', // vacío
             $totals['inoperative'],
         ];
     }
@@ -243,6 +240,8 @@ class CameraConditionExport extends BaseReportExport implements WithTitle
     {
         return [
             'TOTAL GENERAL',
+            '', // vacío
+            '', // vacío
             '', // vacío
             '', // vacío
             '', // vacío
